@@ -22,12 +22,38 @@ const upgrades = [
     },
     {
         name: "Automated Planter",
-        cost: 100,
+        cost: 50,
         multiplier: 5
     },
     {
         name: "Quantum Spud Spawner",
-        cost: 1000,
-        multiplier: 20
+        cost: 200,
+        multiplier: 10
     }
 ];
+
+function buyUpgrade(index) {
+    const upgrade = upgrades[index];
+    if (potatoCount >= upgrade.cost) {
+        potatoCount -= upgrade.cost;
+        potatoesPerClick *= upgrade.multiplier;
+        updateDisplay();
+        updateUpgradeButtons();
+    }
+}
+
+function displayUpgrades() {
+    const upgradesContainer = document.getElementById('upgrades-container');
+    upgradesContainer.innerHTML = '';
+    upgrades.forEach((upgrade, index) => {
+        const button = document.createElement('button');
+        button.id = `upgrade-${index}`;
+        button.textContent = `Buy ${upgrade.name} (Cost: ${upgrade.cost} potatoes)`;
+        button.onclick = () => buyUpgrade(index);
+        button.disabled = potatoCount < upgrade.cost;
+        upgradesContainer.appendChild(button);
+    });
+}
+
+// Initialize upgrades
+document.addEventListener('DOMContentLoaded', displayUpgrades);

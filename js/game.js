@@ -29,6 +29,7 @@ function updateDisplay() {
     document.getElementById('water-count').textContent = `Water: ${water.toFixed(2)}`;
     document.getElementById('soil-nutrients').textContent = `Soil Nutrients: ${soilNutrients.toFixed(2)}`;
     document.getElementById('oxygen-level').textContent = `Oxygen: ${oxygen.toFixed(2)}`;
+    document.getElementById('exploration-level').textContent = `Exploration Level: ${explorationLevel}`;
 }
 
 function research(type) {

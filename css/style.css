@@ -48,3 +48,8 @@ button:disabled {
 h2 {
     color: #4CAF50;
 }
+
+#explore-button {
+    background-color: #FF6F61;
+    margin-top: 10px;
+}

@@ -1,65 +1,89 @@
-Narrative Arc:
+# Martian Potato: A Humorous Space Farming Adventure
+
+## Narrative Arc
+
 You're a lone astronaut on Mars, tasked with establishing a sustainable food source for future colonization. Your mission: grow potatoes, inspired by "The Martian" but with a humorous twist. As you progress, you'll face challenges, uncover Martian mysteries, and potentially deal with unexpected potato-related consequences.
-Game Mechanisms:
-1. Basic Gameplay:
-Click to plant and harvest potatoes
-Each harvest yields Martian Spuds (MS) - the main currency
-Use MS to buy upgrades and unlock new features
-Resource Management:
-Balance water, soil nutrients, and oxygen levels
-Manage power for various systems
-Research Tree:
-Unlock new potato varieties, farming techniques, and technologies
-Exploration:
-Send rovers to discover new areas and resources
-Uncover Martian artifacts and mysteries
-Colony Building:
-Expand your base as you progress
-Manage incoming colonists and their potato needs
-Upgrades and Progression:
-1. Planting and Harvesting:
-Hand > Hand Trowel > Automated Planter > Quantum Spud Spawner
-Potato Processing:
-Raw Potato > Potato Chip > Potato Battery > Potato Computer
-3. Water Collection:
-Manual Ice Melting > Solar Still > Atmospheric Water Generator > Quantum H2O Synthesizer
-Soil Enrichment:
-Martian Dust > Composted Potato Peels > Engineered Microbes > Nano-Nutrient Replicators
-Oxygen Production:
-Potato Plant Photosynthesis > Algae Bioreactor > Molecular Oxygen Separator > Quantum Air Materializer
-Energy Generation:
-Potato Battery > Solar Panels > Fusion Reactor > Potato-Powered Perpetual Motion Machine
-Transportation:
-Potato Sack > Wheelbarrow > Rover > Teleportation Grid
-Communication:
-Potato Radio > Satellite Uplink > Quantum Entanglement Communicator > Psychic Potato Network
-Special Events and Challenges:
-Dust storms requiring protective measures for crops
-Solar flares affecting electronic systems
-Discovery of ancient Martian potato civilizations
-Potato blight mutations
-First contact with alien life (spoiler: they're potato-based)
-Surprises and Plot Twists:
-Potato Sentience: Your crops develop consciousness and demand rights
-Time-traveling potatoes from Earth's future
-Discovery that Mars is actually a giant, dormant potato
-Accidental creation of a potato black hole
-Achievements and Milestones:
-"One Small Step for Spud": Plant your first potato
-"Spudnik Satellite Launch": Establish orbital communication
-"That's No Moon, It's a Potato!": Discover Mars' true nature
-"May the Starch Be With You": Achieve potato sentience
-"Intergalactic French Fry": Export potatoes to other star systems
-Puns and Humor:
+
+## Game Mechanisms
+
+### 1. Basic Gameplay
+- Click to plant and harvest potatoes
+- Each harvest yields Martian Spuds (MS) - the main currency
+- Use MS to buy upgrades and unlock new features
+
+### 2. Resource Management
+- Balance water, soil nutrients, and oxygen levels
+- Manage power for various systems
+
+### 3. Research Tree
+- Unlock new potato varieties, farming techniques, and technologies
+
+### 4. Exploration
+- Send rovers to discover new areas and resources
+- Uncover Martian artifacts and mysteries
+
+### 5. Colony Building
+- Expand your base as you progress
+- Manage incoming colonists and their potato needs
+
+## Upgrades and Progression
+
+### 1. Planting and Harvesting
+- Hand > Hand Trowel > Automated Planter > Quantum Spud Spawner
+
+### 2. Potato Processing
+- Raw Potato > Potato Chip > Potato Battery > Potato Computer
+
+### 3. Water Collection
+- Manual Ice Melting > Solar Still > Atmospheric Water Generator > Quantum H2O Synthesizer
+
+### 4. Soil Enrichment
+- Martian Dust > Composted Potato Peels > Engineered Microbes > Nano-Nutrient Replicators
+
+### 5. Oxygen Production
+- Potato Plant Photosynthesis > Algae Bioreactor > Molecular Oxygen Separator > Quantum Air Materializer
+
+### 6. Energy Generation
+- Potato Battery > Solar Panels > Fusion Reactor > Potato-Powered Perpetual Motion Machine
+
+### 7. Transportation
+- Potato Sack > Wheelbarrow > Rover > Teleportation Grid
+
+### 8. Communication
+- Potato Radio > Satellite Uplink > Quantum Entanglement Communicator > Psychic Potato Network
+
+## Special Events and Challenges
+- Dust storms requiring protective measures for crops
+- Solar flares affecting electronic systems
+- Discovery of ancient Martian potato civilizations
+- Potato blight mutations
+- First contact with alien life (spoiler: they're potato-based)
+
+## Surprises and Plot Twists
+- Potato Sentience: Your crops develop consciousness and demand rights
+- Time-traveling potatoes from Earth's future
+- Discovery that Mars is actually a giant, dormant potato
+- Accidental creation of a potato black hole
+
+## Achievements and Milestones
+- "One Small Step for Spud": Plant your first potato
+- "Spudnik Satellite Launch": Establish orbital communication
+- "That's No Moon, It's a Potato!": Discover Mars' true nature
+- "May the Starch Be With You": Achieve potato sentience
+- "Intergalactic French Fry": Export potatoes to other star systems
+
+## Puns and Humor
 1. Research "Quantum Entanglement" to create "Mash-Up Potatoes"
-Unlock the "Gravitational Wavy Chips" theory
-Develop "String(y Potato) Theory" for interdimensional travel
-Create the "Mars Rover? I Hardly Know 'Er!" exploration vehicle
-Establish the "United Federation of Planets (Potato Edition)"
-Scientific Parallels:
-Accurate Martian soil composition and its effects on agriculture
-Realistic challenges of water extraction and management on Mars
-Effects of lower gravity on plant growth and human physiology
-Radiation protection methods for crops and colonists
-Closed-loop life support systems and resource recycling
+2. Unlock the "Gravitational Wavy Chips" theory
+3. Develop "String(y Potato) Theory" for interdimensional travel
+4. Create the "Mars Rover? I Hardly Know 'Er!" exploration vehicle
+5. Establish the "United Federation of Planets (Potato Edition)"
+
+## Scientific Parallels
+- Accurate Martian soil composition and its effects on agriculture
+- Realistic challenges of water extraction and management on Mars
+- Effects of lower gravity on plant growth and human physiology
+- Radiation protection methods for crops and colonists
+- Closed-loop life support systems and resource recycling
+
 This design for "Martian Potato" offers a blend of humor, scientific accuracy, and engaging gameplay mechanics. The progression from simple potato farming to interstellar potato-based civilizations provides a compelling arc that should keep players entertained and surprised throughout their journey on Mars.

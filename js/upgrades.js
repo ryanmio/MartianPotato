@@ -44,7 +44,7 @@ function buyUpgrade(index) {
 
 function displayUpgrades() {
     const upgradesContainer = document.getElementById('upgrades-container');
-    upgradesContainer.innerHTML = '';
+    upgradesContainer.innerHTML = '<h2>Upgrades</h2>';
     upgrades.forEach((upgrade, index) => {
         const button = document.createElement('button');
         button.id = `upgrade-${index}`;

@@ -18,11 +18,11 @@ button {
     background-color: #4CAF50;
     border: none;
     color: white;
-    padding: 15px 32px;
+    padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 14px;
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 5px;
@@ -33,6 +33,18 @@ button:disabled {
     cursor: not-allowed;
 }
 
-#upgrades-container {
+#resources {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+#upgrades-container, #research-container {
     margin-top: 20px;
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+}
+
+h2 {
+    color: #4CAF50;
 }

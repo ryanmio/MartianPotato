@@ -11,17 +11,50 @@ let waterEfficiency = 1;
 let soilEfficiency = 1;
 let oxygenEfficiency = 1;
 
+let plantingDelay = 2000; // 2 seconds
+let lastPlantTime = 0;
+
 function plantPotato() {
+    const currentTime = Date.now();
+    if (currentTime - lastPlantTime < plantingDelay) {
+        return;
+    }
+
     if (water >= 1 && soilNutrients >= 1 && oxygen >= 1) {
         potatoCount += potatoesPerClick;
         water -= 1 / waterEfficiency;
         soilNutrients -= 1 / soilEfficiency;
         oxygen -= 1 / oxygenEfficiency;
+        lastPlantTime = currentTime;
         updateDisplay();
         updateUpgradeButtons();
+        checkAchievements();
     } else {
-        alert("Not enough resources to plant a potato!");
+        alert("Not enough resources to plant a potato! Explore Mars to find more resources.");
     }
+    updatePlantButton();
+}
+
+function updatePlantButton() {
+    const plantButton = document.getElementById('plant-button');
+    const currentTime = Date.now();
+    const timeLeft = Math.max(0, plantingDelay - (currentTime - lastPlantTime));
+    
+    if (timeLeft > 0) {
+        plantButton.disabled = true;
+        plantButton.textContent = `Plant Potato (${(timeLeft / 1000).toFixed(1)}s)`;
+    } else {
+        plantButton.disabled = false;
+        plantButton.textContent = 'Plant Potato';
+    }
+}
+
+function checkAchievements() {
+    if (potatoCount >= 1 && !achievements.firstPotato) {
+        achievements.firstPotato = true;
+        alert("Achievement Unlocked: One Small Step for Spud!");
+    }
+    // Add more achievements here
 }
 
 function updateDisplay() {
@@ -76,6 +109,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateDisplay();
     displayUpgrades();
+
+    // Start the main game loop
+    setInterval(updatePlantButton, 100);
 });
 
 // Function to update upgrade buttons (to be called after each potato plant)

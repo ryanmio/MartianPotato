@@ -1,42 +1,20 @@
 // Upgrade system will be implemented here
 console.log("Upgrades system loaded");
 
-// Example upgrade
-const handTrowel = {
-    name: "Hand Trowel",
-    cost: 10,
-    multiplier: 2
-};
-
-// Upgrade tree structure
 const upgrades = [
-    {
-        name: "Hand",
-        cost: 0,
-        multiplier: 1
-    },
-    {
-        name: "Hand Trowel",
-        cost: 10,
-        multiplier: 2
-    },
-    {
-        name: "Automated Planter",
-        cost: 50,
-        multiplier: 5
-    },
-    {
-        name: "Quantum Spud Spawner",
-        cost: 200,
-        multiplier: 10
-    }
+    { name: "Hand Trowel", cost: 10, effect: () => { plantingDelay = 1500; } },
+    { name: "Automated Planter", cost: 50, effect: () => { plantingDelay = 1000; } },
+    { name: "Quantum Spud Spawner", cost: 200, effect: () => { plantingDelay = 500; } },
+    { name: "Potato Fork", cost: 20, effect: () => { potatoesPerClick = 2; } },
+    { name: "Potato Harvester", cost: 100, effect: () => { potatoesPerClick = 5; } },
+    { name: "Quantum Harvester", cost: 500, effect: () => { potatoesPerClick = 10; } }
 ];
 
 function buyUpgrade(index) {
     const upgrade = upgrades[index];
     if (potatoCount >= upgrade.cost) {
         potatoCount -= upgrade.cost;
-        potatoesPerClick *= upgrade.multiplier;
+        upgrade.effect();
         updateDisplay();
         updateUpgradeButtons();
     }
@@ -50,10 +28,17 @@ function displayUpgrades() {
         button.id = `upgrade-${index}`;
         button.textContent = `Buy ${upgrade.name} (Cost: ${upgrade.cost} potatoes)`;
         button.onclick = () => buyUpgrade(index);
-        button.disabled = potatoCount < upgrade.cost;
         upgradesContainer.appendChild(button);
     });
 }
 
-// Initialize upgrades
+function updateUpgradeButtons() {
+    upgrades.forEach((upgrade, index) => {
+        const button = document.getElementById(`upgrade-${index}`);
+        if (button) {
+            button.disabled = potatoCount < upgrade.cost;
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', displayUpgrades);

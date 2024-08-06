@@ -22,8 +22,16 @@ const achievements = {
     // Add more achievements here as needed
 };
 
+function calculatePotatoesPerSecond() {
+    if (currentPlantingUpgrade >= 3) { // Automated Planter or higher
+        return 1000 / plantingDelay; // 1 potato per planting cycle
+    }
+    return 0;
+}
+
 function updateResources() {
-    potatoCount += rawPotatoesPerSecond / 10;
+    rawPotatoesPerSecond = calculatePotatoesPerSecond();
+    potatoCount += rawPotatoesPerSecond / 10; // Update every 100ms
     water -= (rawPotatoesPerSecond / 10) / waterEfficiency;
     soilNutrients -= (rawPotatoesPerSecond / 10) / soilEfficiency;
     oxygen -= (rawPotatoesPerSecond / 10) / oxygenEfficiency;
@@ -92,7 +100,7 @@ function updateDisplay() {
     updateElement('oxygen-level', `Oxygen: ${oxygen.toFixed(2)}`);
     updateElement('exploration-level', `Exploration Level: ${explorationLevel}`);
     updateElement('planting-level', `Planting Level: ${upgrades.planting[currentPlantingUpgrade].name}`);
-    updateElement('harvesting-level', `Harvesting Level: ${upgrades.harvesting[currentHarvestingUpgrade].name}`);
+    updateElement('harvesting-level', `Harvesting Level: Bare Hands`);
 }
 
 function research(type) {

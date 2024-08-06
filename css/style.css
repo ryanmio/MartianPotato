@@ -1,68 +1,57 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    color: #333;
-    text-align: center;
+    font-family: "Times New Roman", serif;
+    background-color: #fff;
+    color: #000;
+    text-align: left;
+    font-size: 16px;
+    padding: 15px;
 }
 
 #game-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 button {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin: 4px 2px;
+    border: 1px solid black;
+    background: white;
+    color: black;
+    padding: 5px;
+    font-family: "Times New Roman", serif;
+    margin-bottom: 5px;
+    display: block;
+    font-size: 16px;
     cursor: pointer;
-    border-radius: 5px;
 }
 
-button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
+button:hover, button:disabled {
+    background: rgba(0,0,0,.1);
 }
 
 #resources {
-    display: flex;
-    justify-content: space-around;
     margin-bottom: 20px;
 }
 
-#upgrades-container, #research-container {
+#upgrades-container, #research-container, #exploration-container {
     margin-top: 20px;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid #C0C0C0;
     padding-top: 20px;
 }
 
 h2 {
-    color: #4CAF50;
+    font-size: 21px;
+    line-height: 40px;
+    color: #333;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 20px;
 }
 
 #explore-button {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
     display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    transition-duration: 0.4s;
+    margin: 10px auto 0 auto;
 }
 
 #explore-button:hover {
-    background-color: #45a049;
+    background: rgba(0,0,0,.1);
 }

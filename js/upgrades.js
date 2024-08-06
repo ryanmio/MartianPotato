@@ -60,15 +60,11 @@ let automatedPlantingInterval;
 function startAutomatedPlanting() {
     if (!automatedPlantingInterval) {
         automatedPlantingInterval = setInterval(() => {
-            if (water >= 1 && soilNutrients >= 1 && oxygen >= 1) {
+            if (consumeResources()) {
                 potatoCount++;
-                water--;
-                soilNutrients--;
-                oxygen--;
                 updateDisplay();
                 updateUpgradeButtons();
-            }
-            if (water < 1 || soilNutrients < 1 || oxygen < 1) {
+            } else {
                 clearInterval(automatedPlantingInterval);
                 automatedPlantingInterval = null;
             }

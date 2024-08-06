@@ -29,12 +29,22 @@ function calculatePotatoesPerSecond() {
     return 0;
 }
 
+function consumeResources() {
+    if (water >= 1 && soilNutrients >= 1 && oxygen >= 1) {
+        water = Math.max(0, water - 1 / waterEfficiency);
+        soilNutrients = Math.max(0, soilNutrients - 1 / soilEfficiency);
+        oxygen = Math.max(0, oxygen - 1 / oxygenEfficiency);
+        return true;
+    }
+    return false;
+}
+
 function updateResources() {
     rawPotatoesPerSecond = calculatePotatoesPerSecond();
     
-    water = Math.max(0, Math.floor(water));
-    soilNutrients = Math.max(0, Math.floor(soilNutrients));
-    oxygen = Math.max(0, Math.floor(oxygen));
+    water = Math.floor(water);
+    soilNutrients = Math.floor(soilNutrients);
+    oxygen = Math.floor(oxygen);
     potatoCount = Math.floor(potatoCount);
 
     updateDisplay();
@@ -47,11 +57,8 @@ function plantPotato() {
         return;
     }
 
-    if (water >= 1 && soilNutrients >= 1 && oxygen >= 1) {
+    if (consumeResources()) {
         potatoCount++;
-        water--;
-        soilNutrients--;
-        oxygen--;
         lastPlantTime = currentTime;
         updateDisplay();
         updateUpgradeButtons();

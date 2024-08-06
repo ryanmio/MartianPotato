@@ -2,6 +2,8 @@
 console.log("Game initialized");
 
 let potatoCount = 0;
+let rawPotatoesPerSecond = 0;
+let processedPotatoesPerSecond = 0;
 let water = 100;
 let soilNutrients = 100;
 let oxygen = 100;
@@ -9,10 +11,25 @@ let oxygen = 100;
 let waterEfficiency = 1;
 let soilEfficiency = 1;
 let oxygenEfficiency = 1;
+let processingLevel = 0;
 
 let plantingDelay = 2000; // 2 seconds
 let lastPlantTime = 0;
 let potatoesPerClick = 1;
+
+function updateResources() {
+    potatoCount += rawPotatoesPerSecond / 10;
+    water -= (rawPotatoesPerSecond / 10) / waterEfficiency;
+    soilNutrients -= (rawPotatoesPerSecond / 10) / soilEfficiency;
+    oxygen -= (rawPotatoesPerSecond / 10) / oxygenEfficiency;
+
+    if (water < 0) water = 0;
+    if (soilNutrients < 0) soilNutrients = 0;
+    if (oxygen < 0) oxygen = 0;
+
+    updateDisplay();
+    updateUpgradeButtons();
+}
 
 function plantPotato() {
     const currentTime = Date.now();
@@ -58,13 +75,19 @@ function checkAchievements() {
 }
 
 function updateDisplay() {
-    document.getElementById('potato-count').textContent = `Potatoes: ${potatoCount.toFixed(2)}`;
-    document.getElementById('water-count').textContent = `Water: ${water.toFixed(2)}`;
-    document.getElementById('soil-nutrients').textContent = `Soil Nutrients: ${soilNutrients.toFixed(2)}`;
-    document.getElementById('oxygen-level').textContent = `Oxygen: ${oxygen.toFixed(2)}`;
-    document.getElementById('exploration-level').textContent = `Exploration Level: ${explorationLevel}`;
-    document.getElementById('planting-level').textContent = `Planting Level: ${upgrades.planting[currentPlantingUpgrade].name}`;
-    document.getElementById('harvesting-level').textContent = `Harvesting Level: ${upgrades.harvesting[currentHarvestingUpgrade].name}`;
+    const updateElement = (id, text) => {
+        const element = document.getElementById(id);
+        if (element) element.textContent = text;
+    };
+
+    updateElement('potato-count', `Potatoes: ${potatoCount.toFixed(2)}`);
+    updateElement('potatoes-per-second', `Potatoes per second: ${rawPotatoesPerSecond.toFixed(2)}`);
+    updateElement('water-count', `Water: ${water.toFixed(2)}`);
+    updateElement('soil-nutrients', `Soil Nutrients: ${soilNutrients.toFixed(2)}`);
+    updateElement('oxygen-level', `Oxygen: ${oxygen.toFixed(2)}`);
+    updateElement('exploration-level', `Exploration Level: ${explorationLevel}`);
+    updateElement('planting-level', `Planting Level: ${upgrades.planting[currentPlantingUpgrade].name}`);
+    updateElement('harvesting-level', `Harvesting Level: ${upgrades.harvesting[currentHarvestingUpgrade].name}`);
 }
 
 function research(type) {
@@ -114,4 +137,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Start the main game loop
     setInterval(updatePlantButton, 100);
+    setInterval(updateResources, 100);
 });

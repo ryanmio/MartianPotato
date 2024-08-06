@@ -4,9 +4,10 @@ console.log("Upgrades system loaded");
 const upgrades = {
     planting: [
         { name: "Hand", cost: 0, effect: () => { plantingDelay = 2000; } },
-        { name: "Hand Trowel", cost: 10, effect: () => { plantingDelay = 1500; } },
-        { name: "Automated Planter", cost: 50, effect: () => { plantingDelay = 1000; } },
-        { name: "Quantum Spud Spawner", cost: 200, effect: () => { plantingDelay = 500; } }
+        { name: "Hand Trowel", cost: 1, effect: () => { plantingDelay = 1500; } },
+        { name: "Planting Stick", cost: 1, effect: () => { plantingDelay = 1000; } },
+        { name: "Automated Planter", cost: 5, effect: () => { startAutomatedPlanting(); } },
+        { name: "Quantum Spud Spawner", cost: 1000, effect: () => { plantingDelay = 500; } }
     ],
     harvesting: [
         { name: "Bare Hands", cost: 0, effect: () => { potatoesPerClick = 1; } },
@@ -68,6 +69,23 @@ function updateUpgradeButtons() {
             button.disabled = potatoCount < upgrades[type][index].cost;
         }
     });
+}
+
+let automatedPlantingInterval;
+
+function startAutomatedPlanting() {
+    if (!automatedPlantingInterval) {
+        automatedPlantingInterval = setInterval(() => {
+            if (water >= 1 && soilNutrients >= 1 && oxygen >= 1) {
+                potatoCount += potatoesPerClick;
+                water -= 1 / waterEfficiency;
+                soilNutrients -= 1 / soilEfficiency;
+                oxygen -= 1 / oxygenEfficiency;
+                updateDisplay();
+                updateUpgradeButtons();
+            }
+        }, plantingDelay);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', displayUpgrades);

@@ -5,8 +5,8 @@ const upgrades = {
     planting: [
         { name: "Hand", cost: 0, effect: () => { plantingDelay = 2000; } },
         { name: "Hand Trowel", cost: 1, effect: () => { plantingDelay = 1500; } },
-        { name: "Planting Stick", cost: 5, effect: () => { plantingDelay = 1000; } },
-        { name: "Automated Planter", cost: 2, effect: () => { startAutomatedPlanting(); } },
+        { name: "Planting Stick", cost: 1, effect: () => { plantingDelay = 1000; } },
+        { name: "Automated Planter", cost: 1, effect: () => { startAutomatedPlanting(); } },
         { name: "Quantum Spud Spawner", cost: 1000, effect: () => { plantingDelay = 500; } }
     ]
 };
@@ -61,12 +61,16 @@ function startAutomatedPlanting() {
     if (!automatedPlantingInterval) {
         automatedPlantingInterval = setInterval(() => {
             if (water >= 1 && soilNutrients >= 1 && oxygen >= 1) {
-                potatoCount += 1; // Always plant one potato at a time
-                water -= 1 / waterEfficiency;
-                soilNutrients -= 1 / soilEfficiency;
-                oxygen -= 1 / oxygenEfficiency;
+                potatoCount++;
+                water--;
+                soilNutrients--;
+                oxygen--;
                 updateDisplay();
                 updateUpgradeButtons();
+            }
+            if (water < 1 || soilNutrients < 1 || oxygen < 1) {
+                clearInterval(automatedPlantingInterval);
+                automatedPlantingInterval = null;
             }
         }, plantingDelay);
     }

@@ -31,14 +31,11 @@ function calculatePotatoesPerSecond() {
 
 function updateResources() {
     rawPotatoesPerSecond = calculatePotatoesPerSecond();
-    potatoCount += rawPotatoesPerSecond / 10; // Update every 100ms
-    water -= (rawPotatoesPerSecond / 10) / waterEfficiency;
-    soilNutrients -= (rawPotatoesPerSecond / 10) / soilEfficiency;
-    oxygen -= (rawPotatoesPerSecond / 10) / oxygenEfficiency;
-
-    if (water < 0) water = 0;
-    if (soilNutrients < 0) soilNutrients = 0;
-    if (oxygen < 0) oxygen = 0;
+    
+    water = Math.max(0, Math.floor(water));
+    soilNutrients = Math.max(0, Math.floor(soilNutrients));
+    oxygen = Math.max(0, Math.floor(oxygen));
+    potatoCount = Math.floor(potatoCount);
 
     updateDisplay();
     updateUpgradeButtons();
@@ -51,10 +48,10 @@ function plantPotato() {
     }
 
     if (water >= 1 && soilNutrients >= 1 && oxygen >= 1) {
-        potatoCount += potatoesPerClick;
-        water -= 1 / waterEfficiency;
-        soilNutrients -= 1 / soilEfficiency;
-        oxygen -= 1 / oxygenEfficiency;
+        potatoCount++;
+        water--;
+        soilNutrients--;
+        oxygen--;
         lastPlantTime = currentTime;
         updateDisplay();
         updateUpgradeButtons();
@@ -93,14 +90,19 @@ function updateDisplay() {
         if (element) element.textContent = text;
     };
 
-    updateElement('potato-count', `Potatoes: ${potatoCount.toFixed(2)}`);
-    updateElement('potatoes-per-second', `Potatoes per second: ${rawPotatoesPerSecond.toFixed(2)}`);
-    updateElement('water-count', `Water: ${water.toFixed(2)}`);
-    updateElement('soil-nutrients', `Soil Nutrients: ${soilNutrients.toFixed(2)}`);
-    updateElement('oxygen-level', `Oxygen: ${oxygen.toFixed(2)}`);
+    updateElement('potato-count', `Potatoes: ${Math.floor(potatoCount)}`);
+    const potatoesPerSecondElement = document.getElementById('potatoes-per-second');
+    if (currentPlantingUpgrade >= 3) {
+        potatoesPerSecondElement.style.display = 'block';
+        updateElement('potatoes-per-second', `Potatoes per second: ${Math.floor(rawPotatoesPerSecond)}`);
+    } else {
+        potatoesPerSecondElement.style.display = 'none';
+    }
+    updateElement('water-count', `Water: ${Math.floor(water)}`);
+    updateElement('soil-nutrients', `Soil Nutrients: ${Math.floor(soilNutrients)}`);
+    updateElement('oxygen-level', `Oxygen: ${Math.floor(oxygen)}`);
     updateElement('exploration-level', `Exploration Level: ${explorationLevel}`);
     updateElement('planting-level', `Planting Level: ${upgrades.planting[currentPlantingUpgrade].name}`);
-    updateElement('harvesting-level', `Harvesting Level: Bare Hands`);
 }
 
 function research(type) {

@@ -17,6 +17,11 @@ let plantingDelay = 2000; // 2 seconds
 let lastPlantTime = 0;
 let potatoesPerClick = 1;
 
+const achievements = {
+    firstPotato: false,
+    // Add more achievements here as needed
+};
+
 function updateResources() {
     potatoCount += rawPotatoesPerSecond / 10;
     water -= (rawPotatoesPerSecond / 10) / waterEfficiency;

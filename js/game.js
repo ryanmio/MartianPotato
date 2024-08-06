@@ -23,28 +23,23 @@ const achievements = {
 };
 
 function calculatePotatoesPerSecond() {
-    if (currentPlantingUpgrade >= 3) { // Automated Planter or higher
-        return 1000 / plantingDelay; // 1 potato per planting cycle
-    }
-    return 0;
+    return rawPotatoesPerSecond;
 }
 
-function consumeResources() {
-    if (water >= 1 && soilNutrients >= 1 && oxygen >= 1) {
-        water = Math.max(0, water - 1 / waterEfficiency);
-        soilNutrients = Math.max(0, soilNutrients - 1 / soilEfficiency);
-        oxygen = Math.max(0, oxygen - 1 / oxygenEfficiency);
+function consumeResources(amount = 1) {
+    if (water >= amount && soilNutrients >= amount && oxygen >= amount) {
+        water -= amount / waterEfficiency;
+        soilNutrients -= amount / soilEfficiency;
+        oxygen -= amount / oxygenEfficiency;
         return true;
     }
     return false;
 }
 
 function updateResources() {
-    rawPotatoesPerSecond = calculatePotatoesPerSecond();
-    
-    water = Math.floor(water);
-    soilNutrients = Math.floor(soilNutrients);
-    oxygen = Math.floor(oxygen);
+    water = Math.max(0, water);
+    soilNutrients = Math.max(0, soilNutrients);
+    oxygen = Math.max(0, oxygen);
     potatoCount = Math.floor(potatoCount);
 
     updateDisplay();
@@ -98,11 +93,11 @@ function updateDisplay() {
         if (element) element.textContent = text;
     };
 
-    updateElement('potato-count', `Potatoes: ${Math.floor(potatoCount)}`);
+    updateElement('potato-count', `Potatoes: ${potatoCount.toFixed(1)}`);
     const potatoesPerSecondElement = document.getElementById('potatoes-per-second');
-    if (currentPlantingUpgrade >= 3) {
+    if (rawPotatoesPerSecond > 0) {
         potatoesPerSecondElement.style.display = 'block';
-        updateElement('potatoes-per-second', `Potatoes per second: ${Math.floor(rawPotatoesPerSecond)}`);
+        updateElement('potatoes-per-second', `Potatoes per second: ${rawPotatoesPerSecond.toFixed(1)}`);
     } else {
         potatoesPerSecondElement.style.display = 'none';
     }

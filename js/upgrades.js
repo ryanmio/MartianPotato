@@ -4,9 +4,9 @@ console.log("Upgrades system loaded");
 const upgrades = {
     planting: [
         { name: "Hand", cost: 0, effect: () => { plantingDelay = 2000; } },
-        { name: "Hand Trowel", cost: 5, effect: () => { plantingDelay = 1500; } },
-        { name: "Planting Stick", cost: 10, effect: () => { plantingDelay = 1000; } },
-        { name: "Automated Planter", cost: 20, effect: () => { addAutoplanter(); }, count: 0 },
+        { name: "Hand Trowel", cost: 1, effect: () => { plantingDelay = 1500; } },
+        { name: "Planting Stick", cost: 1, effect: () => { plantingDelay = 1000; } },
+        { name: "Automated Planter", cost: 1, effect: () => { addAutoplanter(); }, count: 0 },
         { name: "Quantum Spud Spawner", cost: 1000, effect: () => { plantingDelay = 500; } }
     ]
 };
@@ -32,12 +32,18 @@ function displayUpgrades() {
     const upgradesContainer = document.getElementById('upgrades-container');
     upgradesContainer.innerHTML = '<h2>Upgrades</h2>';
 
-    upgrades.planting.forEach((upgrade, index) => {
-        if (index > currentPlantingUpgrade || (index === 3 && upgrade.count > 0)) {
-            const upgradeButton = createUpgradeButton('planting', index, upgrade);
-            upgradesContainer.appendChild(upgradeButton);
-        }
-    });
+    const nextUpgradeIndex = currentPlantingUpgrade + 1;
+    if (nextUpgradeIndex < upgrades.planting.length) {
+        const nextUpgrade = upgrades.planting[nextUpgradeIndex];
+        const upgradeButton = createUpgradeButton('planting', nextUpgradeIndex, nextUpgrade);
+        upgradesContainer.appendChild(upgradeButton);
+    }
+
+    // Always show the Automated Planter if it has been purchased at least once
+    if (upgrades.planting[3].count > 0) {
+        const autoplanterButton = createUpgradeButton('planting', 3, upgrades.planting[3]);
+        upgradesContainer.appendChild(autoplanterButton);
+    }
 }
 
 function createUpgradeButton(type, index, upgrade) {
@@ -68,7 +74,9 @@ function addAutoplanter() {
     };
     autoplanters.push(autoplanter);
     upgrades.planting[3].count++;
+    rawPotatoesPerSecond += 1; // Each autoplanter adds 1 potato per second
     startAutoplanter(autoplanter);
+    updateDisplay();
 }
 
 function startAutomatedPlanting() {
@@ -80,16 +88,20 @@ function startAutomatedPlanting() {
 }
 
 function startAutoplanter(autoplanter) {
+    let accumulatedPotatoes = 0;
     autoplanter.interval = setInterval(() => {
-        if (consumeResources()) {
-            potatoCount++;
-            updateDisplay();
-            updateUpgradeButtons();
+        if (consumeResources(0.1)) {  // Consume 0.1 resources every 100ms
+            accumulatedPotatoes += 0.1;  // Add 0.1 potatoes every 100ms
+            if (accumulatedPotatoes >= 1) {
+                potatoCount += Math.floor(accumulatedPotatoes);
+                accumulatedPotatoes %= 1;
+                updateDisplay();
+            }
         } else {
             clearInterval(autoplanter.interval);
             autoplanter.interval = null;
         }
-    }, plantingDelay);
+    }, 100);  // Run every 100ms instead of plantingDelay
 }
 
 function checkAndRestartAutoplanters() {

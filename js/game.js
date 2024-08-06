@@ -49,6 +49,7 @@ function updateResources() {
 
     updateDisplay();
     updateUpgradeButtons();
+    checkAndRestartAutoplanters();
 }
 
 function plantPotato() {

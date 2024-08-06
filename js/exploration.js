@@ -2,16 +2,18 @@ let explorationLevel = 0;
 const explorationCost = 100;
 
 function exploreMarsSurface() {
-    if (potatoCount >= explorationCost) {
-        potatoCount -= explorationCost;
-        explorationLevel++;
-        const discovery = discoverRandomEvent();
-        updateDisplay();
-        updateUpgradeButtons();
-        alert(`Exploration successful! ${discovery}`);
-    } else {
-        alert("Not enough potatoes for exploration!");
-    }
+    const waterReward = Math.floor(Math.random() * 10) + 1;
+    const soilReward = Math.floor(Math.random() * 10) + 1;
+    const oxygenReward = Math.floor(Math.random() * 10) + 1;
+
+    water += waterReward;
+    soilNutrients += soilReward;
+    oxygen += oxygenReward;
+    explorationLevel++;
+
+    updateDisplay();
+    updateUpgradeButtons();
+    alert(`Exploration successful! You found:\nWater: ${waterReward}\nSoil Nutrients: ${soilReward}\nOxygen: ${oxygenReward}`);
 }
 
 function discoverRandomEvent() {
@@ -45,9 +47,6 @@ function handleSpecialEvent(event) {
 
 // Initialize exploration
 document.addEventListener('DOMContentLoaded', () => {
-    const exploreButton = document.createElement('button');
-    exploreButton.id = 'explore-button';
-    exploreButton.textContent = `Explore Mars Surface (Cost: ${explorationCost} potatoes)`;
-    exploreButton.onclick = exploreMarsSurface;
-    document.getElementById('game-container').appendChild(exploreButton);
+    const exploreButton = document.getElementById('explore-button');
+    exploreButton.addEventListener('click', exploreMarsSurface);
 });

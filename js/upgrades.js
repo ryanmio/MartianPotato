@@ -19,8 +19,12 @@ function buyUpgrade(type, index) {
     if (potatoCount >= cost) {
         potatoCount -= cost;
         upgrade.effect();
-        if (type === 'planting' && index !== 3) {
-            currentPlantingUpgrade = index;
+        if (type === 'planting') {
+            if (index === 3) {
+                upgrade.count++;
+            } else {
+                currentPlantingUpgrade = index;
+            }
         }
         updateDisplay();
         displayUpgrades();
@@ -32,17 +36,22 @@ function displayUpgrades() {
     const upgradesContainer = document.getElementById('upgrades-container');
     upgradesContainer.innerHTML = '<h2>Upgrades</h2>';
 
-    const nextUpgradeIndex = currentPlantingUpgrade + 1;
-    if (nextUpgradeIndex < upgrades.planting.length) {
+    if (currentPlantingUpgrade < 3) {
+        // Show the next upgrade up to Automated Planter
+        const nextUpgradeIndex = currentPlantingUpgrade + 1;
         const nextUpgrade = upgrades.planting[nextUpgradeIndex];
         const upgradeButton = createUpgradeButton('planting', nextUpgradeIndex, nextUpgrade);
         upgradesContainer.appendChild(upgradeButton);
-    }
-
-    // Always show the Automated Planter if it has been purchased at least once
-    if (upgrades.planting[3].count > 0) {
+    } else if (currentPlantingUpgrade === 3) {
+        // Show only the Automated Planter button if it's the current upgrade
         const autoplanterButton = createUpgradeButton('planting', 3, upgrades.planting[3]);
         upgradesContainer.appendChild(autoplanterButton);
+    }
+
+    // Show Quantum Spud Spawner if Automated Planter has been purchased and it's not the current upgrade
+    if (upgrades.planting[3].count > 0 && currentPlantingUpgrade < 4) {
+        const quantumSpudButton = createUpgradeButton('planting', 4, upgrades.planting[4]);
+        upgradesContainer.appendChild(quantumSpudButton);
     }
 }
 

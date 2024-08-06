@@ -2,7 +2,6 @@
 console.log("Game initialized");
 
 let potatoCount = 0;
-let potatoesPerClick = 1;
 let water = 100;
 let soilNutrients = 100;
 let oxygen = 100;
@@ -13,6 +12,7 @@ let oxygenEfficiency = 1;
 
 let plantingDelay = 2000; // 2 seconds
 let lastPlantTime = 0;
+let potatoesPerClick = 1;
 
 function plantPotato() {
     const currentTime = Date.now();
@@ -63,6 +63,8 @@ function updateDisplay() {
     document.getElementById('soil-nutrients').textContent = `Soil Nutrients: ${soilNutrients.toFixed(2)}`;
     document.getElementById('oxygen-level').textContent = `Oxygen: ${oxygen.toFixed(2)}`;
     document.getElementById('exploration-level').textContent = `Exploration Level: ${explorationLevel}`;
+    document.getElementById('planting-level').textContent = `Planting Level: ${upgrades.planting[currentPlantingUpgrade].name}`;
+    document.getElementById('harvesting-level').textContent = `Harvesting Level: ${upgrades.harvesting[currentHarvestingUpgrade].name}`;
 }
 
 function research(type) {
@@ -113,13 +115,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start the main game loop
     setInterval(updatePlantButton, 100);
 });
-
-// Function to update upgrade buttons (to be called after each potato plant)
-function updateUpgradeButtons() {
-    upgrades.forEach((upgrade, index) => {
-        const button = document.getElementById(`upgrade-${index}`);
-        if (button) {
-            button.disabled = potatoCount < upgrade.cost;
-        }
-    });
-}

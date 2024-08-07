@@ -110,6 +110,11 @@ function updateDisplay() {
     updateElement('water-count', `Water: ${Math.floor(water)}`);
     updateElement('soil-nutrients', `Soil Nutrients: ${Math.floor(soilNutrients)}`);
     updateElement('oxygen-level', `Oxygen: ${Math.floor(oxygen)}`);
+    updateElement('exploration-level', `Exploration Level: ${explorationLevel}`);
+    if (currentExplorationUpgrade >= 0) {
+        const currentUpgrade = explorationUpgrades[currentExplorationUpgrade];
+        updateElement('current-explorer', `Current Explorer: ${currentUpgrade.name}`);
+    }
 }
 
 function research(type) {
@@ -156,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateDisplay();
     displayUpgrades();
+    displayExplorationUpgrades();
 
     // Start the main game loop
     setInterval(updatePlantButton, 100);

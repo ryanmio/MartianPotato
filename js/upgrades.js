@@ -7,7 +7,8 @@ const upgrades = {
         { name: "Hand Trowel", cost: 1, effect: () => { plantingDelay = 1500; } },
         { name: "Planting Stick", cost: 1, effect: () => { plantingDelay = 1000; } },
         { name: "Automated Planter", cost: 1, effect: () => { addAutoplanter(); }, count: 0 },
-        { name: "Quantum Spud Spawner", cost: 1000, effect: () => { plantingDelay = 500; } }
+        { name: "Quantum Spud Spawner", cost: 1000, effect: () => { plantingDelay = 500; } },
+        { name: "Autonomous Rover", cost: 500, effect: () => { startAutonomousExploration(); }, count: 0 }
     ]
 };
 

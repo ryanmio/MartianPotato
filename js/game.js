@@ -94,18 +94,22 @@ function updateDisplay() {
     };
 
     updateElement('potato-count', `Potatoes: ${potatoCount.toFixed(1)}`);
-    const potatoesPerSecondElement = document.getElementById('potatoes-per-second');
-    if (rawPotatoesPerSecond > 0) {
-        potatoesPerSecondElement.style.display = 'block';
-        updateElement('potatoes-per-second', `Potatoes per second: ${rawPotatoesPerSecond.toFixed(1)}`);
-    } else {
-        potatoesPerSecondElement.style.display = 'none';
+    updateElement('potatoes-per-second', `Potatoes per second: ${rawPotatoesPerSecond.toFixed(1)}`);
+    updateElement('planting-level', `Planting Level: ${upgrades.planting[currentPlantingUpgrade].name}`);
+    
+    const autoplantersElement = document.getElementById('automated-planters');
+    if (autoplantersElement) {
+        if (autoplanters.length > 0) {
+            autoplantersElement.style.display = 'block';
+            autoplantersElement.textContent = `Automated Planters: ${autoplanters.length}`;
+        } else {
+            autoplantersElement.style.display = 'none';
+        }
     }
+
     updateElement('water-count', `Water: ${Math.floor(water)}`);
     updateElement('soil-nutrients', `Soil Nutrients: ${Math.floor(soilNutrients)}`);
     updateElement('oxygen-level', `Oxygen: ${Math.floor(oxygen)}`);
-    updateElement('exploration-level', `Exploration Level: ${explorationLevel}`);
-    updateElement('planting-level', `Planting Level: ${upgrades.planting[currentPlantingUpgrade].name}`);
 }
 
 function research(type) {

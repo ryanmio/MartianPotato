@@ -59,8 +59,7 @@ function createUpgradeButton(type, index, upgrade) {
     const button = document.createElement('button');
     button.id = `${type}-upgrade-${index}`;
     const cost = index === 3 ? Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count)) : upgrade.cost;
-    const countText = index === 3 ? ` (${upgrade.count})` : '';
-    button.textContent = `Buy ${upgrade.name}${countText} (Cost: ${cost} potatoes)`;
+    button.textContent = `Buy ${upgrade.name} (Cost: ${cost} potatoes)`;
     button.onclick = () => buyUpgrade(type, index);
     button.disabled = potatoCount < cost;
     return button;
@@ -82,7 +81,6 @@ function addAutoplanter() {
         cost: Math.floor(20 * Math.pow(1.15, upgrades.planting[3].count))
     };
     autoplanters.push(autoplanter);
-    upgrades.planting[3].count++;
     rawPotatoesPerSecond += 1; // Each autoplanter adds 1 potato per second
     startAutoplanter(autoplanter);
     updateDisplay();
@@ -99,24 +97,23 @@ function startAutomatedPlanting() {
 function startAutoplanter(autoplanter) {
     let accumulatedPotatoes = 0;
     autoplanter.interval = setInterval(() => {
-        if (consumeResources(0.1)) {  // Consume 0.1 resources every 100ms
-            accumulatedPotatoes += 0.1;  // Add 0.1 potatoes every 100ms
+        if (consumeResources(0.1)) {
+            accumulatedPotatoes += 0.1;
             if (accumulatedPotatoes >= 1) {
                 potatoCount += Math.floor(accumulatedPotatoes);
                 accumulatedPotatoes %= 1;
                 updateDisplay();
             }
-        } else {
-            clearInterval(autoplanter.interval);
-            autoplanter.interval = null;
         }
-    }, 100);  // Run every 100ms instead of plantingDelay
+    }, 100);
 }
 
 function checkAndRestartAutoplanters() {
-    if (water >= 1 && soilNutrients >= 1 && oxygen >= 1) {
-        startAutomatedPlanting();
-    }
+    autoplanters.forEach(autoplanter => {
+        if (!autoplanter.interval && consumeResources(0.1)) {
+            startAutoplanter(autoplanter);
+        }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', displayUpgrades);

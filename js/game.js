@@ -110,11 +110,8 @@ function updateDisplay() {
     updateElement('water-count', `Water: ${Math.floor(water)}`);
     updateElement('soil-nutrients', `Soil Nutrients: ${Math.floor(soilNutrients)}`);
     updateElement('oxygen-level', `Oxygen: ${Math.floor(oxygen)}`);
-    updateElement('exploration-level', `Exploration Level: ${explorationLevel}`);
-    if (currentExplorationUpgrade >= 0) {
-        const currentUpgrade = explorationUpgrades[currentExplorationUpgrade];
-        updateElement('current-explorer', `Current Explorer: ${currentUpgrade.name}`);
-    }
+    updateElement('exploration-rate', `Exploration Rate: ${totalExplorationRate.toFixed(1)} per second`);
+    updateElement('purchased-upgrades', `Purchased Upgrades: ${purchasedUpgrades.map(u => u.name).join(', ')}`);
 }
 
 function research(type) {

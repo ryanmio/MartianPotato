@@ -1,15 +1,26 @@
 const explorationUpgrades = [
+    { name: "Martian Map", cost: 10, effect: () => { exploreDelay = 30000; } },
+    { name: "Binoculars", cost: 50, effect: () => { exploreDelay = 20000; } },
+    { name: "Jetpack", cost: 250, effect: () => { exploreDelay = 10000; } },
     { name: "Potato-Powered Rover", cost: 500, rate: 0.1 },
     { name: "Spudnik Satellite", cost: 2000, rate: 0.5 },
     { name: "Subterranean Tuber Tunneler", cost: 5000, rate: 1 },
     { name: "Martian Potato Colonizer", cost: 20000, rate: 2 }
 ];
 
+let exploreDelay = 6000; // Initial delay of 6 seconds
+let lastExploreTime = 0;
 let purchasedUpgrades = [];
 let autonomousExplorationInterval = null;
 let totalExplorationRate = 0;
 
 function exploreMarsSurface() {
+    const currentTime = Date.now();
+    if (currentTime - lastExploreTime < exploreDelay) {
+        alert(`You need to wait ${((exploreDelay - (currentTime - lastExploreTime)) / 1000).toFixed(1)} seconds before exploring again.`);
+        return;
+    }
+
     const waterReward = Math.floor(Math.random() * 10) + 1;
     const soilReward = Math.floor(Math.random() * 10) + 1;
     const oxygenReward = Math.floor(Math.random() * 10) + 1;
@@ -18,14 +29,9 @@ function exploreMarsSurface() {
     soilNutrients += soilReward;
     oxygen += oxygenReward;
 
+    lastExploreTime = currentTime;
     updateDisplay();
     alert(`Exploration successful! You found:\nWater: ${waterReward}\nSoil Nutrients: ${soilReward}\nOxygen: ${oxygenReward}`);
-    
-    // 10% chance of triggering a random event
-    if (Math.random() < 0.1) {
-        const event = discoverRandomEvent();
-        alert(event);
-    }
 }
 
 function buyExplorationUpgrade(index) {
@@ -33,8 +39,12 @@ function buyExplorationUpgrade(index) {
     if (potatoCount >= upgrade.cost && !purchasedUpgrades.includes(upgrade)) {
         potatoCount -= upgrade.cost;
         purchasedUpgrades.push(upgrade);
-        totalExplorationRate += upgrade.rate;
-        updateAutonomousExploration();
+        if (upgrade.rate) {
+            totalExplorationRate += upgrade.rate;
+            updateAutonomousExploration();
+        } else {
+            upgrade.effect();
+        }
         updateDisplay();
         displayExplorationUpgrades();
     }
@@ -58,15 +68,26 @@ function updateAutonomousExploration() {
 function displayExplorationUpgrades() {
     const container = document.getElementById('exploration-upgrades');
     container.innerHTML = '<h3>Exploration Upgrades</h3>';
-    explorationUpgrades.forEach((upgrade, index) => {
-        if (!purchasedUpgrades.includes(upgrade)) {
-            const button = document.createElement('button');
-            button.textContent = `Buy ${upgrade.name} (Cost: ${upgrade.cost} potatoes)`;
-            button.onclick = () => buyExplorationUpgrade(index);
-            button.disabled = potatoCount < upgrade.cost;
-            container.appendChild(button);
-        }
-    });
+    const nextUpgradeIndex = purchasedUpgrades.length;
+    if (nextUpgradeIndex < explorationUpgrades.length) {
+        const nextUpgrade = explorationUpgrades[nextUpgradeIndex];
+        const button = document.createElement('button');
+        button.id = 'exploration-upgrade-button';
+        button.textContent = `Buy ${nextUpgrade.name} (Cost: ${nextUpgrade.cost} potatoes)`;
+        button.onclick = () => buyExplorationUpgrade(nextUpgradeIndex);
+        button.disabled = potatoCount < nextUpgrade.cost;
+        container.appendChild(button);
+    }
+}
+
+function updateExplorationUpgradeButton() {
+    const container = document.getElementById('exploration-upgrades');
+    const button = container.querySelector('button');
+    if (button) {
+        const nextUpgradeIndex = purchasedUpgrades.length;
+        const nextUpgrade = explorationUpgrades[nextUpgradeIndex];
+        button.disabled = potatoCount < nextUpgrade.cost;
+    }
 }
 
 // Initialize exploration

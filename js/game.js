@@ -112,6 +112,20 @@ function updateDisplay() {
     updateElement('oxygen-level', `Oxygen: ${Math.floor(oxygen)}`);
     updateElement('exploration-rate', `Exploration Rate: ${totalExplorationRate.toFixed(1)} per second`);
     updateElement('purchased-upgrades', `Purchased Upgrades: ${purchasedUpgrades.map(u => u.name).join(', ')}`);
+
+    const exploreButton = document.getElementById('explore-button');
+    const currentTime = Date.now();
+    const timeLeft = Math.max(0, exploreDelay - (currentTime - lastExploreTime));
+    if (timeLeft > 0) {
+        exploreButton.disabled = true;
+        exploreButton.textContent = `Explore Mars Surface (${(timeLeft / 1000).toFixed(1)}s)`;
+    } else {
+        exploreButton.disabled = false;
+        exploreButton.textContent = 'Explore Mars Surface';
+    }
+
+    // Add this line
+    updateExplorationUpgradeButton();
 }
 
 function research(type) {

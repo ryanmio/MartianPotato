@@ -29,8 +29,13 @@ button:hover, button:disabled {
     background: rgba(0,0,0,.1);
 }
 
-#resources {
-    margin-bottom: 20px;
+#resources, #production, #exploration-container {
+    margin-bottom: 10px;
+}
+
+#resources p, #production p, #exploration-container p {
+    margin: 5px 0;
+    line-height: 1.2;
 }
 
 #upgrades-container, #research-container, #exploration-container {
@@ -41,10 +46,10 @@ button:hover, button:disabled {
 
 h2 {
     font-size: 21px;
-    line-height: 40px;
+    line-height: 30px;
     color: #333;
     border-bottom: 1px solid #e5e5e5;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 #explore-button {

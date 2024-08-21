@@ -184,9 +184,15 @@ function updateDisplay() {
     // Update potato field display only if there are changes
     const fieldContainer = document.getElementById('potato-field');
     const currentPotatoFieldHTML = potatoField.map((potato, index) => {
-        const growthStage = `${potato.growthStage}%`;
-        const harvestableClass = potato.growthStage >= 100 ? 'harvestable' : '';
-        return `<div class="potato ${harvestableClass}" style="background-size: ${growthStage} 100%;" data-index="${index}">${growthStage}</div>`;
+        const growthStage = potato.growthStage;
+        const harvestableClass = growthStage >= 100 ? 'harvestable' : '';
+        const growthColor = growthStage < 33 ? '#8FBC8F' : growthStage < 66 ? '#3CB371' : '#228B22';
+        return `
+            <div class="potato ${harvestableClass}" data-index="${index}">
+                <div class="growth-indicator" style="height: ${growthStage}%; background-color: ${growthColor};"></div>
+                <span class="growth-text">${growthStage}%</span>
+            </div>
+        `;
     }).join('');
 
     if (fieldContainer.innerHTML !== currentPotatoFieldHTML) {

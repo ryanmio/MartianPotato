@@ -47,22 +47,61 @@ function updateResources() {
     checkAndRestartAutoplanters();
 }
 
+// Add these new variables at the beginning of the file
+const MAX_FIELD_SIZE = 8;
+const GROWTH_TIME = 8000; // 8 seconds in milliseconds
+let potatoField = [];
+
+// Modify the plantPotato function
 function plantPotato() {
     const currentTime = Date.now();
     if (currentTime - lastPlantTime < plantingDelay) {
         return;
     }
 
+    if (potatoField.length >= MAX_FIELD_SIZE) {
+        alert("No more room in the field! Harvest some potatoes first.");
+        return;
+    }
+
     if (consumeResources()) {
-        potatoCount++;
+        potatoField.push({
+            plantedAt: currentTime,
+            growthStage: 0
+        });
         lastPlantTime = currentTime;
         updateDisplay();
         updateUpgradeButtons();
-        checkAchievements();
     } else {
         alert("Not enough resources to plant a potato! Explore Mars to find more resources.");
     }
     updatePlantButton();
+}
+
+// Add a new function to handle potato growth
+function updatePotatoGrowth() {
+    const currentTime = Date.now();
+    potatoField = potatoField.map(potato => {
+        const growthTime = currentTime - potato.plantedAt;
+        potato.growthStage = Math.min(100, Math.floor((growthTime / GROWTH_TIME) * 100));
+        return potato;
+    });
+    updateDisplay();
+}
+
+// Add a new function to harvest potatoes
+function harvestPotatoes() {
+    let harvestedCount = 0;
+    potatoField = potatoField.filter(potato => {
+        if (potato.growthStage >= 100) {
+            harvestedCount++;
+            return false;
+        }
+        return true;
+    });
+    potatoCount += harvestedCount;
+    updateDisplay();
+    checkAchievements();
 }
 
 function updatePlantButton() {
@@ -126,6 +165,17 @@ function updateDisplay() {
 
     // Add this line
     updateExplorationUpgradeButton();
+
+    // Modify the updateDisplay function to show the potato field
+    const fieldContainer = document.getElementById('potato-field');
+    fieldContainer.innerHTML = '';
+    potatoField.forEach((potato, index) => {
+        const potatoElement = document.createElement('div');
+        potatoElement.className = 'potato';
+        potatoElement.style.backgroundSize = `${potato.growthStage}% 100%`;
+        potatoElement.textContent = `${potato.growthStage}%`;
+        fieldContainer.appendChild(potatoElement);
+    });
 }
 
 function research(type) {
@@ -177,4 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start the main game loop
     setInterval(updatePlantButton, 100);
     setInterval(updateResources, 100);
+    setInterval(updatePotatoGrowth, 1000); // Update growth every second
+
+    const fieldContainer = document.getElementById('potato-field');
+    fieldContainer.addEventListener('click', harvestPotatoes);
 });

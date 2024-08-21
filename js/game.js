@@ -89,7 +89,7 @@ function updatePotatoGrowth() {
     updateDisplay();
 }
 
-// Add a new function to harvest potatoes
+// Modify the harvestPotatoes function
 function harvestPotatoes() {
     let harvestedCount = 0;
     potatoField = potatoField.filter(potato => {
@@ -99,9 +99,27 @@ function harvestPotatoes() {
         }
         return true;
     });
-    potatoCount += harvestedCount;
-    updateDisplay();
-    checkAchievements();
+
+    if (harvestedCount > 0) {
+        potatoCount += harvestedCount;
+        updateDisplay();
+        checkAchievements();
+    }
+}
+
+function harvestPotatoAtIndex(index) {
+    console.log(`Attempting to harvest potato at index ${index}`);
+    console.log(`Potato field:`, potatoField);
+    console.log(`Potato at index ${index}:`, potatoField[index]);
+    if (potatoField[index] && potatoField[index].growthStage >= 100) {
+        potatoCount++;
+        potatoField.splice(index, 1);
+        console.log(`Harvested potato at index ${index}`);
+        updateDisplay();
+        checkAchievements();
+    } else {
+        console.log(`Potato at index ${index} is not ready for harvesting`);
+    }
 }
 
 function updatePlantButton() {
@@ -163,19 +181,32 @@ function updateDisplay() {
         exploreButton.textContent = 'Explore Mars Surface';
     }
 
-    // Add this line
-    updateExplorationUpgradeButton();
-
-    // Modify the updateDisplay function to show the potato field
+    // Update potato field display only if there are changes
     const fieldContainer = document.getElementById('potato-field');
-    fieldContainer.innerHTML = '';
-    potatoField.forEach((potato, index) => {
-        const potatoElement = document.createElement('div');
-        potatoElement.className = 'potato';
-        potatoElement.style.backgroundSize = `${potato.growthStage}% 100%`;
-        potatoElement.textContent = `${potato.growthStage}%`;
-        fieldContainer.appendChild(potatoElement);
-    });
+    const currentPotatoFieldHTML = potatoField.map((potato, index) => {
+        const growthStage = `${potato.growthStage}%`;
+        const harvestableClass = potato.growthStage >= 100 ? 'harvestable' : '';
+        return `<div class="potato ${harvestableClass}" style="background-size: ${growthStage} 100%;" data-index="${index}">${growthStage}</div>`;
+    }).join('');
+
+    if (fieldContainer.innerHTML !== currentPotatoFieldHTML) {
+        fieldContainer.innerHTML = currentPotatoFieldHTML;
+
+        // Attach event listeners to the new potato elements
+        document.querySelectorAll('.potato').forEach(potatoElement => {
+            potatoElement.addEventListener('click', () => {
+                const index = parseInt(potatoElement.getAttribute('data-index'), 10);
+                console.log(`Clicked on potato at index ${index}`);
+                if (potatoField[index].growthStage >= 100) {
+                    harvestPotatoAtIndex(index);
+                } else {
+                    console.log(`Potato at index ${index} is not ready for harvesting`);
+                }
+            });
+        });
+    }
+
+    updateExplorationUpgradeButton();
 }
 
 function research(type) {
@@ -229,6 +260,14 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateResources, 100);
     setInterval(updatePotatoGrowth, 1000); // Update growth every second
 
-    const fieldContainer = document.getElementById('potato-field');
-    fieldContainer.addEventListener('click', harvestPotatoes);
+    const debugHarvestButton = document.getElementById('debug-harvest');
+    debugHarvestButton.addEventListener('click', () => {
+        console.log("Debug: Attempting to harvest all ready potatoes");
+        potatoField.forEach((potato, index) => {
+            if (potato.growthStage >= 100) {
+                harvestPotatoAtIndex(index);
+            }
+        });
+        updateDisplay();
+    });
 });

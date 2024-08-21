@@ -81,4 +81,14 @@ h2 {
     color: white;
     background-image: linear-gradient(to top, #4CAF50 50%, transparent 50%);
     background-repeat: no-repeat;
+    cursor: pointer;
+    position: relative;
+}
+
+.potato.harvestable {
+    box-shadow: 0 0 10px #FFD700;
+}
+
+.potato.harvestable:hover {
+    transform: scale(1.1);
 }

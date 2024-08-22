@@ -50,7 +50,7 @@ function updateResources() {
 // Add these new variables at the beginning of the file
 const MAX_FIELD_SIZE = 8;
 const GROWTH_TIME = 8000; // 8 seconds in milliseconds
-let potatoField = [];
+let potatoField = new Array(MAX_FIELD_SIZE).fill(null);
 
 // Modify the plantPotato function
 function plantPotato() {
@@ -59,16 +59,17 @@ function plantPotato() {
         return;
     }
 
-    if (potatoField.length >= MAX_FIELD_SIZE) {
+    const emptySlotIndex = potatoField.findIndex(slot => slot === null);
+    if (emptySlotIndex === -1) {
         alert("No more room in the field! Harvest some potatoes first.");
         return;
     }
 
     if (consumeResources()) {
-        potatoField.push({
+        potatoField[emptySlotIndex] = {
             plantedAt: currentTime,
             growthStage: 0
-        });
+        };
         lastPlantTime = currentTime;
         updateDisplay();
         updateUpgradeButtons();
@@ -82,37 +83,21 @@ function plantPotato() {
 function updatePotatoGrowth() {
     const currentTime = Date.now();
     potatoField = potatoField.map(potato => {
-        const growthTime = currentTime - potato.plantedAt;
-        potato.growthStage = Math.min(100, Math.floor((growthTime / GROWTH_TIME) * 100));
+        if (potato !== null) {
+            const growthTime = currentTime - potato.plantedAt;
+            potato.growthStage = Math.min(100, Math.floor((growthTime / GROWTH_TIME) * 100));
+        }
         return potato;
     });
     updateDisplay();
 }
 
 // Modify the harvestPotatoes function
-function harvestReadyPotatoes() {
-    let harvestedCount = 0;
-    potatoField = potatoField.filter(potato => {
-        if (potato.growthStage >= 100) {
-            harvestedCount++;
-            return false;
-        }
-        return true;
-    });
-
-    if (harvestedCount > 0) {
-        potatoCount += harvestedCount;
-        checkAchievements();
-    }
-}
-
 function harvestPotatoAtIndex(index) {
     console.log(`Attempting to harvest potato at index ${index}`);
-    console.log(`Potato field:`, potatoField);
-    console.log(`Potato at index ${index}:`, potatoField[index]);
     if (potatoField[index] && potatoField[index].growthStage >= 100) {
         potatoCount++;
-        potatoField.splice(index, 1);
+        potatoField[index] = null; // Replace with empty slot instead of removing
         console.log(`Harvested potato at index ${index}`);
         updateDisplay();
         checkAchievements();
@@ -183,13 +168,18 @@ function updateDisplay() {
     // Update potato field display only if there are changes
     const fieldContainer = document.getElementById('potato-field');
     const currentPotatoFieldHTML = potatoField.map((potato, index) => {
+        if (potato === null) {
+            return `<div class="potato-slot"></div>`;
+        }
         const growthStage = potato.growthStage;
         const harvestableClass = growthStage >= 100 ? 'harvestable' : '';
         const growthColor = growthStage < 33 ? '#8FBC8F' : growthStage < 66 ? '#3CB371' : '#228B22';
         return `
-            <div class="potato ${harvestableClass}" data-index="${index}">
-                <div class="growth-indicator" style="height: ${growthStage}%; background-color: ${growthColor};"></div>
-                <span class="growth-text">${growthStage}%</span>
+            <div class="potato-slot">
+                <div class="potato ${harvestableClass}" data-index="${index}">
+                    <div class="growth-indicator" style="height: ${growthStage}%; background-color: ${growthColor};"></div>
+                    <span class="growth-text">${growthStage}%</span>
+                </div>
             </div>
         `;
     }).join('');
@@ -270,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
     debugHarvestButton.addEventListener('click', () => {
         console.log("Debug: Attempting to harvest all ready potatoes");
         potatoField.forEach((potato, index) => {
-            if (potato.growthStage >= 100) {
+            if (potato && potato.growthStage >= 100) {
                 harvestPotatoAtIndex(index);
             }
         });

@@ -87,12 +87,13 @@ function addAutoplanter() {
 
 function startAutoplanter(autoplanter) {
     autoplanter.interval = setInterval(() => {
-        if (potatoField.length < MAX_FIELD_SIZE && consumeResources()) {
+        const emptySlotIndex = potatoField.findIndex(slot => slot === null);
+        if (emptySlotIndex !== -1 && consumeResources()) {
             const currentTime = Date.now();
-            potatoField.push({
+            potatoField[emptySlotIndex] = {
                 plantedAt: currentTime,
                 growthStage: 0
-            });
+            };
             updateDisplay();
         }
     }, 2000); // Try to plant every 2 seconds

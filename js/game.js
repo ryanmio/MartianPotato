@@ -23,7 +23,7 @@ const achievements = {
 };
 
 function calculatePotatoesPerSecond() {
-    return rawPotatoesPerSecond;
+    return autoplanters.length / (GROWTH_TIME / 1000);
 }
 
 function consumeResources(amount = 1) {
@@ -90,7 +90,7 @@ function updatePotatoGrowth() {
 }
 
 // Modify the harvestPotatoes function
-function harvestPotatoes() {
+function harvestReadyPotatoes() {
     let harvestedCount = 0;
     potatoField = potatoField.filter(potato => {
         if (potato.growthStage >= 100) {
@@ -102,7 +102,6 @@ function harvestPotatoes() {
 
     if (harvestedCount > 0) {
         potatoCount += harvestedCount;
-        updateDisplay();
         checkAchievements();
     }
 }
@@ -265,6 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updatePlantButton, 100);
     setInterval(updateResources, 100);
     setInterval(updatePotatoGrowth, 1000); // Update growth every second
+    setInterval(checkAndRestartAutoplanters, 5000); // Check autoplanters every 5 seconds
 
     const debugHarvestButton = document.getElementById('debug-harvest');
     debugHarvestButton.addEventListener('click', () => {

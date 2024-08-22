@@ -81,36 +81,26 @@ function addAutoplanter() {
         cost: Math.floor(20 * Math.pow(1.15, upgrades.planting[3].count))
     };
     autoplanters.push(autoplanter);
-    rawPotatoesPerSecond += 1; // Each autoplanter adds 1 potato per second
     startAutoplanter(autoplanter);
     updateDisplay();
 }
 
-function startAutomatedPlanting() {
-    autoplanters.forEach(autoplanter => {
-        if (!autoplanter.interval) {
-            startAutoplanter(autoplanter);
-        }
-    });
-}
-
 function startAutoplanter(autoplanter) {
-    let accumulatedPotatoes = 0;
     autoplanter.interval = setInterval(() => {
-        if (consumeResources(0.1)) {
-            accumulatedPotatoes += 0.1;
-            if (accumulatedPotatoes >= 1) {
-                potatoCount += Math.floor(accumulatedPotatoes);
-                accumulatedPotatoes %= 1;
-                updateDisplay();
-            }
+        if (potatoField.length < MAX_FIELD_SIZE && consumeResources()) {
+            const currentTime = Date.now();
+            potatoField.push({
+                plantedAt: currentTime,
+                growthStage: 0
+            });
+            updateDisplay();
         }
-    }, 100);
+    }, 2000); // Try to plant every 2 seconds
 }
 
 function checkAndRestartAutoplanters() {
     autoplanters.forEach(autoplanter => {
-        if (!autoplanter.interval && consumeResources(0.1)) {
+        if (!autoplanter.interval) {
             startAutoplanter(autoplanter);
         }
     });

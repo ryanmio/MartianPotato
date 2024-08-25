@@ -8,6 +8,10 @@ const upgrades = {
         { name: "Planting Stick", cost: 1, effect: () => { plantingDelay = 1000; } },
         { name: "Automated Planter", cost: 1, effect: () => { addAutoplanter(); }, count: 0 },
         { name: "Quantum Spud Spawner", cost: 1000, effect: () => { plantingDelay = 500; } }
+    ],
+    harvesting: [
+        { name: "Hand", cost: 0, effect: () => { /* No effect for initial hand harvesting */ } },
+        { name: "Auto Harvester", cost: 10, effect: () => { addAutoHarvester(); }, count: 0 }
     ]
 };
 
@@ -15,7 +19,7 @@ let currentPlantingUpgrade = 0;
 
 function buyUpgrade(type, index) {
     const upgrade = upgrades[type][index];
-    const cost = index === 3 ? Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count)) : upgrade.cost;
+    const cost = type === 'planting' && index === 3 ? Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count)) : upgrade.cost;
     if (potatoCount >= cost) {
         potatoCount -= cost;
         upgrade.effect();
@@ -25,6 +29,8 @@ function buyUpgrade(type, index) {
             } else {
                 currentPlantingUpgrade = index;
             }
+        } else if (type === 'harvesting' && index === 1) {
+            upgrade.count++;
         }
         updateDisplay();
         displayUpgrades();
@@ -53,12 +59,17 @@ function displayUpgrades() {
         const quantumSpudButton = createUpgradeButton('planting', 4, upgrades.planting[4]);
         upgradesContainer.appendChild(quantumSpudButton);
     }
+
+    // Show Auto Harvester upgrade
+    const autoHarvesterUpgrade = upgrades.harvesting[1];
+    const autoHarvesterButton = createUpgradeButton('harvesting', 1, autoHarvesterUpgrade);
+    upgradesContainer.appendChild(autoHarvesterButton);
 }
 
 function createUpgradeButton(type, index, upgrade) {
     const button = document.createElement('button');
     button.id = `${type}-upgrade-${index}`;
-    const cost = index === 3 ? Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count)) : upgrade.cost;
+    const cost = type === 'planting' && index === 3 ? Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count)) : upgrade.cost;
     button.textContent = `Buy ${upgrade.name} (Cost: ${cost} potatoes)`;
     button.onclick = () => buyUpgrade(type, index);
     button.disabled = potatoCount < cost;
@@ -67,9 +78,14 @@ function createUpgradeButton(type, index, upgrade) {
 
 function updateUpgradeButtons() {
     const index = currentPlantingUpgrade + 1;
-    const button = document.getElementById(`planting-upgrade-${index}`);
-    if (button) {
-        button.disabled = potatoCount < upgrades.planting[index].cost;
+    const plantingButton = document.getElementById(`planting-upgrade-${index}`);
+    if (plantingButton) {
+        plantingButton.disabled = potatoCount < upgrades.planting[index].cost;
+    }
+
+    const autoHarvesterButton = document.getElementById('harvesting-upgrade-1');
+    if (autoHarvesterButton) {
+        autoHarvesterButton.disabled = potatoCount < upgrades.harvesting[1].cost;
     }
 }
 
@@ -81,6 +97,7 @@ function addAutoplanter() {
         cost: Math.floor(20 * Math.pow(1.15, upgrades.planting[3].count))
     };
     autoplanters.push(autoplanter);
+    rawPotatoesPerSecond += 1; // Each autoplanter adds 1 potato per second
     startAutoplanter(autoplanter);
     updateDisplay();
 }
@@ -107,4 +124,29 @@ function checkAndRestartAutoplanters() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', displayUpgrades);
+let autoHarvesters = [];
+
+function addAutoHarvester() {
+    const autoHarvester = {
+        interval: null,
+        cost: Math.floor(10 * Math.pow(1.15, upgrades.harvesting[1].count))
+    };
+    autoHarvesters.push(autoHarvester);
+    startAutoHarvester(autoHarvester);
+    updateDisplay();
+}
+
+function startAutoHarvester(autoHarvester) {
+    autoHarvester.interval = setInterval(() => {
+        potatoField.forEach((potato, index) => {
+            if (potato && potato.growthStage >= 100) {
+                harvestPotatoAtIndex(index);
+            }
+        });
+    }, 2000); // Try to harvest every 2 seconds
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    displayUpgrades();
+    updateUpgradeButtons();
+});

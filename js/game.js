@@ -89,6 +89,11 @@ function updatePotatoGrowth() {
         }
         return potato;
     });
+    autoHarvesters.forEach(autoHarvester => {
+        if (!autoHarvester.interval) {
+            startAutoHarvester(autoHarvester);
+        }
+    });
     updateDisplay();
 }
 
@@ -249,6 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDisplay();
     displayUpgrades();
     displayExplorationUpgrades();
+    updateUpgradeButtons();
 
     // Start the main game loop
     setInterval(updatePlantButton, 100);

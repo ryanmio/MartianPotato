@@ -29,8 +29,19 @@ button:hover, button:disabled {
     background: rgba(0,0,0,.1);
 }
 
-#resources, #production, #exploration-container {
-    margin-bottom: 10px;
+#stats-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+#resources, #production {
+    flex: 1;
+    margin-right: 20px;
+}
+
+#production {
+    margin-right: 0;
 }
 
 #resources p, #production p, #exploration-container p {
@@ -38,7 +49,7 @@ button:hover, button:disabled {
     line-height: 1.2;
 }
 
-#upgrades-container, #research-container, #exploration-container {
+#upgrades-container, #research-container, #exploration-container, #debug-container {
     margin-top: 20px;
     border-top: 1px solid #C0C0C0;
     padding-top: 20px;
@@ -160,4 +171,14 @@ h2 {
 
 .potato:hover {
     transform: scale(1.1);
+}
+
+#plant-button {
+    margin-bottom: 20px;
+}
+
+#debug-container {
+    margin-top: 20px;
+    border-top: 1px solid #C0C0C0;
+    padding-top: 20px;
 }

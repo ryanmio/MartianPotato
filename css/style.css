@@ -84,6 +84,8 @@ h2 {
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.7);
     position: relative;
     overflow: hidden;
+    justify-items: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
 }
 
 #potato-field::before {
@@ -102,7 +104,7 @@ h2 {
 .potato-slot {
     width: 70px;
     height: 70px;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.1); /* Make the placeholders less obvious */
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -110,8 +112,8 @@ h2 {
 }
 
 .potato {
-    width: 100%;
-    height: 100%;
+    width: 60px; /* Adjusted size for better centering */
+    height: 60px; /* Adjusted size for better centering */
     background-color: #8B4513;
     border: 2px solid #4A2511;
     border-radius: 50%;
@@ -124,6 +126,7 @@ h2 {
     position: relative;
     overflow: hidden;
     cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add shadow for depth */
 }
 
 .potato::before {

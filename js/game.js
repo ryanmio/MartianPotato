@@ -66,9 +66,18 @@ function plantPotato() {
     }
 
     if (consumeResources()) {
+        const rotation = Math.floor(Math.random() * 10) - 5;
+        const scaleX = 0.95 + Math.random() * 0.1;
+        const scaleY = 0.95 + Math.random() * 0.1;
+        const borderRadius = `${45 + Math.random() * 10}% ${55 + Math.random() * 10}% ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% / ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% ${55 + Math.random() * 10}% ${45 + Math.random() * 10}%`;
+        
         potatoField[emptySlotIndex] = {
             plantedAt: currentTime,
-            growthStage: 0
+            growthStage: 0,
+            rotation,
+            scaleX,
+            scaleY,
+            borderRadius
         };
         lastPlantTime = currentTime;
         updateDisplay();
@@ -178,10 +187,11 @@ function updateDisplay() {
         }
         const growthStage = potato.growthStage;
         const harvestableClass = growthStage >= 100 ? 'harvestable' : '';
-        const growthColor = growthStage < 33 ? '#8FBC8F' : growthStage < 66 ? '#3CB371' : '#228B22';
+        const growthColor = growthStage < 33 ? 'rgba(139, 195, 74, 0.4)' : growthStage < 66 ? 'rgba(76, 175, 80, 0.4)' : 'rgba(56, 142, 60, 0.4)';
+        
         return `
             <div class="potato-slot">
-                <div class="potato ${harvestableClass}" data-index="${index}">
+                <div class="potato ${harvestableClass}" data-index="${index}" style="transform: rotate(${potato.rotation}deg) scale(${potato.scaleX}, ${potato.scaleY}); border-radius: ${potato.borderRadius};">
                     <div class="growth-indicator" style="height: ${growthStage}%; background-color: ${growthColor};"></div>
                     <span class="growth-text">${growthStage}%</span>
                 </div>

@@ -127,7 +127,14 @@ h2 {
     overflow: hidden;
     cursor: pointer;
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
-    transform: rotate(5deg);
+}
+
+.potato:hover {
+    transform: scale(1.1);
+}
+
+.potato:hover .potato-content {
+    transform: scale(0.90909) !important; /* This is 1 / 1.1 to counter the scale of the parent */
 }
 
 .potato::before {
@@ -163,14 +170,29 @@ h2 {
     left: 0;
     right: 0;
     background-color: rgba(76, 175, 80, 0.4);
-    transition: height 0.5s ease-out;
+    transition: height 0.5s ease-out, opacity 0.3s ease;
     z-index: 1;
+    opacity: 0;
+}
+
+.potato:hover .growth-indicator {
+    opacity: 1;
+}
+
+.growth-text-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
 }
 
 .potato .growth-text {
-    position: relative;
-    z-index: 2;
-    mix-blend-mode: normal;
+    transform: none;
 }
 
 .potato.harvestable {
@@ -180,10 +202,6 @@ h2 {
 @keyframes pulse {
     0% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
     100% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.4); }
-}
-
-.potato:hover {
-    transform: scale(1.1) rotate(5deg);
 }
 
 #plant-button {

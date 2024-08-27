@@ -66,7 +66,6 @@ function plantPotato() {
     }
 
     if (consumeResources()) {
-        const rotation = Math.floor(Math.random() * 10) - 5;
         const scaleX = 0.95 + Math.random() * 0.1;
         const scaleY = 0.95 + Math.random() * 0.1;
         const borderRadius = `${45 + Math.random() * 10}% ${55 + Math.random() * 10}% ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% / ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% ${55 + Math.random() * 10}% ${45 + Math.random() * 10}%`;
@@ -74,7 +73,6 @@ function plantPotato() {
         potatoField[emptySlotIndex] = {
             plantedAt: currentTime,
             growthStage: 0,
-            rotation,
             scaleX,
             scaleY,
             borderRadius
@@ -191,9 +189,11 @@ function updateDisplay() {
         
         return `
             <div class="potato-slot">
-                <div class="potato ${harvestableClass}" data-index="${index}" style="transform: rotate(${potato.rotation}deg) scale(${potato.scaleX}, ${potato.scaleY}); border-radius: ${potato.borderRadius};">
+                <div class="potato ${harvestableClass}" data-index="${index}" style="transform: scale(${potato.scaleX}, ${potato.scaleY}); border-radius: ${potato.borderRadius};">
                     <div class="growth-indicator" style="height: ${growthStage}%; background-color: ${growthColor};"></div>
-                    <span class="growth-text">${growthStage}%</span>
+                    <div class="growth-text-container">
+                        <span class="growth-text">${growthStage}%</span>
+                    </div>
                 </div>
             </div>
         `;

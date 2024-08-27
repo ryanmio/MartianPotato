@@ -107,9 +107,16 @@ function startAutoplanter(autoplanter) {
         const emptySlotIndex = potatoField.findIndex(slot => slot === null);
         if (emptySlotIndex !== -1 && consumeResources()) {
             const currentTime = Date.now();
+            const scaleX = 0.95 + Math.random() * 0.1;
+            const scaleY = 0.95 + Math.random() * 0.1;
+            const borderRadius = `${45 + Math.random() * 10}% ${55 + Math.random() * 10}% ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% / ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% ${55 + Math.random() * 10}% ${45 + Math.random() * 10}%`;
+            
             potatoField[emptySlotIndex] = {
                 plantedAt: currentTime,
-                growthStage: 0
+                growthStage: 0,
+                scaleX,
+                scaleY,
+                borderRadius
             };
             updateDisplay();
         }

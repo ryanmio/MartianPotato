@@ -110,13 +110,15 @@ function startAutoplanter(autoplanter) {
             const scaleX = 0.95 + Math.random() * 0.1;
             const scaleY = 0.95 + Math.random() * 0.1;
             const borderRadius = `${45 + Math.random() * 10}% ${55 + Math.random() * 10}% ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% / ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% ${55 + Math.random() * 10}% ${45 + Math.random() * 10}%`;
+            const textureClass = `potato-texture-${Math.floor(Math.random() * 8) + 1}`;
             
             potatoField[emptySlotIndex] = {
                 plantedAt: currentTime,
                 growthStage: 0,
                 scaleX,
                 scaleY,
-                borderRadius
+                borderRadius,
+                textureClass
             };
             updateDisplay();
         }

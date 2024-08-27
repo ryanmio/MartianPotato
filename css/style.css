@@ -144,24 +144,49 @@ h2 {
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
-        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%),
-        radial-gradient(circle at 70% 70%, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 60%);
+    background-image: 
+        radial-gradient(#A18260 2px, transparent 2px),
+        radial-gradient(#D4B995 2px, transparent 2px),
+        radial-gradient(#A18260 1px, transparent 1px),
+        radial-gradient(#D4B995 1px, transparent 1px);
+    background-size: 
+        37px 37px,
+        23px 23px,
+        41px 41px,
+        19px 19px;
+    background-position: 
+        0 0,
+        17px 13px,
+        7px 23px,
+        31px 29px;
+    opacity: 0.6;
     pointer-events: none;
 }
 
 .potato::after {
     content: '';
     position: absolute;
-    width: 90%;
-    height: 90%;
-    top: 5%;
-    left: 5%;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
     background: 
         radial-gradient(circle at 20% 20%, #D4B995 0%, transparent 50%),
         radial-gradient(circle at 80% 80%, #A18260 0%, transparent 50%);
     border-radius: inherit;
     opacity: 0.7;
+    box-shadow:
+        inset 1px 1px 1px rgba(255,255,255,0.3),
+        inset -1px -1px 1px rgba(0,0,0,0.3),
+        0.3px 0.3px 0px 0px #8B6E4E,
+        -0.5px 1px 0px 0px #8B6E4E,
+        1px -0.5px 0px 0px #8B6E4E,
+        -1px -1px 0px 0px #8B6E4E,
+        1px 1px 0px 0px #8B6E4E,
+        -1.5px 0.5px 0px 0px #8B6E4E,
+        1.5px -1px 0px 0px #8B6E4E,
+        1px 1.5px 0px 0px #8B6E4E;
+    pointer-events: none;
 }
 
 .potato .growth-indicator {
@@ -213,3 +238,12 @@ h2 {
     border-top: 1px solid #C0C0C0;
     padding-top: 20px;
 }
+
+.potato-texture-1::before { background-position: 0 0, 17px 13px, 7px 23px, 31px 29px; }
+.potato-texture-2::before { background-position: 5px 5px, 22px 18px, 12px 28px, 36px 34px; }
+.potato-texture-3::before { background-position: 10px 10px, 27px 23px, 17px 33px, 41px 39px; }
+.potato-texture-4::before { background-position: 15px 15px, 32px 28px, 22px 38px, 46px 44px; }
+.potato-texture-5::before { background-position: 20px 20px, 37px 33px, 27px 43px, 51px 49px; }
+.potato-texture-6::before { background-position: 25px 25px, 42px 38px, 32px 48px, 56px 54px; }
+.potato-texture-7::before { background-position: 30px 30px, 47px 43px, 37px 53px, 61px 59px; }
+.potato-texture-8::before { background-position: 35px 35px, 52px 48px, 42px 58px, 66px 64px; }

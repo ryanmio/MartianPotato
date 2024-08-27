@@ -69,13 +69,15 @@ function plantPotato() {
         const scaleX = 0.95 + Math.random() * 0.1;
         const scaleY = 0.95 + Math.random() * 0.1;
         const borderRadius = `${45 + Math.random() * 10}% ${55 + Math.random() * 10}% ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% / ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% ${55 + Math.random() * 10}% ${45 + Math.random() * 10}%`;
+        const textureClass = `potato-texture-${Math.floor(Math.random() * 8) + 1}`;
         
         potatoField[emptySlotIndex] = {
             plantedAt: currentTime,
             growthStage: 0,
             scaleX,
             scaleY,
-            borderRadius
+            borderRadius,
+            textureClass
         };
         lastPlantTime = currentTime;
         updateDisplay();
@@ -189,7 +191,7 @@ function updateDisplay() {
         
         return `
             <div class="potato-slot">
-                <div class="potato ${harvestableClass}" data-index="${index}" style="transform: scale(${potato.scaleX}, ${potato.scaleY}); border-radius: ${potato.borderRadius};">
+                <div class="potato ${harvestableClass} ${potato.textureClass}" data-index="${index}" style="transform: scale(${potato.scaleX}, ${potato.scaleY}); border-radius: ${potato.borderRadius};">
                     <div class="growth-indicator" style="height: ${growthStage}%; background-color: ${growthColor};"></div>
                     <div class="growth-text-container">
                         <span class="growth-text">${growthStage}%</span>

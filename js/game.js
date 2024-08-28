@@ -36,15 +36,20 @@ function consumeResources(amount = 1) {
     return false;
 }
 
-function updateResources() {
-    water = Math.max(0, water);
-    soilNutrients = Math.max(0, soilNutrients);
-    oxygen = Math.max(0, oxygen);
-    potatoCount = Math.floor(potatoCount);
+let lastUpdateTime = 0;
+const UPDATE_INTERVAL = 1000; // Update every second
 
-    updateDisplay();
-    updateUpgradeButtons();
-    checkAndRestartAutoplanters();
+function updateResources(currentTime) {
+    if (currentTime - lastUpdateTime >= UPDATE_INTERVAL) {
+        water = Math.max(0, water);
+        soilNutrients = Math.max(0, soilNutrients);
+        oxygen = Math.max(0, oxygen);
+        potatoCount = Math.floor(potatoCount);
+
+        lastUpdateTime = currentTime;
+        return true;
+    }
+    return false;
 }
 
 // Add these new variables at the beginning of the file
@@ -153,44 +158,50 @@ function initializePotatoField() {
     }
 }
 
-// Modify the updateDisplay function
 function updateDisplay() {
-    const updateElement = (id, text) => {
+    const updateElementIfChanged = (id, newText) => {
         const element = document.getElementById(id);
-        if (element) element.textContent = text;
+        if (element && element.textContent !== newText) {
+            element.textContent = newText;
+        }
     };
 
-    updateElement('potato-count', `Potatoes: ${potatoCount.toFixed(1)}`);
-    updateElement('potatoes-per-second', `Potatoes per second: ${rawPotatoesPerSecond.toFixed(1)}`);
-    updateElement('planting-level', `Planting Level: ${upgrades.planting[currentPlantingUpgrade].name}`);
-    
+    updateElementIfChanged('potato-count', `Potatoes: ${potatoCount.toFixed(1)}`);
+    updateElementIfChanged('potatoes-per-second', `Potatoes per second: ${rawPotatoesPerSecond.toFixed(1)}`);
+    updateElementIfChanged('planting-level', `Planting Level: ${upgrades.planting[currentPlantingUpgrade].name}`);
+    updateElementIfChanged('water-count', `Water: ${Math.floor(water)}`);
+    updateElementIfChanged('soil-nutrients', `Soil Nutrients: ${Math.floor(soilNutrients)}`);
+    updateElementIfChanged('oxygen-level', `Oxygen: ${Math.floor(oxygen)}`);
+    updateElementIfChanged('exploration-rate', `Exploration Rate: ${totalExplorationRate.toFixed(1)} per second`);
+    updateElementIfChanged('purchased-upgrades', `Purchased Upgrades: ${purchasedUpgrades.map(u => u.name).join(', ')}`);
+
     const autoplantersElement = document.getElementById('automated-planters');
     if (autoplantersElement) {
-        if (autoplanters.length > 0) {
-            autoplantersElement.style.display = 'block';
-            autoplantersElement.textContent = `Automated Planters: ${autoplanters.length}`;
-        } else {
-            autoplantersElement.style.display = 'none';
+        const newText = `Automated Planters: ${autoplanters.length}`;
+        if (autoplantersElement.textContent !== newText) {
+            autoplantersElement.textContent = newText;
+            autoplantersElement.style.display = autoplanters.length > 0 ? 'block' : 'none';
         }
     }
 
-    updateElement('water-count', `Water: ${Math.floor(water)}`);
-    updateElement('soil-nutrients', `Soil Nutrients: ${Math.floor(soilNutrients)}`);
-    updateElement('oxygen-level', `Oxygen: ${Math.floor(oxygen)}`);
-    updateElement('exploration-rate', `Exploration Rate: ${totalExplorationRate.toFixed(1)} per second`);
-    updateElement('purchased-upgrades', `Purchased Upgrades: ${purchasedUpgrades.map(u => u.name).join(', ')}`);
+    updateExploreButton();
+    updatePotatoField();
+    updateExplorationUpgradeButton();
+}
 
+function updateExploreButton() {
     const exploreButton = document.getElementById('explore-button');
     const currentTime = Date.now();
     const timeLeft = Math.max(0, exploreDelay - (currentTime - lastExploreTime));
-    if (timeLeft > 0) {
-        exploreButton.disabled = true;
-        exploreButton.textContent = `Explore Mars Surface (${(timeLeft / 1000).toFixed(1)}s)`;
-    } else {
-        exploreButton.disabled = false;
-        exploreButton.textContent = 'Explore Mars Surface';
+    const newText = timeLeft > 0 ? `Explore Mars Surface (${(timeLeft / 1000).toFixed(1)}s)` : 'Explore Mars Surface';
+    
+    if (exploreButton.textContent !== newText) {
+        exploreButton.textContent = newText;
+        exploreButton.disabled = timeLeft > 0;
     }
+}
 
+function updatePotatoField() {
     const fieldContainer = document.getElementById('potato-field');
     potatoField.forEach((potato, index) => {
         let slotElement = fieldContainer.querySelector(`.potato-slot[data-index="${index}"]`);
@@ -204,47 +215,49 @@ function updateDisplay() {
         if (potato === null) {
             if (slotElement.firstChild) slotElement.innerHTML = '';
         } else {
-            let potatoElement = slotElement.querySelector('.potato');
-            if (!potatoElement) {
-                potatoElement = document.createElement('div');
-                potatoElement.className = 'potato';
-                potatoElement.innerHTML = `
-                    <div class="growth-indicator"></div>
-                    <div class="growth-text-container">
-                        <span class="growth-text"></span>
-                    </div>
-                `;
-                slotElement.appendChild(potatoElement);
-            }
-
-            const growthStage = potato.growthStage;
-            const harvestableClass = growthStage >= 100 ? 'harvestable' : '';
-            const growthColor = growthStage < 33 ? 'rgba(139, 195, 74, 0.4)' : growthStage < 66 ? 'rgba(76, 175, 80, 0.4)' : 'rgba(56, 142, 60, 0.4)';
-
-            if (potatoElement.className !== `potato ${harvestableClass} ${potato.textureClass}`) {
-                potatoElement.className = `potato ${harvestableClass} ${potato.textureClass}`;
-            }
-            if (potatoElement.style.transform !== `scale(${potato.scaleX}, ${potato.scaleY})`) {
-                potatoElement.style.transform = `scale(${potato.scaleX}, ${potato.scaleY})`;
-            }
-            if (potatoElement.style.borderRadius !== potato.borderRadius) {
-                potatoElement.style.borderRadius = potato.borderRadius;
-            }
-            
-            let growthIndicator = potatoElement.querySelector('.growth-indicator');
-            if (growthIndicator.style.height !== `${growthStage}%` || growthIndicator.style.backgroundColor !== growthColor) {
-                growthIndicator.style.height = `${growthStage}%`;
-                growthIndicator.style.backgroundColor = growthColor;
-            }
-            
-            let growthText = potatoElement.querySelector('.growth-text');
-            if (growthText.textContent !== `${growthStage}%`) {
-                growthText.textContent = `${growthStage}%`;
-            }
+            updatePotatoElement(slotElement, potato);
         }
     });
+}
 
-    updateExplorationUpgradeButton();
+function updatePotatoElement(slotElement, potato) {
+    let potatoElement = slotElement.querySelector('.potato');
+    if (!potatoElement) {
+        potatoElement = document.createElement('div');
+        potatoElement.className = 'potato';
+        potatoElement.innerHTML = `
+            <div class="growth-indicator"></div>
+            <div class="growth-text-container">
+                <span class="growth-text"></span>
+            </div>
+        `;
+        slotElement.appendChild(potatoElement);
+    }
+
+    const growthStage = potato.growthStage;
+    const harvestableClass = growthStage >= 100 ? 'harvestable' : '';
+    const growthColor = growthStage < 33 ? 'rgba(139, 195, 74, 0.4)' : growthStage < 66 ? 'rgba(76, 175, 80, 0.4)' : 'rgba(56, 142, 60, 0.4)';
+
+    if (potatoElement.className !== `potato ${harvestableClass} ${potato.textureClass}`) {
+        potatoElement.className = `potato ${harvestableClass} ${potato.textureClass}`;
+    }
+    if (potatoElement.style.transform !== `scale(${potato.scaleX}, ${potato.scaleY})`) {
+        potatoElement.style.transform = `scale(${potato.scaleX}, ${potato.scaleY})`;
+    }
+    if (potatoElement.style.borderRadius !== potato.borderRadius) {
+        potatoElement.style.borderRadius = potato.borderRadius;
+    }
+    
+    let growthIndicator = potatoElement.querySelector('.growth-indicator');
+    if (growthIndicator.style.height !== `${growthStage}%` || growthIndicator.style.backgroundColor !== growthColor) {
+        growthIndicator.style.height = `${growthStage}%`;
+        growthIndicator.style.backgroundColor = growthColor;
+    }
+    
+    let growthText = potatoElement.querySelector('.growth-text');
+    if (growthText.textContent !== `${growthStage}%`) {
+        growthText.textContent = `${growthStage}%`;
+    }
 }
 
 function research(type) {
@@ -275,22 +288,29 @@ function research(type) {
     updateUpgradeButtons();
 }
 
-// Replace multiple setInterval calls with a single game loop
-let lastUpdateTime = Date.now();
+const FRAME_RATE = 30; // 30 fps
+const FRAME_DELAY = 1000 / FRAME_RATE;
+let lastFrameTime = 0;
 
-function gameLoop() {
-    const currentTime = Date.now();
-    const deltaTime = currentTime - lastUpdateTime;
-
-    if (deltaTime >= 100) {  // Update every 100ms
+function gameLoop(currentTime) {
+    if (currentTime - lastFrameTime >= FRAME_DELAY) {
         updatePlantButton();
-        updateResources();
+        if (updateResources(currentTime)) {
+            updateDisplay();
+            updateUpgradeButtons();
+            checkAndRestartAutoplanters();
+        }
         updatePotatoGrowth();
-        updateDisplay();
-        lastUpdateTime = currentTime;
+        lastFrameTime = currentTime;
     }
-
     requestAnimationFrame(gameLoop);
+}
+
+function updateNonCriticalElements() {
+    requestIdleCallback(() => {
+        updateUpgradeButtons();
+        displayExplorationUpgrades();
+    });
 }
 
 // Initialize the game
@@ -319,16 +339,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    updateDisplay();
     displayUpgrades();
     displayExplorationUpgrades();
     updateUpgradeButtons();
 
-    // In the DOMContentLoaded event listener, replace setInterval calls with:
     requestAnimationFrame(gameLoop);
-
-    // Keep this separate as it doesn't need to run as frequently
-    setInterval(checkAndRestartAutoplanters, 5000);
 
     const debugHarvestButton = document.getElementById('debug-harvest');
     debugHarvestButton.addEventListener('click', () => {

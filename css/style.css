@@ -248,3 +248,23 @@ h2 {
 .potato-texture-6::before { background-position: 25px 25px, 42px 38px, 32px 48px, 56px 54px; }
 .potato-texture-7::before { background-position: 30px 30px, 47px 43px, 37px 53px, 61px 59px; }
 .potato-texture-8::before { background-position: 35px 35px, 52px 48px, 42px 58px, 66px 64px; }
+
+#debug-info {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #00ff00;
+    font-family: monospace;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+#debug-info h3 {
+    margin-top: 0;
+}
+
+#debug-info p {
+    margin: 5px 0;
+}

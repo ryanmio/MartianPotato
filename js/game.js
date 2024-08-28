@@ -87,6 +87,7 @@ function plantPotato() {
         lastPlantTime = currentTime;
         updateDisplay();
         updateUpgradeButtons();
+        updateLastAction("Planted Potato");
     } else {
         alert("Not enough resources to plant a potato! Explore Mars to find more resources.");
     }
@@ -120,6 +121,7 @@ function harvestPotatoAtIndex(index) {
         console.log(`Harvested potato at index ${index}`);
         updateDisplay();
         checkAchievements();
+        updateLastAction(`Harvested Potato at index ${index}`);
     } else {
         console.log(`Potato at index ${index} is not ready for harvesting`);
     }
@@ -313,6 +315,100 @@ function updateNonCriticalElements() {
     });
 }
 
+// Add these variables at the top of the file
+let debugMode = false;
+let fpsValues = [];
+let lastDebugUpdateTime = 0;
+let lastResourceValues = { water: 0, soilNutrients: 0, oxygen: 0 };
+let lastAction = "None";
+
+// Add this function to toggle debug mode
+function toggleDebugMode() {
+    debugMode = !debugMode;
+    const debugInfo = document.getElementById('debug-info');
+    if (debugInfo) {
+        debugInfo.style.display = debugMode ? 'block' : 'none';
+        if (debugMode) {
+            // Initialize debug info when first enabled
+            updateDebugInfo(performance.now(), 0);
+        }
+    }
+}
+
+// Modify the gameLoop function to include debug information
+function gameLoop(currentTime) {
+    if (currentTime - lastFrameTime >= FRAME_DELAY) {
+        const startTime = performance.now();
+        
+        updatePlantButton();
+        if (updateResources(currentTime)) {
+            updateDisplay();
+            updateUpgradeButtons();
+            checkAndRestartAutoplanters();
+        }
+        updatePotatoGrowth();
+        
+        if (debugMode) {
+            const updateTime = performance.now() - startTime;
+            updateDebugInfo(currentTime, updateTime);
+        }
+        
+        lastFrameTime = currentTime;
+    }
+    requestAnimationFrame(gameLoop);
+}
+
+// Add this function to update debug information
+function updateDebugInfo(currentTime, updateTime) {
+    const debugInfoContainer = document.getElementById('debug-info');
+    if (!debugInfoContainer || debugInfoContainer.style.display === 'none') {
+        return; // Exit if debug info is not visible
+    }
+
+    try {
+        const fps = 1000 / (currentTime - lastDebugUpdateTime);
+        fpsValues.push(fps);
+        if (fpsValues.length > 60) fpsValues.shift();
+        const averageFps = fpsValues.reduce((a, b) => a + b, 0) / fpsValues.length;
+        
+        const memoryUsage = performance.memory ? (performance.memory.usedJSHeapSize / (1024 * 1024)).toFixed(2) : 'N/A';
+        const activePotatoes = potatoField.filter(potato => potato !== null).length;
+        
+        const resourceGeneration = {
+            water: ((water - lastResourceValues.water) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2),
+            soilNutrients: ((soilNutrients - lastResourceValues.soilNutrients) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2),
+            oxygen: ((oxygen - lastResourceValues.oxygen) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2)
+        };
+        
+        const updateElement = (id, text) => {
+            const element = debugInfoContainer.querySelector(`#${id}`);
+            if (element) element.textContent = text;
+        };
+
+        updateElement('fps', `FPS: ${averageFps.toFixed(2)}`);
+        updateElement('update-time', `Last Update Time: ${updateTime.toFixed(2)}ms`);
+        updateElement('memory-usage', `Memory Usage: ${memoryUsage} MB`);
+        updateElement('potato-count-debug', `Potato Count: ${potatoCount.toFixed(2)}`);
+        updateElement('active-potatoes', `Active Potatoes: ${activePotatoes}`);
+        updateElement('resource-usage', `Resource Usage: Water (${water.toFixed(2)}), Soil (${soilNutrients.toFixed(2)}), Oxygen (${oxygen.toFixed(2)})`);
+        updateElement('resource-generation', `Resource Generation: Water (${resourceGeneration.water}/s), Soil (${resourceGeneration.soilNutrients}/s), Oxygen (${resourceGeneration.oxygen}/s)`);
+        updateElement('last-action', `Last Action: ${lastAction}`);
+        
+        lastDebugUpdateTime = currentTime;
+        lastResourceValues = { water, soilNutrients, oxygen };
+    } catch (error) {
+        console.error('Error updating debug info:', error);
+    }
+}
+
+// Add this function to update the last action
+function updateLastAction(action) {
+    lastAction = action;
+    if (debugMode) {
+        document.getElementById('last-action').textContent = `Last Action: ${lastAction}`;
+    }
+}
+
 // Initialize the game
 document.addEventListener('DOMContentLoaded', () => {
     const plantButton = document.getElementById('plant-button');
@@ -355,4 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         updateDisplay();
     });
+
+    const toggleDebugModeButton = document.getElementById('toggle-debug-mode');
+    toggleDebugModeButton.addEventListener('click', toggleDebugMode);
 });

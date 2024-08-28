@@ -221,12 +221,12 @@ h2 {
 }
 
 .potato.harvestable {
-    animation: pulse 1.5s infinite alternate;
+    animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
-    0% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
-    100% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.4); }
+    0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
+    50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.4); }
 }
 
 #plant-button {

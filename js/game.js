@@ -142,6 +142,18 @@ function checkAchievements() {
     // Add more achievements here
 }
 
+// Add this function to initialize the potato field
+function initializePotatoField() {
+    const fieldContainer = document.getElementById('potato-field');
+    for (let i = 0; i < MAX_FIELD_SIZE; i++) {
+        const slotElement = document.createElement('div');
+        slotElement.className = 'potato-slot';
+        slotElement.setAttribute('data-index', i);
+        fieldContainer.appendChild(slotElement);
+    }
+}
+
+// Modify the updateDisplay function
 function updateDisplay() {
     const updateElement = (id, text) => {
         const element = document.getElementById(id);
@@ -179,44 +191,46 @@ function updateDisplay() {
         exploreButton.textContent = 'Explore Mars Surface';
     }
 
-    // Update potato field display only if there are changes
     const fieldContainer = document.getElementById('potato-field');
-    const currentPotatoFieldHTML = potatoField.map((potato, index) => {
-        if (potato === null) {
-            return `<div class="potato-slot"></div>`;
+    potatoField.forEach((potato, index) => {
+        let slotElement = fieldContainer.querySelector(`.potato-slot[data-index="${index}"]`);
+        if (!slotElement) {
+            slotElement = document.createElement('div');
+            slotElement.className = 'potato-slot';
+            slotElement.setAttribute('data-index', index);
+            fieldContainer.appendChild(slotElement);
         }
-        const growthStage = potato.growthStage;
-        const harvestableClass = growthStage >= 100 ? 'harvestable' : '';
-        const growthColor = growthStage < 33 ? 'rgba(139, 195, 74, 0.4)' : growthStage < 66 ? 'rgba(76, 175, 80, 0.4)' : 'rgba(56, 142, 60, 0.4)';
-        
-        return `
-            <div class="potato-slot">
-                <div class="potato ${harvestableClass} ${potato.textureClass}" data-index="${index}" style="transform: scale(${potato.scaleX}, ${potato.scaleY}); border-radius: ${potato.borderRadius};">
-                    <div class="growth-indicator" style="height: ${growthStage}%; background-color: ${growthColor};"></div>
-                    <div class="growth-text-container">
-                        <span class="growth-text">${growthStage}%</span>
+
+        if (potato === null) {
+            slotElement.innerHTML = '';
+        } else {
+            const growthStage = potato.growthStage;
+            const harvestableClass = growthStage >= 100 ? 'harvestable' : '';
+            const growthColor = growthStage < 33 ? 'rgba(139, 195, 74, 0.4)' : growthStage < 66 ? 'rgba(76, 175, 80, 0.4)' : 'rgba(56, 142, 60, 0.4)';
+            
+            let potatoElement = slotElement.querySelector('.potato');
+            if (!potatoElement) {
+                slotElement.innerHTML = `
+                    <div class="potato ${harvestableClass} ${potato.textureClass}" style="transform: scale(${potato.scaleX}, ${potato.scaleY}); border-radius: ${potato.borderRadius};">
+                        <div class="growth-indicator" style="height: ${growthStage}%; background-color: ${growthColor};"></div>
+                        <div class="growth-text-container">
+                            <span class="growth-text">${growthStage}%</span>
+                        </div>
                     </div>
-                </div>
-            </div>
-        `;
-    }).join('');
-
-    if (fieldContainer.innerHTML !== currentPotatoFieldHTML) {
-        fieldContainer.innerHTML = currentPotatoFieldHTML;
-
-        // Attach event listeners to the new potato elements
-        document.querySelectorAll('.potato').forEach(potatoElement => {
-            potatoElement.addEventListener('click', () => {
-                const index = parseInt(potatoElement.getAttribute('data-index'), 10);
-                console.log(`Clicked on potato at index ${index}`);
-                if (potatoField[index].growthStage >= 100) {
-                    harvestPotatoAtIndex(index);
-                } else {
-                    console.log(`Potato at index ${index} is not ready for harvesting`);
-                }
-            });
-        });
-    }
+                `;
+            } else {
+                potatoElement.className = `potato ${harvestableClass} ${potato.textureClass}`;
+                potatoElement.style.transform = `scale(${potato.scaleX}, ${potato.scaleY})`;
+                potatoElement.style.borderRadius = potato.borderRadius;
+                
+                let growthIndicator = potatoElement.querySelector('.growth-indicator');
+                growthIndicator.style.height = `${growthStage}%`;
+                growthIndicator.style.backgroundColor = growthColor;
+                
+                potatoElement.querySelector('.growth-text').textContent = `${growthStage}%`;
+            }
+        }
+    });
 
     updateExplorationUpgradeButton();
 }
@@ -262,6 +276,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const researchOxygenButton = document.getElementById('research-oxygen');
     researchOxygenButton.addEventListener('click', () => research('oxygen'));
+
+    initializePotatoField();
+
+    document.getElementById('potato-field').addEventListener('click', (event) => {
+        const slotElement = event.target.closest('.potato-slot');
+        if (slotElement) {
+            const index = parseInt(slotElement.getAttribute('data-index'), 10);
+            if (potatoField[index] && potatoField[index].growthStage >= 100) {
+                harvestPotatoAtIndex(index);
+            }
+        }
+    });
 
     updateDisplay();
     displayUpgrades();

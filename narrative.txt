@@ -37,117 +37,168 @@ At its core, the game employs a meta-awareness approach, explicitly revealing ho
 ## Upgrades and Progression
 
 ### 1. Planting and Harvesting
-- Hand (Initial Tool):
+- Hand Trowel (Initial Tool):
   - Function: Manual planting with a 4-second delay between actions, consuming 1 unit each of water, soil, and oxygen per potato.
   - Meta Message: "Manual labor. The game begins with the simplest form of interaction, making future efficiencies feel like significant advancements. Notice how your patience is tested to make each upgrade feel more rewarding."
+  - Asset Name: "hand_trowel.webp"
 
-- Irrigation Wand:
+- Watering Can:
   - Function: Speeds up planting by integrating water delivery directly into the planting process, reducing delay to 3 seconds, consumes 1 unit each of water, soil, and oxygen per potato.
-  - Meta Message: "Integration of processes. By combining tasks, the game gives the illusion of efficiency, yet subtly increases your dependency on a single method. Every step forward ties you more closely to the game's loop."
+  - Meta Message: " "
+  - Asset Name: "watering_can.webp"
 
 - Automated Planter:
-  - Function: Plants multiple plots at once, reduces planting delay to 2 seconds, consumes 0.7 units of resources per potato, but consumes 1 unit of power per second.
+  - Function: Automatically plants one potato after the planting delay.
   - Meta Message: "Automation's allure. This upgrade significantly reduces active playtime, giving you a sense of progress and control, while quietly introducing a new constraint: power. The game keeps you engaged by shifting your focus to resource management."
+  - Asset Name: "automated_planter.webp"
 
 - Quantum Spud Spawner:
   - Functionality: Advanced technology instantly seeds potatoes by manipulating quantum fields, reducing planting delay to 0.5 seconds, consuming 1 unit each of water, soil, and oxygen per potato, but requires 10 units of power per second.
   - Meta Message: "The ultimate efficiency. The game offers peak performance, yet at a steep resource cost. This reflects the paradox of progress: as you achieve perfection, your burden increases. What appears to be the pinnacle of advancement is, in fact, the height of your dependency."
+  - Asset Name: "quantum_spud_spawner.webp"
 
 ### 2. Resource Collection and Production
 - Water:
   - Manual Ice Melting (Initial Tool):
     - Function: Collect water by manually melting Martian ice, 1 unit per 5 clicks.
     - Meta Message: "The grind begins. By starting with a low-yield, high-effort method, the game establishes a baseline against which all future upgrades will feel like progress, even if they simply shift the type of effort required."
+    - Asset Name: "manual_ice_melting.webp"
 
   - Solar Still:
     - Functionality: Passively generates 1 unit of water every 10 seconds.
     - Meta Message: "Passive accumulation. This system introduces the concept of minimal effort for continuous reward, luring you into a rhythm of passive engagement while keeping you attached to the game through consistent, slow gains."
+    - Asset Name: "solar_still.webp"
 
   - Moisture Vaporator:
     - Functionality: Extracts moisture from the atmosphere, generating 1 unit of water per second, consumes 2 units of power.
     - Meta Message: "Scaling up. As production increases, so does your dependency on power. The game subtly encourages you to trade one form of scarcity for another, keeping you in a state of managed necessity."
+    - Asset Name: "moisture_vaporator.webp"
 
   - Aquifer Tapping Drill:
     - Function: Taps into Martian subsurface aquifers, generating 5 units of water per second but requiring 10 units of power.
     - Meta Message: "Resource extraction on a large scale. The promise of abundant resources masks the increasing complexity and dependency that comes with them. The game offers abundance at the cost of deeper entanglement in its systems."
+    - Asset Name: "aquifer_tapping_drill.webp"
+
+  - Water Storage Tank:
+    - Function: Increases maximum water storage capacity by 100 units.
+    - Meta Message: "Expanding the reservoir. This upgrade provides a sense of security and control over your water supply, encouraging you to accumulate more resources. However, it also subtly increases your investment in the game's systems, making it harder to walk away."
+    - Asset Name: "water_storage_tank.webp"
 
 - Soil Nutrients:
   - Martian Dust (Initial Resource):
     - Functionality: Collect soil nutrients by scooping Martian dust, 1 unit per click.
     - Meta Message: "Basic gathering. This reinforces the value of effort-based acquisition, where each unit earned strengthens your attachment to the resource. The simplicity of the task belies its role in conditioning you to appreciate later efficiencies."
+    - Asset Name: "martian_dust.webp"
 
   - Composted Potato Peels:
     - Functionality: Recycle potato peels into soil nutrients, generating 1 unit every 5 seconds.
     - Meta Message: "Controlled release. This upgrade provides a steady stream of resources, reinforcing the satisfaction of consistency while subtly increasing your dependency on ongoing resource inputs."
+    - Asset Name: "composted_potato_peels.webp"
 
   - Engineered Microbes:
     - Functionality: Genetically engineered microbes break down Martian rocks into soil nutrients, generating 2 units per second, consuming 5 units of power.
     - Meta Message: "Biotechnological progression. The use of engineered solutions reflects the game's encouragement of innovation, while simultaneously binding you to the consequences of such advancements—higher outputs with greater costs."
+    - Asset Name: "engineered_microbes.webp"
 
   - Nanobot Soil Enhancer:
     - Functionality: Nanobots enhance soil quality at the molecular level, generating 10 units per second, consuming 20 units of power.
     - Meta Message: "Hyper-efficiency through advanced technology. The game pushes you towards the apex of production, but at what cost? Notice how this mirrors real-world challenges—where greater efficiency leads to greater energy demands, locking you into a cycle of resource dependency."
+    - Asset Name: "nanobot_soil_enhancer.webp"
 
 - Oxygen:
   - Photosynthesis (Initial Resource):
     - Functionality: Potatoes naturally produce a small amount of oxygen, generating 1 unit of oxygen every 10 seconds.
     - Meta Message: "Natural processes as a starting point. This ties your progress to the basics of life support, grounding the game in a reality where growth is slow, encouraging patience while building anticipation for future enhancements."
+    - Asset Name: "photosynthesis.webp"
 
-  - Algae Bioreactor:
+  - Potato Bioreactor:
     - Functionality: Cultivate oxygen-producing algae in a controlled environment, generating 2 units of oxygen per second, consumes 2 units of power and 1 unit of water.
     - Meta Message: "Biological automation. This marks a shift from manual to biological systems, where the game introduces a new layer of complexity—balancing multiple resource inputs for a single output, increasing the challenge and deepening engagement."
+    - Asset Name: "potato_bioreactor.webp"
 
   - CO2 Scrubber:
     - Functionality: Removes carbon dioxide from the air, generating 5 units of oxygen per second but requiring 10 units of power.
     - Meta Message: "Electrochemical processes. The game introduces advanced technology that requires significant energy inputs, creating a dynamic where you must balance resource production with energy consumption."
+    - Asset Name: "co2_scrubber.webp"
 
   - Oxygen Recycler:
     - Functionality: Recycles and purifies the existing oxygen supply, generating 10 units of oxygen per second, consumes 15 units of power.
     - Meta Message: "Sustainability through technology. The game presents recycling as a means of self-sufficiency, yet it comes with a steep energy cost, reflecting the trade-offs inherent in creating a closed-loop system."
+    - Asset Name: "oxygen_recycler.webp"
 
 ### 3. Energy and Automation
 - Potato Battery (Initial Power Source):
   - Functionality: Generates electricity from potatoes, 1 unit of power per potato, decays after 10 seconds.
   - Meta Message: "The irony of power from food. This introduces the concept of trade-offs—sacrificing sustenance for energy. The decay mechanic subtly reminds you of the impermanence of solutions, keeping you in a constant state of seeking improvement."
+  - Asset Name: "potato_battery.webp"
+
+- Potato Chip:
+  - Functionality: Gateway to advanced technology
+  - Meta Message: ""
+  - Asset Name: "potato_chip.webp"
+
+- Potato Computer:
+  - Functionality: Gateway to advanced technology
+  - Meta Message: ""
+  - Asset Name: "potato_computer.webp"
 
 - Solar Panels:
   - Functionality: Harness the power of the Martian sun, generating 10 units of power per second during the day, 0 at night.
   - Meta Message: "Renewable but inconsistent. The reliance on a natural cycle introduces the concept of intermittency, forcing you to manage resources with an eye on time, subtly preparing you for the more complex challenges ahead."
+  - Asset Name: "solar_panels.webp"
 
 - Wind Turbine:
   - Functionality: Converts Martian wind into power, generating 15 units of power per second but only during windstorms.
   - Meta Message: "Harnessing the unpredictable. Wind energy offers bursts of power, introducing a reliance on nature's whims. The game uses this mechanic to keep you engaged with fluctuating resource management."
+  - Asset Name: "wind_turbine.webp"
 
 - Radioisotope Thermoelectric Generator (RTG):
   - Functionality: Generates a constant 50 units of power per second using radioactive decay, requires no maintenance.
   - Meta Message: "Steady but costly. The game presents a powerful, constant energy source, yet it comes with underlying risks. This mechanic reflects the balance between reliability and the potential dangers of harnessing extreme technologies."
+  - Asset Name: "rtg.webp"
 
 - Quantum Entanglement Power Transmitter:
   - Functionality: Instantly transmits power across any distance, generating 100 units of power per second, consumes 200 units of power to maintain the quantum link.
   - Meta Message: "The allure of instant power. The game offers unprecedented efficiency at a staggering cost, drawing you deeper into a cycle of dependency. The trade-off between power and sustainability becomes a central theme, challenging your management skills."
+  - Asset Name: "quantum_entanglement_power_transmitter.webp"
 
 ### 4. Exploration and Expansion
 - Potato-Powered Rover (Initial Exploration Tool):
   - Functionality: Automated exploration vehicle, explores every 2 seconds, consumes 1 unit of power and 1 unit of oxygen per exploration.
   - Meta Message: "Automation in exploration. The game shifts exploration from manual effort to automated systems, reducing your direct involvement but increasing your dependency on power. Each discovery is now a product of your management rather than your action."
+  - Asset Name: "potato_powered_rover.webp"
 
 - Autonomous Drone:
   - Functionality: Aerial exploration with a 1-second delay between explorations, consumes 5 units of power per exploration.
   - Meta Message: "Speed at a cost. The game tempts you with faster exploration, yet the increased power demands keep you bound to resource management. Each upgrade pushes you towards greater efficiency but also deeper entanglement in the game's systems."
+  - Asset Name: "autonomous_drone.webp"
 
 - Orbital Mapper:
   - Functionality: Provides detailed maps of unexplored regions, reducing exploration time by 50%, consumes 10 units of power per second.
   - Meta Message: "Surveillance and efficiency. The game introduces high-level monitoring as a tool for exploration, but at the cost of significant resource consumption. The balance between knowledge and resource expenditure becomes a central challenge."
+  - Asset Name: "orbital_mapper.webp"
 
 - Subterranean Scanner:
   - Functionality: Scans below the Martian surface to reveal hidden resources, consuming 20 units of power per second.
   - Meta Message: "The hidden costs of knowledge. The game offers a powerful tool for uncovering resources, but at a steep energy cost. This reflects the real-world trade-off between information and resource expenditure, challenging you to balance the two."
+  - Asset Name: "subterranean_scanner.webp"
 
 ### 5. Communication and Society
-- Potato Radio: Rudimentary communication device, allows basic coordination between potato colonies, consumes 0.1 units of power per second
-- Satellite Uplink: Establishes orbital communication, enabling global coordination and trade between colonies, consumes 1 unit of power per second
-- Quantum Entanglement Communicator: Instant communication across vast distances using quantum entanglement, consumes 5 units of power per second
-- Psychic Potato Network: Genetically engineered potatoes with psychic abilities form a telepathic network, enabling seamless communication and coordination, consumes 10 units of power per second
+- Potato Radio:
+  - Functionality: Rudimentary communication device, allows basic coordination between potato colonies, consumes 0.1 units of power per second
+  - Asset Name: "potato_radio.webp"
+
+- Satellite Uplink:
+  - Functionality: Establishes orbital communication, enabling global coordination and trade between colonies, consumes 1 unit of power per second
+  - Asset Name: "satellite_uplink.webp"
+
+- Quantum Entanglement Communicator:
+  - Functionality: Instant communication across vast distances using quantum entanglement, consumes 5 units of power per second
+  - Asset Name: "quantum_entanglement_communicator.webp"
+
+- Psychic Potato Network:
+  - Functionality: Genetically engineered potatoes with psychic abilities form a telepathic network, enabling seamless communication and coordination, consumes 10 units of power per second
+  - Asset Name: "psychic_potato_network.webp"
 
 ## Special Events and Challenges
 - Dust storms requiring protective measures for crops

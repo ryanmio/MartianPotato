@@ -134,25 +134,48 @@ function checkAndRestartAutoplanters() {
 }
 
 let autoHarvesters = [];
+const BASE_HARVEST_DELAY = 1000; // 1 second in milliseconds
 
 function addAutoHarvester() {
     const autoHarvester = {
-        interval: null,
         cost: Math.floor(10 * Math.pow(1.15, upgrades.harvesting[1].count))
     };
     autoHarvesters.push(autoHarvester);
-    startAutoHarvester(autoHarvester);
+    updateAutoHarvesterDelay();
     updateDisplay();
 }
 
-function startAutoHarvester(autoHarvester) {
-    autoHarvester.interval = setInterval(() => {
-        potatoField.forEach((potato, index) => {
-            if (potato && potato.growthStage >= 100) {
-                harvestPotatoAtIndex(index);
-            }
-        });
-    }, 2000); // Try to harvest every 2 seconds
+function updateAutoHarvesterDelay() {
+    const newDelay = BASE_HARVEST_DELAY / autoHarvesters.length;
+    if (autoHarvesters.length === 1) {
+        startAutoHarvester(newDelay);
+    } else {
+        clearInterval(autoHarvestInterval);
+        startAutoHarvester(newDelay);
+    }
+}
+
+let autoHarvestInterval;
+let lastAutoHarvestTime = 0;
+
+function startAutoHarvester(delay) {
+    clearInterval(autoHarvestInterval);
+    autoHarvestInterval = setInterval(() => {
+        const currentTime = Date.now();
+        if (currentTime - lastAutoHarvestTime >= delay) {
+            harvestOneReadyPotato();
+            lastAutoHarvestTime = currentTime;
+        }
+    }, 100); // Check more frequently, but only harvest based on the delay
+}
+
+function harvestOneReadyPotato() {
+    for (let i = 0; i < potatoField.length; i++) {
+        if (potatoField[i] && potatoField[i].growthStage >= 100) {
+            harvestPotatoAtIndex(i);
+            break; // Only harvest one potato
+        }
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

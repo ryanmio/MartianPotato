@@ -104,11 +104,6 @@ function updatePotatoGrowth() {
         }
         return potato;
     });
-    autoHarvesters.forEach(autoHarvester => {
-        if (!autoHarvester.interval) {
-            startAutoHarvester(autoHarvester);
-        }
-    });
     updateDisplay();
 }
 

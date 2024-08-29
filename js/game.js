@@ -116,7 +116,7 @@ function updatePotatoGrowth() {
 function harvestPotatoAtIndex(index) {
     console.log(`Attempting to harvest potato at index ${index}`);
     if (potatoField[index] && potatoField[index].growthStage >= 100) {
-        potatoCount++;
+        potatoCount = Math.floor(potatoCount + 1);
         potatoField[index] = null; // Replace with empty slot instead of removing
         console.log(`Harvested potato at index ${index}`);
         updateDisplay();
@@ -168,14 +168,14 @@ function updateDisplay() {
         }
     };
 
-    updateElementIfChanged('potato-count', `Potatoes: ${potatoCount.toFixed(1)}`);
+    updateElementIfChanged('potato-count', `Potatoes: ${Math.floor(potatoCount)}`);
     updateElementIfChanged('potatoes-per-second', `Potatoes per second: ${rawPotatoesPerSecond.toFixed(1)}`);
-    updateElementIfChanged('planting-level', `Planting Level: ${upgrades.planting[currentPlantingUpgrade].name}`);
     updateElementIfChanged('water-count', `Water: ${Math.floor(water)}`);
     updateElementIfChanged('soil-nutrients', `Soil Nutrients: ${Math.floor(soilNutrients)}`);
     updateElementIfChanged('oxygen-level', `Oxygen: ${Math.floor(oxygen)}`);
     updateElementIfChanged('exploration-rate', `Exploration Rate: ${totalExplorationRate.toFixed(1)} per second`);
     updateElementIfChanged('purchased-upgrades', `Purchased Upgrades: ${purchasedUpgrades.map(u => u.name).join(', ')}`);
+    updateElementIfChanged('auto-harvesters', `Auto Harvesters: ${autoHarvesters.length}`);
 
     const autoplantersElement = document.getElementById('automated-planters');
     if (autoplantersElement) {

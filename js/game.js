@@ -114,16 +114,15 @@ function updatePotatoGrowth() {
 
 // Modify the harvestPotatoes function
 function harvestPotatoAtIndex(index) {
-    console.log(`Attempting to harvest potato at index ${index}`);
+    updateLastAction(`Attempting to harvest potato at index ${index}`);
     if (potatoField[index] && potatoField[index].growthStage >= 100) {
         potatoCount = Math.floor(potatoCount + 1);
         potatoField[index] = null; // Replace with empty slot instead of removing
-        console.log(`Harvested potato at index ${index}`);
+        updateLastAction(`Harvested potato at index ${index}`);
         updateDisplay();
         checkAchievements();
-        updateLastAction(`Harvested Potato at index ${index}`);
     } else {
-        console.log(`Potato at index ${index} is not ready for harvesting`);
+        updateLastAction(`Potato at index ${index} is not ready for harvesting`);
     }
 }
 
@@ -467,7 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const debugHarvestButton = document.getElementById('debug-harvest');
     debugHarvestButton.addEventListener('click', () => {
-        console.log("Debug: Attempting to harvest all ready potatoes");
+        updateLastAction("Debug: Attempting to harvest all ready potatoes");
         potatoField.forEach((potato, index) => {
             if (potato && potato.growthStage >= 100) {
                 harvestPotatoAtIndex(index);

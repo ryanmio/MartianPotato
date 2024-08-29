@@ -66,7 +66,7 @@ function plantPotato() {
 
     const emptySlotIndex = potatoField.findIndex(slot => slot === null);
     if (emptySlotIndex === -1) {
-        alert("No more room in the field! Harvest some potatoes first.");
+        showToast("No Room", "No more room in the field! Harvest some potatoes first.", 'setback');
         return;
     }
 
@@ -89,7 +89,7 @@ function plantPotato() {
         updateUpgradeButtons();
         updateLastAction("Planted Potato");
     } else {
-        alert("Not enough resources to plant a potato! Explore Mars to find more resources.");
+        showToast("Not Enough Resources", "Not enough resources to plant a potato! Explore Mars to find more resources.", 'setback');
     }
     updatePlantButton();
 }
@@ -144,7 +144,7 @@ function updatePlantButton() {
 function checkAchievements() {
     if (potatoCount >= 1 && !achievements.firstPotato) {
         achievements.firstPotato = true;
-        alert("Achievement Unlocked: One Small Step for Spud!");
+        showToast("Achievement Unlocked", "One Small Step for Spud!");
     }
     // Add more achievements here
 }
@@ -268,21 +268,21 @@ function research(type) {
             if (potatoCount >= 50) {
                 potatoCount -= 50;
                 waterEfficiency *= 1.5;
-                alert("Water collection efficiency improved!");
+                showToast("Research Success", "Water collection efficiency improved!");
             }
             break;
         case 'soil':
             if (potatoCount >= 50) {
                 potatoCount -= 50;
                 soilEfficiency *= 1.5;
-                alert("Soil enrichment efficiency improved!");
+                showToast("Research Success", "Soil enrichment efficiency improved!");
             }
             break;
         case 'oxygen':
             if (potatoCount >= 50) {
                 potatoCount -= 50;
                 oxygenEfficiency *= 1.5;
-                alert("Oxygen production efficiency improved!");
+                showToast("Research Success", "Oxygen production efficiency improved!");
             }
             break;
     }
@@ -407,6 +407,30 @@ function updateLastAction(action) {
     if (debugMode) {
         document.getElementById('last-action').textContent = `Last Action: ${lastAction}`;
     }
+}
+
+// Add this function near the top of the file
+function showToast(title, message, type = 'achievement') {
+    const toastContainer = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.innerHTML = `
+        <div class="toast-title">${title}</div>
+        <div class="toast-message">${message}</div>
+    `;
+    toastContainer.appendChild(toast);
+
+    // Trigger reflow to enable transition
+    toast.offsetHeight;
+
+    toast.classList.add('show');
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            toastContainer.removeChild(toast);
+        }, 300);
+    }, 3000);
 }
 
 // Initialize the game

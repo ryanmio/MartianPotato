@@ -170,7 +170,7 @@ function updateDisplay() {
     updateElementIfChanged('water-count', `Water: ${Math.floor(water)}`);
     updateElementIfChanged('soil-nutrients', `Soil Nutrients: ${Math.floor(soilNutrients)}`);
     updateElementIfChanged('oxygen-level', `Oxygen: ${Math.floor(oxygen)}`);
-    updateElementIfChanged('exploration-rate', `Exploration Rate: ${totalExplorationRate.toFixed(1)} per second`);
+    updateElementIfChanged('exploration-rate', `Exploration Rate: ${Math.floor(totalExplorationRate * 60)} per minute`);
     updateElementIfChanged('purchased-upgrades', `Purchased Upgrades: ${purchasedUpgrades.map(u => u.name).join(', ')}`);
     updateElementIfChanged('auto-harvesters', `Auto Harvesters: ${autoHarvesters.length}`);
 

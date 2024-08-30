@@ -35,16 +35,16 @@ button:hover, button:disabled {
     margin-bottom: 20px;
 }
 
-#resources, #production {
+#resources, #production, #exploration {
     flex: 1;
     margin-right: 20px;
 }
 
-#production {
+#exploration {
     margin-right: 0;
 }
 
-#resources p, #production p, #exploration-container p {
+#resources p, #production p, #exploration p {
     margin: 5px 0;
     line-height: 1.2;
 }

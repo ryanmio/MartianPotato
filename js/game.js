@@ -8,9 +8,6 @@ let water = 100;
 let soilNutrients = 100;
 let oxygen = 100;
 
-let waterEfficiency = 1;
-let soilEfficiency = 1;
-let oxygenEfficiency = 1;
 let processingLevel = 0;
 
 let plantingDelay = 2000; // 2 seconds
@@ -26,6 +23,12 @@ function calculatePotatoesPerSecond() {
     return autoplanters.length / (GROWTH_TIME / 1000);
 }
 
+// Keep these variables
+let waterEfficiency = 1;
+let soilEfficiency = 1;
+let oxygenEfficiency = 1;
+
+// Modify the consumeResources function to use the efficiency multipliers
 function consumeResources(amount = 1) {
     if (water >= amount && soilNutrients >= amount && oxygen >= amount) {
         water -= amount / waterEfficiency;
@@ -256,34 +259,6 @@ function updatePotatoElement(slotElement, potato) {
     }
 }
 
-function research(type) {
-    switch(type) {
-        case 'water':
-            if (potatoCount >= 50) {
-                potatoCount -= 50;
-                waterEfficiency *= 1.5;
-                showToast("Research Success", "Water collection efficiency improved!");
-            }
-            break;
-        case 'soil':
-            if (potatoCount >= 50) {
-                potatoCount -= 50;
-                soilEfficiency *= 1.5;
-                showToast("Research Success", "Soil enrichment efficiency improved!");
-            }
-            break;
-        case 'oxygen':
-            if (potatoCount >= 50) {
-                potatoCount -= 50;
-                oxygenEfficiency *= 1.5;
-                showToast("Research Success", "Oxygen production efficiency improved!");
-            }
-            break;
-    }
-    updateDisplay();
-    updateUpgradeButtons();
-}
-
 const FRAME_RATE = 30; // 30 fps
 const FRAME_DELAY = 1000 / FRAME_RATE;
 let lastFrameTime = 0;
@@ -431,15 +406,6 @@ function showToast(title, message, type = 'achievement') {
 document.addEventListener('DOMContentLoaded', () => {
     const plantButton = document.getElementById('plant-button');
     plantButton.addEventListener('click', plantPotato);
-
-    const researchWaterButton = document.getElementById('research-water');
-    researchWaterButton.addEventListener('click', () => research('water'));
-
-    const researchSoilButton = document.getElementById('research-soil');
-    researchSoilButton.addEventListener('click', () => research('soil'));
-
-    const researchOxygenButton = document.getElementById('research-oxygen');
-    researchOxygenButton.addEventListener('click', () => research('oxygen'));
 
     initializePotatoField();
 

@@ -3,15 +3,46 @@ console.log("Upgrades system loaded");
 
 const upgrades = {
     planting: [
-        { name: "Hand", cost: 0, effect: () => { plantingDelay = 2000; } },
-        { name: "Hand Trowel", cost: 1, effect: () => { plantingDelay = 1500; } },
-        { name: "Planting Stick", cost: 1, effect: () => { plantingDelay = 1000; } },
-        { name: "Automated Planter", cost: 1, effect: () => { addAutoplanter(); }, count: 0 },
-        { name: "Quantum Spud Spawner", cost: 1000, effect: () => { plantingDelay = 500; } }
+        { 
+            name: "Hand Trowel", 
+            cost: 0, 
+            effect: () => { plantingDelay = 4000; },
+            metaMessage: "Manual labor. The game begins with the simplest form of interaction, making future efficiencies feel like significant advancements. Notice how your patience is tested to make each upgrade feel more rewarding."
+        },
+        { 
+            name: "Watering Can", 
+            cost: 1, 
+            effect: () => { plantingDelay = 3000; },
+            metaMessage: "Integrating water delivery. This upgrade speeds up the planting process, giving you a sense of progress while subtly introducing the concept of resource management."
+        },
+        { 
+            name: "Automated Planter", 
+            cost: 5, 
+            effect: () => { addAutoplanter(); }, 
+            count: 0,
+            metaMessage: "Automation's allure. This upgrade significantly reduces active playtime, giving you a sense of progress and control, while quietly introducing a new constraint: power. The game keeps you engaged by shifting your focus to resource management."
+        },
+        { 
+            name: "Quantum Spud Spawner", 
+            cost: 1000, 
+            effect: () => { plantingDelay = 500; },
+            metaMessage: "The ultimate efficiency. The game offers peak performance, yet at a steep resource cost. This reflects the paradox of progress: as you achieve perfection, your burden increases. What appears to be the pinnacle of advancement is, in fact, the height of your dependency."
+        }
     ],
     harvesting: [
-        { name: "Hand", cost: 0, effect: () => { /* No effect for initial hand harvesting */ } },
-        { name: "Auto Harvester", cost: 10, effect: () => { addAutoHarvester(); }, count: 0 }
+        { 
+            name: "Hand", 
+            cost: 0, 
+            effect: () => { /* No effect for initial hand harvesting */ },
+            metaMessage: "The starting point. Remember this moment of simplicity as the game grows more complex."
+        },
+        { 
+            name: "Auto Harvester", 
+            cost: 100, 
+            effect: () => { addAutoHarvester(); }, 
+            count: 0,
+            metaMessage: "Your first step towards full automation. The game is reducing your direct involvement, shifting your focus to management and strategy."
+        }
     ]
 };
 
@@ -35,6 +66,14 @@ function buyUpgrade(type, index) {
         updateDisplay();
         displayUpgrades();
         rawPotatoesPerSecond = calculatePotatoesPerSecond();
+        console.log("Upgrade purchased:", upgrade.name);
+        console.log("New planting delay:", plantingDelay); // Add this line for debugging
+        if (upgrade.metaMessage) {
+            console.log("Meta message:", upgrade.metaMessage);
+            showToast("Upgrade Insight", upgrade.metaMessage, 'meta');
+        } else {
+            console.log("No meta message for this upgrade");
+        }
     }
 }
 
@@ -176,6 +215,10 @@ function harvestOneReadyPotato() {
             break; // Only harvest one potato
         }
     }
+}
+
+function showMetaMessage(message) {
+    showToast("Upgrade Insight", message, 'meta');
 }
 
 document.addEventListener('DOMContentLoaded', () => {

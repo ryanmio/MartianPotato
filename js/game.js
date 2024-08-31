@@ -10,7 +10,7 @@ let oxygen = 100;
 
 let processingLevel = 0;
 
-let plantingDelay = 2000; // 2 seconds
+let plantingDelay = 4000; // 4 seconds, matching the initial "Hand Trowel" upgrade
 let lastPlantTime = 0;
 let potatoesPerClick = 1;
 
@@ -362,6 +362,7 @@ function updateDebugInfo(currentTime, updateTime) {
         updateElement('resource-usage', `Resource Usage: Water (${water.toFixed(2)}), Soil (${soilNutrients.toFixed(2)}), Oxygen (${oxygen.toFixed(2)})`);
         updateElement('resource-generation', `Resource Generation: Water (${resourceGeneration.water}/s), Soil (${resourceGeneration.soilNutrients}/s), Oxygen (${resourceGeneration.oxygen}/s)`);
         updateElement('last-action', `Last Action: ${lastAction}`);
+        updateElement('planting-delay', `Planting Delay: ${plantingDelay}ms`);
         
         lastDebugUpdateTime = currentTime;
         lastResourceValues = { water, soilNutrients, oxygen };
@@ -379,7 +380,8 @@ function updateLastAction(action) {
 }
 
 // Add this function near the top of the file
-function showToast(title, message, type = 'achievement') {
+window.showToast = function(title, message, type = 'achievement') {
+    console.log("Showing toast:", title, message, type);
     const toastContainer = document.getElementById('toast-container');
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;

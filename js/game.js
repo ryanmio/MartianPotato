@@ -444,4 +444,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const toggleDebugModeButton = document.getElementById('toggle-debug-mode');
     toggleDebugModeButton.addEventListener('click', toggleDebugMode);
+
+    const minimizeDebugButton = document.getElementById('minimize-debug');
+    const debugInfo = document.getElementById('debug-info');
+
+    minimizeDebugButton.addEventListener('click', () => {
+        debugInfo.classList.toggle('minimized');
+        minimizeDebugButton.setAttribute('data-text', 
+            debugInfo.classList.contains('minimized') ? 'Maximize' : 'Minimize');
+    });
 });

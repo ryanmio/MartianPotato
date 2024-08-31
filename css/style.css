@@ -311,3 +311,29 @@ h2 {
 .toast-message {
     font-size: 14px;
 }
+
+.debug-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#minimize-debug {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+#debug-info.minimized #debug-content {
+    display: none;
+}
+
+#debug-info.minimized #minimize-debug::after {
+    content: 'Maximize';
+}
+
+#debug-info:not(.minimized) #minimize-debug::after {
+    content: 'Minimize';
+}

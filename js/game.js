@@ -300,6 +300,10 @@ function toggleDebugMode() {
         if (debugMode) {
             // Initialize debug info when first enabled
             updateDebugInfo(performance.now(), 0);
+            // Add 100 potatoes when debug mode is enabled
+            potatoCount += 100;
+            updateDisplay();
+            showToast("Debug Mode", "Added 100 potatoes for testing", 'debug');
         }
     }
 }

@@ -50,13 +50,15 @@ let currentPlantingUpgrade = 0;
 
 function buyUpgrade(type, index) {
     const upgrade = upgrades[type][index];
-    const cost = type === 'planting' && index === 3 ? Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count)) : upgrade.cost;
+    const cost = type === 'planting' && index === 2 ? Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count)) : upgrade.cost;
     if (potatoCount >= cost) {
         potatoCount -= cost;
         upgrade.effect();
         if (type === 'planting') {
-            if (index === 3) {
+            if (index === 2) {
                 upgrade.count++;
+            } else if (index === 3) {
+                currentPlantingUpgrade = index;
             } else {
                 currentPlantingUpgrade = index;
             }
@@ -67,7 +69,7 @@ function buyUpgrade(type, index) {
         displayUpgrades();
         rawPotatoesPerSecond = calculatePotatoesPerSecond();
         console.log("Upgrade purchased:", upgrade.name);
-        console.log("New planting delay:", plantingDelay); // Add this line for debugging
+        console.log("New planting delay:", plantingDelay);
         if (upgrade.metaMessage) {
             console.log("Meta message:", upgrade.metaMessage);
             showToast("Upgrade Insight", upgrade.metaMessage, 'meta');
@@ -81,21 +83,21 @@ function displayUpgrades() {
     const upgradesContainer = document.getElementById('upgrades-container');
     upgradesContainer.innerHTML = '<h2>Upgrades</h2>';
 
-    if (currentPlantingUpgrade < 3) {
+    if (currentPlantingUpgrade < 2) {
         // Show the next upgrade up to Automated Planter
         const nextUpgradeIndex = currentPlantingUpgrade + 1;
         const nextUpgrade = upgrades.planting[nextUpgradeIndex];
         const upgradeButton = createUpgradeButton('planting', nextUpgradeIndex, nextUpgrade);
         upgradesContainer.appendChild(upgradeButton);
-    } else if (currentPlantingUpgrade === 3) {
+    } else if (currentPlantingUpgrade === 2) {
         // Show only the Automated Planter button if it's the current upgrade
-        const autoplanterButton = createUpgradeButton('planting', 3, upgrades.planting[3]);
+        const autoplanterButton = createUpgradeButton('planting', 2, upgrades.planting[2]);
         upgradesContainer.appendChild(autoplanterButton);
     }
 
-    // Show Quantum Spud Spawner if Automated Planter has been purchased and it's not the current upgrade
-    if (upgrades.planting[3].count > 0 && currentPlantingUpgrade < 4) {
-        const quantumSpudButton = createUpgradeButton('planting', 4, upgrades.planting[4]);
+    // Show Quantum Spud Spawner if Automated Planter has been purchased
+    if (upgrades.planting[2].count > 0) {
+        const quantumSpudButton = createUpgradeButton('planting', 3, upgrades.planting[3]);
         upgradesContainer.appendChild(quantumSpudButton);
     }
 
@@ -108,7 +110,7 @@ function displayUpgrades() {
 function createUpgradeButton(type, index, upgrade) {
     const button = document.createElement('button');
     button.id = `${type}-upgrade-${index}`;
-    const cost = type === 'planting' && index === 3 ? Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count)) : upgrade.cost;
+    const cost = type === 'planting' && index === 2 ? Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count)) : upgrade.cost;
     button.textContent = `Buy ${upgrade.name} (Cost: ${cost} potatoes)`;
     button.onclick = () => buyUpgrade(type, index);
     button.disabled = potatoCount < cost;

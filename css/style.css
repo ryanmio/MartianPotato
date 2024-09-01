@@ -339,19 +339,47 @@ h2 {
 }
 
 /* Tech Tree Styles */
+#tech-tree-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
 #tech-tree {
     display: flex;
     overflow-x: auto;
     padding: 20px;
+    scroll-behavior: smooth;
+    flex: 1;
+    white-space: nowrap; /* Ensure single row */
 }
 
-.tech-category {
-    display: flex;
-    flex-wrap: nowrap;
+.carousel-arrow {
+    background-color: #ddd;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+#tech-tree-left {
+    left: 0;
+}
+
+#tech-tree-right {
+    right: 0;
+}
+
+.carousel-arrow:hover {
+    background-color: #ccc;
 }
 
 .tech-card {
-    display: flex;
+    display: inline-flex; /* Ensure cards are inline */
     width: 200px;
     height: 100px;
     margin-right: 10px;

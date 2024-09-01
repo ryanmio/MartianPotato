@@ -303,4 +303,18 @@ function harvestOneReadyPotato() {
 }
 
 // Initialize the tech tree
-document.addEventListener('DOMContentLoaded', createTechTree);
+document.addEventListener('DOMContentLoaded', () => {
+    createTechTree();
+
+    const techTree = document.getElementById('tech-tree');
+    const leftArrow = document.getElementById('tech-tree-left');
+    const rightArrow = document.getElementById('tech-tree-right');
+
+    leftArrow.addEventListener('click', () => {
+        techTree.scrollBy({ left: -200, behavior: 'smooth' });
+    });
+
+    rightArrow.addEventListener('click', () => {
+        techTree.scrollBy({ left: 200, behavior: 'smooth' });
+    });
+});

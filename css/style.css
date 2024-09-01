@@ -381,8 +381,8 @@ h2 {
 }
 
 .tech-card {
-    display: inline-flex; /* Ensure cards are inline */
-    width: 200px;
+    display: inline-flex;
+    width: 240px; /* Increased from 220px to 240px */
     height: 100px;
     margin-right: 10px;
     background-color: #f0f0f0;
@@ -393,7 +393,7 @@ h2 {
 }
 
 .tech-card-icon {
-    width: 50%;
+    width: 40%; /* Decreased from 50% to 40% */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -401,10 +401,17 @@ h2 {
     background-color: #ddd;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
+    overflow: hidden; /* Add this to ensure image doesn't overflow */
+}
+
+.tech-card-icon img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Ensure the entire image is visible */
 }
 
 .tech-card-details {
-    width: 50%;
+    width: 60%; /* Increased from 50% to 60% */
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -414,6 +421,11 @@ h2 {
 .tech-card-details h3 {
     margin: 0;
     font-size: 14px;
+    line-height: 1.2; /* Added to improve readability */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .tech-card-details p {
@@ -422,7 +434,7 @@ h2 {
 }
 
 .details-button {
-    margin-top: 5px;
+    margin-top: auto; /* Push button to bottom */
     padding: 5px;
     font-size: 12px;
     cursor: pointer;

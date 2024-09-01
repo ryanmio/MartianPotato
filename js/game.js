@@ -89,7 +89,6 @@ function plantPotato() {
         };
         lastPlantTime = currentTime;
         updateDisplay();
-        updateUpgradeButtons();
         updateLastAction("Planted Potato");
     } else {
         showToast("Not Enough Resources", "Not enough resources to plant a potato! Explore Mars to find more resources.", 'setback');
@@ -186,6 +185,7 @@ function updateDisplay() {
     updateExploreButton();
     updatePotatoField();
     updateExplorationUpgradeButton();
+    updateTechTree(); // Changed from createTechTree()
 }
 
 function updateExploreButton() {
@@ -268,7 +268,6 @@ function gameLoop(currentTime) {
         updatePlantButton();
         if (updateResources(currentTime)) {
             updateDisplay();
-            updateUpgradeButtons();
             checkAndRestartAutoplanters();
         }
         updatePotatoGrowth();
@@ -279,7 +278,6 @@ function gameLoop(currentTime) {
 
 function updateNonCriticalElements() {
     requestIdleCallback(() => {
-        updateUpgradeButtons();
         displayExplorationUpgrades();
     });
 }
@@ -316,7 +314,6 @@ function gameLoop(currentTime) {
         updatePlantButton();
         if (updateResources(currentTime)) {
             updateDisplay();
-            updateUpgradeButtons();
             checkAndRestartAutoplanters();
         }
         updatePotatoGrowth();
@@ -425,9 +422,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    displayUpgrades();
+    createTechTree(); // Add this line to create the tech tree once
     displayExplorationUpgrades();
-    updateUpgradeButtons();
 
     requestAnimationFrame(gameLoop);
 

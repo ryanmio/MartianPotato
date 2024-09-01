@@ -7,26 +7,30 @@ const upgrades = {
             name: "Hand Trowel", 
             cost: 0, 
             effect: () => { plantingDelay = 4000; },
-            metaMessage: "Manual labor. The game begins with the simplest form of interaction, making future efficiencies feel like significant advancements. Notice how your patience is tested to make each upgrade feel more rewarding."
+            icon: "🖐️",
+            description: "Manual labor. The game begins with the simplest form of interaction, making future efficiencies feel like significant advancements."
         },
         { 
             name: "Watering Can", 
             cost: 1, 
             effect: () => { plantingDelay = 3000; },
-            metaMessage: "Integrating water delivery. This upgrade speeds up the planting process, giving you a sense of progress while subtly introducing the concept of resource management."
+            icon: "🚿",
+            description: "Integrating water delivery. This upgrade speeds up the planting process, giving you a sense of progress while subtly introducing the concept of resource management."
         },
         { 
             name: "Automated Planter", 
             cost: 5, 
             effect: () => { addAutoplanter(); }, 
             count: 0,
-            metaMessage: "Automation's allure. This upgrade significantly reduces active playtime, giving you a sense of progress and control, while quietly introducing a new constraint: power. The game keeps you engaged by shifting your focus to resource management."
+            icon: "🤖",
+            description: "Automation's allure. This upgrade significantly reduces active playtime, giving you a sense of progress and control, while quietly introducing a new constraint: power."
         },
         { 
             name: "Quantum Spud Spawner", 
             cost: 1000, 
             effect: () => { plantingDelay = 500; },
-            metaMessage: "The ultimate efficiency. The game offers peak performance, yet at a steep resource cost. This reflects the paradox of progress: as you achieve perfection, your burden increases. What appears to be the pinnacle of advancement is, in fact, the height of your dependency."
+            icon: "⚛️",
+            description: "The ultimate efficiency. The game offers peak performance, yet at a steep resource cost. This reflects the paradox of progress: as you achieve perfection, your burden increases."
         }
     ],
     harvesting: [
@@ -34,19 +38,72 @@ const upgrades = {
             name: "Hand", 
             cost: 0, 
             effect: () => { /* No effect for initial hand harvesting */ },
-            metaMessage: "The starting point. Remember this moment of simplicity as the game grows more complex."
+            icon: "🤚",
+            description: "The starting point. Remember this moment of simplicity as the game grows more complex."
         },
         { 
             name: "Auto Harvester", 
             cost: 100, 
             effect: () => { addAutoHarvester(); }, 
             count: 0,
-            metaMessage: "Your first step towards full automation. The game is reducing your direct involvement, shifting your focus to management and strategy."
+            icon: "🤖",
+            description: "Your first step towards full automation. The game is reducing your direct involvement, shifting your focus to management and strategy."
         }
     ]
 };
 
 let currentPlantingUpgrade = 0;
+
+function createTechTree() {
+    const techTree = document.getElementById('tech-tree');
+    techTree.innerHTML = ''; // Clear existing content
+
+    upgrades.planting.forEach((upgrade, index) => {
+        techTree.appendChild(createCard(upgrade, 'planting', index));
+    });
+
+    upgrades.harvesting.forEach((upgrade, index) => {
+        techTree.appendChild(createCard(upgrade, 'harvesting', index));
+    });
+}
+
+function createCard(upgrade, type, index) {
+    const card = document.createElement('div');
+    card.className = 'tech-card';
+    card.innerHTML = `
+        <div class="tech-card-icon">${upgrade.icon}</div>
+        <h3>${upgrade.name}</h3>
+        <div class="tech-card-details">
+            <p class="tech-card-cost">Cost: ${upgrade.cost} potatoes</p>
+            <p class="tech-card-effect">${upgrade.description}</p>
+            <button class="buy-upgrade-button">Buy Upgrade</button>
+        </div>
+    `;
+
+    // Toggle visibility of details on click
+    card.addEventListener('click', () => {
+        card.classList.toggle('active');
+    });
+
+    // Buy upgrade when the button is clicked
+    const buyButton = card.querySelector('.buy-upgrade-button');
+    buyButton.addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevent card from toggling when button is clicked
+        buyUpgrade(type, index);
+    });
+
+    return card;
+}
+
+function updateTechTree() {
+    const techCards = document.querySelectorAll('.tech-card');
+    techCards.forEach((card, index) => {
+        const buyButton = card.querySelector('.buy-upgrade-button');
+        const costElement = card.querySelector('.tech-card-cost');
+        const cost = parseInt(costElement.textContent.split(':')[1]);
+        buyButton.disabled = potatoCount < cost;
+    });
+}
 
 function buyUpgrade(type, index) {
     const upgrade = upgrades[type][index];
@@ -57,76 +114,19 @@ function buyUpgrade(type, index) {
         if (type === 'planting') {
             if (index === 2) {
                 upgrade.count++;
-            } else if (index === 3) {
-                currentPlantingUpgrade = index;
             } else {
-                currentPlantingUpgrade = index;
+                currentPlantingUpgrade = Math.max(currentPlantingUpgrade, index);
             }
         } else if (type === 'harvesting' && index === 1) {
             upgrade.count++;
         }
-        updateDisplay();
-        displayUpgrades();
-        rawPotatoesPerSecond = calculatePotatoesPerSecond();
+        updateDisplay(); // Update other game elements
+        updateTechTree(); // Changed from createTechTree()
         console.log("Upgrade purchased:", upgrade.name);
         console.log("New planting delay:", plantingDelay);
-        if (upgrade.metaMessage) {
-            console.log("Meta message:", upgrade.metaMessage);
-            showToast("Upgrade Insight", upgrade.metaMessage, 'meta');
-        } else {
-            console.log("No meta message for this upgrade");
-        }
-    }
-}
-
-function displayUpgrades() {
-    const upgradesContainer = document.getElementById('upgrades-container');
-    upgradesContainer.innerHTML = '<h2>Upgrades</h2>';
-
-    if (currentPlantingUpgrade < 2) {
-        // Show the next upgrade up to Automated Planter
-        const nextUpgradeIndex = currentPlantingUpgrade + 1;
-        const nextUpgrade = upgrades.planting[nextUpgradeIndex];
-        const upgradeButton = createUpgradeButton('planting', nextUpgradeIndex, nextUpgrade);
-        upgradesContainer.appendChild(upgradeButton);
-    } else if (currentPlantingUpgrade === 2) {
-        // Show only the Automated Planter button if it's the current upgrade
-        const autoplanterButton = createUpgradeButton('planting', 2, upgrades.planting[2]);
-        upgradesContainer.appendChild(autoplanterButton);
-    }
-
-    // Show Quantum Spud Spawner if Automated Planter has been purchased
-    if (upgrades.planting[2].count > 0) {
-        const quantumSpudButton = createUpgradeButton('planting', 3, upgrades.planting[3]);
-        upgradesContainer.appendChild(quantumSpudButton);
-    }
-
-    // Show Auto Harvester upgrade
-    const autoHarvesterUpgrade = upgrades.harvesting[1];
-    const autoHarvesterButton = createUpgradeButton('harvesting', 1, autoHarvesterUpgrade);
-    upgradesContainer.appendChild(autoHarvesterButton);
-}
-
-function createUpgradeButton(type, index, upgrade) {
-    const button = document.createElement('button');
-    button.id = `${type}-upgrade-${index}`;
-    const cost = type === 'planting' && index === 2 ? Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count)) : upgrade.cost;
-    button.textContent = `Buy ${upgrade.name} (Cost: ${cost} potatoes)`;
-    button.onclick = () => buyUpgrade(type, index);
-    button.disabled = potatoCount < cost;
-    return button;
-}
-
-function updateUpgradeButtons() {
-    const index = currentPlantingUpgrade + 1;
-    const plantingButton = document.getElementById(`planting-upgrade-${index}`);
-    if (plantingButton) {
-        plantingButton.disabled = potatoCount < upgrades.planting[index].cost;
-    }
-
-    const autoHarvesterButton = document.getElementById('harvesting-upgrade-1');
-    if (autoHarvesterButton) {
-        autoHarvesterButton.disabled = potatoCount < upgrades.harvesting[1].cost;
+        showToast("Upgrade Purchased", `You have purchased the ${upgrade.name} upgrade!`, 'achievement');
+    } else {
+        showToast("Not Enough Potatoes", "You don't have enough potatoes to purchase this upgrade.", 'setback');
     }
 }
 
@@ -219,11 +219,5 @@ function harvestOneReadyPotato() {
     }
 }
 
-function showMetaMessage(message) {
-    showToast("Upgrade Insight", message, 'meta');
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    displayUpgrades();
-    updateUpgradeButtons();
-});
+// Initialize the tech tree
+document.addEventListener('DOMContentLoaded', createTechTree);

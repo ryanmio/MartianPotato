@@ -87,17 +87,25 @@ function createCard(upgrade, type, index) {
         <h3>${upgrade.name}</h3>
     `;
 
-    card.addEventListener('click', () => showUpgradeModal(upgrade, type, index));
+    card.addEventListener('click', () => {
+        showUpgradeModal(upgrade, type, index);
+    });
 
     return card;
 }
 
 function showUpgradeModal(upgrade, type, index) {
+    const existingModal = document.querySelector('.modal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+
     const modal = document.createElement('div');
     modal.className = 'modal';
     
     let content = `
-        <div>
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
             <h2>${upgrade.name}</h2>
             <p>${upgrade.description}</p>
     `;
@@ -105,16 +113,21 @@ function showUpgradeModal(upgrade, type, index) {
     if (!upgrade.purchased) {
         content += `
             <p class="tech-card-cost">Cost: ${upgrade.cost} potatoes</p>
-            <button class="buy-upgrade-button">Buy Upgrade</button>
+            <button class="buy-upgrade-button" ${potatoCount >= upgrade.cost ? '' : 'disabled'}>Buy Upgrade</button>
         `;
-    } else {
-        content += `<p class="meta-message">${upgrade.metaMessage}</p>`;
+    } else if (upgrade.count !== undefined && type === 'harvesting') {
+        const nextCost = Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count));
+        content += `
+            <p class="tech-card-cost">Cost: ${nextCost} potatoes</p>
+            <button class="buy-upgrade-button" ${potatoCount >= nextCost ? '' : 'disabled'}>Buy Upgrade</button>
+        `;
     }
-
+    
+    content += `<p class="meta-message">${upgrade.metaMessage}</p>`;
     content += `</div>`;
     modal.innerHTML = content;
 
-    if (!upgrade.purchased) {
+    if (!upgrade.purchased || (upgrade.count !== undefined && type === 'harvesting')) {
         const buyButton = modal.querySelector('.buy-upgrade-button');
         buyButton.addEventListener('click', () => {
             buyUpgrade(type, index);
@@ -122,8 +135,13 @@ function showUpgradeModal(upgrade, type, index) {
         });
     }
 
+    const closeButton = modal.querySelector('.close-modal');
+    closeButton.addEventListener('click', () => {
+        modal.remove();
+    });
+
     modal.addEventListener('click', (event) => {
-        if (event.target === modal || event.target.className === 'modal') {
+        if (event.target === modal) {
             modal.remove();
         }
     });
@@ -142,10 +160,21 @@ function updateTechTree() {
         const category = upgradeCategories[categoryIndex];
         const upgrade = upgrades[category] && upgrades[category][upgradeIndex];
         
-        if (upgrade && upgrade.purchased) {
-            card.classList.add('purchased');
-        } else {
-            card.classList.remove('purchased');
+        if (upgrade) {
+            card.classList.remove('purchasable', 'purchased', 'repeatable');
+            if (upgrade.purchased) {
+                if (upgrade.count !== undefined && category === 'harvesting') {
+                    card.classList.add('repeatable');
+                    const nextCost = Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count));
+                    if (potatoCount >= nextCost) {
+                        card.classList.add('purchasable');
+                    }
+                } else {
+                    card.classList.add('purchased');
+                }
+            } else if (potatoCount >= upgrade.cost) {
+                card.classList.add('purchasable');
+            }
         }
     });
 }

@@ -151,7 +151,7 @@ function createCard(upgrade, category, index) {
     card.innerHTML = `
         <div class="tech-card-icon">${upgrade.icon}</div>
         <div class="tech-card-details">
-            <h3>${upgrade.name}</h3>
+            <h3 class="tech-card-name" title="${upgrade.name}">${upgrade.name}</h3>
             <p class="tech-card-cost">Cost: ${upgrade.cost} potatoes</p>
             <button class="details-button">Details</button>
         </div>

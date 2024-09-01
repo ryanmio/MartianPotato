@@ -519,3 +519,11 @@ h2 {
     border-radius: 6px;
     margin-top: 20px;
 }
+
+.tech-card-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    margin: 0;
+}

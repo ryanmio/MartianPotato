@@ -60,6 +60,68 @@ const upgrades = {
 
 let currentPlantingUpgrade = 0;
 
+// Add these variables at the top of the file
+let lastTechTreeUpdate = 0;
+const TECH_TREE_UPDATE_INTERVAL = 1000; // Update every second
+
+// Modify the updateTechTree function
+function updateTechTree() {
+    const currentTime = Date.now();
+    if (currentTime - lastTechTreeUpdate < TECH_TREE_UPDATE_INTERVAL) {
+        return; // Exit if not enough time has passed since the last update
+    }
+    lastTechTreeUpdate = currentTime;
+
+    const techCards = document.querySelectorAll('.tech-card');
+    
+    techCards.forEach((card) => {
+        const category = card.dataset.category;
+        const index = parseInt(card.dataset.index);
+        const upgrade = upgrades[category][index];
+        
+        if (upgrade) {
+            const isPurchasable = category === 'harvesting' && upgrade.count !== undefined
+                ? potatoCount >= Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count))
+                : potatoCount >= upgrade.cost;
+
+            // Only update classes if there's a change
+            if (isPurchasable && !card.classList.contains('purchasable')) {
+                card.classList.add('purchasable');
+            } else if (!isPurchasable && card.classList.contains('purchasable')) {
+                card.classList.remove('purchasable');
+            }
+
+            // Update cost display if needed
+            const costElement = card.querySelector('.tech-card-cost');
+            if (costElement) {
+                const cost = category === 'harvesting' && upgrade.count !== undefined
+                    ? Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count))
+                    : upgrade.cost;
+                const newCostText = `Cost: ${cost} potatoes`;
+                if (costElement.textContent !== newCostText) {
+                    costElement.textContent = newCostText;
+                }
+            }
+        }
+    });
+}
+
+// Modify the gameLoop function in js/game.js
+function gameLoop(currentTime) {
+    if (currentTime - lastFrameTime >= FRAME_DELAY) {
+        updatePlantButton();
+        if (updateResources(currentTime)) {
+            updateDisplay();
+            checkAndRestartAutoplanters();
+        }
+        updatePotatoGrowth();
+        updateTechTree(); // Call updateTechTree here, it will self-throttle
+        lastFrameTime = currentTime;
+    }
+    requestAnimationFrame(gameLoop);
+}
+
+// Remove the updateTechTree call from createTechTree
 function createTechTree() {
     const techTree = document.getElementById('tech-tree');
     techTree.innerHTML = ''; // Clear existing content
@@ -77,23 +139,26 @@ function createTechTree() {
         techTree.appendChild(categoryDiv);
     }
     
-    updateTechTree(); // Call this to set initial states
+    // Remove this line:
+    // updateTechTree(); // Call this to set initial states
 }
 
-function createCard(upgrade, type, index) {
+function createCard(upgrade, category, index) {
     const card = document.createElement('div');
     card.className = 'tech-card';
+    card.dataset.category = category;
+    card.dataset.index = index;
     card.innerHTML = `
         <div class="tech-card-icon">${upgrade.icon}</div>
         <div class="tech-card-details">
             <h3>${upgrade.name}</h3>
-            <p>Cost: ${upgrade.cost} potatoes</p>
+            <p class="tech-card-cost">Cost: ${upgrade.cost} potatoes</p>
             <button class="details-button">Details</button>
         </div>
     `;
 
     card.querySelector('.details-button').addEventListener('click', () => {
-        showUpgradeModal(upgrade, type, index);
+        showUpgradeModal(upgrade, category, index);
     });
 
     return card;
@@ -152,36 +217,6 @@ function showUpgradeModal(upgrade, type, index) {
     });
 
     document.body.appendChild(modal);
-}
-
-function updateTechTree() {
-    const techCards = document.querySelectorAll('.tech-card');
-    const upgradeCategories = Object.keys(upgrades);
-    
-    techCards.forEach((card, index) => {
-        const categoryIndex = Math.floor(index / upgradeCategories.length);
-        const upgradeIndex = index % upgradeCategories.length;
-        
-        const category = upgradeCategories[categoryIndex];
-        const upgrade = upgrades[category] && upgrades[category][upgradeIndex];
-        
-        if (upgrade) {
-            card.classList.remove('purchasable', 'purchased', 'repeatable');
-            if (upgrade.purchased) {
-                if (upgrade.count !== undefined && category === 'harvesting') {
-                    card.classList.add('repeatable');
-                    const nextCost = Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count));
-                    if (potatoCount >= nextCost) {
-                        card.classList.add('purchasable');
-                    }
-                } else {
-                    card.classList.add('purchased');
-                }
-            } else if (potatoCount >= upgrade.cost) {
-                card.classList.add('purchasable');
-            }
-        }
-    });
 }
 
 function buyUpgrade(type, index) {

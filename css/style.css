@@ -348,34 +348,36 @@ h2 {
 #tech-tree {
     display: flex;
     overflow-x: auto;
-    padding: 20px;
+    padding: 20px 0; /* Remove horizontal padding */
     scroll-behavior: smooth;
     flex: 1;
     white-space: nowrap; /* Ensure single row */
 }
 
 .carousel-arrow {
-    background-color: #ddd;
+    background-color: transparent;
     border: none;
     padding: 10px;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 24px;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     z-index: 1;
+    color: #333;
+    display: none; /* Hide by default */
 }
 
 #tech-tree-left {
-    left: 0;
+    left: -30px; /* Move further to the edge */
 }
 
 #tech-tree-right {
-    right: 0;
+    right: -30px; /* Move further to the edge */
 }
 
 .carousel-arrow:hover {
-    background-color: #ccc;
+    color: #000;
 }
 
 .tech-card {

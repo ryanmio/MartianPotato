@@ -67,10 +67,11 @@ function createTechTree() {
     for (const category in upgrades) {
         const categoryDiv = document.createElement('div');
         categoryDiv.className = 'tech-category';
-        categoryDiv.innerHTML = `<h3>${category.charAt(0).toUpperCase() + category.slice(1)}</h3>`;
 
         upgrades[category].forEach((upgrade, index) => {
-            categoryDiv.appendChild(createCard(upgrade, category, index));
+            if (!upgrade.purchased || (upgrade.count !== undefined && category === 'harvesting')) {
+                categoryDiv.appendChild(createCard(upgrade, category, index));
+            }
         });
 
         techTree.appendChild(categoryDiv);
@@ -84,10 +85,14 @@ function createCard(upgrade, type, index) {
     card.className = 'tech-card';
     card.innerHTML = `
         <div class="tech-card-icon">${upgrade.icon}</div>
-        <h3>${upgrade.name}</h3>
+        <div class="tech-card-details">
+            <h3>${upgrade.name}</h3>
+            <p>Cost: ${upgrade.cost} potatoes</p>
+            <button class="details-button">Details</button>
+        </div>
     `;
 
-    card.addEventListener('click', () => {
+    card.querySelector('.details-button').addEventListener('click', () => {
         showUpgradeModal(upgrade, type, index);
     });
 
@@ -198,7 +203,7 @@ function buyUpgrade(type, index) {
             upgrade.count++;
         }
         updateDisplay(); // Update other game elements
-        updateTechTree(); // Update the tech tree display
+        createTechTree(); // Recreate the tech tree to remove purchased upgrades
         console.log("Upgrade purchased:", upgrade.name);
         console.log("New planting delay:", plantingDelay);
         showToast("Upgrade Purchased", `You have purchased the ${upgrade.name} upgrade!`, 'achievement');

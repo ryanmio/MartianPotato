@@ -148,14 +148,36 @@ function createCard(upgrade, category, index) {
     card.className = 'tech-card';
     card.dataset.category = category;
     card.dataset.index = index;
-    card.innerHTML = `
-        <div class="tech-card-icon">${upgrade.icon}</div>
-        <div class="tech-card-details">
-            <h3 class="tech-card-name" title="${upgrade.name}">${upgrade.name}</h3>
-            <p class="tech-card-cost">Cost: ${upgrade.cost} potatoes</p>
-            <button class="details-button">Details</button>
-        </div>
+
+    const iconElement = document.createElement('div');
+    iconElement.className = 'tech-card-icon';
+
+    const imageName = upgrade.assetName || (upgrade.name.replace(/\s+/g, '_').toLowerCase() + '.webp');
+    const imageUrl = `images/${imageName}`;
+
+    const img = new Image();
+    img.src = imageUrl;
+    img.onerror = () => {
+        iconElement.textContent = upgrade.icon;
+        console.log(`Failed to load image: ${imageUrl}`);
+    };
+    img.onload = () => {
+        iconElement.innerHTML = '';
+        iconElement.appendChild(img);
+    };
+
+    iconElement.textContent = upgrade.icon; // Fallback content
+
+    const detailsElement = document.createElement('div');
+    detailsElement.className = 'tech-card-details';
+    detailsElement.innerHTML = `
+        <h3 class="tech-card-name" title="${upgrade.name}">${upgrade.name}</h3>
+        <p class="tech-card-cost">Cost: ${upgrade.cost} potatoes</p>
+        <button class="details-button">Details</button>
     `;
+
+    card.appendChild(iconElement);
+    card.appendChild(detailsElement);
 
     card.querySelector('.details-button').addEventListener('click', () => {
         showUpgradeModal(upgrade, category, index);

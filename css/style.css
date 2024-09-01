@@ -390,58 +390,56 @@ h2 {
     border-radius: 8px;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
-    align-items: stretch; /* Ensure all elements stretch to fill the card height */
+    overflow: hidden; /* Ensure content doesn't overflow */
 }
 
 .tech-card-icon {
-    width: 100px; /* Fixed width to ensure square shape */
-    height: 100px; /* Fixed height to match card height */
-    flex-shrink: 0; /* Prevent icon from shrinking */
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 30px;
     background-color: #ddd;
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
     overflow: hidden;
 }
 
 .tech-card-icon img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* This will ensure the image covers the entire area */
+    object-fit: cover;
 }
 
 .tech-card-details {
-    flex-grow: 1; /* Allow details to grow and fill remaining space */
+    flex-grow: 1;
     padding: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Distribute content evenly */
+    justify-content: space-between;
+    overflow: hidden; /* Ensure content doesn't overflow */
 }
 
 .tech-card-name {
-    margin: 0;
+    margin: 0 0 5px 0;
     font-size: 14px;
     line-height: 1.2;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 100%;
 }
 
 .tech-card-cost {
-    margin: 5px 0;
+    margin: 0 0 5px 0;
     font-size: 12px;
 }
 
 .details-button {
-    align-self: flex-start; /* Align button to the left */
+    align-self: flex-start;
     padding: 5px;
     font-size: 12px;
     cursor: pointer;
-    margin-top: auto; /* Push button to the bottom */
+    margin-top: auto;
 }
 
 /* Modal Styles */
@@ -542,4 +540,9 @@ h2 {
     text-overflow: ellipsis;
     max-width: 100%;
     margin: 0;
+}
+
+.tech-category {
+    display: inline-flex;
+    align-items: flex-start;
 }

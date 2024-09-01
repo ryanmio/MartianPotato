@@ -131,7 +131,7 @@ function createTechTree() {
         categoryDiv.className = 'tech-category';
 
         upgrades[category].forEach((upgrade, index) => {
-            if (!upgrade.purchased || (upgrade.count !== undefined && category === 'harvesting')) {
+            if (!upgrade.purchased || (upgrade.count !== undefined && upgrade.count > 0)) {
                 categoryDiv.appendChild(createCard(upgrade, category, index));
             }
         });
@@ -179,7 +179,8 @@ function createCard(upgrade, category, index) {
     card.appendChild(iconElement);
     card.appendChild(detailsElement);
 
-    card.querySelector('.details-button').addEventListener('click', () => {
+    card.querySelector('.details-button').addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevent card click event
         showUpgradeModal(upgrade, category, index);
     });
 
@@ -384,4 +385,28 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', updateArrows);
 
     updateArrows(); // Initial check
+});
+
+function updateTechTreeAlignment() {
+    const techTree = document.getElementById('tech-tree');
+    const categories = techTree.querySelectorAll('.tech-category');
+    let maxHeight = 0;
+
+    categories.forEach(category => {
+        const height = category.offsetHeight;
+        if (height > maxHeight) {
+            maxHeight = height;
+        }
+    });
+
+    categories.forEach(category => {
+        category.style.height = `${maxHeight}px`;
+    });
+}
+
+// Call this function after creating the tech tree and whenever the window is resized
+window.addEventListener('resize', updateTechTreeAlignment);
+document.addEventListener('DOMContentLoaded', () => {
+    createTechTree();
+    updateTechTreeAlignment();
 });

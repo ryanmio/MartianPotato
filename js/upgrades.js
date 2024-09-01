@@ -8,14 +8,16 @@ const upgrades = {
             cost: 0, 
             effect: () => { plantingDelay = 4000; },
             icon: "🖐️",
-            description: "Manual labor. The game begins with the simplest form of interaction, making future efficiencies feel like significant advancements."
+            description: "The simplest tool for planting potatoes.",
+            metaMessage: "Manual labor. The game begins with the simplest form of interaction, making future efficiencies feel like significant advancements."
         },
         { 
             name: "Watering Can", 
             cost: 1, 
             effect: () => { plantingDelay = 3000; },
             icon: "🚿",
-            description: "Integrating water delivery. This upgrade speeds up the planting process, giving you a sense of progress while subtly introducing the concept of resource management."
+            description: "Speeds up the planting process by efficiently watering the soil.",
+            metaMessage: "Integrating water delivery. This upgrade speeds up the planting process, giving you a sense of progress while subtly introducing the concept of resource management."
         },
         { 
             name: "Automated Planter", 
@@ -23,14 +25,16 @@ const upgrades = {
             effect: () => { addAutoplanter(); }, 
             count: 0,
             icon: "🤖",
-            description: "Automation's allure. This upgrade significantly reduces active playtime, giving you a sense of progress and control, while quietly introducing a new constraint: power."
+            description: "Automatically plants potatoes, reducing manual labor.",
+            metaMessage: "Automation's allure. This upgrade significantly reduces active playtime, giving you a sense of progress and control, while quietly introducing a new constraint: power."
         },
         { 
             name: "Quantum Spud Spawner", 
             cost: 1000, 
             effect: () => { plantingDelay = 500; },
             icon: "⚛️",
-            description: "The ultimate efficiency. The game offers peak performance, yet at a steep resource cost. This reflects the paradox of progress: as you achieve perfection, your burden increases."
+            description: "Utilizes quantum technology for near-instant potato planting.",
+            metaMessage: "The ultimate efficiency. The game offers peak performance, yet at a steep resource cost. This reflects the paradox of progress: as you achieve perfection, your burden increases."
         }
     ],
     harvesting: [
@@ -39,7 +43,8 @@ const upgrades = {
             cost: 0, 
             effect: () => { /* No effect for initial hand harvesting */ },
             icon: "🤚",
-            description: "The starting point. Remember this moment of simplicity as the game grows more complex."
+            description: "Harvest potatoes manually.",
+            metaMessage: "The starting point. Remember this moment of simplicity as the game grows more complex."
         },
         { 
             name: "Auto Harvester", 
@@ -47,7 +52,8 @@ const upgrades = {
             effect: () => { addAutoHarvester(); }, 
             count: 0,
             icon: "🤖",
-            description: "Your first step towards full automation. The game is reducing your direct involvement, shifting your focus to management and strategy."
+            description: "Automatically harvests mature potatoes.",
+            metaMessage: "Your first step towards full automation. The game is reducing your direct involvement, shifting your focus to management and strategy."
         }
     ]
 };
@@ -58,13 +64,19 @@ function createTechTree() {
     const techTree = document.getElementById('tech-tree');
     techTree.innerHTML = ''; // Clear existing content
 
-    upgrades.planting.forEach((upgrade, index) => {
-        techTree.appendChild(createCard(upgrade, 'planting', index));
-    });
+    for (const category in upgrades) {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'tech-category';
+        categoryDiv.innerHTML = `<h3>${category.charAt(0).toUpperCase() + category.slice(1)}</h3>`;
 
-    upgrades.harvesting.forEach((upgrade, index) => {
-        techTree.appendChild(createCard(upgrade, 'harvesting', index));
-    });
+        upgrades[category].forEach((upgrade, index) => {
+            categoryDiv.appendChild(createCard(upgrade, category, index));
+        });
+
+        techTree.appendChild(categoryDiv);
+    }
+    
+    updateTechTree(); // Call this to set initial states
 }
 
 function createCard(upgrade, type, index) {
@@ -73,44 +85,80 @@ function createCard(upgrade, type, index) {
     card.innerHTML = `
         <div class="tech-card-icon">${upgrade.icon}</div>
         <h3>${upgrade.name}</h3>
-        <div class="tech-card-details">
-            <p class="tech-card-cost">Cost: ${upgrade.cost} potatoes</p>
-            <p class="tech-card-effect">${upgrade.description}</p>
-            <button class="buy-upgrade-button">Buy Upgrade</button>
-        </div>
     `;
 
-    // Toggle visibility of details on click
-    card.addEventListener('click', () => {
-        card.classList.toggle('active');
-    });
-
-    // Buy upgrade when the button is clicked
-    const buyButton = card.querySelector('.buy-upgrade-button');
-    buyButton.addEventListener('click', (event) => {
-        event.stopPropagation(); // Prevent card from toggling when button is clicked
-        buyUpgrade(type, index);
-    });
+    card.addEventListener('click', () => showUpgradeModal(upgrade, type, index));
 
     return card;
 }
 
+function showUpgradeModal(upgrade, type, index) {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    
+    let content = `
+        <div>
+            <h2>${upgrade.name}</h2>
+            <p>${upgrade.description}</p>
+    `;
+
+    if (!upgrade.purchased) {
+        content += `
+            <p class="tech-card-cost">Cost: ${upgrade.cost} potatoes</p>
+            <button class="buy-upgrade-button">Buy Upgrade</button>
+        `;
+    } else {
+        content += `<p class="meta-message">${upgrade.metaMessage}</p>`;
+    }
+
+    content += `</div>`;
+    modal.innerHTML = content;
+
+    if (!upgrade.purchased) {
+        const buyButton = modal.querySelector('.buy-upgrade-button');
+        buyButton.addEventListener('click', () => {
+            buyUpgrade(type, index);
+            modal.remove();
+        });
+    }
+
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal || event.target.className === 'modal') {
+            modal.remove();
+        }
+    });
+
+    document.body.appendChild(modal);
+}
+
 function updateTechTree() {
     const techCards = document.querySelectorAll('.tech-card');
+    const upgradeCategories = Object.keys(upgrades);
+    
     techCards.forEach((card, index) => {
-        const buyButton = card.querySelector('.buy-upgrade-button');
-        const costElement = card.querySelector('.tech-card-cost');
-        const cost = parseInt(costElement.textContent.split(':')[1]);
-        buyButton.disabled = potatoCount < cost;
+        const categoryIndex = Math.floor(index / upgradeCategories.length);
+        const upgradeIndex = index % upgradeCategories.length;
+        
+        const category = upgradeCategories[categoryIndex];
+        const upgrade = upgrades[category] && upgrades[category][upgradeIndex];
+        
+        if (upgrade && upgrade.purchased) {
+            card.classList.add('purchased');
+        } else {
+            card.classList.remove('purchased');
+        }
     });
 }
 
 function buyUpgrade(type, index) {
     const upgrade = upgrades[type][index];
+    if (!upgrade) return; // Exit if the upgrade doesn't exist
+
     const cost = type === 'planting' && index === 2 ? Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count)) : upgrade.cost;
     if (potatoCount >= cost) {
         potatoCount -= cost;
         upgrade.effect();
+        upgrade.purchased = true;
         if (type === 'planting') {
             if (index === 2) {
                 upgrade.count++;
@@ -121,10 +169,11 @@ function buyUpgrade(type, index) {
             upgrade.count++;
         }
         updateDisplay(); // Update other game elements
-        updateTechTree(); // Changed from createTechTree()
+        updateTechTree(); // Update the tech tree display
         console.log("Upgrade purchased:", upgrade.name);
         console.log("New planting delay:", plantingDelay);
         showToast("Upgrade Purchased", `You have purchased the ${upgrade.name} upgrade!`, 'achievement');
+        showToast("Meta Insight", upgrade.metaMessage, 'meta');
     } else {
         showToast("Not Enough Potatoes", "You don't have enough potatoes to purchase this upgrade.", 'setback');
     }

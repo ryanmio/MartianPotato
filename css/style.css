@@ -564,7 +564,7 @@ h2 {
 #ice-melting-container {
     width: 200px; /* Set a fixed width */
     height: 130px; /* Reduce height */
-    margin: 20px auto; /* Center the container */
+    margin: 20px 0; /* Remove auto margin to left-align */
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* Distribute space evenly */
@@ -589,4 +589,10 @@ h2 {
     font-weight: normal; /* Normal font weight */
     text-align: center;
     margin: 0; /* Remove default margin */
+}
+
+#parent-container {
+    display: flex;
+    align-items: flex-start; /* Align items to the start */
+    gap: 20px; /* Add some space between items */
 }

@@ -338,44 +338,45 @@ h2 {
 
 /* Tech Tree Styles */
 #tech-tree-container {
-    display: flex;
-    align-items: center;
     position: relative;
+    width: 100%;
+    overflow: hidden;
 }
 
 #tech-tree {
     display: flex;
     overflow-x: auto;
-    padding: 20px 0; /* Remove horizontal padding */
     scroll-behavior: smooth;
-    flex: 1;
-    white-space: nowrap; /* Ensure single row */
+    white-space: nowrap;
 }
 
 .carousel-arrow {
-    background-color: transparent;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 24px;
+    display: block; /* Show arrows by default */
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 1;
-    color: #333;
-    display: none; /* Hide by default */
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 2;
 }
 
 #tech-tree-left {
-    left: -30px; /* Move further to the edge */
+    left: 5px;
 }
 
 #tech-tree-right {
-    right: -30px; /* Move further to the edge */
+    right: 5px;
 }
 
-.carousel-arrow:hover {
-    color: #000;
+.tech-card {
+    flex: 0 0 auto;
+    width: 240px;
+    margin-right: 10px;
 }
 
 .tech-card {

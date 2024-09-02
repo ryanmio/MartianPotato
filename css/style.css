@@ -66,10 +66,6 @@ h2 {
     margin: 10px auto 0 auto;
 }
 
-#explore-button:hover {
-    background: rgba(0,0,0,.1);
-}
-
 #potato-field {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -624,11 +620,6 @@ h2 {
     cursor: pointer;
     margin: 0 auto;
     transition: transform 0.2s ease-in-out;
-    width: 60px;
-    height: 60px;
-    background: none;
-    border: none;
-    padding: 0;
 }
 
 .explore-mars:hover {
@@ -638,6 +629,7 @@ h2 {
 .explore-mars:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
 }
 
 #exploration-cooldown {
@@ -645,7 +637,7 @@ h2 {
     color: #666;
     display: block;
     text-align: center;
-    margin-top: 5px;
+
 }
 
 .exploration-progress {

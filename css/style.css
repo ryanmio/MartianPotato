@@ -63,7 +63,7 @@ h2 {
 
 #explore-button {
     display: inline-block;
-    margin: 10px auto 0 auto;
+    margin: 0px auto 0 auto;
 }
 
 #potato-field {
@@ -613,7 +613,7 @@ h2 {
 }
 
 .explore-mars {
-    font-size: 50px;
+    font-size: 40px;
     display: flex;
     justify-content: center;
     align-items: center;

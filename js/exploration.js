@@ -21,15 +21,29 @@ function exploreMarsSurface() {
         return;
     }
 
-    const waterReward = Math.floor(Math.random() * 10) + 1;
-    const soilReward = Math.floor(Math.random() * 10) + 1;
-    const oxygenReward = Math.floor(Math.random() * 10) + 1;
+    // Adjust rewards: water is half as much as soil and oxygen on average
+    const waterReward = Math.floor(Math.random() * 5) + 1; // 1-5 range
+    const soilReward = Math.floor(Math.random() * 10) + 1; // 1-10 range
+    const oxygenReward = Math.floor(Math.random() * 10) + 1; // 1-10 range
 
     water += waterReward;
     soilNutrients += soilReward;
     oxygen += oxygenReward;
 
-    showToast("Exploration Success", `Found: ${waterReward} water, ${soilReward} soil nutrients, ${oxygenReward} oxygen`, 'achievement');
+    // Create a list of non-zero rewards
+    const rewards = [];
+    if (waterReward > 0) rewards.push(`${waterReward} water`);
+    if (soilReward > 0) rewards.push(`${soilReward} soil nutrients`);
+    if (oxygenReward > 0) rewards.push(`${oxygenReward} oxygen`);
+
+    // Join the rewards with commas and 'and' for the last item
+    const rewardString = rewards.join(', ').replace(/,([^,]*)$/, ' and$1');
+
+    showToast(
+        "Resources Acquired",
+        `An exploration of the martian surface yielded: ${rewardString}.`,
+        'achievement'
+    );
 
     lastExploreTime = currentTime;
     updateExplorationProgress();

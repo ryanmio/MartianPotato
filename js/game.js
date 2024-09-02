@@ -186,6 +186,7 @@ function updateDisplay() {
     updatePotatoField();
     updateExplorationUpgradeButton();
     updateTechTree(); // Changed from createTechTree()
+    updateIceMeltingProgress();
 }
 
 function updateExploreButton() {
@@ -449,4 +450,28 @@ document.addEventListener('DOMContentLoaded', () => {
         minimizeDebugButton.setAttribute('data-text', 
             debugInfo.classList.contains('minimized') ? 'Maximize' : 'Minimize');
     });
+
+    const iceCube = document.getElementById('ice-cube');
+    iceCube.addEventListener('click', meltIce);
+    updateIceMeltingProgress();
 });
+
+let waterMeltingClicks = 0;
+const CLICKS_PER_WATER = 5;
+
+function meltIce() {
+    waterMeltingClicks++;
+    if (waterMeltingClicks >= CLICKS_PER_WATER) {
+        water++;
+        waterMeltingClicks = 0;
+        showToast("Water Collected", "You've melted ice and collected 1 unit of water!", 'achievement');
+    }
+    updateIceMeltingProgress();
+    updateDisplay();
+    updateLastAction("Melted ice");
+}
+
+function updateIceMeltingProgress() {
+    const progressElement = document.getElementById('ice-melting-progress');
+    progressElement.textContent = `Clicks: ${waterMeltingClicks} / ${CLICKS_PER_WATER}`;
+}

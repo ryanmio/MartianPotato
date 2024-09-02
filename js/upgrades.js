@@ -41,7 +41,7 @@ const upgrades = {
         { 
             name: "Manual Ice Melting", 
             cost: 0, 
-            effect: () => { /* No effect for initial manual water collection */ },
+            effect: () => { /* Need to implement */ },
             icon: "🧊",
             description: "Collect water by manually melting Martian ice, 1 unit per 5 clicks.",
             metaMessage: "The grind begins. By starting with a low-yield, high-effort method, the game establishes a baseline against which all future upgrades will feel like progress, even if they simply shift the type of effort required.",

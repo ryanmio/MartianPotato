@@ -458,8 +458,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let waterMeltingClicks = 0;
 const CLICKS_PER_WATER = 5;
+let isManualIceMeltingUnlocked = false;
 
 function meltIce() {
+    if (!isManualIceMeltingUnlocked) return;
+    
     waterMeltingClicks++;
     if (waterMeltingClicks >= CLICKS_PER_WATER) {
         water++;
@@ -469,6 +472,14 @@ function meltIce() {
     updateIceMeltingProgress();
     updateDisplay();
     updateLastAction("Melted ice");
+}
+
+function unlockManualIceMelting() {
+    isManualIceMeltingUnlocked = true;
+    const iceMeltingContainer = document.getElementById('ice-melting-container');
+    if (iceMeltingContainer) {
+        iceMeltingContainer.style.display = 'block';
+    }
 }
 
 function updateIceMeltingProgress() {

@@ -41,7 +41,10 @@ const upgrades = {
         { 
             name: "Manual Ice Melting", 
             cost: 0, 
-            effect: () => { /* Need to implement */ },
+            effect: () => { 
+                unlockManualIceMelting(); // Call the function defined in game.js
+                showToast("Upgrade Unlocked", "You can now manually melt ice for water!", 'achievement');
+            },
             icon: "🧊",
             description: "Collect water by manually melting Martian ice, 1 unit per 5 clicks.",
             metaMessage: "The grind begins. By starting with a low-yield, high-effort method, the game establishes a baseline against which all future upgrades will feel like progress, even if they simply shift the type of effort required.",
@@ -414,10 +417,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Add this function to handle manual ice melting
 function meltIce() {
+    if (!isManualIceMeltingUnlocked) return;
+    
     waterMeltingClicks++;
-    if (waterMeltingClicks >= 5) {
+    if (waterMeltingClicks >= CLICKS_PER_WATER) {
         water++;
         waterMeltingClicks = 0;
-        updateDisplay();
+        showToast("Water Collected", "You've melted ice and collected 1 unit of water!", 'achievement');
+    }
+    updateIceMeltingProgress();
+    updateDisplay();
+    updateLastAction("Melted ice");
+}
+
+// Add this function to unlock manual ice melting
+function unlockManualIceMelting() {
+    isManualIceMeltingUnlocked = true;
+    const iceMeltingContainer = document.getElementById('ice-melting-container');
+    if (iceMeltingContainer) {
+        iceMeltingContainer.style.display = 'block';
     }
 }
+
+// Initialize the ice melting mechanism
+document.addEventListener('DOMContentLoaded', () => {
+    const iceMeltingContainer = document.getElementById('ice-melting-container');
+    if (iceMeltingContainer) {
+        iceMeltingContainer.style.display = 'none'; // Hide by default
+    }
+
+    const iceCube = document.getElementById('ice-cube');
+    iceCube.addEventListener('click', meltIce);
+});

@@ -484,5 +484,7 @@ function unlockManualIceMelting() {
 
 function updateIceMeltingProgress() {
     const progressElement = document.getElementById('ice-melting-progress');
-    progressElement.textContent = `Clicks: ${waterMeltingClicks} / ${CLICKS_PER_WATER}`;
+    const progress = (waterMeltingClicks / CLICKS_PER_WATER) * 100;
+    progressElement.style.setProperty('--progress', progress);
+    progressElement.textContent = `${waterMeltingClicks} / ${CLICKS_PER_WATER}`;
 }

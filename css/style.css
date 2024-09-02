@@ -591,62 +591,45 @@ h2 {
     gap: 20px; /* Add some space between items */
 }
 
-#exploration-container {
+#exploration-container, #ice-melting-container {
     width: 200px;
     height: 100px;
     margin: 20px 0;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Change from space-between to center */
+    justify-content: flex-start; /* Align items to the top */
     align-items: center;
     background-color: #f0f0f0;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 10px;
-    position: relative; /* Add this */
+    position: relative;
 }
 
-#exploration-container h3 {
+#exploration-container h3, #ice-melting-container h3 {
     text-align: center;
     width: 100%;
-    margin: 0 0 10px 0; /* Add bottom margin */
+    margin: 0 0 10px 0;
     font-size: 15px;
 }
 
-.explore-mars {
-    font-size: 40px;
+.explore-mars, #ice-cube {
+    font-size: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: transform 0.2s ease-in-out;
-    /* Remove margin: 0 auto; */
+    margin-top: auto; /* Push to the bottom of the container */
+    margin-bottom: auto; /* Center vertically */
 }
 
-.explore-mars:hover {
-    transform: scale(1.1);
-}
-
-.explore-mars:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-}
-
-#exploration-cooldown {
+#exploration-cooldown, .ice-melting-progress {
     font-size: 14px;
     color: #666;
-    position: absolute; /* Change to absolute positioning */
-    bottom: 5px; /* Position at the bottom */
+    position: absolute;
+    bottom: 5px;
     left: 0;
     right: 0;
     text-align: center;
-}
-
-.exploration-progress {
-    font-size: 16px;
-    color: #333;
-    font-weight: normal;
-    text-align: center;
-    margin: 0;
 }

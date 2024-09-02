@@ -105,6 +105,11 @@ At its core, the game employs a meta-awareness approach, explicitly revealing ho
     - Meta Message: "Hyper-efficiency through advanced technology. The game pushes you towards the apex of production, but at what cost? Notice how this mirrors real-world challenges—where greater efficiency leads to greater energy demands, locking you into a cycle of resource dependency."
     - Asset Name: "nanobot_soil_enhancer.webp"
 
+  - Composting Bin:
+    - Functionality: Converts organic waste into nutrient-rich compost, generating 5 units of soil nutrients per second, consuming 1 unit of water and 1 unit of power.
+    - Meta Message: "Sustainable resource management. The game introduces the concept of recycling and closed-loop systems, encouraging you to think about long-term sustainability while still requiring resource inputs."
+    - Asset Name: "composting_bin.webp"
+
 - Oxygen:
   - Photosynthesis (Initial Resource):
     - Functionality: Potatoes naturally produce a small amount of oxygen, generating 1 unit of oxygen every 10 seconds.
@@ -162,6 +167,21 @@ At its core, the game employs a meta-awareness approach, explicitly revealing ho
   - Meta Message: "The allure of instant power. The game offers unprecedented efficiency at a staggering cost, drawing you deeper into a cycle of dependency. The trade-off between power and sustainability becomes a central theme, challenging your management skills."
   - Asset Name: "quantum_entanglement_power_transmitter.webp"
 
+- Solar-Potato Cooker:
+  - Functionality: Harnesses solar energy to cook potatoes, increasing their nutritional value and energy output by 50%, consumes 5 units of power per second.
+  - Meta Message: "Synergistic technologies. The game introduces the concept of combining resources and technologies for enhanced effects, encouraging experimentation and creative problem-solving."
+  - Asset Name: "solar_potato_cooker.webp"
+
+- Manual Potato Squeezer:
+  - Functionality: Extracts energy from potatoes through manual squeezing, generating 2 units of power per potato, requires manual input.
+  - Meta Message: "The power of manual labor. The game reintroduces the value of physical effort, reminding you that sometimes the simplest solutions can be effective, even if they require more work."
+  - Asset Name: "manual_potato_squeezer.webp"
+
+- Basic Potato Battery:
+  - Functionality: A rudimentary power source using potatoes, generates 5 units of power per second, decays after 30 seconds.
+  - Meta Message: "Humble beginnings. The game starts with a basic, inefficient power source, setting the stage for future improvements and highlighting the value of technological progression."
+  - Asset Name: "basic_potato_battery.webp"
+
 ### 4. Exploration and Expansion
 - Potato-Powered Rover (Initial Exploration Tool):
   - Functionality: Automated exploration vehicle, explores every 2 seconds, consumes 1 unit of power and 1 unit of oxygen per exploration.
@@ -183,6 +203,31 @@ At its core, the game employs a meta-awareness approach, explicitly revealing ho
   - Meta Message: "The hidden costs of knowledge. The game offers a powerful tool for uncovering resources, but at a steep energy cost. This reflects the real-world trade-off between information and resource expenditure, challenging you to balance the two."
   - Asset Name: "subterranean_scanner.webp"
 
+- Potato Transporter:
+  - Functionality: Teleports potatoes from remote locations to the main base, consuming 10 units of power per potato transported.
+  - Meta Message: "Instant gratification at a price. The game introduces a way to bypass the time and effort of physical transportation, but at a significant energy cost, reflecting the trade-off between convenience and sustainability."
+  - Asset Name: "potato_transporter.webp"
+
+- Martian Land Deed:
+  - Functionality: Grants ownership of a new plot of Martian land, increasing the available space for potato farming and resource collection.
+  - Meta Message: "Expansion and exploitation. The game encourages the acquisition of new territory, simulating the drive for growth and control, while subtly questioning the ethics of claiming and exploiting new lands."
+  - Asset Name: "martian_land_deed.webp"
+
+- Martian Habitat Upgrade:
+  - Functionality: Improves the living conditions of the Martian base, increasing colonist happiness and productivity by 10%.
+  - Meta Message: "The importance of infrastructure. The game highlights the need to invest in the well-being of your colonists, demonstrating that a thriving society is not just about resource production, but also about the quality of life."
+  - Asset Name: "martian_habitat_upgrade.webp"
+
+- Potato Storage Silo:
+  - Functionality: Increases potato storage capacity by 1000 units, allowing for larger harvests and more efficient resource management.
+  - Meta Message: "Preparing for the future. The game encourages long-term planning and investment in infrastructure, highlighting the importance of anticipating future needs and challenges."
+  - Asset Name: "potato_storage_silo.webp"
+
+- Potato Vault:
+  - Functionality: A secure, underground facility for long-term potato storage, protecting against Martian environmental hazards and ensuring a stable food supply.
+  - Meta Message: "Security and resilience. The game introduces the concept of safeguarding resources against potential threats, emphasizing the importance of planning for the unexpected and building robust systems."
+  - Asset Name: "potato_vault.webp"
+
 ### 5. Communication and Society
 - Potato Radio:
   - Functionality: Rudimentary communication device, allows basic coordination between potato colonies, consumes 0.1 units of power per second
@@ -199,6 +244,22 @@ At its core, the game employs a meta-awareness approach, explicitly revealing ho
 - Psychic Potato Network:
   - Functionality: Genetically engineered potatoes with psychic abilities form a telepathic network, enabling seamless communication and coordination, consumes 10 units of power per second
   - Asset Name: "psychic_potato_network.webp"
+
+- Martian Trade Agreement:
+  - Functionality: Establishes trade routes with other Martian colonies, allowing for the exchange of resources and technologies.
+  - Meta Message: "Cooperation and competition. The game introduces the concept of interacting with other entities, highlighting the benefits of cooperation while also hinting at the potential for rivalry and conflict."
+  - Asset Name: "martian_trade_agreement.webp"
+
+- Potato Research Grant:
+  - Functionality: Provides funding for advanced potato research, unlocking new technologies and upgrades.
+  - Meta Message: "The power of investment. The game demonstrates the importance of investing in research and development, showing how it can lead to breakthroughs and advancements that can change the course of the game."
+  - Asset Name: "potato_research_grant.webp"
+
+### 6. User Interface and Analytics
+- Production Overview Dashboard:
+  - Functionality: Provides a comprehensive overview of potato production, resource consumption, and colony status, allowing for better decision-making and resource management.
+  - Meta Message: "Knowledge is power. The game provides you with detailed information about your colony, giving you a sense of control and mastery over the game's systems. However, this information can also be overwhelming, leading to analysis paralysis and a constant need to optimize."
+  - Asset Name: "production_overview_dashboard.webp"
 
 ## Special Events and Challenges
 - Dust storms requiring protective measures for crops

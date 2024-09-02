@@ -29,8 +29,11 @@ function exploreMarsSurface() {
     soilNutrients += soilReward;
     oxygen += oxygenReward;
 
+    showToast("Exploration Success", `Found: ${waterReward} water, ${soilReward} soil nutrients, ${oxygenReward} oxygen`, 'achievement');
+
     lastExploreTime = currentTime;
     updateExplorationProgress();
+    updateDisplay();
 }
 
 function buyExplorationUpgrade(index) {
@@ -95,11 +98,10 @@ function updateExplorationUpgradeButton() {
 
 // Modify the updateExplorationProgress function
 function updateExplorationProgress() {
-    const progressElement = document.getElementById('exploration-progress');
+    const cooldownElement = document.getElementById('exploration-cooldown');
     const currentTime = Date.now();
     const remainingTime = Math.max(0, exploreDelay - (currentTime - lastExploreTime));
-    const cooldownText = `Cooldown: ${(remainingTime / 1000).toFixed(1)} / ${(exploreDelay / 1000).toFixed(1)}`;
-    progressElement.textContent = cooldownText;
+    cooldownElement.textContent = remainingTime > 0 ? `(${(remainingTime / 1000).toFixed(1)}s)` : '';
 }
 
 // Modify the event listener

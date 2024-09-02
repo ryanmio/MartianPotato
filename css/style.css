@@ -624,6 +624,16 @@ h2 {
     margin-bottom: auto; /* Center vertically */
 }
 
+.explore-mars:hover, #ice-cube:hover {
+    transform: scale(1.1);
+}
+
+.explore-mars:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
 #exploration-cooldown, .ice-melting-progress {
     font-size: 14px;
     color: #666;

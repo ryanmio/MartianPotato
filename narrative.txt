@@ -204,8 +204,8 @@ At its core, the game employs a meta-awareness approach, explicitly revealing ho
   - Asset Name: "subterranean_scanner.webp"
 
 - Potato Transporter:
-  - Functionality: Teleports potatoes from remote locations to the main base, consuming 10 units of power per potato transported.
-  - Meta Message: "Instant gratification at a price. The game introduces a way to bypass the time and effort of physical transportation, but at a significant energy cost, reflecting the trade-off between convenience and sustainability."
+  - Functionality: 
+  - Meta Message: ""
   - Asset Name: "potato_transporter.webp"
 
 - Martian Land Deed:

@@ -39,12 +39,13 @@ const upgrades = {
     ],
     harvesting: [
         { 
-            name: "Hand", 
+            name: "Manual Ice Melting", 
             cost: 0, 
-            effect: () => { /* No effect for initial hand harvesting */ },
-            icon: "🤚",
-            description: "Harvest potatoes manually.",
-            metaMessage: "The starting point. Remember this moment of simplicity as the game grows more complex."
+            effect: () => { /* No effect for initial manual water collection */ },
+            icon: "🧊",
+            description: "Collect water by manually melting Martian ice, 1 unit per 5 clicks.",
+            metaMessage: "The grind begins. By starting with a low-yield, high-effort method, the game establishes a baseline against which all future upgrades will feel like progress, even if they simply shift the type of effort required.",
+            assetName: "manual_ice_melting.webp"
         },
         { 
             name: "Auto Harvester", 
@@ -410,3 +411,13 @@ document.addEventListener('DOMContentLoaded', () => {
     createTechTree();
     updateTechTreeAlignment();
 });
+
+// Add this function to handle manual ice melting
+function meltIce() {
+    waterMeltingClicks++;
+    if (waterMeltingClicks >= 5) {
+        water++;
+        waterMeltingClicks = 0;
+        updateDisplay();
+    }
+}

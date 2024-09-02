@@ -594,3 +594,64 @@ h2 {
     align-items: flex-start; /* Align items to the start */
     gap: 20px; /* Add some space between items */
 }
+
+#exploration-container {
+    width: 200px;
+    height: 100px;
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+#exploration-container h3 {
+    text-align: center;
+    width: 100%;
+    margin: 0;
+    font-size: 15px;
+}
+
+.explore-mars {
+    font-size: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin: 0 auto;
+    transition: transform 0.2s ease-in-out;
+    width: 60px;
+    height: 60px;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.explore-mars:hover {
+    transform: scale(1.1);
+}
+
+.explore-mars:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#exploration-cooldown {
+    font-size: 14px;
+    color: #666;
+    display: block;
+    text-align: center;
+    margin-top: 5px;
+}
+
+.exploration-progress {
+    font-size: 16px;
+    color: #333;
+    font-weight: normal;
+    text-align: center;
+    margin: 0;
+}

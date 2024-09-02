@@ -17,7 +17,7 @@ let totalExplorationRate = 0;
 function exploreMarsSurface() {
     const currentTime = Date.now();
     if (currentTime - lastExploreTime < exploreDelay) {
-        alert(`You need to wait ${((exploreDelay - (currentTime - lastExploreTime)) / 1000).toFixed(1)} seconds before exploring again.`);
+        showToast("Exploration Cooldown", `You need to wait ${((exploreDelay - (currentTime - lastExploreTime)) / 1000).toFixed(1)} seconds before exploring again.`, 'setback');
         return;
     }
 
@@ -30,8 +30,7 @@ function exploreMarsSurface() {
     oxygen += oxygenReward;
 
     lastExploreTime = currentTime;
-    updateDisplay();
-    alert(`Exploration successful! You found:\nWater: ${waterReward}\nSoil Nutrients: ${soilReward}\nOxygen: ${oxygenReward}`);
+    updateExplorationProgress();
 }
 
 function buyExplorationUpgrade(index) {
@@ -67,6 +66,8 @@ function updateAutonomousExploration() {
 
 function displayExplorationUpgrades() {
     const container = document.getElementById('exploration-upgrades');
+    if (!container) return; // Add this check
+
     container.innerHTML = '<h3>Exploration Upgrades</h3>';
     const nextUpgradeIndex = purchasedUpgrades.length;
     if (nextUpgradeIndex < explorationUpgrades.length) {
@@ -82,6 +83,8 @@ function displayExplorationUpgrades() {
 
 function updateExplorationUpgradeButton() {
     const container = document.getElementById('exploration-upgrades');
+    if (!container) return; // Add this check
+
     const button = container.querySelector('button');
     if (button) {
         const nextUpgradeIndex = purchasedUpgrades.length;
@@ -90,9 +93,19 @@ function updateExplorationUpgradeButton() {
     }
 }
 
-// Initialize exploration
+// Modify the updateExplorationProgress function
+function updateExplorationProgress() {
+    const progressElement = document.getElementById('exploration-progress');
+    const currentTime = Date.now();
+    const remainingTime = Math.max(0, exploreDelay - (currentTime - lastExploreTime));
+    const cooldownText = `Cooldown: ${(remainingTime / 1000).toFixed(1)} / ${(exploreDelay / 1000).toFixed(1)}`;
+    progressElement.textContent = cooldownText;
+}
+
+// Modify the event listener
 document.addEventListener('DOMContentLoaded', () => {
     const exploreButton = document.getElementById('explore-button');
+    exploreButton.innerHTML = '🚀'; // Use innerHTML instead of textContent
     exploreButton.addEventListener('click', exploreMarsSurface);
-    displayExplorationUpgrades();
+    updateExplorationProgress();
 });

@@ -189,15 +189,18 @@ function updateDisplay() {
     updateIceMeltingProgress();
 }
 
+// Modify the updateExploreButton function
 function updateExploreButton() {
     const exploreButton = document.getElementById('explore-button');
     const currentTime = Date.now();
     const timeLeft = Math.max(0, exploreDelay - (currentTime - lastExploreTime));
-    const newText = timeLeft > 0 ? `Explore Mars Surface (${(timeLeft / 1000).toFixed(1)}s)` : 'Explore Mars Surface';
     
-    if (exploreButton.textContent !== newText) {
-        exploreButton.textContent = newText;
-        exploreButton.disabled = timeLeft > 0;
+    exploreButton.disabled = timeLeft > 0;
+    
+    // Update only the cooldown text, not the entire button content
+    const cooldownElement = document.getElementById('exploration-cooldown');
+    if (cooldownElement) {
+        cooldownElement.textContent = timeLeft > 0 ? `(${(timeLeft / 1000).toFixed(1)}s)` : '';
     }
 }
 
@@ -272,6 +275,8 @@ function gameLoop(currentTime) {
             checkAndRestartAutoplanters();
         }
         updatePotatoGrowth();
+        updateTechTree();
+        updateExplorationProgress();
         lastFrameTime = currentTime;
     }
     requestAnimationFrame(gameLoop);
@@ -318,6 +323,8 @@ function gameLoop(currentTime) {
             checkAndRestartAutoplanters();
         }
         updatePotatoGrowth();
+        updateTechTree();
+        updateExplorationProgress();
         
         if (debugMode) {
             const updateTime = performance.now() - startTime;

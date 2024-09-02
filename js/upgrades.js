@@ -385,30 +385,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateArrows(); // Initial check
 });
 
-// Remove or comment out this function as it's no longer needed
-// function updateTechTreeAlignment() {
-//     const techTree = document.getElementById('tech-tree');
-//     const categories = techTree.querySelectorAll('.tech-category');
-//     let maxHeight = 0;
-
-//     categories.forEach(category => {
-//         const height = category.offsetHeight;
-//         if (height > maxHeight) {
-//             maxHeight = height;
-//         }
-//     });
-
-//     categories.forEach(category => {
-//         category.style.height = `${maxHeight}px`;
-//     });
-// }
-
-// Remove or comment out this event listener as it's no longer needed
-// window.addEventListener('resize', updateTechTreeAlignment);
-// document.addEventListener('DOMContentLoaded', () => {
-//     createTechTree();
-//     updateTechTreeAlignment();
-// });
 
 // Add this function to handle manual ice melting
 function meltIce() {

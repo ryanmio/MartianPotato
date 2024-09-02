@@ -1,66 +1,74 @@
 // Upgrade system will be implemented here
 console.log("Upgrades system loaded");
 
-const upgrades = {
-    planting: [
-        { 
-            name: "Hand Trowel", 
-            cost: 0, 
-            effect: () => { plantingDelay = 4000; },
-            icon: "🖐️",
-            description: "The simplest tool for planting potatoes.",
-            metaMessage: "Manual labor. The game begins with the simplest form of interaction, making future efficiencies feel like significant advancements."
+const upgrades = [
+    { 
+        name: "Hand Trowel", 
+        cost: 0, 
+        effect: () => { plantingDelay = 4000; },
+        icon: "🖐️",
+        description: "The simplest tool for planting potatoes.",
+        metaMessage: "Manual labor. The game begins with the simplest form of interaction, making future efficiencies feel like significant advancements.",
+        weight: 1,
+        category: "planting"
+    },
+    { 
+        name: "Manual Ice Melting", 
+        cost: 0, 
+        effect: () => { 
+            unlockManualIceMelting();
+            showToast("Upgrade Unlocked", "You can now manually melt ice for water!", 'achievement');
         },
-        { 
-            name: "Watering Can", 
-            cost: 1, 
-            effect: () => { plantingDelay = 3000; },
-            icon: "🚿",
-            description: "Speeds up the planting process by efficiently watering the soil.",
-            metaMessage: "Integrating water delivery. This upgrade speeds up the planting process, giving you a sense of progress while subtly introducing the concept of resource management."
-        },
-        { 
-            name: "Automated Planter", 
-            cost: 5, 
-            effect: () => { addAutoplanter(); }, 
-            count: 0,
-            icon: "🤖",
-            description: "Automatically plants potatoes, reducing manual labor.",
-            metaMessage: "Automation's allure. This upgrade significantly reduces active playtime, giving you a sense of progress and control, while quietly introducing a new constraint: power."
-        },
-        { 
-            name: "Quantum Spud Spawner", 
-            cost: 1000, 
-            effect: () => { plantingDelay = 500; },
-            icon: "⚛️",
-            description: "Utilizes quantum technology for near-instant potato planting.",
-            metaMessage: "The ultimate efficiency. The game offers peak performance, yet at a steep resource cost. This reflects the paradox of progress: as you achieve perfection, your burden increases."
-        }
-    ],
-    harvesting: [
-        { 
-            name: "Manual Ice Melting", 
-            cost: 0, 
-            effect: () => { 
-                unlockManualIceMelting(); // Call the function defined in game.js
-                showToast("Upgrade Unlocked", "You can now manually melt ice for water!", 'achievement');
-            },
-            icon: "🧊",
-            description: "Collect water by manually melting Martian ice, 1 unit per 5 clicks.",
-            metaMessage: "The grind begins. By starting with a low-yield, high-effort method, the game establishes a baseline against which all future upgrades will feel like progress, even if they simply shift the type of effort required.",
-            assetName: "manual_ice_melting.webp"
-        },
-        { 
-            name: "Auto Harvester", 
-            cost: 100, 
-            effect: () => { addAutoHarvester(); }, 
-            count: 0,
-            icon: "🤖",
-            description: "Automatically harvests mature potatoes.",
-            metaMessage: "Your first step towards full automation. The game is reducing your direct involvement, shifting your focus to management and strategy."
-        }
-    ]
-};
+        icon: "🧊",
+        description: "Collect water by manually melting Martian ice, 1 unit per 5 clicks.",
+        metaMessage: "The grind begins. By starting with a low-yield, high-effort method, the game establishes a baseline against which all future upgrades will feel like progress, even if they simply shift the type of effort required.",
+        assetName: "manual_ice_melting.webp",
+        weight: 2,
+        category: "harvesting"
+    },
+    { 
+        name: "Watering Can", 
+        cost: 1, 
+        effect: () => { plantingDelay = 3000; },
+        icon: "🚿",
+        description: "Speeds up the planting process by efficiently watering the soil.",
+        metaMessage: "Integrating water delivery. This upgrade speeds up the planting process, giving you a sense of progress while subtly introducing the concept of resource management.",
+        weight: 3,
+        category: "planting"
+    },
+    { 
+        name: "Automated Planter", 
+        cost: 5, 
+        effect: () => { addAutoplanter(); }, 
+        count: 0,
+        icon: "🤖",
+        description: "Automatically plants potatoes, reducing manual labor.",
+        metaMessage: "Automation's allure. This upgrade significantly reduces active playtime, giving you a sense of progress and control, while quietly introducing a new constraint: power.",
+        weight: 4,
+        category: "planting"
+    },
+    { 
+        name: "Auto Harvester", 
+        cost: 100, 
+        effect: () => { addAutoHarvester(); }, 
+        count: 0,
+        icon: "🤖",
+        description: "Automatically harvests mature potatoes.",
+        metaMessage: "Your first step towards full automation. The game is reducing your direct involvement, shifting your focus to management and strategy.",
+        weight: 5,
+        category: "harvesting"
+    },
+    { 
+        name: "Quantum Spud Spawner", 
+        cost: 1000, 
+        effect: () => { plantingDelay = 500; },
+        icon: "⚛️",
+        description: "Utilizes quantum technology for near-instant potato planting.",
+        metaMessage: "The ultimate efficiency. The game offers peak performance, yet at a steep resource cost. This reflects the paradox of progress: as you achieve perfection, your burden increases.",
+        weight: 6,
+        category: "planting"
+    }
+];
 
 let currentPlantingUpgrade = 0;
 
@@ -79,14 +87,12 @@ function updateTechTree() {
     const techCards = document.querySelectorAll('.tech-card');
     
     techCards.forEach((card) => {
-        const category = card.dataset.category;
         const index = parseInt(card.dataset.index);
-        const upgrade = upgrades[category][index];
+        const upgrade = upgrades[index];
         
         if (upgrade) {
-            const isPurchasable = category === 'harvesting' && upgrade.count !== undefined
-                ? potatoCount >= Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count))
-                : potatoCount >= upgrade.cost;
+            const upgradeCost = getUpgradeCost(upgrade);
+            const isPurchasable = potatoCount >= upgradeCost;
 
             // Only update classes if there's a change
             if (isPurchasable && !card.classList.contains('purchasable')) {
@@ -98,10 +104,7 @@ function updateTechTree() {
             // Update cost display if needed
             const costElement = card.querySelector('.tech-card-cost');
             if (costElement) {
-                const cost = category === 'harvesting' && upgrade.count !== undefined
-                    ? Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count))
-                    : upgrade.cost;
-                const newCostText = `Cost: ${cost} potatoes`;
+                const newCostText = `Cost: ${upgradeCost} potatoes`;
                 if (costElement.textContent !== newCostText) {
                     costElement.textContent = newCostText;
                 }
@@ -130,27 +133,22 @@ function createTechTree() {
     const techTree = document.getElementById('tech-tree');
     techTree.innerHTML = ''; // Clear existing content
 
-    for (const category in upgrades) {
-        const categoryDiv = document.createElement('div');
-        categoryDiv.className = 'tech-category';
+    // Sort upgrades by weight
+    const sortedUpgrades = upgrades.slice().sort((a, b) => a.weight - b.weight);
 
-        upgrades[category].forEach((upgrade, index) => {
-            if (!upgrade.purchased || (upgrade.count !== undefined && upgrade.count > 0)) {
-                categoryDiv.appendChild(createCard(upgrade, category, index));
-            }
-        });
-
-        techTree.appendChild(categoryDiv);
-    }
+    sortedUpgrades.forEach((upgrade, index) => {
+        if (!upgrade.purchased || (upgrade.count !== undefined && upgrade.count > 0)) {
+            techTree.appendChild(createCard(upgrade, index));
+        }
+    });
     
     // Remove this line:
     // updateTechTree(); // Call this to set initial states
 }
 
-function createCard(upgrade, category, index) {
+function createCard(upgrade, index) {
     const card = document.createElement('div');
     card.className = 'tech-card';
-    card.dataset.category = category;
     card.dataset.index = index;
 
     const iconElement = document.createElement('div');
@@ -176,7 +174,7 @@ function createCard(upgrade, category, index) {
     detailsElement.className = 'tech-card-details';
     detailsElement.innerHTML = `
         <h3 class="tech-card-name" title="${upgrade.name}">${upgrade.name}</h3>
-        <p class="tech-card-cost">Cost: ${upgrade.cost} potatoes</p>
+        <p class="tech-card-cost">Cost: ${getUpgradeCost(upgrade)} potatoes</p>
         <button class="details-button">Details</button>
     `;
 
@@ -185,13 +183,20 @@ function createCard(upgrade, category, index) {
 
     card.querySelector('.details-button').addEventListener('click', (event) => {
         event.stopPropagation(); // Prevent card click event
-        showUpgradeModal(upgrade, category, index);
+        showUpgradeModal(upgrade, index);
     });
 
     return card;
 }
 
-function showUpgradeModal(upgrade, type, index) {
+function getUpgradeCost(upgrade) {
+    if (upgrade.count !== undefined) {
+        return Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count));
+    }
+    return upgrade.cost;
+}
+
+function showUpgradeModal(upgrade, index) {
     const existingModal = document.querySelector('.modal');
     if (existingModal) {
         existingModal.remove();
@@ -207,16 +212,11 @@ function showUpgradeModal(upgrade, type, index) {
             <p>${upgrade.description}</p>
     `;
 
-    if (!upgrade.purchased) {
+    const upgradeCost = getUpgradeCost(upgrade);
+    if (!upgrade.purchased || (upgrade.count !== undefined)) {
         content += `
-            <p class="tech-card-cost">Cost: ${upgrade.cost} potatoes</p>
-            <button class="buy-upgrade-button" ${potatoCount >= upgrade.cost ? '' : 'disabled'}>Buy Upgrade</button>
-        `;
-    } else if (upgrade.count !== undefined && type === 'harvesting') {
-        const nextCost = Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count));
-        content += `
-            <p class="tech-card-cost">Cost: ${nextCost} potatoes</p>
-            <button class="buy-upgrade-button" ${potatoCount >= nextCost ? '' : 'disabled'}>Buy Upgrade</button>
+            <p class="tech-card-cost">Cost: ${upgradeCost} potatoes</p>
+            <button class="buy-upgrade-button" ${potatoCount >= upgradeCost ? '' : 'disabled'}>Buy Upgrade</button>
         `;
     }
     
@@ -224,10 +224,10 @@ function showUpgradeModal(upgrade, type, index) {
     content += `</div>`;
     modal.innerHTML = content;
 
-    if (!upgrade.purchased || (upgrade.count !== undefined && type === 'harvesting')) {
+    if (!upgrade.purchased || (upgrade.count !== undefined)) {
         const buyButton = modal.querySelector('.buy-upgrade-button');
         buyButton.addEventListener('click', () => {
-            buyUpgrade(type, index);
+            buyUpgrade(index);
             modal.remove();
         });
     }
@@ -246,22 +246,16 @@ function showUpgradeModal(upgrade, type, index) {
     document.body.appendChild(modal);
 }
 
-function buyUpgrade(type, index) {
-    const upgrade = upgrades[type][index];
+function buyUpgrade(index) {
+    const upgrade = upgrades[index];
     if (!upgrade) return; // Exit if the upgrade doesn't exist
 
-    const cost = type === 'planting' && index === 2 ? Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count)) : upgrade.cost;
+    const cost = getUpgradeCost(upgrade);
     if (potatoCount >= cost) {
         potatoCount -= cost;
         upgrade.effect();
         upgrade.purchased = true;
-        if (type === 'planting') {
-            if (index === 2) {
-                upgrade.count++;
-            } else {
-                currentPlantingUpgrade = Math.max(currentPlantingUpgrade, index);
-            }
-        } else if (type === 'harvesting' && index === 1) {
+        if (upgrade.count !== undefined) {
             upgrade.count++;
         }
         updateDisplay(); // Update other game elements
@@ -391,29 +385,30 @@ document.addEventListener('DOMContentLoaded', () => {
     updateArrows(); // Initial check
 });
 
-function updateTechTreeAlignment() {
-    const techTree = document.getElementById('tech-tree');
-    const categories = techTree.querySelectorAll('.tech-category');
-    let maxHeight = 0;
+// Remove or comment out this function as it's no longer needed
+// function updateTechTreeAlignment() {
+//     const techTree = document.getElementById('tech-tree');
+//     const categories = techTree.querySelectorAll('.tech-category');
+//     let maxHeight = 0;
 
-    categories.forEach(category => {
-        const height = category.offsetHeight;
-        if (height > maxHeight) {
-            maxHeight = height;
-        }
-    });
+//     categories.forEach(category => {
+//         const height = category.offsetHeight;
+//         if (height > maxHeight) {
+//             maxHeight = height;
+//         }
+//     });
 
-    categories.forEach(category => {
-        category.style.height = `${maxHeight}px`;
-    });
-}
+//     categories.forEach(category => {
+//         category.style.height = `${maxHeight}px`;
+//     });
+// }
 
-// Call this function after creating the tech tree and whenever the window is resized
-window.addEventListener('resize', updateTechTreeAlignment);
-document.addEventListener('DOMContentLoaded', () => {
-    createTechTree();
-    updateTechTreeAlignment();
-});
+// Remove or comment out this event listener as it's no longer needed
+// window.addEventListener('resize', updateTechTreeAlignment);
+// document.addEventListener('DOMContentLoaded', () => {
+//     createTechTree();
+//     updateTechTreeAlignment();
+// });
 
 // Add this function to handle manual ice melting
 function meltIce() {

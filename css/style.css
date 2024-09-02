@@ -51,8 +51,6 @@ button:hover, button:disabled {
 
 #upgrades-container, #research-container, #exploration-container, #debug-container {
     margin-top: 20px;
-    border-top: 1px solid #C0C0C0;
-    padding-top: 20px;
 }
 
 h2 {
@@ -563,7 +561,7 @@ h2 {
 
 #ice-melting-container {
     width: 200px; /* Set a fixed width */
-    height: 130px; /* Reduce height */
+    height: 100px; /* Reduce height */
     margin: 20px 0; /* Remove auto margin to left-align */
     display: flex;
     flex-direction: column;
@@ -579,7 +577,6 @@ h2 {
     text-align: center;
     width: 100%;
     margin: 0; /* Remove default margin */
-    padding: 10px 0; /* Add padding for spacing */
     font-size: 15px; /* Adjust font size if necessary */
 }
 

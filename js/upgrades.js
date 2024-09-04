@@ -315,7 +315,7 @@ function showUpgradeModal(upgrade, index) {
 
 function buyUpgrade(index) {
     const upgrade = upgrades[index];
-    if (!upgrade) return; // Exit if the upgrade doesn't exist
+    if (!upgrade) return;
 
     const cost = getUpgradeCost(upgrade);
     if (potatoCount >= cost) {
@@ -326,18 +326,10 @@ function buyUpgrade(index) {
         } else {
             upgrade.purchased = true;
         }
-        // Ensure window.purchasedUpgrades exists before pushing to it
         window.purchasedUpgrades = window.purchasedUpgrades || [];
         window.purchasedUpgrades.push(upgrade);
-        updateDisplay(); // Update other game elements
-        createTechTree(); // Recreate the tech tree to remove purchased upgrades
-        console.log("Upgrade purchased:", upgrade.name);
-        if (upgrade.category === "planting") {
-            console.log("New planting delay:", plantingDelay);
-        } else if (upgrade.category === "exploration") {
-            console.log("New exploration delay:", window.exploreDelay);
-            console.log("New exploration rate:", window.totalExplorationRate);
-        }
+        updateDisplay();
+        createTechTree();
         showToast("Upgrade Purchased", `You have purchased the ${upgrade.name} upgrade!`, 'achievement');
         showToast("Meta Insight", upgrade.metaMessage, 'meta');
     } else {

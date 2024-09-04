@@ -192,21 +192,11 @@ function updateExploreButton() {
     const exploreButton = document.getElementById('explore-button');
     const cooldownElement = document.getElementById('exploration-cooldown');
     
-    if (!exploreButton || !cooldownElement) {
-        console.error('Explore button or cooldown element not found');
-        return;
-    }
+    if (!exploreButton || !cooldownElement) return;
 
     const currentTime = Date.now();
     const timeLeft = Math.max(0, window.exploreDelay - (currentTime - window.lastExploreTime));
     
-    console.log('updateExploreButton:', {
-        currentTime,
-        lastExploreTime: window.lastExploreTime,
-        exploreDelay: window.exploreDelay,
-        timeLeft
-    });
-
     exploreButton.disabled = timeLeft > 0;
     
     if (timeLeft > 0) {
@@ -288,7 +278,6 @@ function gameLoop(currentTime) {
         }
         updatePotatoGrowth();
         updateTechTree();
-        console.log('Calling updateExploreButton from gameLoop');
         updateExploreButton();
         
         if (debugMode) {
@@ -329,31 +318,6 @@ function toggleDebugMode() {
             showToast("Debug Mode", "Added 100 potatoes for testing", 'debug');
         }
     }
-}
-
-// Modify the gameLoop function to include debug information
-function gameLoop(currentTime) {
-    if (currentTime - lastFrameTime >= FRAME_DELAY) {
-        const startTime = performance.now();
-        
-        updatePlantButton();
-        if (updateResources(currentTime)) {
-            updateDisplay();
-            checkAndRestartAutoplanters();
-        }
-        updatePotatoGrowth();
-        updateTechTree();
-        console.log('Calling updateExploreButton from gameLoop');
-        updateExploreButton();
-        
-        if (debugMode) {
-            const updateTime = performance.now() - startTime;
-            updateDebugInfo(currentTime, updateTime);
-        }
-        
-        lastFrameTime = currentTime;
-    }
-    requestAnimationFrame(gameLoop);
 }
 
 // Add this function to update debug information

@@ -67,6 +67,76 @@ const upgrades = [
         metaMessage: "The ultimate efficiency. The game offers peak performance, yet at a steep resource cost. This reflects the paradox of progress: as you achieve perfection, your burden increases.",
         weight: 6,
         category: "planting"
+    },
+    { 
+        name: "Martian Map", 
+        cost: 10, 
+        effect: () => { window.exploreDelay = 5000; },
+        icon: "🗺️",
+        description: "Reduces exploration time to 5 seconds.",
+        metaMessage: "Efficiency through knowledge. This upgrade demonstrates how information can lead to faster progress, subtly encouraging you to value data and exploration.",
+        weight: 7,
+        category: "exploration"
+    },
+    { 
+        name: "Binoculars", 
+        cost: 50, 
+        effect: () => { window.exploreDelay = 4000; },
+        icon: "🔭",
+        description: "Further reduces exploration time to 4 seconds.",
+        metaMessage: "Incremental improvements. This upgrade shows how small advancements can accumulate, encouraging continued investment in seemingly minor upgrades.",
+        weight: 8,
+        category: "exploration"
+    },
+    { 
+        name: "Jetpack", 
+        cost: 250, 
+        effect: () => { window.exploreDelay = 3000; },
+        icon: "🚀",
+        description: "Dramatically reduces exploration time to 3 seconds.",
+        metaMessage: "Technological leaps. This upgrade represents a significant advancement, showing how larger investments can lead to more substantial improvements.",
+        weight: 9,
+        category: "exploration"
+    },
+    { 
+        name: "Potato-Powered Rover", 
+        cost: 500, 
+        effect: () => { window.totalExplorationRate += 0.1; updateAutonomousExploration(); },
+        icon: "🚙",
+        description: "Autonomously explores Mars, discovering resources every 10 seconds.",
+        metaMessage: "Automation begins. This upgrade introduces the concept of passive resource generation, shifting your focus from active play to strategic management.",
+        weight: 10,
+        category: "exploration"
+    },
+    { 
+        name: "Spudnik Satellite", 
+        cost: 2000, 
+        effect: () => { window.totalExplorationRate += 0.5; updateAutonomousExploration(); },
+        icon: "🛰️",
+        description: "Orbits Mars, providing detailed surface scans and increasing resource discovery.",
+        metaMessage: "Global perspective. This upgrade demonstrates how technology can provide a broader view, leading to more efficient resource discovery and management.",
+        weight: 11,
+        category: "exploration"
+    },
+    { 
+        name: "Subterranean Tuber Tunneler", 
+        cost: 5000, 
+        effect: () => { window.totalExplorationRate += 1; updateAutonomousExploration(); },
+        icon: "🕳️",
+        description: "Burrows beneath the Martian surface, uncovering hidden resource deposits.",
+        metaMessage: "Digging deeper. This upgrade shows how exploring new frontiers (in this case, underground) can lead to significant resource gains, encouraging players to think beyond the obvious.",
+        weight: 12,
+        category: "exploration"
+    },
+    { 
+        name: "Martian Potato Colonizer", 
+        cost: 20000, 
+        effect: () => { window.totalExplorationRate += 2; updateAutonomousExploration(); },
+        icon: "🏙️",
+        description: "Establishes autonomous potato-growing colonies across Mars, greatly increasing resource discovery.",
+        metaMessage: "Full automation. This final upgrade represents the pinnacle of your Martian potato empire, showcasing how far you've come from manual labor to planet-wide automation.",
+        weight: 13,
+        category: "exploration"
     }
 ];
 
@@ -256,10 +326,18 @@ function buyUpgrade(index) {
         } else {
             upgrade.purchased = true;
         }
+        // Ensure window.purchasedUpgrades exists before pushing to it
+        window.purchasedUpgrades = window.purchasedUpgrades || [];
+        window.purchasedUpgrades.push(upgrade);
         updateDisplay(); // Update other game elements
         createTechTree(); // Recreate the tech tree to remove purchased upgrades
         console.log("Upgrade purchased:", upgrade.name);
-        console.log("New planting delay:", plantingDelay);
+        if (upgrade.category === "planting") {
+            console.log("New planting delay:", plantingDelay);
+        } else if (upgrade.category === "exploration") {
+            console.log("New exploration delay:", window.exploreDelay);
+            console.log("New exploration rate:", window.totalExplorationRate);
+        }
         showToast("Upgrade Purchased", `You have purchased the ${upgrade.name} upgrade!`, 'achievement');
         showToast("Meta Insight", upgrade.metaMessage, 'meta');
     } else {

@@ -169,8 +169,8 @@ function updateDisplay() {
     updateElementIfChanged('water-count', `Water: ${Math.floor(water)}`);
     updateElementIfChanged('soil-nutrients', `Soil Nutrients: ${Math.floor(soilNutrients)}`);
     updateElementIfChanged('oxygen-level', `Oxygen: ${Math.floor(oxygen)}`);
-    updateElementIfChanged('exploration-rate', `Exploration Rate: ${Math.floor(totalExplorationRate * 60)} per minute`);
-    updateElementIfChanged('purchased-upgrades', `Purchased Upgrades: ${purchasedUpgrades.map(u => u.name).join(', ')}`);
+    updateElementIfChanged('exploration-rate', `Exploration Rate: ${Math.floor(window.totalExplorationRate * 60)} per minute`);
+    updateElementIfChanged('purchased-upgrades', `Purchased Upgrades: ${(window.purchasedUpgrades || []).map(u => u.name).join(', ')}`);
     updateElementIfChanged('auto-harvesters', `Auto Harvesters: ${autoHarvesters.length}`);
 
     const autoplantersElement = document.getElementById('automated-planters');
@@ -184,26 +184,35 @@ function updateDisplay() {
 
     updateExploreButton();
     updatePotatoField();
-    updateExplorationUpgradeButton();
     updateTechTree(); // Changed from createTechTree()
     updateIceMeltingProgress();
 }
 
-// Modify the updateExploreButton function
 function updateExploreButton() {
     const exploreButton = document.getElementById('explore-button');
-    const currentTime = Date.now();
-    const timeLeft = Math.max(0, exploreDelay - (currentTime - lastExploreTime));
+    const cooldownElement = document.getElementById('exploration-cooldown');
     
+    if (!exploreButton || !cooldownElement) {
+        console.error('Explore button or cooldown element not found');
+        return;
+    }
+
+    const currentTime = Date.now();
+    const timeLeft = Math.max(0, window.exploreDelay - (currentTime - window.lastExploreTime));
+    
+    console.log('updateExploreButton:', {
+        currentTime,
+        lastExploreTime: window.lastExploreTime,
+        exploreDelay: window.exploreDelay,
+        timeLeft
+    });
+
     exploreButton.disabled = timeLeft > 0;
     
-    const cooldownElement = document.getElementById('exploration-cooldown');
-    if (cooldownElement) {
-        if (timeLeft > 0) {
-            cooldownElement.textContent = `(${(timeLeft / 1000).toFixed(1)}s)`;
-        } else if (cooldownElement.textContent !== 'Ready') {
-            cooldownElement.textContent = 'Ready';
-        }
+    if (timeLeft > 0) {
+        cooldownElement.textContent = `(${(timeLeft / 1000).toFixed(1)}s)`;
+    } else {
+        cooldownElement.textContent = 'Ready';
     }
 }
 
@@ -279,7 +288,14 @@ function gameLoop(currentTime) {
         }
         updatePotatoGrowth();
         updateTechTree();
-        updateExplorationProgress();
+        console.log('Calling updateExploreButton from gameLoop');
+        updateExploreButton();
+        
+        if (debugMode) {
+            const updateTime = performance.now() - startTime;
+            updateDebugInfo(currentTime, updateTime);
+        }
+        
         lastFrameTime = currentTime;
     }
     requestAnimationFrame(gameLoop);
@@ -327,7 +343,8 @@ function gameLoop(currentTime) {
         }
         updatePotatoGrowth();
         updateTechTree();
-        updateExplorationProgress();
+        console.log('Calling updateExploreButton from gameLoop');
+        updateExploreButton();
         
         if (debugMode) {
             const updateTime = performance.now() - startTime;
@@ -434,7 +451,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     createTechTree(); // Add this line to create the tech tree once
-    displayExplorationUpgrades();
 
     requestAnimationFrame(gameLoop);
 

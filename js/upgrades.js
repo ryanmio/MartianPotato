@@ -141,9 +141,6 @@ function createTechTree() {
             techTree.appendChild(createCard(upgrade, index));
         }
     });
-    
-    // Remove this line:
-    // updateTechTree(); // Call this to set initial states
 }
 
 function createCard(upgrade, index) {
@@ -254,9 +251,10 @@ function buyUpgrade(index) {
     if (potatoCount >= cost) {
         potatoCount -= cost;
         upgrade.effect();
-        upgrade.purchased = true;
         if (upgrade.count !== undefined) {
             upgrade.count++;
+        } else {
+            upgrade.purchased = true;
         }
         updateDisplay(); // Update other game elements
         createTechTree(); // Recreate the tech tree to remove purchased upgrades
@@ -274,7 +272,7 @@ let autoplanters = [];
 function addAutoplanter() {
     const autoplanter = {
         interval: null,
-        cost: Math.floor(20 * Math.pow(1.15, upgrades.planting[3].count))
+        cost: Math.floor(20 * Math.pow(1.15, upgrades.find(u => u.name === "Automated Planter").count))
     };
     autoplanters.push(autoplanter);
     rawPotatoesPerSecond += 1; // Each autoplanter adds 1 potato per second
@@ -318,35 +316,18 @@ const BASE_HARVEST_DELAY = 1000; // 1 second in milliseconds
 
 function addAutoHarvester() {
     const autoHarvester = {
-        cost: Math.floor(10 * Math.pow(1.15, upgrades.harvesting[1].count))
+        interval: null,
+        cost: Math.floor(100 * Math.pow(1.15, upgrades.find(u => u.name === "Auto Harvester").count))
     };
     autoHarvesters.push(autoHarvester);
-    updateAutoHarvesterDelay();
+    startAutoHarvester(autoHarvester);
     updateDisplay();
 }
 
-function updateAutoHarvesterDelay() {
-    const newDelay = BASE_HARVEST_DELAY / autoHarvesters.length;
-    if (autoHarvesters.length === 1) {
-        startAutoHarvester(newDelay);
-    } else {
-        clearInterval(autoHarvestInterval);
-        startAutoHarvester(newDelay);
-    }
-}
-
-let autoHarvestInterval;
-let lastAutoHarvestTime = 0;
-
-function startAutoHarvester(delay) {
-    clearInterval(autoHarvestInterval);
-    autoHarvestInterval = setInterval(() => {
-        const currentTime = Date.now();
-        if (currentTime - lastAutoHarvestTime >= delay) {
-            harvestOneReadyPotato();
-            lastAutoHarvestTime = currentTime;
-        }
-    }, 100); // Check more frequently, but only harvest based on the delay
+function startAutoHarvester(autoHarvester) {
+    autoHarvester.interval = setInterval(() => {
+        harvestOneReadyPotato();
+    }, BASE_HARVEST_DELAY);
 }
 
 function harvestOneReadyPotato() {

@@ -197,10 +197,13 @@ function updateExploreButton() {
     
     exploreButton.disabled = timeLeft > 0;
     
-    // Update only the cooldown text, not the entire button content
     const cooldownElement = document.getElementById('exploration-cooldown');
     if (cooldownElement) {
-        cooldownElement.textContent = timeLeft > 0 ? `(${(timeLeft / 1000).toFixed(1)}s)` : '';
+        if (timeLeft > 0) {
+            cooldownElement.textContent = `(${(timeLeft / 1000).toFixed(1)}s)`;
+        } else if (cooldownElement.textContent !== 'Ready') {
+            cooldownElement.textContent = 'Ready';
+        }
     }
 }
 

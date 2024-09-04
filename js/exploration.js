@@ -115,7 +115,7 @@ function updateExplorationProgress() {
     const cooldownElement = document.getElementById('exploration-cooldown');
     const currentTime = Date.now();
     const remainingTime = Math.max(0, exploreDelay - (currentTime - lastExploreTime));
-    cooldownElement.textContent = remainingTime > 0 ? `(${(remainingTime / 1000).toFixed(1)}s)` : '';
+    cooldownElement.textContent = remainingTime > 0 ? `(${(remainingTime / 1000).toFixed(1)}s)` : 'Ready';
 }
 
 // Modify the event listener

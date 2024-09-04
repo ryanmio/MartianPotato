@@ -121,7 +121,7 @@ function updateExplorationProgress() {
 // Modify the event listener
 document.addEventListener('DOMContentLoaded', () => {
     const exploreButton = document.getElementById('explore-button');
-    exploreButton.innerHTML = '🚀'; // Use innerHTML instead of textContent
+    exploreButton.innerHTML = '👩‍🚀'; // Use innerHTML instead of textContent
     exploreButton.addEventListener('click', exploreMarsSurface);
     updateExplorationProgress();
 });

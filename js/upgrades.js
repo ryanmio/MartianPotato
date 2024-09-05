@@ -99,16 +99,6 @@ const upgrades = [
         category: "exploration"
     },
     { 
-        name: "Potato-Powered Rover", 
-        cost: 500, 
-        effect: () => { window.totalExplorationRate += 0.1; updateAutonomousExploration(); },
-        icon: "🚙",
-        description: "Autonomously explores Mars, discovering resources every 10 seconds.",
-        metaMessage: "Automation begins. This upgrade introduces the concept of passive resource generation, shifting your focus from active play to strategic management.",
-        weight: 10,
-        category: "exploration"
-    },
-    { 
         name: "Spudnik Satellite", 
         cost: 2000, 
         effect: () => { window.totalExplorationRate += 0.5; updateAutonomousExploration(); },
@@ -119,13 +109,24 @@ const upgrades = [
         category: "exploration"
     },
     { 
+        name: "Martian Bucket-Wheel Excavator", 
+        cost: 3500, 
+        effect: () => { window.totalExplorationRate += 0.8; updateAutonomousExploration(); },
+        icon: "⛏️",
+        description: "A massive mobile strip-mining machine that efficiently extracts resources from the Martian surface.",
+        metaMessage: "Industrial-scale operations. This upgrade showcases how large-scale machinery can dramatically increase resource gathering efficiency, shifting the game's scale.",
+        assetName: "bucket_wheel_excavator.webp",
+        weight: 12,
+        category: "exploration"
+    },
+    { 
         name: "Subterranean Tuber Tunneler", 
         cost: 5000, 
         effect: () => { window.totalExplorationRate += 1; updateAutonomousExploration(); },
         icon: "🕳️",
         description: "Burrows beneath the Martian surface, uncovering hidden resource deposits.",
         metaMessage: "Digging deeper. This upgrade shows how exploring new frontiers (in this case, underground) can lead to significant resource gains, encouraging players to think beyond the obvious.",
-        weight: 12,
+        weight: 13,
         category: "exploration"
     },
     { 
@@ -135,7 +136,7 @@ const upgrades = [
         icon: "🏙️",
         description: "Establishes autonomous potato-growing colonies across Mars, greatly increasing resource discovery.",
         metaMessage: "Full automation. This final upgrade represents the pinnacle of your Martian potato empire, showcasing how far you've come from manual labor to planet-wide automation.",
-        weight: 13,
+        weight: 14,
         category: "exploration"
     }
 ];
@@ -157,27 +158,20 @@ function updateTechTree() {
     const techCards = document.querySelectorAll('.tech-card');
     
     techCards.forEach((card) => {
-        const index = parseInt(card.dataset.index);
-        const upgrade = upgrades[index];
+        const upgradeName = card.dataset.upgradeName;
+        const upgrade = upgrades.find(u => u.name === upgradeName);
         
         if (upgrade) {
             const upgradeCost = getUpgradeCost(upgrade);
             const isPurchasable = potatoCount >= upgradeCost;
 
-            // Only update classes if there's a change
-            if (isPurchasable && !card.classList.contains('purchasable')) {
-                card.classList.add('purchasable');
-            } else if (!isPurchasable && card.classList.contains('purchasable')) {
-                card.classList.remove('purchasable');
-            }
+            // Update purchasability
+            card.classList.toggle('purchasable', isPurchasable);
 
-            // Update cost display if needed
+            // Always update cost display
             const costElement = card.querySelector('.tech-card-cost');
             if (costElement) {
-                const newCostText = `Cost: ${upgradeCost} potatoes`;
-                if (costElement.textContent !== newCostText) {
-                    costElement.textContent = newCostText;
-                }
+                costElement.textContent = `Cost: ${upgradeCost} potatoes`;
             }
         }
     });
@@ -206,17 +200,18 @@ function createTechTree() {
     // Sort upgrades by weight
     const sortedUpgrades = upgrades.slice().sort((a, b) => a.weight - b.weight);
 
-    sortedUpgrades.forEach((upgrade, index) => {
+    sortedUpgrades.forEach((upgrade) => {
         if (!upgrade.purchased || (upgrade.count !== undefined && upgrade.count > 0)) {
-            techTree.appendChild(createCard(upgrade, index));
+            techTree.appendChild(createCard(upgrade));
         }
     });
 }
 
-function createCard(upgrade, index) {
+// Modify the createCard function to use getUpgradeCost
+function createCard(upgrade) {
     const card = document.createElement('div');
     card.className = 'tech-card';
-    card.dataset.index = index;
+    card.dataset.upgradeName = upgrade.name; // Use name as identifier
 
     const iconElement = document.createElement('div');
     iconElement.className = 'tech-card-icon';
@@ -250,12 +245,13 @@ function createCard(upgrade, index) {
 
     card.querySelector('.details-button').addEventListener('click', (event) => {
         event.stopPropagation(); // Prevent card click event
-        showUpgradeModal(upgrade, index);
+        showUpgradeModal(upgrade);
     });
 
     return card;
 }
 
+// Modify the getUpgradeCost function to handle all cases
 function getUpgradeCost(upgrade) {
     if (upgrade.count !== undefined) {
         return Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count));
@@ -263,7 +259,7 @@ function getUpgradeCost(upgrade) {
     return upgrade.cost;
 }
 
-function showUpgradeModal(upgrade, index) {
+function showUpgradeModal(upgrade) {
     const existingModal = document.querySelector('.modal');
     if (existingModal) {
         existingModal.remove();
@@ -294,7 +290,7 @@ function showUpgradeModal(upgrade, index) {
     if (!upgrade.purchased || (upgrade.count !== undefined)) {
         const buyButton = modal.querySelector('.buy-upgrade-button');
         buyButton.addEventListener('click', () => {
-            buyUpgrade(index);
+            buyUpgrade(upgrade);
             modal.remove();
         });
     }
@@ -313,10 +309,8 @@ function showUpgradeModal(upgrade, index) {
     document.body.appendChild(modal);
 }
 
-function buyUpgrade(index) {
-    const upgrade = upgrades[index];
-    if (!upgrade) return;
-
+// Modify the buyUpgrade function to update the card immediately after purchase
+function buyUpgrade(upgrade) {
     const cost = getUpgradeCost(upgrade);
     if (potatoCount >= cost) {
         potatoCount -= cost;
@@ -326,10 +320,18 @@ function buyUpgrade(index) {
         } else {
             upgrade.purchased = true;
         }
-        window.purchasedUpgrades = window.purchasedUpgrades || [];
-        window.purchasedUpgrades.push(upgrade);
         updateDisplay();
-        createTechTree();
+        
+        // Immediately update the specific card that was just purchased
+        const card = document.querySelector(`.tech-card[data-upgrade-name="${upgrade.name}"]`);
+        if (card) {
+            const costElement = card.querySelector('.tech-card-cost');
+            if (costElement) {
+                costElement.textContent = `Cost: ${getUpgradeCost(upgrade)} potatoes`;
+            }
+        }
+        
+        createTechTree(); // Recreate the tech tree to reflect changes
         showToast("Upgrade Purchased", `You have purchased the ${upgrade.name} upgrade!`, 'achievement');
         showToast("Meta Insight", upgrade.metaMessage, 'meta');
     } else {
@@ -409,9 +411,15 @@ function harvestOneReadyPotato() {
     }
 }
 
-// Initialize the tech tree
-document.addEventListener('DOMContentLoaded', () => {
+// Add a function to initialize the tech tree with correct costs
+function initializeTechTree() {
     createTechTree();
+    updateTechTree(); // Ensure initial costs are set correctly
+}
+
+// Modify the DOMContentLoaded event listener to use the new initializeTechTree function
+document.addEventListener('DOMContentLoaded', () => {
+    initializeTechTree();
 
     const techTree = document.getElementById('tech-tree');
     const leftArrow = document.getElementById('tech-tree-left');

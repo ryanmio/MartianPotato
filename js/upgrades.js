@@ -75,7 +75,7 @@ const upgrades = [
         icon: "🗺️",
         description: "Reduces exploration time to 5 seconds.",
         metaMessage: "Efficiency through knowledge. This upgrade demonstrates how information can lead to faster progress, subtly encouraging you to value data and exploration.",
-        weight: 7,
+        weight: 1,
         category: "exploration"
     },
     { 
@@ -85,7 +85,7 @@ const upgrades = [
         icon: "🔭",
         description: "Further reduces exploration time to 4 seconds.",
         metaMessage: "Incremental improvements. This upgrade shows how small advancements can accumulate, encouraging continued investment in seemingly minor upgrades.",
-        weight: 8,
+        weight: 2,
         category: "exploration"
     },
     { 

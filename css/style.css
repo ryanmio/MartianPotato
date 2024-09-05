@@ -643,3 +643,37 @@ h2 {
     right: 0;
     text-align: center;
 }
+
+/* Add this new class for blurred cards */
+.tech-card.blurred {
+    filter: blur(5px);
+    pointer-events: none;
+}
+
+.tech-card.blurred .tech-card-name,
+.tech-card.blurred .tech-card-cost {
+    opacity: 0;
+}
+
+/* Modify the existing .tech-card styles to accommodate the blur effect */
+.tech-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.tech-card::before {
+    content: "???";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: #333;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tech-card.blurred::before {
+    opacity: 1;
+}

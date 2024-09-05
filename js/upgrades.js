@@ -44,7 +44,7 @@ const upgrades = [
         icon: "🤖",
         description: "Automatically plants potatoes, reducing manual labor.",
         metaMessage: "Automation's allure. This upgrade significantly reduces active playtime, giving you a sense of progress and control, while quietly introducing a new constraint: power.",
-        weight: 4,
+        weight: 3,
         category: "planting"
     },
     { 
@@ -60,12 +60,12 @@ const upgrades = [
     },
     { 
         name: "Quantum Spud Spawner", 
-        cost: 1000, 
+        cost: 1000000, 
         effect: () => { plantingDelay = 500; },
         icon: "⚛️",
         description: "Utilizes quantum technology for near-instant potato planting.",
         metaMessage: "The ultimate efficiency. The game offers peak performance, yet at a steep resource cost. This reflects the paradox of progress: as you achieve perfection, your burden increases.",
-        weight: 6,
+        weight: 20,
         category: "planting"
     },
     { 
@@ -75,7 +75,7 @@ const upgrades = [
         icon: "🗺️",
         description: "Reduces exploration time to 5 seconds.",
         metaMessage: "Efficiency through knowledge. This upgrade demonstrates how information can lead to faster progress, subtly encouraging you to value data and exploration.",
-        weight: 1,
+        weight: 2,
         category: "exploration"
     },
     { 
@@ -85,7 +85,7 @@ const upgrades = [
         icon: "🔭",
         description: "Further reduces exploration time to 4 seconds.",
         metaMessage: "Incremental improvements. This upgrade shows how small advancements can accumulate, encouraging continued investment in seemingly minor upgrades.",
-        weight: 2,
+        weight: 3,
         category: "exploration"
     },
     { 
@@ -95,7 +95,7 @@ const upgrades = [
         icon: "🚀",
         description: "Dramatically reduces exploration time to 3 seconds.",
         metaMessage: "Technological leaps. This upgrade represents a significant advancement, showing how larger investments can lead to more substantial improvements.",
-        weight: 9,
+        weight: 5,
         category: "exploration"
     },
     { 
@@ -105,7 +105,7 @@ const upgrades = [
         icon: "🛰️",
         description: "Orbits Mars, providing detailed surface scans and increasing resource discovery.",
         metaMessage: "Global perspective. This upgrade demonstrates how technology can provide a broader view, leading to more efficient resource discovery and management.",
-        weight: 11,
+        weight: 10,
         category: "exploration"
     },
     { 
@@ -207,11 +207,15 @@ function createTechTree() {
     });
 }
 
-// Modify the createCard function to use getUpgradeCost
+// Add this variable at the top of the file
+let highestPurchasedWeight = 0;
+
+// Modify the createCard function
 function createCard(upgrade) {
     const card = document.createElement('div');
     card.className = 'tech-card';
-    card.dataset.upgradeName = upgrade.name; // Use name as identifier
+    card.dataset.upgradeName = upgrade.name;
+    card.dataset.weight = upgrade.weight;
 
     const iconElement = document.createElement('div');
     iconElement.className = 'tech-card-icon';
@@ -237,16 +241,27 @@ function createCard(upgrade) {
     detailsElement.innerHTML = `
         <h3 class="tech-card-name" title="${upgrade.name}">${upgrade.name}</h3>
         <p class="tech-card-cost">Cost: ${getUpgradeCost(upgrade)} potatoes</p>
-        <button class="details-button">Details</button>
     `;
+
+    // Only add the details button if the upgrade weight is not above 10 or if a weight 10 upgrade has been purchased
+    if (upgrade.weight <= 10 || highestPurchasedWeight >= 10) {
+        const detailsButton = document.createElement('button');
+        detailsButton.className = 'details-button';
+        detailsButton.textContent = 'Details';
+        detailsButton.addEventListener('click', (event) => {
+            event.stopPropagation(); // Prevent card click event
+            showUpgradeModal(upgrade);
+        });
+        detailsElement.appendChild(detailsButton);
+    }
 
     card.appendChild(iconElement);
     card.appendChild(detailsElement);
 
-    card.querySelector('.details-button').addEventListener('click', (event) => {
-        event.stopPropagation(); // Prevent card click event
-        showUpgradeModal(upgrade);
-    });
+    // Add blur class if the upgrade weight is above 10 and no weight 10 upgrade has been purchased
+    if (upgrade.weight > 10 && highestPurchasedWeight < 10) {
+        card.classList.add('blurred');
+    }
 
     return card;
 }
@@ -322,6 +337,9 @@ function buyUpgrade(upgrade) {
         }
         updateDisplay();
         
+        // Update the highest purchased weight
+        highestPurchasedWeight = Math.max(highestPurchasedWeight, upgrade.weight);
+
         // Immediately update the specific card that was just purchased
         const card = document.querySelector(`.tech-card[data-upgrade-name="${upgrade.name}"]`);
         if (card) {
@@ -331,12 +349,42 @@ function buyUpgrade(upgrade) {
             }
         }
         
+        // If a weight 10 upgrade was purchased, update all cards
+        if (upgrade.weight === 10) {
+            updateAllCards();
+        }
+
         createTechTree(); // Recreate the tech tree to reflect changes
         showToast("Upgrade Purchased", `You have purchased the ${upgrade.name} upgrade!`, 'achievement');
         showToast("Meta Insight", upgrade.metaMessage, 'meta');
     } else {
         showToast("Not Enough Potatoes", "You don't have enough potatoes to purchase this upgrade.", 'setback');
     }
+}
+
+// Add this new function to update all cards when a weight 10 upgrade is purchased
+function updateAllCards() {
+    const cards = document.querySelectorAll('.tech-card');
+    cards.forEach(card => {
+        const weight = parseInt(card.dataset.weight, 10);
+        if (weight > 10) {
+            card.classList.remove('blurred');
+            if (!card.querySelector('.details-button')) {
+                const detailsButton = document.createElement('button');
+                detailsButton.className = 'details-button';
+                detailsButton.textContent = 'Details';
+                detailsButton.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const upgradeName = card.dataset.upgradeName;
+                    const upgrade = upgrades.find(u => u.name === upgradeName);
+                    if (upgrade) {
+                        showUpgradeModal(upgrade);
+                    }
+                });
+                card.querySelector('.tech-card-details').appendChild(detailsButton);
+            }
+        }
+    });
 }
 
 let autoplanters = [];

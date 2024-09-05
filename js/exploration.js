@@ -1,17 +1,7 @@
 window.totalExplorationRate = 0;
 
-const explorationUpgrades = [
-    { name: "Martian Map", cost: 10, effect: () => { window.exploreDelay = 5000; } },
-    { name: "Binoculars", cost: 50, effect: () => { window.exploreDelay = 4000; } },
-    { name: "Jetpack", cost: 250, effect: () => { window.exploreDelay = 3000; } },
-    { name: "Potato-Powered Rover", cost: 500, rate: 0.1, effect: () => { window.totalExplorationRate += 0.1; } },
-    { name: "Spudnik Satellite", cost: 2000, rate: 0.5, effect: () => { window.totalExplorationRate += 0.5; } },
-    { name: "Subterranean Tuber Tunneler", cost: 5000, rate: 1, effect: () => { window.totalExplorationRate += 1; } },
-    { name: "Martian Potato Colonizer", cost: 20000, rate: 2, effect: () => { window.totalExplorationRate += 2; } }
-];
-
 window.lastExploreTime = 0;
-window.exploreDelay = 6000; // 6 seconds initial delay
+window.exploreDelay = 10000; // 10 seconds initial delay
 
 function exploreMarsSurface() {
     const currentTime = Date.now();

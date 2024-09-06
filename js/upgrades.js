@@ -85,9 +85,12 @@ const upgrades = [
     { 
         name: "Martian Map", 
         cost: 10, 
-        effect: () => { window.exploreDelay = 5000; },
+        effect: () => { 
+            window.exploreDelay = Math.max(1000, window.exploreDelay - 5000);
+            updateExploreButton();
+        },
         icon: "🗺️",
-        description: "Reduces exploration time to 5 seconds.",
+        description: "Reduces exploration time by 5 seconds.",
         metaMessage: "Efficiency through knowledge. This upgrade demonstrates how information can lead to faster progress, subtly encouraging you to value data and exploration.",
         weight: 2,
         category: "exploration"
@@ -95,9 +98,12 @@ const upgrades = [
     { 
         name: "Binoculars", 
         cost: 50, 
-        effect: () => { window.exploreDelay = 4000; },
+        effect: () => { 
+            window.exploreDelay = Math.max(1000, window.exploreDelay - 1000);
+            updateExploreButton();
+        },
         icon: "🔭",
-        description: "Further reduces exploration time to 4 seconds.",
+        description: "Further reduces exploration time by 1 second.",
         metaMessage: "Incremental improvements. This upgrade shows how small advancements can accumulate, encouraging continued investment in seemingly minor upgrades.",
         weight: 3,
         category: "exploration"
@@ -105,9 +111,12 @@ const upgrades = [
     { 
         name: "Jetpack", 
         cost: 250, 
-        effect: () => { window.exploreDelay = 3000; },
+        effect: () => { 
+            window.exploreDelay = Math.max(1000, Math.floor(window.exploreDelay * 0.5));
+            updateExploreButton();
+        },
         icon: "🚀",
-        description: "Dramatically reduces exploration time to 3 seconds.",
+        description: "Halves the exploration cooldown time.",
         metaMessage: "Technological leaps. This upgrade represents a significant advancement, showing how larger investments can lead to more substantial improvements.",
         weight: 5,
         category: "exploration"

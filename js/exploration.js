@@ -1,33 +1,38 @@
-window.totalExplorationRate = 0;
-window.explorationResourceMultiplier = 1; // Add this line
+// This file implements the exploration system for the Martian Potato game
+// It defines exploration mechanics, resource discovery, and autonomous exploration features
 
+// Global variables for exploration mechanics
+window.totalExplorationRate = 0;
+window.explorationResourceMultiplier = 1;
 window.lastExploreTime = 0;
-window.exploreDelay = 10000; // 10 seconds initial delay
+window.exploreDelay = 10000; // 10 seconds initial delay between manual explorations
 
 function exploreMarsSurface() {
     const currentTime = Date.now();
+    // Check if enough time has passed since last exploration
     if (currentTime - window.lastExploreTime < window.exploreDelay) {
         const waitTime = ((window.exploreDelay - (currentTime - window.lastExploreTime)) / 1000).toFixed(1);
         showToast("Exploration Cooldown", `You need to wait ${waitTime} seconds before exploring again.`, 'setback');
         return;
     }
 
-    // Adjust rewards: water is half as much as soil and oxygen on average
-    const waterReward = Math.floor(Math.random() * 5 + 1) * window.explorationResourceMultiplier; // 1-5 range
-    const soilReward = Math.floor(Math.random() * 10 + 1) * window.explorationResourceMultiplier; // 1-10 range
-    const oxygenReward = Math.floor(Math.random() * 10 + 1) * window.explorationResourceMultiplier; // 1-10 range
+    // Calculate rewards for manual exploration
+    // Water is intentionally less abundant than soil and oxygen
+    const waterReward = Math.floor(Math.random() * 5 + 1) * window.explorationResourceMultiplier;
+    const soilReward = Math.floor(Math.random() * 10 + 1) * window.explorationResourceMultiplier;
+    const oxygenReward = Math.floor(Math.random() * 10 + 1) * window.explorationResourceMultiplier;
 
+    // Add rewards to global resource counters
     water += waterReward;
     soilNutrients += soilReward;
     oxygen += oxygenReward;
 
-    // Create a list of non-zero rewards
+    // Prepare reward message for user feedback
     const rewards = [];
     if (waterReward > 0) rewards.push(`${waterReward.toFixed(1)} water`);
     if (soilReward > 0) rewards.push(`${soilReward.toFixed(1)} soil nutrients`);
     if (oxygenReward > 0) rewards.push(`${oxygenReward.toFixed(1)} oxygen`);
 
-    // Join the rewards with commas and 'and' for the last item
     const rewardString = rewards.join(', ').replace(/,([^,]*)$/, ' and$1');
 
     showToast(
@@ -40,13 +45,15 @@ function exploreMarsSurface() {
     updateDisplay();
 }
 
-// Add this function to handle autonomous exploration
+// Function to handle autonomous exploration based on total exploration rate
 function autonomousExploration() {
     if (window.totalExplorationRate > 0) {
+        // Calculate rewards for autonomous exploration
         const waterReward = (Math.random() * 2.5 + 0.5) * window.totalExplorationRate * window.explorationResourceMultiplier;
         const soilReward = (Math.random() * 5 + 1) * window.totalExplorationRate * window.explorationResourceMultiplier;
         const oxygenReward = (Math.random() * 5 + 1) * window.totalExplorationRate * window.explorationResourceMultiplier;
 
+        // Add rewards to global resource counters
         water += waterReward;
         soilNutrients += soilReward;
         oxygen += oxygenReward;
@@ -55,7 +62,7 @@ function autonomousExploration() {
     }
 }
 
-// Add this function to update autonomous exploration
+// Function to start or stop autonomous exploration based on total exploration rate
 function updateAutonomousExploration() {
     clearInterval(window.autonomousExplorationInterval);
     if (window.totalExplorationRate > 0) {
@@ -63,12 +70,12 @@ function updateAutonomousExploration() {
     }
 }
 
-// Modify the event listener
+// Set up event listener for manual exploration and initialize autonomous exploration
 document.addEventListener('DOMContentLoaded', () => {
     const exploreButton = document.getElementById('explore-button');
     if (exploreButton) {
         exploreButton.innerHTML = '👩‍🚀';
         exploreButton.addEventListener('click', exploreMarsSurface);
     }
-    updateAutonomousExploration(); // Start autonomous exploration if applicable
+    updateAutonomousExploration();
 });

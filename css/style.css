@@ -1,3 +1,4 @@
+/* 1. Reset and Base Styles */
 body {
     font-family: "Times New Roman", serif;
     background-color: #fff;
@@ -7,26 +8,11 @@ body {
     padding: 15px;
 }
 
+/* 2. Layout and Grid */
 #game-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-}
-
-button {
-    border: 1px solid black;
-    background: white;
-    color: black;
-    padding: 5px;
-    font-family: "Times New Roman", serif;
-    margin-bottom: 5px;
-    display: block;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-button:hover, button:disabled {
-    background: rgba(0,0,0,.1);
 }
 
 #stats-container {
@@ -53,6 +39,13 @@ button:hover, button:disabled {
     margin-top: 20px;
 }
 
+#parent-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+/* 3. Typography */
 h2 {
     font-size: 21px;
     line-height: 30px;
@@ -61,11 +54,26 @@ h2 {
     margin-bottom: 10px;
 }
 
-#explore-button {
-    display: inline-block;
-    margin: 0px auto 0 auto;
+/* 4. Components */
+
+/* Buttons */
+button {
+    border: 1px solid black;
+    background: white;
+    color: black;
+    padding: 5px;
+    font-family: "Times New Roman", serif;
+    margin-bottom: 5px;
+    display: block;
+    font-size: 16px;
+    cursor: pointer;
 }
 
+button:hover, button:disabled {
+    background: rgba(0,0,0,.1);
+}
+
+/* Potato Field */
 #potato-field {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -472,21 +480,8 @@ h2 {
     align-items: flex-start;
 }
 
-#ice-cube {
-    font-size: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    margin: 0 auto;
-    transition: transform 0.2s ease-in-out;
-}
-
-#ice-cube:hover {
-    transform: scale(1.1);
-}
-
-#ice-melting-container {
+/* Exploration and Ice Melting */
+#exploration-container, #ice-melting-container {
     width: 200px;
     height: 100px;
     margin: 20px 0;
@@ -498,48 +493,13 @@ h2 {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 10px;
-}
-
-#ice-melting-container h3 {
-    text-align: center;
-    width: 100%;
-    margin: 0;
-    font-size: 15px;
-}
-
-.ice-melting-progress {
-    font-size: 16px;
-    color: #333;
-    font-weight: normal;
-    text-align: center;
-    margin: 0;
-}
-
-#parent-container {
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-}
-
-#exploration-container, #ice-melting-container {
-    width: 200px;
-    height: 100px;
-    margin: 20px 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    background-color: #f0f0f0;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 10px;
     position: relative;
 }
 
 #exploration-container h3, #ice-melting-container h3 {
     text-align: center;
     width: 100%;
-    margin: 0 0 10px 0;
+    margin: 0;
     font-size: 15px;
 }
 
@@ -550,8 +510,7 @@ h2 {
     align-items: center;
     cursor: pointer;
     transition: transform 0.2s ease-in-out;
-    margin-top: auto;
-    margin-bottom: auto;
+    flex-grow: 1;
 }
 
 .explore-mars:hover, #ice-cube:hover {
@@ -567,14 +526,12 @@ h2 {
 #exploration-cooldown, .ice-melting-progress {
     font-size: 14px;
     color: #666;
-    position: absolute;
-    bottom: 5px;
-    left: 0;
-    right: 0;
+    width: 100%;
     text-align: center;
+    margin-top: 5px;
 }
 
-/* Modal Styles */
+/* Modals */
 .modal {
     position: fixed;
     top: 0;
@@ -665,3 +622,13 @@ h2 {
     border-radius: 6px;
     margin-top: 20px;
 }
+
+/* 5. Utility Classes */
+.debug-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 6. Media Queries */
+/* Add any responsive styles here if needed */

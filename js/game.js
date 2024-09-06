@@ -26,7 +26,7 @@ let processedPotatoesPerSecond = 0;
 let processingLevel = 0;
 
 // Planting Variables
-let plantingDelay = 4000; // 4 seconds, matching the initial "Hand Trowel" upgrade
+let plantingDelay = 5000;
 let lastPlantTime = 0;
 let potatoesPerClick = 1;
 

@@ -1,6 +1,7 @@
-// Main game logic
-console.log("Game initialized");
+// This file contains the core game logic for the Martian Potato game
+// It manages game state, resource handling, potato planting and harvesting, and UI updates
 
+// Game state variables
 let potatoCount = 0;
 let rawPotatoesPerSecond = 0;
 let processedPotatoesPerSecond = 0;
@@ -14,21 +15,23 @@ let plantingDelay = 4000; // 4 seconds, matching the initial "Hand Trowel" upgra
 let lastPlantTime = 0;
 let potatoesPerClick = 1;
 
+// Achievement tracking
 const achievements = {
     firstPotato: false,
     // Add more achievements here as needed
 };
 
+// Calculate the rate of potato production
 function calculatePotatoesPerSecond() {
     return autoplanters.length / (GROWTH_TIME / 1000);
 }
 
-// Keep these variables
+// Resource efficiency multipliers
 let waterEfficiency = 1;
 let soilEfficiency = 1;
 let oxygenEfficiency = 1;
 
-// Modify the consumeResources function to use the efficiency multipliers
+// Consume resources for potato growth, applying efficiency multipliers
 function consumeResources(amount = 1) {
     if (water >= amount && soilNutrients >= amount && oxygen >= amount) {
         water -= amount / waterEfficiency;
@@ -39,9 +42,11 @@ function consumeResources(amount = 1) {
     return false;
 }
 
+// Game update timing variables
 let lastUpdateTime = 0;
 const UPDATE_INTERVAL = 1000; // Update every second
 
+// Update game resources and ensure they don't go below zero
 function updateResources(currentTime) {
     if (currentTime - lastUpdateTime >= UPDATE_INTERVAL) {
         water = Math.max(0, water);
@@ -55,12 +60,12 @@ function updateResources(currentTime) {
     return false;
 }
 
-// Add these new variables at the beginning of the file
+// Potato field constants and variables
 const MAX_FIELD_SIZE = 8;
 const GROWTH_TIME = 8000; // 8 seconds in milliseconds
 let potatoField = new Array(MAX_FIELD_SIZE).fill(null);
 
-// Modify the plantPotato function
+// Plant a potato in an empty field slot
 function plantPotato() {
     const currentTime = Date.now();
     if (currentTime - lastPlantTime < plantingDelay) {
@@ -74,6 +79,7 @@ function plantPotato() {
     }
 
     if (consumeResources()) {
+        // Generate random potato appearance properties
         const scaleX = 0.95 + Math.random() * 0.1;
         const scaleY = 0.95 + Math.random() * 0.1;
         const borderRadius = `${45 + Math.random() * 10}% ${55 + Math.random() * 10}% ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% / ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% ${55 + Math.random() * 10}% ${45 + Math.random() * 10}%`;
@@ -96,7 +102,7 @@ function plantPotato() {
     updatePlantButton();
 }
 
-// Add a new function to handle potato growth
+// Update the growth stage of all planted potatoes
 function updatePotatoGrowth() {
     const currentTime = Date.now();
     potatoField = potatoField.map(potato => {
@@ -109,7 +115,7 @@ function updatePotatoGrowth() {
     updateDisplay();
 }
 
-// Modify the harvestPotatoes function
+// Harvest a fully grown potato at the specified index
 function harvestPotatoAtIndex(index) {
     updateLastAction(`Attempting to harvest potato at index ${index}`);
     if (potatoField[index] && potatoField[index].growthStage >= 100) {
@@ -123,6 +129,7 @@ function harvestPotatoAtIndex(index) {
     }
 }
 
+// Update the plant button state and cooldown display
 function updatePlantButton() {
     const plantButton = document.getElementById('plant-button');
     const currentTime = Date.now();
@@ -137,6 +144,7 @@ function updatePlantButton() {
     }
 }
 
+// Check and update game achievements
 function checkAchievements() {
     if (potatoCount >= 1 && !achievements.firstPotato) {
         achievements.firstPotato = true;
@@ -145,7 +153,7 @@ function checkAchievements() {
     // Add more achievements here
 }
 
-// Add this function to initialize the potato field
+// Initialize the visual representation of the potato field
 function initializePotatoField() {
     const fieldContainer = document.getElementById('potato-field');
     for (let i = 0; i < MAX_FIELD_SIZE; i++) {
@@ -156,6 +164,7 @@ function initializePotatoField() {
     }
 }
 
+// Update the game display with current resource counts and rates
 function updateDisplay() {
     const updateElementIfChanged = (id, newText) => {
         const element = document.getElementById(id);
@@ -184,10 +193,11 @@ function updateDisplay() {
 
     updateExploreButton();
     updatePotatoField();
-    updateTechTree(); // Changed from createTechTree()
+    updateTechTree();
     updateIceMeltingProgress();
 }
 
+// Update the explore button state and cooldown display
 function updateExploreButton() {
     const exploreButton = document.getElementById('explore-button');
     const cooldownElement = document.getElementById('exploration-cooldown');
@@ -206,6 +216,7 @@ function updateExploreButton() {
     }
 }
 
+// Update the visual representation of the potato field
 function updatePotatoField() {
     const fieldContainer = document.getElementById('potato-field');
     potatoField.forEach((potato, index) => {
@@ -225,6 +236,7 @@ function updatePotatoField() {
     });
 }
 
+// Update the visual representation of a single potato
 function updatePotatoElement(slotElement, potato) {
     let potatoElement = slotElement.querySelector('.potato');
     if (!potatoElement) {
@@ -265,10 +277,12 @@ function updatePotatoElement(slotElement, potato) {
     }
 }
 
+// Game loop constants and variables
 const FRAME_RATE = 30; // 30 fps
 const FRAME_DELAY = 1000 / FRAME_RATE;
 let lastFrameTime = 0;
 
+// Main game loop function
 function gameLoop(currentTime) {
     if (currentTime - lastFrameTime >= FRAME_DELAY) {
         updatePlantButton();
@@ -290,20 +304,21 @@ function gameLoop(currentTime) {
     requestAnimationFrame(gameLoop);
 }
 
+// Update non-critical elements during idle time
 function updateNonCriticalElements() {
     requestIdleCallback(() => {
         displayExplorationUpgrades();
     });
 }
 
-// Add these variables at the top of the file
+// Debug mode variables
 let debugMode = false;
 let fpsValues = [];
 let lastDebugUpdateTime = 0;
 let lastResourceValues = { water: 0, soilNutrients: 0, oxygen: 0 };
 let lastAction = "None";
 
-// Add this function to toggle debug mode
+// Toggle debug mode on/off
 function toggleDebugMode() {
     debugMode = !debugMode;
     const debugInfo = document.getElementById('debug-info');
@@ -320,7 +335,7 @@ function toggleDebugMode() {
     }
 }
 
-// Add this function to update debug information
+// Update debug information display
 function updateDebugInfo(currentTime, updateTime) {
     const debugInfoContainer = document.getElementById('debug-info');
     if (!debugInfoContainer || debugInfoContainer.style.display === 'none') {
@@ -364,7 +379,7 @@ function updateDebugInfo(currentTime, updateTime) {
     }
 }
 
-// Add this function to update the last action
+// Update the last action for debugging purposes
 function updateLastAction(action) {
     lastAction = action;
     if (debugMode) {
@@ -372,7 +387,7 @@ function updateLastAction(action) {
     }
 }
 
-// Add this function near the top of the file
+// Display a toast notification to the user
 window.showToast = function(title, message, type = 'achievement') {
     console.log("Showing toast:", title, message, type);
     const toastContainer = document.getElementById('toast-container');
@@ -397,7 +412,7 @@ window.showToast = function(title, message, type = 'achievement') {
     }, 3000);
 }
 
-// Initialize the game
+// Initialize the game when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
     const plantButton = document.getElementById('plant-button');
     plantButton.addEventListener('click', plantPotato);
@@ -414,7 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    createTechTree(); // Add this line to create the tech tree once
+    createTechTree(); // Create the tech tree
 
     requestAnimationFrame(gameLoop);
 
@@ -446,10 +461,12 @@ document.addEventListener('DOMContentLoaded', () => {
     updateIceMeltingProgress();
 });
 
+// Variables for ice melting mechanic
 let waterMeltingClicks = 0;
 const CLICKS_PER_WATER = 5;
 let isManualIceMeltingUnlocked = false;
 
+// Handle manual ice melting process
 function meltIce() {
     if (!isManualIceMeltingUnlocked) return;
     
@@ -464,6 +481,7 @@ function meltIce() {
     updateLastAction("Melted ice");
 }
 
+// Unlock the manual ice melting feature
 function unlockManualIceMelting() {
     isManualIceMeltingUnlocked = true;
     const iceMeltingContainer = document.getElementById('ice-melting-container');
@@ -472,6 +490,7 @@ function unlockManualIceMelting() {
     }
 }
 
+// Update the visual progress of ice melting
 function updateIceMeltingProgress() {
     const progressElement = document.getElementById('ice-melting-progress');
     const progress = (waterMeltingClicks / CLICKS_PER_WATER) * 100;

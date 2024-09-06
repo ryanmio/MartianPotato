@@ -1,7 +1,20 @@
 // This file implements the upgrade system for the Martian Potato game
 // It defines available upgrades, manages the tech tree UI, and handles upgrade purchases
 
-// Define the list of available upgrades
+// Game Constants
+const TECH_TREE_UPDATE_INTERVAL = 1000; // Update every second
+const BASE_HARVEST_DELAY = 1000; // 1 second in milliseconds
+
+// Upgrade System Variables
+let currentPlantingUpgrade = 0;
+let highestPurchasedWeight = 0;
+let lastTechTreeUpdate = 0;
+
+// Automation Arrays
+let autoplanters = [];
+let autoHarvesters = [];
+
+// Upgrade Definitions
 const upgrades = [
     { 
         name: "Hand Trowel", 
@@ -148,12 +161,6 @@ const upgrades = [
     }
 ];
 
-let currentPlantingUpgrade = 0;
-
-// Variables for throttling tech tree updates
-let lastTechTreeUpdate = 0;
-const TECH_TREE_UPDATE_INTERVAL = 1000; // Update every second
-
 // Update the tech tree UI, throttled to run at most once per second
 function updateTechTree() {
     const currentTime = Date.now();
@@ -210,9 +217,6 @@ function createTechTree() {
         }
     });
 }
-
-// Track the highest weight of purchased upgrades
-let highestPurchasedWeight = 0;
 
 // Create a single tech card for the given upgrade
 function createCard(upgrade) {
@@ -392,9 +396,6 @@ function updateAllCards() {
     });
 }
 
-// Array to store autoplanter objects
-let autoplanters = [];
-
 // Add a new autoplanter to the game
 function addAutoplanter() {
     const autoplanter = {
@@ -439,10 +440,6 @@ function checkAndRestartAutoplanters() {
         }
     });
 }
-
-// Array to store auto harvester objects
-let autoHarvesters = [];
-const BASE_HARVEST_DELAY = 1000; // 1 second in milliseconds
 
 // Add a new auto harvester to the game
 function addAutoHarvester() {

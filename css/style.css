@@ -78,8 +78,8 @@ h2 {
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.7);
     position: relative;
     overflow: hidden;
-    justify-items: center; /* Center items horizontally */
-    align-items: center; /* Center items vertically */
+    justify-items: center;
+    align-items: center;
 }
 
 #potato-field::before {
@@ -98,7 +98,7 @@ h2 {
 .potato-slot {
     width: 70px;
     height: 70px;
-    background-color: rgba(0, 0, 0, 0.1); /* Make the placeholders less obvious */
+    background-color: rgba(0, 0, 0, 0.1);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -263,7 +263,6 @@ h2 {
     margin: 5px 0;
 }
 
-/* Add this at the end of the file */
 #toast-container {
     position: fixed;
     top: 20px;
@@ -347,7 +346,7 @@ h2 {
 }
 
 .carousel-arrow {
-    display: block; /* Show arrows by default */
+    display: block;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -385,7 +384,7 @@ h2 {
     border-radius: 8px;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
-    overflow: hidden; /* Ensure content doesn't overflow */
+    overflow: hidden;
 }
 
 .tech-card-icon {
@@ -412,7 +411,7 @@ h2 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    overflow: hidden; /* Ensure content doesn't overflow */
+    overflow: hidden;
 }
 
 .tech-card-name {
@@ -543,52 +542,52 @@ h2 {
 }
 
 #ice-cube {
-    font-size: 50px; /* Increase the size */
+    font-size: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer; /* Add cursor pointer */
-    margin: 0 auto; /* Center the ice cube */
-    transition: transform 0.2s ease-in-out; /* Smooth transition */
+    cursor: pointer;
+    margin: 0 auto;
+    transition: transform 0.2s ease-in-out;
 }
 
 #ice-cube:hover {
-    transform: scale(1.1); /* Slightly increase the size on hover */
+    transform: scale(1.1);
 }
 
 #ice-melting-container {
-    width: 200px; /* Set a fixed width */
-    height: 100px; /* Reduce height */
-    margin: 20px 0; /* Remove auto margin to left-align */
+    width: 200px;
+    height: 100px;
+    margin: 20px 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Distribute space evenly */
+    justify-content: space-between;
     align-items: center;
-    background-color: #f0f0f0; /* Light background color */
-    border-radius: 10px; /* Slightly round the corners */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-    padding: 10px; /* Add padding for spacing */
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
 }
 
 #ice-melting-container h3 {
     text-align: center;
     width: 100%;
-    margin: 0; /* Remove default margin */
-    font-size: 15px; /* Adjust font size if necessary */
+    margin: 0;
+    font-size: 15px;
 }
 
 .ice-melting-progress {
     font-size: 16px;
-    color: #333; /* Darker text color */
-    font-weight: normal; /* Normal font weight */
+    color: #333;
+    font-weight: normal;
     text-align: center;
-    margin: 0; /* Remove default margin */
+    margin: 0;
 }
 
 #parent-container {
     display: flex;
-    align-items: flex-start; /* Align items to the start */
-    gap: 20px; /* Add some space between items */
+    align-items: flex-start;
+    gap: 20px;
 }
 
 #exploration-container, #ice-melting-container {
@@ -597,7 +596,7 @@ h2 {
     margin: 20px 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Align items to the top */
+    justify-content: flex-start;
     align-items: center;
     background-color: #f0f0f0;
     border-radius: 10px;
@@ -620,8 +619,8 @@ h2 {
     align-items: center;
     cursor: pointer;
     transition: transform 0.2s ease-in-out;
-    margin-top: auto; /* Push to the bottom of the container */
-    margin-bottom: auto; /* Center vertically */
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .explore-mars:hover, #ice-cube:hover {
@@ -644,7 +643,6 @@ h2 {
     text-align: center;
 }
 
-/* Add this new class for blurred cards */
 .tech-card.blurred {
     filter: blur(5px);
     pointer-events: none;
@@ -655,7 +653,6 @@ h2 {
     opacity: 0;
 }
 
-/* Modify the existing .tech-card styles to accommodate the blur effect */
 .tech-card {
     position: relative;
     overflow: hidden;

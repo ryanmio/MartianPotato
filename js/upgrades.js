@@ -101,9 +101,12 @@ const upgrades = [
     { 
         name: "Spudnik Satellite", 
         cost: 2000, 
-        effect: () => { window.totalExplorationRate += 0.5; updateAutonomousExploration(); },
+        effect: () => { 
+            window.explorationResourceMultiplier = 1.5; 
+            showToast("Upgrade Effect", "Spudnik Satellite now increases resource yields from exploration by 50%!", 'achievement');
+        },
         icon: "🛰️",
-        description: "Orbits Mars, providing detailed surface scans and increasing resource discovery.",
+        description: "Orbits Mars, providing detailed surface scans and increasing resource discovery by 50%.",
         metaMessage: "Global perspective. This upgrade demonstrates how technology can provide a broader view, leading to more efficient resource discovery and management.",
         weight: 10,
         category: "exploration"
@@ -111,9 +114,12 @@ const upgrades = [
     { 
         name: "Martian Bucket-Wheel Excavator", 
         cost: 3500, 
-        effect: () => { window.totalExplorationRate += 0.8; updateAutonomousExploration(); },
+        effect: () => { 
+            window.totalExplorationRate += 0.8; 
+            updateAutonomousExploration();
+        },
         icon: "⛏️",
-        description: "A massive mobile strip-mining machine that efficiently extracts resources from the Martian surface.",
+        description: "A massive mobile strip-mining machine that autonomously extracts resources from the Martian surface.",
         metaMessage: "Industrial-scale operations. This upgrade showcases how large-scale machinery can dramatically increase resource gathering efficiency, shifting the game's scale.",
         assetName: "bucket_wheel_excavator.webp",
         weight: 12,

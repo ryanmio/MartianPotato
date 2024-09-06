@@ -1,4 +1,5 @@
 window.totalExplorationRate = 0;
+window.explorationResourceMultiplier = 1; // Add this line
 
 window.lastExploreTime = 0;
 window.exploreDelay = 10000; // 10 seconds initial delay
@@ -12,9 +13,9 @@ function exploreMarsSurface() {
     }
 
     // Adjust rewards: water is half as much as soil and oxygen on average
-    const waterReward = Math.floor(Math.random() * 5) + 1; // 1-5 range
-    const soilReward = Math.floor(Math.random() * 10) + 1; // 1-10 range
-    const oxygenReward = Math.floor(Math.random() * 10) + 1; // 1-10 range
+    const waterReward = Math.floor(Math.random() * 5 + 1) * window.explorationResourceMultiplier; // 1-5 range
+    const soilReward = Math.floor(Math.random() * 10 + 1) * window.explorationResourceMultiplier; // 1-10 range
+    const oxygenReward = Math.floor(Math.random() * 10 + 1) * window.explorationResourceMultiplier; // 1-10 range
 
     water += waterReward;
     soilNutrients += soilReward;
@@ -22,9 +23,9 @@ function exploreMarsSurface() {
 
     // Create a list of non-zero rewards
     const rewards = [];
-    if (waterReward > 0) rewards.push(`${waterReward} water`);
-    if (soilReward > 0) rewards.push(`${soilReward} soil nutrients`);
-    if (oxygenReward > 0) rewards.push(`${oxygenReward} oxygen`);
+    if (waterReward > 0) rewards.push(`${waterReward.toFixed(1)} water`);
+    if (soilReward > 0) rewards.push(`${soilReward.toFixed(1)} soil nutrients`);
+    if (oxygenReward > 0) rewards.push(`${oxygenReward.toFixed(1)} oxygen`);
 
     // Join the rewards with commas and 'and' for the last item
     const rewardString = rewards.join(', ').replace(/,([^,]*)$/, ' and$1');
@@ -39,6 +40,29 @@ function exploreMarsSurface() {
     updateDisplay();
 }
 
+// Add this function to handle autonomous exploration
+function autonomousExploration() {
+    if (window.totalExplorationRate > 0) {
+        const waterReward = (Math.random() * 2.5 + 0.5) * window.totalExplorationRate * window.explorationResourceMultiplier;
+        const soilReward = (Math.random() * 5 + 1) * window.totalExplorationRate * window.explorationResourceMultiplier;
+        const oxygenReward = (Math.random() * 5 + 1) * window.totalExplorationRate * window.explorationResourceMultiplier;
+
+        water += waterReward;
+        soilNutrients += soilReward;
+        oxygen += oxygenReward;
+
+        updateDisplay();
+    }
+}
+
+// Add this function to update autonomous exploration
+function updateAutonomousExploration() {
+    clearInterval(window.autonomousExplorationInterval);
+    if (window.totalExplorationRate > 0) {
+        window.autonomousExplorationInterval = setInterval(autonomousExploration, 1000);
+    }
+}
+
 // Modify the event listener
 document.addEventListener('DOMContentLoaded', () => {
     const exploreButton = document.getElementById('explore-button');
@@ -46,4 +70,5 @@ document.addEventListener('DOMContentLoaded', () => {
         exploreButton.innerHTML = '👩‍🚀';
         exploreButton.addEventListener('click', exploreMarsSurface);
     }
+    updateAutonomousExploration(); // Start autonomous exploration if applicable
 });

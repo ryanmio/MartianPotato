@@ -1,35 +1,63 @@
 // This file contains the core game logic for the Martian Potato game
 // It manages game state, resource handling, potato planting and harvesting, and UI updates
 
-// Game state variables
+// Game Constants
+const MAX_FIELD_SIZE = 8;
+const GROWTH_TIME = 8000; // 8 seconds in milliseconds
+const UPDATE_INTERVAL = 1000; // Update every second
+const FRAME_RATE = 30; // 30 fps
+const FRAME_DELAY = 1000 / FRAME_RATE;
+const CLICKS_PER_WATER = 5;
+
+// System Variables
+let lastUpdateTime = 0;
+let lastFrameTime = 0;
+let debugMode = false;
+
+// Resource Variables
 let potatoCount = 0;
-let rawPotatoesPerSecond = 0;
-let processedPotatoesPerSecond = 0;
 let water = 100;
 let soilNutrients = 100;
 let oxygen = 100;
 
+// Production Variables
+let rawPotatoesPerSecond = 0;
+let processedPotatoesPerSecond = 0;
 let processingLevel = 0;
 
+// Planting Variables
 let plantingDelay = 4000; // 4 seconds, matching the initial "Hand Trowel" upgrade
 let lastPlantTime = 0;
 let potatoesPerClick = 1;
 
-// Achievement tracking
+// Resource Efficiency Multipliers
+let waterEfficiency = 1;
+let soilEfficiency = 1;
+let oxygenEfficiency = 1;
+
+// Ice Melting Variables
+let waterMeltingClicks = 0;
+let isManualIceMeltingUnlocked = false;
+
+// Large Data Structures
+let potatoField = new Array(MAX_FIELD_SIZE).fill(null);
+
+// Achievement Tracking
 const achievements = {
     firstPotato: false,
     // Add more achievements here as needed
 };
 
+// Debug Variables
+let fpsValues = [];
+let lastDebugUpdateTime = 0;
+let lastResourceValues = { water: 0, soilNutrients: 0, oxygen: 0 };
+let lastAction = "None";
+
 // Calculate the rate of potato production
 function calculatePotatoesPerSecond() {
     return autoplanters.length / (GROWTH_TIME / 1000);
 }
-
-// Resource efficiency multipliers
-let waterEfficiency = 1;
-let soilEfficiency = 1;
-let oxygenEfficiency = 1;
 
 // Consume resources for potato growth, applying efficiency multipliers
 function consumeResources(amount = 1) {
@@ -41,10 +69,6 @@ function consumeResources(amount = 1) {
     }
     return false;
 }
-
-// Game update timing variables
-let lastUpdateTime = 0;
-const UPDATE_INTERVAL = 1000; // Update every second
 
 // Update game resources and ensure they don't go below zero
 function updateResources(currentTime) {
@@ -59,11 +83,6 @@ function updateResources(currentTime) {
     }
     return false;
 }
-
-// Potato field constants and variables
-const MAX_FIELD_SIZE = 8;
-const GROWTH_TIME = 8000; // 8 seconds in milliseconds
-let potatoField = new Array(MAX_FIELD_SIZE).fill(null);
 
 // Plant a potato in an empty field slot
 function plantPotato() {
@@ -277,11 +296,6 @@ function updatePotatoElement(slotElement, potato) {
     }
 }
 
-// Game loop constants and variables
-const FRAME_RATE = 30; // 30 fps
-const FRAME_DELAY = 1000 / FRAME_RATE;
-let lastFrameTime = 0;
-
 // Main game loop function
 function gameLoop(currentTime) {
     if (currentTime - lastFrameTime >= FRAME_DELAY) {
@@ -310,13 +324,6 @@ function updateNonCriticalElements() {
         displayExplorationUpgrades();
     });
 }
-
-// Debug mode variables
-let debugMode = false;
-let fpsValues = [];
-let lastDebugUpdateTime = 0;
-let lastResourceValues = { water: 0, soilNutrients: 0, oxygen: 0 };
-let lastAction = "None";
 
 // Toggle debug mode on/off
 function toggleDebugMode() {
@@ -460,11 +467,6 @@ document.addEventListener('DOMContentLoaded', () => {
     iceCube.addEventListener('click', meltIce);
     updateIceMeltingProgress();
 });
-
-// Variables for ice melting mechanic
-let waterMeltingClicks = 0;
-const CLICKS_PER_WATER = 5;
-let isManualIceMeltingUnlocked = false;
 
 // Handle manual ice melting process
 function meltIce() {

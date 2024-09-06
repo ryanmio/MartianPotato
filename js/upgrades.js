@@ -1,6 +1,7 @@
-// Upgrade system will be implemented here
-console.log("Upgrades system loaded");
+// This file implements the upgrade system for the Martian Potato game
+// It defines available upgrades, manages the tech tree UI, and handles upgrade purchases
 
+// Define the list of available upgrades
 const upgrades = [
     { 
         name: "Hand Trowel", 
@@ -149,11 +150,11 @@ const upgrades = [
 
 let currentPlantingUpgrade = 0;
 
-// Add these variables at the top of the file
+// Variables for throttling tech tree updates
 let lastTechTreeUpdate = 0;
 const TECH_TREE_UPDATE_INTERVAL = 1000; // Update every second
 
-// Modify the updateTechTree function
+// Update the tech tree UI, throttled to run at most once per second
 function updateTechTree() {
     const currentTime = Date.now();
     if (currentTime - lastTechTreeUpdate < TECH_TREE_UPDATE_INTERVAL) {
@@ -171,10 +172,8 @@ function updateTechTree() {
             const upgradeCost = getUpgradeCost(upgrade);
             const isPurchasable = potatoCount >= upgradeCost;
 
-            // Update purchasability
+            // Update purchasability and cost display
             card.classList.toggle('purchasable', isPurchasable);
-
-            // Always update cost display
             const costElement = card.querySelector('.tech-card-cost');
             if (costElement) {
                 costElement.textContent = `Cost: ${upgradeCost} potatoes`;
@@ -183,7 +182,7 @@ function updateTechTree() {
     });
 }
 
-// Modify the gameLoop function in js/game.js
+// Main game loop function, called on each animation frame
 function gameLoop(currentTime) {
     if (currentTime - lastFrameTime >= FRAME_DELAY) {
         updatePlantButton();
@@ -198,14 +197,13 @@ function gameLoop(currentTime) {
     requestAnimationFrame(gameLoop);
 }
 
-// Remove the updateTechTree call from createTechTree
+// Create and populate the tech tree UI
 function createTechTree() {
     const techTree = document.getElementById('tech-tree');
     techTree.innerHTML = ''; // Clear existing content
 
-    // Sort upgrades by weight
+    // Sort upgrades by weight and create cards for each
     const sortedUpgrades = upgrades.slice().sort((a, b) => a.weight - b.weight);
-
     sortedUpgrades.forEach((upgrade) => {
         if (!upgrade.purchased || (upgrade.count !== undefined && upgrade.count > 0)) {
             techTree.appendChild(createCard(upgrade));
@@ -213,10 +211,10 @@ function createTechTree() {
     });
 }
 
-// Add this variable at the top of the file
+// Track the highest weight of purchased upgrades
 let highestPurchasedWeight = 0;
 
-// Modify the createCard function
+// Create a single tech card for the given upgrade
 function createCard(upgrade) {
     const card = document.createElement('div');
     card.className = 'tech-card';
@@ -272,7 +270,7 @@ function createCard(upgrade) {
     return card;
 }
 
-// Modify the getUpgradeCost function to handle all cases
+// Calculate the cost of an upgrade, considering potential count-based scaling
 function getUpgradeCost(upgrade) {
     if (upgrade.count !== undefined) {
         return Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count));
@@ -280,6 +278,7 @@ function getUpgradeCost(upgrade) {
     return upgrade.cost;
 }
 
+// Display a modal with detailed information about an upgrade
 function showUpgradeModal(upgrade) {
     const existingModal = document.querySelector('.modal');
     if (existingModal) {
@@ -330,7 +329,7 @@ function showUpgradeModal(upgrade) {
     document.body.appendChild(modal);
 }
 
-// Modify the buyUpgrade function to update the card immediately after purchase
+// Handle the purchase of an upgrade
 function buyUpgrade(upgrade) {
     const cost = getUpgradeCost(upgrade);
     if (potatoCount >= cost) {
@@ -368,7 +367,7 @@ function buyUpgrade(upgrade) {
     }
 }
 
-// Add this new function to update all cards when a weight 10 upgrade is purchased
+// Update all tech cards when a weight 10 upgrade is purchased
 function updateAllCards() {
     const cards = document.querySelectorAll('.tech-card');
     cards.forEach(card => {
@@ -393,8 +392,10 @@ function updateAllCards() {
     });
 }
 
+// Array to store autoplanter objects
 let autoplanters = [];
 
+// Add a new autoplanter to the game
 function addAutoplanter() {
     const autoplanter = {
         interval: null,
@@ -406,6 +407,7 @@ function addAutoplanter() {
     updateDisplay();
 }
 
+// Start the autoplanting process for a given autoplanter
 function startAutoplanter(autoplanter) {
     autoplanter.interval = setInterval(() => {
         const emptySlotIndex = potatoField.findIndex(slot => slot === null);
@@ -429,6 +431,7 @@ function startAutoplanter(autoplanter) {
     }, 2000); // Try to plant every 2 seconds
 }
 
+// Check and restart any stopped autoplanters
 function checkAndRestartAutoplanters() {
     autoplanters.forEach(autoplanter => {
         if (!autoplanter.interval) {
@@ -437,9 +440,11 @@ function checkAndRestartAutoplanters() {
     });
 }
 
+// Array to store auto harvester objects
 let autoHarvesters = [];
 const BASE_HARVEST_DELAY = 1000; // 1 second in milliseconds
 
+// Add a new auto harvester to the game
 function addAutoHarvester() {
     const autoHarvester = {
         interval: null,
@@ -450,12 +455,14 @@ function addAutoHarvester() {
     updateDisplay();
 }
 
+// Start the auto harvesting process for a given auto harvester
 function startAutoHarvester(autoHarvester) {
     autoHarvester.interval = setInterval(() => {
         harvestOneReadyPotato();
     }, BASE_HARVEST_DELAY);
 }
 
+// Harvest a single ready potato from the field
 function harvestOneReadyPotato() {
     for (let i = 0; i < potatoField.length; i++) {
         if (potatoField[i] && potatoField[i].growthStage >= 100) {
@@ -465,13 +472,13 @@ function harvestOneReadyPotato() {
     }
 }
 
-// Add a function to initialize the tech tree with correct costs
+// Initialize the tech tree with correct costs
 function initializeTechTree() {
     createTechTree();
     updateTechTree(); // Ensure initial costs are set correctly
 }
 
-// Modify the DOMContentLoaded event listener to use the new initializeTechTree function
+// Set up event listeners and initialize the game when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
     initializeTechTree();
 
@@ -498,8 +505,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateArrows(); // Initial check
 });
 
-
-// Add this function to handle manual ice melting
+// Handle the manual ice melting process
 function meltIce() {
     if (!isManualIceMeltingUnlocked) return;
     
@@ -514,7 +520,7 @@ function meltIce() {
     updateLastAction("Melted ice");
 }
 
-// Add this function to unlock manual ice melting
+// Unlock the manual ice melting feature
 function unlockManualIceMelting() {
     isManualIceMeltingUnlocked = true;
     const iceMeltingContainer = document.getElementById('ice-melting-container');
@@ -523,7 +529,7 @@ function unlockManualIceMelting() {
     }
 }
 
-// Initialize the ice melting mechanism
+// Initialize the ice melting mechanism when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
     const iceMeltingContainer = document.getElementById('ice-melting-container');
     if (iceMeltingContainer) {

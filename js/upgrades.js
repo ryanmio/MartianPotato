@@ -14,6 +14,10 @@ let lastTechTreeUpdate = 0;
 let autoplanters = [];
 let autoHarvesters = [];
 
+// Achievement System Variables
+let achievementQueue = [];
+let isAchievementModalOpen = false;
+
 // Upgrade Definitions
 const upgrades = [
     { 
@@ -358,7 +362,14 @@ function buyUpgrade(upgrade) {
         // Update the highest purchased weight
         highestPurchasedWeight = Math.max(highestPurchasedWeight, upgrade.weight);
 
-        // Immediately update the specific card that was just purchased
+        // Queue an achievement for the upgrade purchase
+        queueAchievement(
+            `Upgrade Purchased: ${upgrade.name}`,
+            upgrade.description,
+            upgrade.metaMessage
+        );
+
+        // Update the specific card that was just purchased
         const card = document.querySelector(`.tech-card[data-upgrade-name="${upgrade.name}"]`);
         if (card) {
             const costElement = card.querySelector('.tech-card-cost');
@@ -373,8 +384,6 @@ function buyUpgrade(upgrade) {
         }
 
         createTechTree(); // Recreate the tech tree to reflect changes
-        showToast("Upgrade Purchased", `You have purchased the ${upgrade.name} upgrade!`, 'achievement');
-        showToast("Meta Insight", upgrade.metaMessage, 'meta');
     } else {
         showToast("Not Enough Potatoes", "You don't have enough potatoes to purchase this upgrade.", 'setback');
     }
@@ -545,3 +554,60 @@ document.addEventListener('DOMContentLoaded', () => {
     const iceCube = document.getElementById('ice-cube');
     iceCube.addEventListener('click', meltIce);
 });
+
+// Queue an achievement for display
+function queueAchievement(title, message, metaMessage = '') {
+    achievementQueue.push({ title, message, metaMessage });
+    if (!isAchievementModalOpen) {
+        showNextAchievement();
+    }
+}
+
+// Display the next queued achievement
+function showNextAchievement() {
+    if (achievementQueue.length === 0) {
+        isAchievementModalOpen = false;
+        resumeGame();
+        return;
+    }
+
+    isAchievementModalOpen = true;
+    pauseGame();
+
+    const achievement = achievementQueue.shift();
+    const modal = document.createElement('div');
+    modal.className = 'achievement-modal';
+    modal.innerHTML = `
+        <div class="achievement-content">
+            <h2>${achievement.title}</h2>
+            <p>${achievement.message}</p>
+            ${achievement.metaMessage ? `<p class="meta-message">${achievement.metaMessage}</p>` : ''}
+            <button id="continue-button">Continue</button>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    document.getElementById('continue-button').addEventListener('click', () => {
+        document.body.removeChild(modal);
+        showNextAchievement();
+    });
+}
+
+// Pause the game
+function pauseGame() {
+    // Implement game pausing logic here
+    // For example, stop all intervals, disable buttons, etc.
+    clearInterval(window.autonomousExplorationInterval);
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => button.disabled = true);
+}
+
+// Resume the game
+function resumeGame() {
+    // Implement game resuming logic here
+    // For example, restart all intervals, enable buttons, etc.
+    updateAutonomousExploration();
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => button.disabled = false);
+}

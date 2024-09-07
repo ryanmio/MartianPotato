@@ -167,9 +167,9 @@ function updatePlantButton() {
 function checkAchievements() {
     if (potatoCount >= 1 && !achievements.firstPotato) {
         achievements.firstPotato = true;
-        showToast("Achievement Unlocked", "One Small Step for Spud!");
+        queueAchievement("First Potato", "You've harvested your first Martian potato!", "This marks the beginning of your journey to colonize Mars with potatoes.");
     }
-    // Add more achievements here
+    // Add more achievement checks here
 }
 
 // Initialize the visual representation of the potato field

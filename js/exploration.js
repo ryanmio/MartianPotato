@@ -44,6 +44,7 @@ function exploreMarsSurface() {
     window.lastExploreTime = currentTime;
     updateDisplay();
     updateExploreButton();
+    checkAchievements();
 }
 
 // Function to handle autonomous exploration based on total exploration rate

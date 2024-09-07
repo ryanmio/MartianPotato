@@ -17,20 +17,20 @@ function exploreMarsSurface() {
     }
 
     // Calculate rewards for manual exploration
-    // Water is intentionally less abundant than soil and oxygen
+    // Water is intentionally less abundant than nutrients and oxygen
     const waterReward = Math.floor(Math.random() * 5 + 1) * window.explorationResourceMultiplier;
-    const soilReward = Math.floor(Math.random() * 10 + 1) * window.explorationResourceMultiplier;
+    const nutrientReward = Math.floor(Math.random() * 10 + 1) * window.explorationResourceMultiplier;
     const oxygenReward = Math.floor(Math.random() * 10 + 1) * window.explorationResourceMultiplier;
 
     // Add rewards to global resource counters
     water += waterReward;
-    soilNutrients += soilReward;
+    nutrients += nutrientReward;
     oxygen += oxygenReward;
 
     // Prepare reward message for user feedback
     const rewards = [];
     if (waterReward > 0) rewards.push(`${waterReward.toFixed(1)} water`);
-    if (soilReward > 0) rewards.push(`${soilReward.toFixed(1)} soil nutrients`);
+    if (nutrientReward > 0) rewards.push(`${nutrientReward.toFixed(1)} nutrients`);
     if (oxygenReward > 0) rewards.push(`${oxygenReward.toFixed(1)} oxygen`);
 
     const rewardString = rewards.join(', ').replace(/,([^,]*)$/, ' and$1');
@@ -52,12 +52,12 @@ function autonomousExploration() {
     if (window.totalExplorationRate > 0) {
         // Calculate rewards for autonomous exploration
         const waterReward = (Math.random() * 2.5 + 0.5) * window.totalExplorationRate * window.explorationResourceMultiplier;
-        const soilReward = (Math.random() * 5 + 1) * window.totalExplorationRate * window.explorationResourceMultiplier;
+        const nutrientReward = (Math.random() * 5 + 1) * window.totalExplorationRate * window.explorationResourceMultiplier;
         const oxygenReward = (Math.random() * 5 + 1) * window.totalExplorationRate * window.explorationResourceMultiplier;
 
         // Add rewards to global resource counters
         water += waterReward;
-        soilNutrients += soilReward;
+        nutrients += nutrientReward;
         oxygen += oxygenReward;
 
         updateDisplay();

@@ -735,16 +735,15 @@ button:hover, button:disabled {
     font-size: 14px;
     cursor: pointer;
     font-family: "Times New Roman", serif;
-    transition: background-color 0.3s, transform 0.1s;
+    transition: background-color 0.3s;
     float: right;
     margin-top: 15px;
 }
 
 #continue-button:hover {
     background-color: #333;
-    transform: translateY(-2px);
 }
 
 #continue-button:active {
-    transform: translateY(0);
+    background-color: #444;
 }

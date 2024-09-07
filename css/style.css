@@ -480,8 +480,16 @@ button:hover, button:disabled {
     align-items: flex-start;
 }
 
-/* Exploration and Ice Melting */
-#exploration-container, #ice-melting-container {
+/* Action Cards (Explore Mars, Manual Ice Melting, etc.) */
+.action-card,
+.action-card * {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.action-card {
     width: 200px;
     height: 100px;
     margin: 20px 0;
@@ -496,14 +504,14 @@ button:hover, button:disabled {
     position: relative;
 }
 
-#exploration-container h3, #ice-melting-container h3 {
+.action-card h3 {
     text-align: center;
     width: 100%;
     margin: 0;
     font-size: 15px;
 }
 
-.explore-mars, #ice-cube {
+.action-icon {
     font-size: 50px;
     display: flex;
     justify-content: center;
@@ -513,17 +521,17 @@ button:hover, button:disabled {
     flex-grow: 1;
 }
 
-.explore-mars:hover, #ice-cube:hover {
+.action-icon:hover {
     transform: scale(1.1);
 }
 
-.explore-mars:disabled {
+.action-icon:disabled {
     opacity: 0.5;
     cursor: not-allowed;
     transform: none;
 }
 
-#exploration-cooldown, .ice-melting-progress {
+.action-cooldown {
     font-size: 14px;
     color: #666;
     width: 100%;

@@ -1,5 +1,5 @@
 TODO:
-- [ ] Update achievement system
+- [x] Update achievement system
     - [x] Achievement modal instead of toast
 - [ ] Implement better click effect on Plant Potato button
 - [ ] Implement Ice as a resource to replace Oxygen

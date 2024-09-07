@@ -20,26 +20,62 @@ TODO:
 - [ ] Add new achievements:
     - [ ] Resource Milestones:
         - [ ] "Water Baron": Accumulate 1000 units of water
+            - Asset: water_baron.webp
+            - Prompt: "A Martian astronaut standing proudly next to a massive water tank, with pipes leading to potato fields. The astronaut holds a water droplet hologram. Martian landscape in background. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
         - [ ] "Nutrient Rich": Accumulate 1000 units of soil nutrients
+            - Asset: nutrient_rich.webp
+            - Prompt: "A close-up of Martian soil teeming with colorful, glowing nutrients. A potato plant sprouts from the center, its roots visible and absorbing the nutrients. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
         - [ ] "Oxygen Surplus": Accumulate 1000 units of oxygen
+            - Asset: oxygen_surplus.webp
+            - Prompt: "A transparent dome filled with lush potato plants, emitting visible oxygen. Outside, the red Martian landscape contrasts sharply. An oxygen meter in the foreground shows full capacity. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
     - [ ] Exploration Achievements:
         - [ ] "First Steps": Complete your first manual exploration
+            - Asset: first_steps.webp
+            - Prompt: "An astronaut's boot making the first footprint on Martian soil, with a potato plant sprouting from the print. The Martian horizon and a distant Earth visible in the background. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
         - [ ] "Seasoned Explorer": Complete 50 manual explorations
+            - Asset: seasoned_explorer.webp
+            - Prompt: "A weathered Martian rover covered in dust, with a collection of sample containers filled with various Martian soils and minerals. A holographic map of explored areas hovers above. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
         - [ ] "Automated Frontier": Reach an exploration rate of 10 per minute
+            - Asset: automated_frontier.webp
+            - Prompt: "A swarm of small, drone-like robots exploring the Martian surface, each carrying sensors and sample collection tools. In the background, a base with antennas receiving data. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
     - [ ] Planting and Harvesting:
         - [ ] "Green Thumb": Plant your 100th potato
+            - Asset: green_thumb.webp
+            - Prompt: "An astronaut's gloved hand gently planting a potato seedling in Martian soil. The glove has a green glow around the thumb. Rows of potato plants visible in the background. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
         - [ ] "Harvest Moon": Harvest 1000 potatoes in total
+            - Asset: harvest_moon.webp
+            - Prompt: "A massive pile of potatoes in the foreground, with Phobos (Mars' moon) rising in the background, casting a reddish glow. An astronaut stands atop the pile triumphantly. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
         - [ ] "Speed Planter": Plant 10 potatoes in under 1 minute
+            - Asset: speed_planter.webp
+            - Prompt: "A futuristic, multi-armed planting machine rapidly placing potato seedlings into Martian soil. Motion blur indicates speed, with a timer hologram showing 59 seconds. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
     - [ ] Upgrade Milestones:
         - [ ] "Tech Savvy": Purchase your first 5 upgrades
+            - Asset: tech_savvy.webp
+            - Prompt: "A Martian control room with holographic displays showing various potato farming technologies. An astronaut's hand activates the 5th upgrade, causing the room to glow with achievement. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
         - [ ] "Martian Engineer": Unlock all upgrades in a single category
+            - Asset: martian_engineer.webp
+            - Prompt: "An astronaut wearing an augmented reality headset, surrounded by floating holograms of potato farming equipment and upgrades. All holograms in one category are lit up, indicating completion. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
         - [ ] "Full Automation": Have at least one of each type of automated device
+            - Asset: full_automation.webp
+            - Prompt: "A panoramic view of a Martian potato farm with various automated machines at work - planting, watering, harvesting, and monitoring. No human figures visible. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
     - [ ] Time-based Achievements:
         - [ ] "One Sol Wonder": Play the game continuously for 1 Martian day (24 hours and 37 minutes)
+            - Asset: one_sol_wonder.webp
+            - Prompt: "A split-screen showing a Martian day cycle: one half in daylight, the other in Martian night. A potato plant grows progressively across the image. A clock face overlaid shows 24:37. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
         - [ ] "Week on Mars": Accumulate 7 days of total play time
+            - Asset: week_on_mars.webp
+            - Prompt: "Seven potato plants in a row, each representing a day of growth on Mars. The background transitions from a newly established base to a thriving potato farm. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
     - [ ] Special Actions:
         - [ ] "Ice Breaker": Melt ice manually 100 times
+            - Asset: ice_breaker.webp
+            - Prompt: "An astronaut using a futuristic hand-held device to melt a large Martian ice deposit. Steam rises as water flows towards a potato field. A counter hologram nearby shows '100'. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
         - [ ] "Field Full": Have all 8 potato slots occupied simultaneously
+            - Asset: field_full.webp
+            - Prompt: "A top-down view of a perfectly organized Martian potato field with 8 distinct, fully-grown potato plots. Each plot glows slightly, indicating peak health. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
     - [ ] Combination Achievements:
         - [ ] "Self-Sustaining": Produce more resources than you consume for 5 minutes straight
+            - Asset: self_sustaining.webp
+            - Prompt: "A closed-loop system diagram showing potato plants, water recycling, nutrient production, and oxygen generation. Arrows between elements pulse with energy, all numbers are in the green. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
         - [ ] "Potato Empire": Have 1000 potatoes, 1000 water, 1000 soil nutrients, and 1000 oxygen simultaneously
+            - Asset: potato_empire.webp
+            - Prompt: "A grand Martian citadel made entirely of interconnected potato-shaped domes. Each dome represents a resource: potatoes, water, nutrients, and oxygen. Holographic '1000' floats above each dome. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"

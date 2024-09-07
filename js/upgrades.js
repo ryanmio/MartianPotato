@@ -577,9 +577,24 @@ function showNextAchievement() {
     const achievement = achievementQueue.shift();
     const modal = document.createElement('div');
     modal.className = 'achievement-modal';
+
+    let imageHtml = '';
+    if (achievement.title.startsWith('Upgrade Purchased:')) {
+        const upgradeName = achievement.title.replace('Upgrade Purchased: ', '');
+        const upgrade = upgrades.find(u => u.name === upgradeName);
+        if (upgrade) {
+            if (upgrade.assetName) {
+                imageHtml = `<div class="achievement-image"><img src="images/${upgrade.assetName}" alt="${upgradeName}"></div>`;
+            } else {
+                imageHtml = `<div class="achievement-image">${upgrade.icon}</div>`;
+            }
+        }
+    }
+
     modal.innerHTML = `
         <div class="achievement-content">
             <h2>${achievement.title}</h2>
+            ${imageHtml}
             <p>${achievement.message}</p>
             ${achievement.metaMessage ? `<p class="meta-message">${achievement.metaMessage}</p>` : ''}
             <button id="continue-button">Continue</button>

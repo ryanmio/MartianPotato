@@ -652,39 +652,46 @@ button:hover, button:disabled {
     border-radius: 10px;
     max-width: 400px;
     text-align: center;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-    border: 2px solid #ffd700;
+    box-shadow: 0 0 20px rgba(194, 163, 120, 0.5);
+    border: 2px solid #8B6E4E;
 }
 
 .achievement-content h2 {
-    color: #ffd700;
+    color: #8B6E4E;
     margin-top: 0;
+    font-size: 24px;
+    border-bottom: 2px solid #C2A378;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .achievement-content p {
     margin-bottom: 20px;
+    color: #333;
+    line-height: 1.6;
 }
 
 .achievement-content .meta-message {
     font-style: italic;
     color: #666;
     background-color: #f0f0f0;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 15px;
+    border-radius: 6px;
     margin-top: 20px;
+    font-size: 14px;
 }
 
 #continue-button {
-    background-color: #4CAF50;
+    background-color: #C2A378;
     color: white;
-    border: none;
+    border: 1px solid #8B6E4E;
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    border-radius: 5px;
+    font-family: "Times New Roman", serif;
     transition: background-color 0.3s;
 }
 
 #continue-button:hover {
-    background-color: #45a049;
+    background-color: #A18260;
 }

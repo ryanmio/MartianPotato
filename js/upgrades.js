@@ -607,25 +607,10 @@ function showNextAchievement() {
 
     document.body.appendChild(modal);
 
-    // Add sparkle effect
-    const content = modal.querySelector('.achievement-content');
-    for (let i = 0; i < 20; i++) {
-        const sparkle = document.createElement('div');
-        sparkle.className = 'sparkle';
-        sparkle.style.left = `${Math.random() * 100}%`;
-        sparkle.style.top = `${Math.random() * 100}%`;
-        sparkle.style.animationDelay = `${Math.random() * 1}s`;
-        content.appendChild(sparkle);
-    }
-
     document.getElementById('continue-button').addEventListener('click', () => {
         document.body.removeChild(modal);
         showNextAchievement();
     });
-
-    // Play a celebratory sound (optional)
-    const audio = new Audio('sounds/achievement.mp3');
-    audio.play().catch(e => console.log('Audio play failed:', e));
 }
 
 // Pause the game

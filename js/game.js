@@ -233,19 +233,19 @@ function updateDisplay() {
 
 // Update the explore button state and cooldown display
 function updateExploreButton() {
-    const exploreButton = document.getElementById('explore-button');
+    const exploreCard = document.getElementById('exploration-container');
     const cooldownElement = document.getElementById('exploration-cooldown');
     
-    if (!exploreButton || !cooldownElement) return;
+    if (!exploreCard || !cooldownElement) return;
 
     const currentTime = Date.now();
     const timeLeft = Math.max(0, window.exploreDelay - (currentTime - window.lastExploreTime));
     
-    exploreButton.disabled = timeLeft > 0;
-    
     if (timeLeft > 0) {
+        exploreCard.setAttribute('disabled', 'true');
         cooldownElement.textContent = `(${(timeLeft / 1000).toFixed(1)}s)`;
     } else {
+        exploreCard.removeAttribute('disabled');
         cooldownElement.textContent = 'Ready';
     }
 }
@@ -481,6 +481,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const iceCube = document.getElementById('ice-cube');
     iceCube.addEventListener('click', meltIce);
     updateIceMeltingProgress();
+
+    const exploreCard = document.getElementById('exploration-container');
+    exploreCard.addEventListener('click', () => {
+        if (!exploreCard.hasAttribute('disabled')) {
+            exploreMars();
+        }
+    });
+
+    const iceMeltingCard = document.getElementById('ice-melting-container');
+    iceMeltingCard.addEventListener('click', meltIce);
 });
 
 // Handle manual ice melting process
@@ -513,4 +523,23 @@ function updateIceMeltingProgress() {
     const progress = (waterMeltingClicks / CLICKS_PER_WATER) * 100;
     progressElement.style.setProperty('--progress', progress);
     progressElement.textContent = `${waterMeltingClicks} / ${CLICKS_PER_WATER}`;
+}
+
+// Ensure the exploreMars function is defined
+function exploreMars() {
+    if (window.lastExploreTime && Date.now() - window.lastExploreTime < window.exploreDelay) {
+        console.log("Exploration is on cooldown");
+        return;
+    }
+
+    console.log("Exploring Mars...");
+    // Add your exploration logic here
+    water += Math.floor(Math.random() * 5) + 1;
+    soilNutrients += Math.floor(Math.random() * 5) + 1;
+    oxygen += Math.floor(Math.random() * 5) + 1;
+
+    window.lastExploreTime = Date.now();
+    updateDisplay();
+    updateExploreButton();
+    showToast("Exploration Complete", "You've discovered new resources on Mars!", 'achievement');
 }

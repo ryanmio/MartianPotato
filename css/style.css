@@ -523,11 +523,31 @@ button:hover, button:disabled {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    background-color: #f0f0f0;
+    background: #f0f0f0;
+    border: 2px solid #333;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 0 #333;
     padding: 10px;
     position: relative;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    font-family: 'Courier New', monospace;
+    color: #333;
+}
+
+.action-card:hover {
+    background: #e0e0e0;
+}
+
+.action-card:active {
+    top: 4px;
+    box-shadow: 0 0 0 #333;
+}
+
+.action-card[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
 .action-card h3 {
@@ -538,28 +558,15 @@ button:hover, button:disabled {
 }
 
 .action-icon {
-    font-size: 50px;
+    font-size: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out;
     flex-grow: 1;
-}
-
-.action-icon:hover {
-    transform: scale(1.1);
-}
-
-.action-icon:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
 }
 
 .action-cooldown {
     font-size: 14px;
-    color: #666;
     width: 100%;
     text-align: center;
     margin-top: 5px;

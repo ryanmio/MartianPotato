@@ -233,7 +233,33 @@ button:hover, button:disabled {
 }
 
 #plant-button {
-    margin-bottom: 20px;
+    position: relative;
+    width: 150px;
+    height: 50px;
+    background: #f0f0f0;
+    border: 2px solid #333;
+    border-radius: 10px;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    box-shadow: 0 4px 0 #333;
+}
+
+#plant-button:hover {
+    background: #e0e0e0;
+}
+
+#plant-button:active {
+    top: 4px;
+    box-shadow: 0 0 0 #333;
+}
+
+#plant-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
 #debug-container {

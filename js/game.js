@@ -157,7 +157,7 @@ function updatePlantButton() {
     
     if (timeLeft > 0) {
         plantButton.disabled = true;
-        plantButton.textContent = `Plant Potato (${(timeLeft / 1000).toFixed(1)}s)`;
+        plantButton.textContent = `${(timeLeft / 1000).toFixed(1)}s`;
     } else {
         plantButton.disabled = false;
         plantButton.textContent = 'Plant Potato';

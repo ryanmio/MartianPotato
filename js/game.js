@@ -478,9 +478,15 @@ document.addEventListener('DOMContentLoaded', () => {
             debugInfo.classList.contains('minimized') ? 'Maximize' : 'Minimize');
     });
 
+    const iceMeltingContainer = document.getElementById('ice-melting-container');
     const iceCube = document.getElementById('ice-cube');
+    
+    // Remove old event listeners
+    iceMeltingContainer.removeEventListener('click', meltIce);
+    iceCube.removeEventListener('click', meltIce);
+    
+    // Add new event listener only to the ice cube
     iceCube.addEventListener('click', meltIce);
-    updateIceMeltingProgress();
 
     const exploreCard = document.getElementById('exploration-container');
     exploreCard.addEventListener('click', () => {
@@ -488,22 +494,25 @@ document.addEventListener('DOMContentLoaded', () => {
             exploreMars();
         }
     });
-
-    const iceMeltingCard = document.getElementById('ice-melting-container');
-    iceMeltingCard.addEventListener('click', meltIce);
 });
 
 // Handle manual ice melting process
-function meltIce() {
+function meltIce(event) {
+    event.stopPropagation(); // Prevent event bubbling
+    
+    // Check if the click is directly on the ice cube
+    if (event.currentTarget.id !== 'ice-cube') return;
+    
     if (!isManualIceMeltingUnlocked) return;
     
     waterMeltingClicks++;
+    updateIceMeltingProgress();
+    
     if (waterMeltingClicks >= CLICKS_PER_WATER) {
         water++;
         waterMeltingClicks = 0;
         showToast("Water Collected", "You've melted ice and collected 1 unit of water!", 'achievement');
     }
-    updateIceMeltingProgress();
     updateDisplay();
     updateLastAction("Melted ice");
 }
@@ -513,16 +522,17 @@ function unlockManualIceMelting() {
     isManualIceMeltingUnlocked = true;
     const iceMeltingContainer = document.getElementById('ice-melting-container');
     if (iceMeltingContainer) {
-        iceMeltingContainer.style.display = 'block';
+        iceMeltingContainer.style.display = 'flex';
     }
+    updateIceMeltingProgress();
 }
 
 // Update the visual progress of ice melting
 function updateIceMeltingProgress() {
     const progressElement = document.getElementById('ice-melting-progress');
-    const progress = (waterMeltingClicks / CLICKS_PER_WATER) * 100;
-    progressElement.style.setProperty('--progress', progress);
-    progressElement.textContent = `${waterMeltingClicks} / ${CLICKS_PER_WATER}`;
+    if (progressElement) {
+        progressElement.textContent = `Clicks: ${waterMeltingClicks} / ${CLICKS_PER_WATER}`;
+    }
 }
 
 // Ensure the exploreMars function is defined

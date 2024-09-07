@@ -4,7 +4,7 @@ TODO:
     - [ ] Add image files for achievements:
         - [x] Use potato emoji (🥔) for first_potato achievement
         - [ ] potato_century.webp
-- [ ] Implement better click effect on Plant Potato button
+- [x] Implement better click effect on Plant Potato button
 - [ ] Implement Ice as a resource to replace Oxygen
 - [ ] Implement Ice Mining
 - [ ] Change Soil Nutrients to just nutrients

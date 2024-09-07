@@ -741,3 +741,14 @@ button:hover, button:disabled {
     0%, 100% { transform: scale(0); opacity: 0; }
     50% { transform: scale(1); opacity: 0.8; }
 }
+
+#ice-melting-container, #ice-cube {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+#ice-cube {
+    cursor: pointer;
+}

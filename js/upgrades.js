@@ -583,11 +583,9 @@ function showNextAchievement() {
         const upgradeName = achievement.title.replace('Upgrade Purchased: ', '');
         const upgrade = upgrades.find(u => u.name === upgradeName);
         if (upgrade) {
-            if (upgrade.assetName) {
-                imageHtml = `<img src="images/${upgrade.assetName}" alt="${upgradeName}">`;
-            } else {
-                imageHtml = upgrade.icon;
-            }
+            const imageName = upgrade.assetName || (upgrade.name.replace(/\s+/g, '_').toLowerCase() + '.webp');
+            const imageUrl = `images/${imageName}`;
+            imageHtml = `<img src="${imageUrl}" alt="${upgradeName}" onerror="this.onerror=null;this.innerHTML='${upgrade.icon}';">`;
         }
     }
 

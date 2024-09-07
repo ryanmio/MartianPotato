@@ -355,7 +355,7 @@ function buyUpgrade(upgrade) {
 
         // Queue an achievement for the upgrade purchase
         queueAchievement(
-            `Upgrade Purchased: ${upgrade.name}`,
+            `Technology Unlocked: ${upgrade.name}`,
             upgrade.description,
             upgrade.metaMessage
         );
@@ -570,8 +570,8 @@ function showNextAchievement() {
     modal.className = 'achievement-modal';
 
     let imageHtml = '';
-    if (achievement.title.startsWith('Upgrade Purchased:')) {
-        const upgradeName = achievement.title.replace('Upgrade Purchased: ', '');
+    if (achievement.title.startsWith('Technology Unlocked:')) {
+        const upgradeName = achievement.title.replace('Technology Unlocked: ', '');
         const upgrade = upgrades.find(u => u.name === upgradeName);
         if (upgrade) {
             const imageName = upgrade.assetName || (upgrade.name.replace(/\s+/g, '_').toLowerCase() + '.webp');

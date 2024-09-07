@@ -584,9 +584,9 @@ function showNextAchievement() {
         const upgrade = upgrades.find(u => u.name === upgradeName);
         if (upgrade) {
             if (upgrade.assetName) {
-                imageHtml = `<div class="achievement-image"><img src="images/${upgrade.assetName}" alt="${upgradeName}"></div>`;
+                imageHtml = `<img src="images/${upgrade.assetName}" alt="${upgradeName}">`;
             } else {
-                imageHtml = `<div class="achievement-image">${upgrade.icon}</div>`;
+                imageHtml = upgrade.icon;
             }
         }
     }
@@ -595,12 +595,14 @@ function showNextAchievement() {
         <div class="achievement-content">
             <h2>${achievement.title}</h2>
             <div class="achievement-body">
-                ${imageHtml}
+                <div class="achievement-image">
+                    ${imageHtml}
+                </div>
                 <div class="achievement-text">
                     <p>${achievement.message}</p>
-                    ${achievement.metaMessage ? `<p class="meta-message">${achievement.metaMessage}</p>` : ''}
                 </div>
             </div>
+            ${achievement.metaMessage ? `<p class="meta-message">${achievement.metaMessage}</p>` : ''}
             <button id="continue-button">Continue</button>
         </div>
     `;

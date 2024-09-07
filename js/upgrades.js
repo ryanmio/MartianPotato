@@ -305,32 +305,23 @@ function showUpgradeModal(upgrade) {
     const modal = document.createElement('div');
     modal.className = 'modal';
     
-    let content = `
+    const upgradeCost = getUpgradeCost(upgrade);
+    const content = `
         <div class="modal-content">
             <span class="close-modal">&times;</span>
             <h2>${upgrade.name}</h2>
             <p>${upgrade.description}</p>
-    `;
-
-    const upgradeCost = getUpgradeCost(upgrade);
-    if (!upgrade.purchased || (upgrade.count !== undefined)) {
-        content += `
             <p class="tech-card-cost">Cost: ${upgradeCost} potatoes</p>
             <button class="buy-upgrade-button" ${potatoCount >= upgradeCost ? '' : 'disabled'}>Buy Upgrade</button>
-        `;
-    }
-    
-    content += `<p class="meta-message">${upgrade.metaMessage}</p>`;
-    content += `</div>`;
+        </div>
+    `;
     modal.innerHTML = content;
 
-    if (!upgrade.purchased || (upgrade.count !== undefined)) {
-        const buyButton = modal.querySelector('.buy-upgrade-button');
-        buyButton.addEventListener('click', () => {
-            buyUpgrade(upgrade);
-            modal.remove();
-        });
-    }
+    const buyButton = modal.querySelector('.buy-upgrade-button');
+    buyButton.addEventListener('click', () => {
+        buyUpgrade(upgrade);
+        modal.remove();
+    });
 
     const closeButton = modal.querySelector('.close-modal');
     closeButton.addEventListener('click', () => {

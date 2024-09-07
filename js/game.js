@@ -45,6 +45,7 @@ let potatoField = new Array(MAX_FIELD_SIZE).fill(null);
 // Achievement Tracking
 const achievements = {
     firstPotato: false,
+    potatoCentury: false,
     // Add more achievements here as needed
 };
 
@@ -167,9 +168,23 @@ function updatePlantButton() {
 function checkAchievements() {
     if (potatoCount >= 1 && !achievements.firstPotato) {
         achievements.firstPotato = true;
-        queueAchievement("First Potato", "You've harvested your first Martian potato!", "This marks the beginning of your journey to colonize Mars with potatoes.");
+        queueAchievement(
+            "First Potato",
+            "You've harvested your first Martian potato!",
+            "This marks the beginning of your journey to colonize Mars with potatoes.",
+            "first_potato.webp"
+        );
     }
-    // Add more achievement checks here
+    if (potatoCount >= 100 && !achievements.potatoCentury) {
+        achievements.potatoCentury = true;
+        queueAchievement(
+            "Potato Century",
+            "You've harvested 100 Martian potatoes!",
+            "Your potato farm is starting to take shape. The future of Mars is looking delicious!",
+            "potato_century.webp"
+        );
+    }
+    // Add more achievement checks here as needed
 }
 
 // Initialize the visual representation of the potato field

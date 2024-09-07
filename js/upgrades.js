@@ -547,8 +547,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Queue an achievement for display
-function queueAchievement(title, message, metaMessage = '') {
-    achievementQueue.push({ title, message, metaMessage });
+function queueAchievement(title, message, metaMessage = '', imageName = '') {
+    achievementQueue.push({ title, message, metaMessage, imageName });
     if (!isAchievementModalOpen) {
         showNextAchievement();
     }
@@ -575,9 +575,10 @@ function showNextAchievement() {
         const upgrade = upgrades.find(u => u.name === upgradeName);
         if (upgrade) {
             const imageName = upgrade.assetName || (upgrade.name.replace(/\s+/g, '_').toLowerCase() + '.webp');
-            const imageUrl = `images/${imageName}`;
-            imageHtml = `<img src="${imageUrl}" alt="${upgradeName}" onerror="this.onerror=null;this.innerHTML='${upgrade.icon}';">`;
+            imageHtml = `<img src="images/${imageName}" alt="${upgradeName}" onerror="this.onerror=null;this.innerHTML='${upgrade.icon}';">`;
         }
+    } else if (achievement.imageName) {
+        imageHtml = `<img src="images/${achievement.imageName}" alt="${achievement.title}">`;
     }
 
     modal.innerHTML = `

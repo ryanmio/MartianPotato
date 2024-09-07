@@ -13,3 +13,6 @@ TODO:
 - [ ] Implement random events
 - [ ] Balance upgrade costs and effects
 - [ ] Implement save/load functionality
+- [ ] Add image files for achievements:
+    - [ ] first_potato.webp
+    - [ ] potato_century.webp

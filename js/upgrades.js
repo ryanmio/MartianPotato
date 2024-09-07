@@ -575,10 +575,17 @@ function showNextAchievement() {
         const upgrade = upgrades.find(u => u.name === upgradeName);
         if (upgrade) {
             const imageName = upgrade.assetName || (upgrade.name.replace(/\s+/g, '_').toLowerCase() + '.webp');
-            imageHtml = `<img src="images/${imageName}" alt="${upgradeName}" onerror="this.onerror=null;this.innerHTML='${upgrade.icon}';">`;
+            imageHtml = `<img src="images/${imageName}" alt="${upgradeName}" onerror="this.onerror=null;this.parentNode.innerHTML='${upgrade.icon}';">`;
         }
     } else if (achievement.imageName) {
-        imageHtml = `<img src="images/${achievement.imageName}" alt="${achievement.title}">`;
+        // Add emoji backups for non-upgrade achievements
+        let emojiBackup = '🏆'; // Default emoji
+        if (achievement.title === 'First Potato') {
+            emojiBackup = '🥔';
+        } else if (achievement.title === 'Potato Century') {
+            emojiBackup = '💯';
+        }
+        imageHtml = `<img src="images/${achievement.imageName}" alt="${achievement.title}" onerror="this.onerror=null;this.parentNode.innerHTML='${emojiBackup}';">`;
     }
 
     modal.innerHTML = `

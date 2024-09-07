@@ -20,18 +20,18 @@ function exploreMarsSurface() {
     // Water is intentionally less abundant than nutrients and oxygen
     const waterReward = Math.floor(Math.random() * 5 + 1) * window.explorationResourceMultiplier;
     const nutrientReward = Math.floor(Math.random() * 10 + 1) * window.explorationResourceMultiplier;
-    const oxygenReward = Math.floor(Math.random() * 10 + 1) * window.explorationResourceMultiplier;
+    const iceReward = Math.floor(Math.random() * 10 + 1) * window.explorationResourceMultiplier;
 
     // Add rewards to global resource counters
     water += waterReward;
     nutrients += nutrientReward;
-    oxygen += oxygenReward;
+    ice += iceReward;
 
     // Prepare reward message for user feedback
     const rewards = [];
     if (waterReward > 0) rewards.push(`${waterReward.toFixed(1)} water`);
     if (nutrientReward > 0) rewards.push(`${nutrientReward.toFixed(1)} nutrients`);
-    if (oxygenReward > 0) rewards.push(`${oxygenReward.toFixed(1)} oxygen`);
+    if (iceReward > 0) rewards.push(`${iceReward.toFixed(1)} ice`);
 
     const rewardString = rewards.join(', ').replace(/,([^,]*)$/, ' and$1');
 
@@ -53,12 +53,12 @@ function autonomousExploration() {
         // Calculate rewards for autonomous exploration
         const waterReward = (Math.random() * 2.5 + 0.5) * window.totalExplorationRate * window.explorationResourceMultiplier;
         const nutrientReward = (Math.random() * 5 + 1) * window.totalExplorationRate * window.explorationResourceMultiplier;
-        const oxygenReward = (Math.random() * 5 + 1) * window.totalExplorationRate * window.explorationResourceMultiplier;
+        const iceReward = (Math.random() * 5 + 1) * window.totalExplorationRate * window.explorationResourceMultiplier;
 
         // Add rewards to global resource counters
         water += waterReward;
         nutrients += nutrientReward;
-        oxygen += oxygenReward;
+        ice += iceReward;
 
         updateDisplay();
     }

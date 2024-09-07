@@ -6,8 +6,9 @@ TODO:
         - [ ] potato_century.webp
 - [x] Implement better click effect on Plant Potato button
 - [ ] Implement Ice as a resource to replace Oxygen
+- [ ] Update ice melting to consume ice
 - [ ] Implement Ice Mining
-- [ ] Change Soil Nutrients to just nutrients
+- [x] Change Soil Nutrients to just nutrients
     - [ ] add nutrient gathering upgrades
 - [ ] Implement upgrade to increase plots from 8 to 16 and possibly more
 - [ ] Implement "tutorial" hover effect to highlight the initial actions the user should take

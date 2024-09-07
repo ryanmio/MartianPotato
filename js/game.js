@@ -18,7 +18,7 @@ let debugMode = false;
 let potatoCount = 0;
 let water = 100;
 let nutrients = 100;
-let oxygen = 100;
+let ice = 100;
 
 // Production Variables
 let rawPotatoesPerSecond = 0;
@@ -33,7 +33,7 @@ let potatoesPerClick = 1;
 // Resource Efficiency Multipliers
 let waterEfficiency = 1;
 let soilEfficiency = 1;
-let oxygenEfficiency = 1;
+let iceEfficiency = 1;
 
 // Ice Melting Variables
 let waterMeltingClicks = 0;
@@ -52,7 +52,7 @@ const achievements = {
 // Debug Variables
 let fpsValues = [];
 let lastDebugUpdateTime = 0;
-let lastResourceValues = { water: 0, nutrients: 0, oxygen: 0 };
+let lastResourceValues = { water: 0, nutrients: 0, ice: 0 };
 let lastAction = "None";
 
 // Calculate the rate of potato production
@@ -62,10 +62,10 @@ function calculatePotatoesPerSecond() {
 
 // Consume resources for potato growth, applying efficiency multipliers
 function consumeResources(amount = 1) {
-    if (water >= amount && nutrients >= amount && oxygen >= amount) {
+    if (water >= amount && nutrients >= amount && ice >= amount) {
         water -= amount / waterEfficiency;
         nutrients -= amount / soilEfficiency;
-        oxygen -= amount / oxygenEfficiency;
+        ice -= amount / iceEfficiency;
         return true;
     }
     return false;
@@ -76,7 +76,7 @@ function updateResources(currentTime) {
     if (currentTime - lastUpdateTime >= UPDATE_INTERVAL) {
         water = Math.max(0, water);
         nutrients = Math.max(0, nutrients);
-        oxygen = Math.max(0, oxygen);
+        ice = Math.max(0, ice);
         potatoCount = Math.floor(potatoCount);
 
         lastUpdateTime = currentTime;
@@ -211,7 +211,7 @@ function updateDisplay() {
     updateElementIfChanged('potatoes-per-second', `Potatoes per second: ${rawPotatoesPerSecond.toFixed(1)}`);
     updateElementIfChanged('water-count', `Water: ${Math.floor(water)}`);
     updateElementIfChanged('nutrients', `Nutrients: ${Math.floor(nutrients)}`);
-    updateElementIfChanged('oxygen-level', `Oxygen: ${Math.floor(oxygen)}`);
+    updateElementIfChanged('ice-level', `Ice: ${Math.floor(ice)}`);
     updateElementIfChanged('exploration-rate', `Exploration Rate: ${Math.floor(window.totalExplorationRate * 60)} per minute`);
     updateElementIfChanged('purchased-upgrades', `Purchased Upgrades: ${(window.purchasedUpgrades || []).map(u => u.name).join(', ')}`);
     updateElementIfChanged('auto-harvesters', `Auto Harvesters: ${autoHarvesters.length}`);
@@ -376,7 +376,7 @@ function updateDebugInfo(currentTime, updateTime) {
         const resourceGeneration = {
             water: ((water - lastResourceValues.water) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2),
             nutrients: ((nutrients - lastResourceValues.nutrients) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2),
-            oxygen: ((oxygen - lastResourceValues.oxygen) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2)
+            ice: ((ice - lastResourceValues.ice) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2)
         };
         
         const updateElement = (id, text) => {
@@ -389,13 +389,13 @@ function updateDebugInfo(currentTime, updateTime) {
         updateElement('memory-usage', `Memory Usage: ${memoryUsage} MB`);
         updateElement('potato-count-debug', `Potato Count: ${potatoCount.toFixed(2)}`);
         updateElement('active-potatoes', `Active Potatoes: ${activePotatoes}`);
-        updateElement('resource-usage', `Resource Usage: Water (${water.toFixed(2)}), Nutrients (${nutrients.toFixed(2)}), Oxygen (${oxygen.toFixed(2)})`);
-        updateElement('resource-generation', `Resource Generation: Water (${resourceGeneration.water}/s), Nutrients (${resourceGeneration.nutrients}/s), Oxygen (${resourceGeneration.oxygen}/s)`);
+        updateElement('resource-usage', `Resource Usage: Water (${water.toFixed(2)}), Nutrients (${nutrients.toFixed(2)}), Ice (${ice.toFixed(2)})`);
+        updateElement('resource-generation', `Resource Generation: Water (${resourceGeneration.water}/s), Nutrients (${resourceGeneration.nutrients}/s), Ice (${resourceGeneration.ice}/s)`);
         updateElement('last-action', `Last Action: ${lastAction}`);
         updateElement('planting-delay', `Planting Delay: ${plantingDelay}ms`);
         
         lastDebugUpdateTime = currentTime;
-        lastResourceValues = { water, nutrients, oxygen };
+        lastResourceValues = { water, nutrients, ice };
     } catch (error) {
         console.error('Error updating debug info:', error);
     }
@@ -546,7 +546,7 @@ function exploreMars() {
     // Add your exploration logic here
     water += Math.floor(Math.random() * 5) + 1;
     nutrients += Math.floor(Math.random() * 5) + 1;
-    oxygen += Math.floor(Math.random() * 5) + 1;
+    ice += Math.floor(Math.random() * 5) + 1;
 
     window.lastExploreTime = Date.now();
     updateDisplay();

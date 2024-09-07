@@ -707,12 +707,17 @@ button:hover, button:disabled {
     align-items: center;
     justify-content: center;
     font-size: 40px;
+    overflow: hidden;
 }
 
 .achievement-image img {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain;
+    object-fit: cover;
+}
+
+.achievement-text {
+    overflow: hidden;
 }
 
 #continue-button {

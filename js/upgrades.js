@@ -594,9 +594,13 @@ function showNextAchievement() {
     modal.innerHTML = `
         <div class="achievement-content">
             <h2>${achievement.title}</h2>
-            ${imageHtml}
-            <p>${achievement.message}</p>
-            ${achievement.metaMessage ? `<p class="meta-message">${achievement.metaMessage}</p>` : ''}
+            <div class="achievement-body">
+                ${imageHtml}
+                <div class="achievement-text">
+                    <p>${achievement.message}</p>
+                    ${achievement.metaMessage ? `<p class="meta-message">${achievement.metaMessage}</p>` : ''}
+                </div>
+            </div>
             <button id="continue-button">Continue</button>
         </div>
     `;

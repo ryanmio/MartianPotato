@@ -1,6 +1,9 @@
 TODO:
 - [x] Update achievement system
     - [x] Achievement modal instead of toast
+    - [ ] Add image files for achievements:
+        - [x] Use potato emoji (🥔) for first_potato achievement
+        - [ ] potato_century.webp
 - [ ] Implement better click effect on Plant Potato button
 - [ ] Implement Ice as a resource to replace Oxygen
 - [ ] Implement Ice Mining
@@ -13,6 +16,30 @@ TODO:
 - [ ] Implement random events
 - [ ] Balance upgrade costs and effects
 - [ ] Implement save/load functionality
-- [ ] Add image files for achievements:
-    - [x] Use potato emoji (🥔) for first_potato achievement
-    - [ ] potato_century.webp
+- [ ] Implement time tracking to show user how many potatoes they've harvested over the course of their playtime and graph the potatoes over time in a chart
+- [ ] Add new achievements:
+    - [ ] Resource Milestones:
+        - [ ] "Water Baron": Accumulate 1000 units of water
+        - [ ] "Nutrient Rich": Accumulate 1000 units of soil nutrients
+        - [ ] "Oxygen Surplus": Accumulate 1000 units of oxygen
+    - [ ] Exploration Achievements:
+        - [ ] "First Steps": Complete your first manual exploration
+        - [ ] "Seasoned Explorer": Complete 50 manual explorations
+        - [ ] "Automated Frontier": Reach an exploration rate of 10 per minute
+    - [ ] Planting and Harvesting:
+        - [ ] "Green Thumb": Plant your 100th potato
+        - [ ] "Harvest Moon": Harvest 1000 potatoes in total
+        - [ ] "Speed Planter": Plant 10 potatoes in under 1 minute
+    - [ ] Upgrade Milestones:
+        - [ ] "Tech Savvy": Purchase your first 5 upgrades
+        - [ ] "Martian Engineer": Unlock all upgrades in a single category
+        - [ ] "Full Automation": Have at least one of each type of automated device
+    - [ ] Time-based Achievements:
+        - [ ] "One Sol Wonder": Play the game continuously for 1 Martian day (24 hours and 37 minutes)
+        - [ ] "Week on Mars": Accumulate 7 days of total play time
+    - [ ] Special Actions:
+        - [ ] "Ice Breaker": Melt ice manually 100 times
+        - [ ] "Field Full": Have all 8 potato slots occupied simultaneously
+    - [ ] Combination Achievements:
+        - [ ] "Self-Sustaining": Produce more resources than you consume for 5 minutes straight
+        - [ ] "Potato Empire": Have 1000 potatoes, 1000 water, 1000 soil nutrients, and 1000 oxygen simultaneously

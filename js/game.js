@@ -172,7 +172,7 @@ function checkAchievements() {
             "First Potato",
             "You've harvested your first Martian potato!",
             "This marks the beginning of your journey to colonize Mars with potatoes.",
-            "first_potato.webp"
+            "🥔" // Use the potato emoji instead of an image file
         );
     }
     if (potatoCount >= 100 && !achievements.potatoCentury) {

@@ -1,6 +1,6 @@
 TODO:
 - [ ] Update achievement system
-    - [ ] Achievement modal instead of toast
+    - [x] Achievement modal instead of toast
 - [ ] Implement better click effect on Plant Potato button
 - [ ] Implement Ice as a resource to replace Oxygen
 - [ ] Implement Ice Mining
@@ -14,5 +14,5 @@ TODO:
 - [ ] Balance upgrade costs and effects
 - [ ] Implement save/load functionality
 - [ ] Add image files for achievements:
-    - [ ] first_potato.webp
+    - [x] Use potato emoji (🥔) for first_potato achievement
     - [ ] potato_century.webp

@@ -578,14 +578,13 @@ function showNextAchievement() {
             imageHtml = `<img src="images/${imageName}" alt="${upgradeName}" onerror="this.onerror=null;this.parentNode.innerHTML='${upgrade.icon}';">`;
         }
     } else if (achievement.imageName) {
-        // Add emoji backups for non-upgrade achievements
-        let emojiBackup = '🏆'; // Default emoji
-        if (achievement.title === 'First Potato') {
-            emojiBackup = '🥔';
-        } else if (achievement.title === 'Potato Century') {
-            emojiBackup = '💯';
+        if (achievement.imageName.startsWith('🥔')) {
+            // If the imageName is the potato emoji, display it directly
+            imageHtml = `<span style="font-size: 80px;">${achievement.imageName}</span>`;
+        } else {
+            // Otherwise, treat it as an image file
+            imageHtml = `<img src="images/${achievement.imageName}" alt="${achievement.title}" onerror="this.onerror=null;this.parentNode.innerHTML='🏆';">`;
         }
-        imageHtml = `<img src="images/${achievement.imageName}" alt="${achievement.title}" onerror="this.onerror=null;this.parentNode.innerHTML='${emojiBackup}';">`;
     }
 
     modal.innerHTML = `

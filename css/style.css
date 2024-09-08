@@ -814,6 +814,8 @@ button:hover, button:disabled {
                 -8px 0 5px -5px #02425C inset;
     -moz-user-select: none;
     -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     background: #80DCE9;
     text-align: center; /* Center the text inside the switch */
 }

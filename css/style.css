@@ -795,3 +795,117 @@ button:hover, button:disabled {
 #ice-cube {
     cursor: pointer;
 }
+
+/* Old School Toggle Switch */
+.toggle-switch {
+    border: 2px solid #102838;
+    border-radius: 7px;
+    display: inline-block;
+    width: 100px;
+    height: 50px;
+    padding-top: 1px;
+    position: relative;
+    vertical-align: middle;
+    margin: 10px auto; /* Center the switch horizontally */
+    color: #297597;
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px #02425C inset,
+                -8px 0 5px -5px #02425C inset;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    background: #80DCE9;
+    text-align: center; /* Center the text inside the switch */
+}
+
+.toggle-switch input {
+    position: absolute;
+    visibility: hidden;
+}
+
+.toggle-switch > div {
+    background: linear-gradient(to right, #8FD9E4 0%,#A0F2FE 53%,#69DCF1 56%,#33AFCE 99%,#CEF5FF 100%);
+    box-shadow: -2px 0 1px 0 #A6F2FE inset;
+    border-radius: 5px;
+    line-height: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 1px rgba(255,255,255,0.5);
+    transform-origin: 0 0;
+    transform: scaleX(0.93);
+    transition: 0.1s;
+    text-align: center; /* Ensure text is centered */
+}
+
+.toggle-switch div:first-letter {
+    letter-spacing: 40px; /* Adjust letter-spacing for better centering */
+}
+
+.toggle-switch :checked ~ div {
+    transform-origin: 100% 0;
+    box-shadow: 2px 0 1px 0 #A6F2FE inset;
+    background: linear-gradient(to right, #CEF5FF 0%,#33AFCE 1%,#69DCF1 47%,#A0F2FE 50%,#8FD9E4 100%);
+}
+
+.toggle-switch > b {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    border-radius: 8px;
+    transform: skewY(5deg);
+    box-shadow: 0 6px 8px -5px #000;
+}
+
+.toggle-switch :checked ~ b {
+    right: auto;
+    left: 0;
+    transform: skewY(-5deg);
+}
+
+.toggle-switch .indicator {
+    position: absolute;
+    top: 14px;
+    right: -25px; /* Adjust position to center the light */
+    width: 8px;
+    height: 25px;
+    box-shadow: 0 0 8px #000 inset;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 15px;
+    transition: 0.2s;
+}
+
+.toggle-switch .indicator:before {
+    content: '';
+    display: inline-block;
+    margin-top: 8px;
+    width: 2px;
+    height: 8px;
+    border-radius: 10px;
+    transition: 0.5s;
+}
+
+.toggle-switch :checked ~ .indicator:before {
+    box-shadow: 0 0 7px 6px #BAFC58;
+    width: 6px;
+    background: #F0F9E3;
+    transition: 0.1s;
+}
+
+/* Adjust the action card styles to accommodate the toggle switch */
+#subsurface-aquifer-tapper-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center content vertically */
+    height: 100%; /* Ensure full height */
+    padding: 15px; /* Add padding all around */
+    text-align: center; /* Center text content */
+}
+
+#subsurface-aquifer-tapper-container h3 {
+    margin-bottom: 15px; /* Increase space between title and switch */
+}

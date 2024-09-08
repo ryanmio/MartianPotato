@@ -494,6 +494,12 @@ document.addEventListener('DOMContentLoaded', () => {
             exploreMarsSurface(); // Use the function from exploration.js
         }
     });
+
+    // Add this near the end of the file, inside the DOMContentLoaded event listener
+    const subsurfaceAquiferTapperToggle = document.getElementById('subsurface-aquifer-tapper-toggle');
+    if (subsurfaceAquiferTapperToggle) {
+        subsurfaceAquiferTapperToggle.addEventListener('change', toggleSubsurfaceAquiferTapper);
+    }
 });
 
 // Handle manual ice melting process

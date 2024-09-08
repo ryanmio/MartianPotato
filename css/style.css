@@ -913,11 +913,13 @@ button:hover, button:disabled {
                 0 2px 1px -1px rgba(255,255,255,.7) inset, 
                 8px 0 5px -5px #5A6165 inset,
                 -8px 0 5px -5px #5A6165 inset;
+    color: #3A3E41; /* Darker shade of the button color for text */
 }
 
 .toggle-switch.bucket-wheel > div {
     background: linear-gradient(to right, #8E979D 0%, #A1ACB3 53%, #B4BEC6 56%, #C7D1D9 99%, #DAE0E6 100%);
     box-shadow: -2px 0 1px 0 #DAE0E6 inset;
+    text-shadow: 0 1px rgba(255,255,255,0.5);
 }
 
 .toggle-switch.bucket-wheel :checked ~ div {

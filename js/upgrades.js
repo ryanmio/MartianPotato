@@ -171,6 +171,60 @@ const upgrades = [
         metaMessage: "Full automation. This final upgrade represents the pinnacle of your Martian potato empire, showcasing how far you've come from manual labor to planet-wide automation.",
         weight: 14,
         category: "exploration"
+    },
+    {
+        name: "Thermal Drill",
+        cost: 200,
+        effect: () => { 
+            window.waterExplorationMultiplier = (window.waterExplorationMultiplier || 1) * 1.5;
+            updateAutonomousExploration();
+        },
+        icon: "🔥",
+        description: "A specialized drill that uses heat to extract water from ice deposits more effectively.",
+        metaMessage: "Efficiency through technology. This upgrade introduces the concept of specialized tools, showing how targeted innovations can significantly boost resource gathering.",
+        weight: 6,
+        category: "exploration"
+    },
+    {
+        name: "Subsurface Aquifer Tapper",
+        cost: 500,
+        effect: () => { 
+            window.waterExplorationMultiplier = (window.waterExplorationMultiplier || 1) * 2;
+            updateAutonomousExploration();
+        },
+        icon: "💧",
+        description: "Accesses underground water reserves, significantly increasing water collection during exploration.",
+        metaMessage: "Hidden resources. This upgrade reveals that valuable resources may be hidden beneath the surface, encouraging players to think beyond what's immediately visible.",
+        weight: 8,
+        category: "exploration"
+    },
+    {
+        name: "Martian Polar Cap Extractor",
+        cost: 2500,
+        effect: () => { 
+            window.waterExplorationMultiplier = (window.waterExplorationMultiplier || 1) * 3;
+            window.polarCapBonusChance = 0.05;
+            updateAutonomousExploration();
+        },
+        icon: "❄️",
+        description: "Allows remote extraction of water from Mars' polar ice caps during exploration missions.",
+        metaMessage: "High-risk, high-reward. This upgrade introduces an element of chance, offering the excitement of potentially large bonuses to keep players engaged.",
+        weight: 12,
+        category: "exploration"
+    },
+    {
+        name: "Cometary Ice Harvester",
+        cost: 10000,
+        effect: () => { 
+            window.waterExplorationMultiplier = (window.waterExplorationMultiplier || 1) * 2.5;
+            window.totalExplorationRate *= 1.1;
+            updateAutonomousExploration();
+        },
+        icon: "☄️",
+        description: "Occasionally intercepts and harvests passing comets for their water-rich ice, boosting both exploration and water collection.",
+        metaMessage: "Thinking beyond Mars. This upgrade expands the game's scope, showing how advanced technology can turn previously unreachable resources into viable options.",
+        weight: 15,
+        category: "exploration"
     }
 ];
 

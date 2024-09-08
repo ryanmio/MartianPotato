@@ -5,11 +5,16 @@ TODO:
         - [x] Use potato emoji (🥔) for first_potato achievement
         - [ ] potato_century.webp
 - [x] Implement better click effect on Plant Potato button
-- [ ] Implement Ice as a resource to replace Oxygen
+- [x] Implement Ice as a resource to replace Oxygen
 - [ ] Update ice melting to consume ice
 - [ ] Implement Ice Mining
 - [x] Change Soil Nutrients to just nutrients
     - [ ] add nutrient gathering upgrades
+- [x] Add exploration upgrades for water extraction:
+    - [x] Thermal Drill
+    - [x] Subsurface Aquifer Tapper
+    - [x] Martian Polar Cap Extractor
+    - [x] Cometary Ice Harvester
 - [ ] Implement upgrade to increase plots from 8 to 16 and possibly more
 - [ ] Implement "tutorial" hover effect to highlight the initial actions the user should take
 - [ ] Add exploration cards for remaining exploration upgrades

@@ -481,9 +481,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const iceMeltingContainer = document.getElementById('ice-melting-container');
     const iceCube = document.getElementById('ice-cube');
     
-    // Remove old event listeners
-    iceMeltingContainer.removeEventListener('click', meltIce);
-    iceCube.removeEventListener('click', meltIce);
+    // Remove these lines as they're trying to remove non-existent listeners
+    // iceMeltingContainer.removeEventListener('click', meltIce);
+    // iceCube.removeEventListener('click', meltIce);
     
     // Add new event listener only to the ice cube
     iceCube.addEventListener('click', meltIce);
@@ -506,8 +506,8 @@ document.addEventListener('DOMContentLoaded', () => {
 function meltIce(event) {
     event.stopPropagation(); // Prevent event bubbling
     
-    // Check if the click is directly on the ice cube
-    if (event.currentTarget.id !== 'ice-cube') return;
+    // Remove this check as it's redundant with the event listener being on iceCube
+    // if (event.currentTarget.id !== 'ice-cube') return;
     
     if (!isManualIceMeltingUnlocked) return;
     
@@ -516,6 +516,7 @@ function meltIce(event) {
     
     if (waterMeltingClicks >= CLICKS_PER_WATER) {
         water++;
+        ice--; // Ensure we're consuming ice when water is produced
         waterMeltingClicks = 0;
         showToast("Water Collected", "You've melted ice and collected 1 unit of water!", 'achievement');
     }

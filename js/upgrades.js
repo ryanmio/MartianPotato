@@ -569,15 +569,20 @@ document.addEventListener('DOMContentLoaded', () => {
 function meltIce() {
     if (!isManualIceMeltingUnlocked) return;
     
-    waterMeltingClicks++;
-    if (waterMeltingClicks >= CLICKS_PER_WATER) {
-        water++;
-        waterMeltingClicks = 0;
-        showToast("Water Collected", "You've melted ice and collected 1 unit of water!", 'achievement');
+    if (ice >= 1) {  // Check if there's enough ice
+        waterMeltingClicks++;
+        if (waterMeltingClicks >= CLICKS_PER_WATER) {
+            ice--;  // Consume 1 ice
+            water++;
+            waterMeltingClicks = 0;
+            showToast("Water Collected", "You've melted ice and collected 1 unit of water!", 'achievement');
+        }
+        updateIceMeltingProgress();
+        updateDisplay();
+        updateLastAction("Melted ice");
+    } else {
+        showToast("Not Enough Ice", "You need at least 1 ice to melt!", 'setback');
     }
-    updateIceMeltingProgress();
-    updateDisplay();
-    updateLastAction("Melted ice");
 }
 
 // Unlock the manual ice melting feature

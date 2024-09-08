@@ -189,12 +189,11 @@ const upgrades = [
         name: "Subsurface Aquifer Tapper",
         cost: 500,
         effect: () => { 
-            window.waterExplorationMultiplier = (window.waterExplorationMultiplier || 1) * 2;
-            updateAutonomousExploration();
+            unlockSubsurfaceAquiferTapper();
         },
         icon: "💧",
-        description: "Accesses underground water reserves, significantly increasing water collection during exploration.",
-        metaMessage: "Hidden resources. This upgrade reveals that valuable resources may be hidden beneath the surface, encouraging players to think beyond what's immediately visible.",
+        description: "Accesses underground water reserves. Consumes 1 potato and 2 ice per second to produce 2 water per second when active.",
+        metaMessage: "Automated resource conversion. This upgrade introduces the concept of continuous resource transformation, requiring players to balance multiple resources.",
         weight: 8,
         category: "exploration"
     },
@@ -687,3 +686,65 @@ function resumeGame() {
     const buttons = document.querySelectorAll('button');
     buttons.forEach(button => button.disabled = false);
 }
+
+// Add these new variables and functions
+let isSubsurfaceAquiferTapperUnlocked = false;
+let isSubsurfaceAquiferTapperActive = false;
+let subsurfaceAquiferTapperInterval = null;
+
+function unlockSubsurfaceAquiferTapper() {
+    isSubsurfaceAquiferTapperUnlocked = true;
+    const tapperContainer = document.getElementById('subsurface-aquifer-tapper-container');
+    if (tapperContainer) {
+        tapperContainer.style.display = 'block';
+    }
+}
+
+function toggleSubsurfaceAquiferTapper() {
+    if (!isSubsurfaceAquiferTapperUnlocked) return;
+
+    isSubsurfaceAquiferTapperActive = !isSubsurfaceAquiferTapperActive;
+    const toggleSwitch = document.getElementById('subsurface-aquifer-tapper-toggle');
+    if (toggleSwitch) {
+        toggleSwitch.checked = isSubsurfaceAquiferTapperActive;
+    }
+
+    if (isSubsurfaceAquiferTapperActive) {
+        startSubsurfaceAquiferTapper();
+    } else {
+        stopSubsurfaceAquiferTapper();
+    }
+}
+
+function startSubsurfaceAquiferTapper() {
+    subsurfaceAquiferTapperInterval = setInterval(() => {
+        if (potatoCount >= 1 && ice >= 2) {
+            potatoCount -= 1;
+            ice -= 2;
+            water += 2;
+            updateDisplay();
+        } else {
+            showToast("Resource Shortage", "Not enough resources to run the Subsurface Aquifer Tapper!", 'setback');
+            toggleSubsurfaceAquiferTapper(); // Turn off if resources are insufficient
+        }
+    }, 1000); // Run every second
+}
+
+function stopSubsurfaceAquiferTapper() {
+    clearInterval(subsurfaceAquiferTapperInterval);
+}
+
+// Modify the existing DOMContentLoaded event listener
+document.addEventListener('DOMContentLoaded', () => {
+    // ... existing code ...
+
+    const subsurfaceAquiferTapperContainer = document.getElementById('subsurface-aquifer-tapper-container');
+    if (subsurfaceAquiferTapperContainer) {
+        subsurfaceAquiferTapperContainer.style.display = 'none'; // Hide by default
+    }
+
+    const subsurfaceAquiferTapperToggle = document.getElementById('subsurface-aquifer-tapper-toggle');
+    if (subsurfaceAquiferTapperToggle) {
+        subsurfaceAquiferTapperToggle.addEventListener('change', toggleSubsurfaceAquiferTapper);
+    }
+});

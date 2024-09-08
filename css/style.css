@@ -529,22 +529,24 @@ button:hover, button:disabled {
     box-shadow: 0 4px 0 #333;
     padding: 10px;
     position: relative;
-    cursor: pointer;
-    transition: all 0.1s ease;
-    font-family: 'Courier New', monospace;
-    color: #333;
+    cursor: default; /* Change default cursor to normal */
 }
 
-.action-card:hover {
+.action-card.clickable {
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.action-card.clickable:hover {
     background: #e0e0e0;
 }
 
-.action-card:active {
+.action-card.clickable:active {
     top: 4px;
     box-shadow: 0 0 0 #333;
 }
 
-.action-card[disabled] {
+.action-card.clickable[disabled] {
     opacity: 0.6;
     cursor: not-allowed;
     box-shadow: none;

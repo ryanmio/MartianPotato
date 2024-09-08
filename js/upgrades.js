@@ -585,6 +585,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (subsurfaceAquiferTapperToggle) {
         subsurfaceAquiferTapperToggle.addEventListener('change', toggleSubsurfaceAquiferTapper);
     }
+
+    initializeActionCards();
 });
 
 // Handle the manual ice melting process
@@ -743,4 +745,24 @@ function startSubsurfaceAquiferTapper() {
 // Stop the Subsurface Aquifer Tapper
 function stopSubsurfaceAquiferTapper() {
     clearInterval(subsurfaceAquiferTapperInterval);
+}
+
+function initializeActionCards() {
+    const clickableCards = document.querySelectorAll('.action-card.clickable');
+    clickableCards.forEach(card => {
+        card.addEventListener('click', () => {
+            if (!card.hasAttribute('disabled')) {
+                const actionName = card.id.replace('-container', '');
+                switch (actionName) {
+                    case 'exploration':
+                        exploreMarsSurface();
+                        break;
+                    case 'ice-melting':
+                        meltIce();
+                        break;
+                    // Add more cases for future clickable action cards
+                }
+            }
+        });
+    });
 }

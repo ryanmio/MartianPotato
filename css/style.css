@@ -907,5 +907,5 @@ button:hover, button:disabled {
 }
 
 #subsurface-aquifer-tapper-container h3 {
-    margin-bottom: 15px; /* Increase space between title and switch */
+    /* Removed margin-bottom */
 }

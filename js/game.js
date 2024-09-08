@@ -491,7 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const exploreCard = document.getElementById('exploration-container');
     exploreCard.addEventListener('click', () => {
         if (!exploreCard.hasAttribute('disabled')) {
-            exploreMars();
+            exploreMarsSurface(); // Use the function from exploration.js
         }
     });
 });
@@ -533,23 +533,4 @@ function updateIceMeltingProgress() {
     if (progressElement) {
         progressElement.textContent = `Clicks: ${waterMeltingClicks} / ${CLICKS_PER_WATER}`;
     }
-}
-
-// Ensure the exploreMars function is defined
-function exploreMars() {
-    if (window.lastExploreTime && Date.now() - window.lastExploreTime < window.exploreDelay) {
-        console.log("Exploration is on cooldown");
-        return;
-    }
-
-    console.log("Exploring Mars...");
-    // Add your exploration logic here
-    water += Math.floor(Math.random() * 5) + 1;
-    nutrients += Math.floor(Math.random() * 5) + 1;
-    ice += Math.floor(Math.random() * 5) + 1;
-
-    window.lastExploreTime = Date.now();
-    updateDisplay();
-    updateExploreButton();
-    showToast("Exploration Complete", "You've discovered new resources on Mars!", 'achievement');
 }

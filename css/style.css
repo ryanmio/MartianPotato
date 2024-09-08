@@ -762,7 +762,7 @@ button:hover, button:disabled {
     font-size: 14px;
     cursor: pointer;
     font-family: "Times New Roman", serif;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
     float: right;
     margin-top: 15px;
 }
@@ -905,4 +905,22 @@ button:hover, button:disabled {
     justify-content: center;
     height: 100%;
     text-align: center;
+}
+
+.toggle-switch.bucket-wheel {
+    background: #747C81; /* New gray color */
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px #5A6165 inset,
+                -8px 0 5px -5px #5A6165 inset;
+}
+
+.toggle-switch.bucket-wheel > div {
+    background: linear-gradient(to right, #8E979D 0%, #A1ACB3 53%, #B4BEC6 56%, #C7D1D9 99%, #DAE0E6 100%);
+    box-shadow: -2px 0 1px 0 #DAE0E6 inset;
+}
+
+.toggle-switch.bucket-wheel :checked ~ div {
+    background: linear-gradient(to right, #DAE0E6 0%, #C7D1D9 1%, #B4BEC6 47%, #A1ACB3 50%, #8E979D 100%);
+    box-shadow: 2px 0 1px 0 #DAE0E6 inset;
 }

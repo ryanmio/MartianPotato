@@ -23,6 +23,11 @@ let isSubsurfaceAquiferTapperUnlocked = false;
 let isSubsurfaceAquiferTapperActive = false;
 let subsurfaceAquiferTapperInterval = null;
 
+// Martian Bucket-Wheel Excavator Variables
+let isBucketWheelExcavatorUnlocked = false;
+let isBucketWheelExcavatorActive = false;
+let bucketWheelExcavatorInterval = null;
+
 // Upgrade Definitions
 const upgrades = [
     { 
@@ -147,11 +152,10 @@ const upgrades = [
         name: "Martian Bucket-Wheel Excavator", 
         cost: 3500, 
         effect: () => { 
-            window.totalExplorationRate += 0.8; 
-            updateAutonomousExploration();
+            unlockBucketWheelExcavator();
         },
         icon: "⛏️",
-        description: "A massive mobile strip-mining machine that autonomously extracts resources from the Martian surface.",
+        description: "A massive mobile strip-mining machine that consumes 1 potato per second to generate 2 nutrients and 2 ice.",
         metaMessage: "Industrial-scale operations. This upgrade showcases how large-scale machinery can dramatically increase resource gathering efficiency, shifting the game's scale.",
         assetName: "bucket_wheel_excavator.webp",
         weight: 12,
@@ -586,6 +590,11 @@ document.addEventListener('DOMContentLoaded', () => {
         subsurfaceAquiferTapperToggle.addEventListener('change', toggleSubsurfaceAquiferTapper);
     }
 
+    const bucketWheelExcavatorToggle = document.getElementById('bucket-wheel-excavator-toggle');
+    if (bucketWheelExcavatorToggle) {
+        bucketWheelExcavatorToggle.addEventListener('change', toggleBucketWheelExcavator);
+    }
+
     initializeActionCards();
 });
 
@@ -746,22 +755,74 @@ function stopSubsurfaceAquiferTapper() {
     clearInterval(subsurfaceAquiferTapperInterval);
 }
 
+// Unlock the Bucket-Wheel Excavator
+function unlockBucketWheelExcavator() {
+    isBucketWheelExcavatorUnlocked = true;
+    const excavatorContainer = document.getElementById('bucket-wheel-excavator-container');
+    if (excavatorContainer) {
+        excavatorContainer.style.display = 'block';
+    }
+}
+
+// Toggle the Bucket-Wheel Excavator
+function toggleBucketWheelExcavator() {
+    if (!isBucketWheelExcavatorUnlocked) return;
+
+    isBucketWheelExcavatorActive = !isBucketWheelExcavatorActive;
+    const toggleSwitch = document.getElementById('bucket-wheel-excavator-toggle');
+    if (toggleSwitch) {
+        toggleSwitch.checked = isBucketWheelExcavatorActive;
+    }
+
+    if (isBucketWheelExcavatorActive) {
+        startBucketWheelExcavator();
+    } else {
+        stopBucketWheelExcavator();
+    }
+}
+
+// Start the Bucket-Wheel Excavator
+function startBucketWheelExcavator() {
+    bucketWheelExcavatorInterval = setInterval(() => {
+        if (potatoCount >= 1) {
+            potatoCount -= 1;
+            nutrients += 2;
+            ice += 2;
+            updateDisplay();
+        } else {
+            showToast("Resource Shortage", "Not enough potatoes to run the Martian Bucket-Wheel Excavator!", 'setback');
+            toggleBucketWheelExcavator(); // Turn off if resources are insufficient
+        }
+    }, 1000); // Run every second
+}
+
+// Stop the Bucket-Wheel Excavator
+function stopBucketWheelExcavator() {
+    clearInterval(bucketWheelExcavatorInterval);
+}
+
 function initializeActionCards() {
     const clickableCards = document.querySelectorAll('.action-card.clickable');
     clickableCards.forEach(card => {
         card.addEventListener('click', () => {
             if (!card.hasAttribute('disabled')) {
                 const actionName = card.id.replace('-container', '');
-                switch (actionName) {
-                    case 'exploration':
-                        exploreMarsSurface();
-                        break;
-                    case 'ice-melting':
-                        meltIce();
-                        break;
-                    // Add more cases for future clickable action cards
-                }
+                handleActionCardClick(actionName);
             }
         });
     });
+}
+
+function handleActionCardClick(actionName) {
+    switch (actionName) {
+        case 'exploration':
+            exploreMarsSurface();
+            break;
+        case 'ice-melting':
+            meltIce();
+            break;
+        // Add more cases for future clickable action cards
+        default:
+            console.warn(`No handler for action card: ${actionName}`);
+    }
 }

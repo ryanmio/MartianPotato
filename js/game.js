@@ -481,10 +481,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const iceMeltingContainer = document.getElementById('ice-melting-container');
     const iceCube = document.getElementById('ice-cube');
     
-    // Remove these lines as they're trying to remove non-existent listeners
-    // iceMeltingContainer.removeEventListener('click', meltIce);
-    // iceCube.removeEventListener('click', meltIce);
-    
     // Add new event listener only to the ice cube
     iceCube.addEventListener('click', meltIce);
 
@@ -500,14 +496,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (subsurfaceAquiferTapperToggle) {
         subsurfaceAquiferTapperToggle.addEventListener('change', toggleSubsurfaceAquiferTapper);
     }
+
+    const bucketWheelExcavatorToggle = document.getElementById('bucket-wheel-excavator-toggle');
+    if (bucketWheelExcavatorToggle) {
+        bucketWheelExcavatorToggle.addEventListener('change', toggleBucketWheelExcavator);
+    }
 });
 
 // Handle manual ice melting process
 function meltIce(event) {
     event.stopPropagation(); // Prevent event bubbling
-    
-    // Remove this check as it's redundant with the event listener being on iceCube
-    // if (event.currentTarget.id !== 'ice-cube') return;
     
     if (!isManualIceMeltingUnlocked) return;
     

@@ -806,7 +806,7 @@ button:hover, button:disabled {
     padding-top: 1px;
     position: relative;
     vertical-align: middle;
-    margin: 10px auto; /* Center the switch horizontally */
+    margin: 4px auto; /* Center the switch horizontally */
     color: #297597;
     box-shadow: 0 0 5px rgba(255,255,255,.4), 
                 0 2px 1px -1px rgba(255,255,255,.7) inset, 
@@ -897,13 +897,12 @@ button:hover, button:disabled {
     transition: 0.1s;
 }
 
-/* Adjust the action card styles to accommodate the toggle switch */
-#subsurface-aquifer-tapper-container {
+/* Replace the separate styles with a combined one */
+.toggle-action-card {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Center content vertically */
-    height: 100%; /* Ensure full height */
-    padding: 15px; /* Add padding all around */
-    text-align: center; /* Center text content */
+    justify-content: center;
+    height: 100%;
+    text-align: center;
 }

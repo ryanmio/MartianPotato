@@ -517,7 +517,7 @@ button:hover, button:disabled {
 
 .action-card {
     width: 200px;
-    height: 100px;
+    height: 100px; /* Set a fixed height for all action cards */
     margin: 20px 0;
     display: flex;
     flex-direction: column;
@@ -806,7 +806,7 @@ button:hover, button:disabled {
     padding-top: 1px;
     position: relative;
     vertical-align: middle;
-    margin: 4px auto; /* Center the switch horizontally */
+    margin: 14px auto; /* Center the switch horizontally */
     color: #297597;
     box-shadow: 0 0 5px rgba(255,255,255,.4), 
                 0 2px 1px -1px rgba(255,255,255,.7) inset, 
@@ -903,7 +903,6 @@ button:hover, button:disabled {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
     text-align: center;
 }
 

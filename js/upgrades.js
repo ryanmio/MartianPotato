@@ -18,6 +18,11 @@ let autoHarvesters = [];
 let achievementQueue = [];
 let isAchievementModalOpen = false;
 
+// Subsurface Aquifer Tapper Variables
+let isSubsurfaceAquiferTapperUnlocked = false;
+let isSubsurfaceAquiferTapperActive = false;
+let subsurfaceAquiferTapperInterval = null;
+
 // Upgrade Definitions
 const upgrades = [
     { 
@@ -562,6 +567,24 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', updateArrows);
 
     updateArrows(); // Initial check
+
+    const iceMeltingContainer = document.getElementById('ice-melting-container');
+    if (iceMeltingContainer) {
+        iceMeltingContainer.style.display = 'none'; // Hide by default
+    }
+
+    const iceCube = document.getElementById('ice-cube');
+    iceCube.addEventListener('click', meltIce);
+
+    const subsurfaceAquiferTapperContainer = document.getElementById('subsurface-aquifer-tapper-container');
+    if (subsurfaceAquiferTapperContainer) {
+        subsurfaceAquiferTapperContainer.style.display = 'none'; // Hide by default
+    }
+
+    const subsurfaceAquiferTapperToggle = document.getElementById('subsurface-aquifer-tapper-toggle');
+    if (subsurfaceAquiferTapperToggle) {
+        subsurfaceAquiferTapperToggle.addEventListener('change', toggleSubsurfaceAquiferTapper);
+    }
 });
 
 // Handle the manual ice melting process
@@ -592,17 +615,6 @@ function unlockManualIceMelting() {
         iceMeltingContainer.style.display = 'block';
     }
 }
-
-// Initialize the ice melting mechanism when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', () => {
-    const iceMeltingContainer = document.getElementById('ice-melting-container');
-    if (iceMeltingContainer) {
-        iceMeltingContainer.style.display = 'none'; // Hide by default
-    }
-
-    const iceCube = document.getElementById('ice-cube');
-    iceCube.addEventListener('click', meltIce);
-});
 
 // Queue an achievement for display
 function queueAchievement(title, message, metaMessage = '', imageName = '') {
@@ -687,11 +699,7 @@ function resumeGame() {
     buttons.forEach(button => button.disabled = false);
 }
 
-// Add these new variables and functions
-let isSubsurfaceAquiferTapperUnlocked = false;
-let isSubsurfaceAquiferTapperActive = false;
-let subsurfaceAquiferTapperInterval = null;
-
+// Unlock the Subsurface Aquifer Tapper
 function unlockSubsurfaceAquiferTapper() {
     isSubsurfaceAquiferTapperUnlocked = true;
     const tapperContainer = document.getElementById('subsurface-aquifer-tapper-container');
@@ -700,6 +708,7 @@ function unlockSubsurfaceAquiferTapper() {
     }
 }
 
+// Toggle the Subsurface Aquifer Tapper
 function toggleSubsurfaceAquiferTapper() {
     if (!isSubsurfaceAquiferTapperUnlocked) return;
 
@@ -716,6 +725,7 @@ function toggleSubsurfaceAquiferTapper() {
     }
 }
 
+// Start the Subsurface Aquifer Tapper
 function startSubsurfaceAquiferTapper() {
     subsurfaceAquiferTapperInterval = setInterval(() => {
         if (potatoCount >= 1 && ice >= 2) {
@@ -730,21 +740,7 @@ function startSubsurfaceAquiferTapper() {
     }, 1000); // Run every second
 }
 
+// Stop the Subsurface Aquifer Tapper
 function stopSubsurfaceAquiferTapper() {
     clearInterval(subsurfaceAquiferTapperInterval);
 }
-
-// Modify the existing DOMContentLoaded event listener
-document.addEventListener('DOMContentLoaded', () => {
-    // ... existing code ...
-
-    const subsurfaceAquiferTapperContainer = document.getElementById('subsurface-aquifer-tapper-container');
-    if (subsurfaceAquiferTapperContainer) {
-        subsurfaceAquiferTapperContainer.style.display = 'none'; // Hide by default
-    }
-
-    const subsurfaceAquiferTapperToggle = document.getElementById('subsurface-aquifer-tapper-toggle');
-    if (subsurfaceAquiferTapperToggle) {
-        subsurfaceAquiferTapperToggle.addEventListener('change', toggleSubsurfaceAquiferTapper);
-    }
-});

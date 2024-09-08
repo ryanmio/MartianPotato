@@ -905,7 +905,3 @@ button:hover, button:disabled {
     padding: 15px; /* Add padding all around */
     text-align: center; /* Center text content */
 }
-
-#subsurface-aquifer-tapper-container h3 {
-    /* Removed margin-bottom */
-}

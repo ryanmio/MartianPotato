@@ -197,8 +197,8 @@ const upgrades = [
             unlockSubsurfaceAquiferTapper();
         },
         icon: "💧",
-        description: "Accesses underground water reserves. Consumes 1 potato and 2 ice per second to produce 2 water per second when active.",
-        metaMessage: "Automated resource conversion. This upgrade introduces the concept of continuous resource transformation, requiring players to balance multiple resources.",
+        description: "Accesses underground water reserves. Consumes 1 potato per second to produce 2 water per second when active.",
+        metaMessage: "Automated resource conversion. This upgrade introduces the concept of continuous resource transformation, requiring players to balance potato production and water generation.",
         weight: 8,
         category: "exploration"
     },
@@ -730,13 +730,12 @@ function toggleSubsurfaceAquiferTapper() {
 // Start the Subsurface Aquifer Tapper
 function startSubsurfaceAquiferTapper() {
     subsurfaceAquiferTapperInterval = setInterval(() => {
-        if (potatoCount >= 1 && ice >= 2) {
+        if (potatoCount >= 1) {
             potatoCount -= 1;
-            ice -= 2;
             water += 2;
             updateDisplay();
         } else {
-            showToast("Resource Shortage", "Not enough resources to run the Subsurface Aquifer Tapper!", 'setback');
+            showToast("Resource Shortage", "Not enough potatoes to run the Subsurface Aquifer Tapper!", 'setback');
             toggleSubsurfaceAquiferTapper(); // Turn off if resources are insufficient
         }
     }, 1000); // Run every second

@@ -376,7 +376,7 @@ function updateDebugInfo(currentTime, updateTime) {
         const resourceGeneration = {
             water: ((water - lastResourceValues.water) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2),
             nutrients: ((nutrients - lastResourceValues.nutrients) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2),
-            ice: ((ice - lastResourceValues.ice) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2)
+            potatoes: ((potatoCount - lastResourceValues.potatoes) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2)
         };
         
         const updateElement = (id, text) => {
@@ -389,13 +389,13 @@ function updateDebugInfo(currentTime, updateTime) {
         updateElement('memory-usage', `Memory Usage: ${memoryUsage} MB`);
         updateElement('potato-count-debug', `Potato Count: ${potatoCount.toFixed(2)}`);
         updateElement('active-potatoes', `Active Potatoes: ${activePotatoes}`);
-        updateElement('resource-usage', `Resource Usage: Water (${water.toFixed(2)}), Nutrients (${nutrients.toFixed(2)}), Ice (${ice.toFixed(2)})`);
-        updateElement('resource-generation', `Resource Generation: Water (${resourceGeneration.water}/s), Nutrients (${resourceGeneration.nutrients}/s), Ice (${resourceGeneration.ice}/s)`);
+        updateElement('resource-usage', `Resource Usage: Water (${water.toFixed(2)}), Nutrients (${nutrients.toFixed(2)}), Potatoes (${potatoCount.toFixed(2)})`);
+        updateElement('resource-generation', `Resource Generation: Water (${resourceGeneration.water}/s), Nutrients (${resourceGeneration.nutrients}/s), Potatoes (${resourceGeneration.potatoes}/s)`);
         updateElement('last-action', `Last Action: ${lastAction}`);
         updateElement('planting-delay', `Planting Delay: ${plantingDelay}ms`);
         
         lastDebugUpdateTime = currentTime;
-        lastResourceValues = { water, nutrients, ice };
+        lastResourceValues = { water, nutrients, potatoes: potatoCount };
     } catch (error) {
         console.error('Error updating debug info:', error);
     }

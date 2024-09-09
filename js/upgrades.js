@@ -233,6 +233,17 @@ const upgrades = [
         metaMessage: "Thinking beyond Mars. This upgrade expands the game's scope, showing how advanced technology can turn previously unreachable resources into viable options.",
         weight: 15,
         category: "exploration"
+    },
+    {
+        name: "Ice Melting Basin",
+        cost: 500,
+        effect: () => { unlockIceMeltingBasin(); },
+        icon: "🏺",
+        description: "A large basin that can melt ice more efficiently. Consumes 8 ice to produce 1 water per second for 8 seconds.",
+        metaMessage: "Batch processing. This upgrade introduces the concept of delayed gratification and resource management over time.",
+        assetName: "ice_melting_basin.webp",
+        weight: 8,
+        category: "harvesting"
     }
 ];
 

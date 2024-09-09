@@ -39,6 +39,11 @@ let iceEfficiency = 1;
 let waterMeltingClicks = 0;
 let isManualIceMeltingUnlocked = false;
 
+// Ice Melting Basin Variables
+let isIceMeltingBasinUnlocked = false;
+let iceMeltingBasinTimer = 0;
+let iceMeltingBasinActive = false;
+
 // Large Data Structures
 let potatoField = new Array(MAX_FIELD_SIZE).fill(null);
 
@@ -46,7 +51,7 @@ let potatoField = new Array(MAX_FIELD_SIZE).fill(null);
 const achievements = {
     firstPotato: false,
     potatoCentury: false,
-    // Add more achievements here as needed
+    iceMeltingBasinMaster: false,
 };
 
 // Debug Variables
@@ -78,6 +83,15 @@ function updateResources(currentTime) {
         nutrients = Math.max(0, nutrients);
         ice = Math.max(0, ice);
         potatoCount = Math.floor(potatoCount);
+
+        if (iceMeltingBasinActive) {
+            water++;
+            iceMeltingBasinTimer--;
+            if (iceMeltingBasinTimer <= 0) {
+                iceMeltingBasinActive = false;
+            }
+            updateIceMeltingBasinButton();
+        }
 
         lastUpdateTime = currentTime;
         return true;
@@ -184,6 +198,15 @@ function checkAchievements() {
             "potato_century.webp"
         );
     }
+    if (!achievements.iceMeltingBasinMaster && iceMeltingBasinTimer === 1) {
+        achievements.iceMeltingBasinMaster = true;
+        queueAchievement(
+            "Ice Melting Basin Master",
+            "You've mastered the art of efficient ice melting!",
+            "Efficiency is key on Mars. You're turning ice into a steady stream of water.",
+            "ice_melting_basin_master.webp"
+        );
+    }
     // Add more achievement checks here as needed
 }
 
@@ -229,6 +252,7 @@ function updateDisplay() {
     updatePotatoField();
     updateTechTree();
     updateIceMeltingProgress();
+    updateIceMeltingBasinButton();
 }
 
 // Update the explore button state and cooldown display
@@ -495,6 +519,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (bucketWheelExcavatorToggle) {
         bucketWheelExcavatorToggle.addEventListener('change', toggleBucketWheelExcavator);
     }
+
+    const fillBasinButton = document.getElementById('fill-basin-button');
+    if (fillBasinButton) {
+        fillBasinButton.addEventListener('click', fillIceMeltingBasin);
+    }
 });
 
 // Handle manual ice melting process
@@ -537,5 +566,43 @@ function updateIceMeltingProgress() {
     const progressElement = document.getElementById('ice-melting-progress');
     if (progressElement) {
         progressElement.textContent = `Clicks: ${waterMeltingClicks} / ${CLICKS_PER_WATER}`;
+    }
+}
+
+// Unlock the Ice Melting Basin
+function unlockIceMeltingBasin() {
+    isIceMeltingBasinUnlocked = true;
+    const basinContainer = document.getElementById('ice-melting-basin-container');
+    if (basinContainer) {
+        basinContainer.style.display = 'block';
+    }
+}
+
+// Handle filling the Ice Melting Basin
+function fillIceMeltingBasin() {
+    if (!isIceMeltingBasinUnlocked || iceMeltingBasinActive) return;
+    
+    if (ice >= 8) {
+        ice -= 8;
+        iceMeltingBasinActive = true;
+        iceMeltingBasinTimer = 8;
+        updateDisplay();
+        updateIceMeltingBasinButton();
+    } else {
+        showToast("Not Enough Ice", "You need at least 8 ice to fill the basin!", 'setback');
+    }
+}
+
+// Update the Ice Melting Basin button
+function updateIceMeltingBasinButton() {
+    const basinButton = document.getElementById('fill-basin-button');
+    if (basinButton) {
+        if (iceMeltingBasinActive) {
+            basinButton.disabled = true;
+            basinButton.textContent = `Melting (${iceMeltingBasinTimer}s)`;
+        } else {
+            basinButton.disabled = false;
+            basinButton.textContent = 'Fill Basin';
+        }
     }
 }

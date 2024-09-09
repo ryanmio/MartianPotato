@@ -789,6 +789,24 @@ function stopBucketWheelExcavator() {
     clearInterval(bucketWheelExcavatorInterval);
 }
 
+// Add this to the handleActionCardClick function
+function handleActionCardClick(actionName) {
+    switch (actionName) {
+        case 'exploration':
+            exploreMarsSurface();
+            break;
+        case 'ice-melting':
+            meltIce();
+            break;
+        case 'ice-melting-basin':
+            fillIceMeltingBasin();
+            break;
+        // Add more cases for future clickable action cards
+        default:
+            console.warn(`No handler for action card: ${actionName}`);
+    }
+}
+
 function initializeActionCards() {
     const clickableCards = document.querySelectorAll('.action-card.clickable');
     clickableCards.forEach(card => {
@@ -808,6 +826,9 @@ function handleActionCardClick(actionName) {
             break;
         case 'ice-melting':
             meltIce();
+            break;
+        case 'ice-melting-basin':
+            fillIceMeltingBasin();
             break;
         // Add more cases for future clickable action cards
         default:

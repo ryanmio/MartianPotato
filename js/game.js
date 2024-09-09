@@ -520,9 +520,13 @@ document.addEventListener('DOMContentLoaded', () => {
         bucketWheelExcavatorToggle.addEventListener('change', toggleBucketWheelExcavator);
     }
 
-    const fillBasinButton = document.getElementById('fill-basin-button');
-    if (fillBasinButton) {
-        fillBasinButton.addEventListener('click', fillIceMeltingBasin);
+    const iceMeltingBasinContainer = document.getElementById('ice-melting-basin-container');
+    if (iceMeltingBasinContainer) {
+        iceMeltingBasinContainer.addEventListener('click', () => {
+            if (!iceMeltingBasinContainer.hasAttribute('disabled')) {
+                fillIceMeltingBasin();
+            }
+        });
     }
 });
 
@@ -576,6 +580,7 @@ function unlockIceMeltingBasin() {
     if (basinContainer) {
         basinContainer.style.display = 'block';
     }
+    updateIceMeltingBasinButton();
 }
 
 // Handle filling the Ice Melting Basin
@@ -595,14 +600,15 @@ function fillIceMeltingBasin() {
 
 // Update the Ice Melting Basin button
 function updateIceMeltingBasinButton() {
-    const basinButton = document.getElementById('fill-basin-button');
-    if (basinButton) {
+    const basinContainer = document.getElementById('ice-melting-basin-container');
+    const cooldownElement = document.getElementById('basin-cooldown');
+    if (basinContainer && cooldownElement) {
         if (iceMeltingBasinActive) {
-            basinButton.disabled = true;
-            basinButton.textContent = `Melting (${iceMeltingBasinTimer}s)`;
+            basinContainer.setAttribute('disabled', 'true');
+            cooldownElement.textContent = `(${iceMeltingBasinTimer}s)`;
         } else {
-            basinButton.disabled = false;
-            basinButton.textContent = 'Fill Basin';
+            basinContainer.removeAttribute('disabled');
+            cooldownElement.textContent = 'Ready';
         }
     }
 }

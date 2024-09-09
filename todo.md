@@ -9,6 +9,12 @@ TODO:
 - [x] Update ice melting to consume ice
 - [ ] Implement Ice Mining
 - [ ] Implement Automated Ice Melting
+    - [ ] Ice Melting Basin
+        - Asset: ice_melting_basin.webp
+    - [ ] Nuclear Ice Melter
+        - Asset: nuclear_ice_melter.webp
+    - [ ] Conveyor Belt Melting System
+        - Asset: conveyor_belt_melting_system.webp
 - [x] Change Soil Nutrients to just nutrients
     - [x] add nutrient gathering upgrades
 - [x] Add exploration upgrades for water extraction:

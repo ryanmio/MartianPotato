@@ -3,10 +3,10 @@ TODO:
     - [x] Achievement modal instead of toast
     - [ ] Add image files for achievements:
         - [x] Use potato emoji (🥔) for first_potato achievement
-        - [ ] potato_century.webp
+        - [x] potato_century.webp
 - [x] Implement better click effect on Plant Potato button
 - [x] Implement Ice as a resource to replace Oxygen
-- [ ] Update ice melting to consume ice
+- [x] Update ice melting to consume ice
 - [ ] Implement Ice Mining
 - [x] Change Soil Nutrients to just nutrients
     - [ ] add nutrient gathering upgrades

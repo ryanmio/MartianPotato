@@ -577,9 +577,6 @@ document.addEventListener('DOMContentLoaded', () => {
         iceMeltingContainer.style.display = 'none'; // Hide by default
     }
 
-    const iceCube = document.getElementById('ice-cube');
-    iceCube.addEventListener('click', meltIce);
-
     const subsurfaceAquiferTapperContainer = document.getElementById('subsurface-aquifer-tapper-container');
     if (subsurfaceAquiferTapperContainer) {
         subsurfaceAquiferTapperContainer.style.display = 'none'; // Hide by default
@@ -597,26 +594,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initializeActionCards();
 });
-
-// Handle the manual ice melting process
-function meltIce() {
-    if (!isManualIceMeltingUnlocked) return;
-    
-    if (ice >= 1) {  // Check if there's enough ice
-        waterMeltingClicks++;
-        if (waterMeltingClicks >= CLICKS_PER_WATER) {
-            ice--;  // Consume 1 ice
-            water++;
-            waterMeltingClicks = 0;
-            showToast("Water Collected", "You've melted ice and collected 1 unit of water!", 'achievement');
-        }
-        updateIceMeltingProgress();
-        updateDisplay();
-        updateLastAction("Melted ice");
-    } else {
-        showToast("Not Enough Ice", "You need at least 1 ice to melt!", 'setback');
-    }
-}
 
 // Unlock the manual ice melting feature
 function unlockManualIceMelting() {

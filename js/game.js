@@ -478,12 +478,6 @@ document.addEventListener('DOMContentLoaded', () => {
             debugInfo.classList.contains('minimized') ? 'Maximize' : 'Minimize');
     });
 
-    const iceMeltingContainer = document.getElementById('ice-melting-container');
-    const iceCube = document.getElementById('ice-cube');
-    
-    // Add new event listener only to the ice cube
-    iceCube.addEventListener('click', meltIce);
-
     const exploreCard = document.getElementById('exploration-container');
     exploreCard.addEventListener('click', () => {
         if (!exploreCard.hasAttribute('disabled')) {
@@ -505,21 +499,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Handle manual ice melting process
 function meltIce(event) {
-    event.stopPropagation(); // Prevent event bubbling
+    if (event && event.stopPropagation) {
+        event.stopPropagation(); // Prevent event bubbling only if event exists
+    }
     
     if (!isManualIceMeltingUnlocked) return;
     
-    waterMeltingClicks++;
-    updateIceMeltingProgress();
-    
-    if (waterMeltingClicks >= CLICKS_PER_WATER) {
-        water++;
-        ice--; // Ensure we're consuming ice when water is produced
-        waterMeltingClicks = 0;
-        showToast("Water Collected", "You've melted ice and collected 1 unit of water!", 'achievement');
+    if (ice >= 1) {  // Check if there's enough ice
+        waterMeltingClicks++;
+        updateIceMeltingProgress();
+        
+        if (waterMeltingClicks >= CLICKS_PER_WATER) {
+            ice--;  // Consume 1 ice
+            water++;
+            waterMeltingClicks = 0;
+            showToast("Water Collected", "You've melted ice and collected 1 unit of water!", 'achievement');
+        }
+        updateDisplay();
+        updateLastAction("Melted ice");
+    } else {
+        showToast("Not Enough Ice", "You need at least 1 ice to melt!", 'setback');
     }
-    updateDisplay();
-    updateLastAction("Melted ice");
 }
 
 // Unlock the manual ice melting feature

@@ -8,8 +8,9 @@ TODO:
 - [x] Implement Ice as a resource to replace Oxygen
 - [x] Update ice melting to consume ice
 - [ ] Implement Ice Mining
+- [ ] Implement Automated Ice Melting
 - [x] Change Soil Nutrients to just nutrients
-    - [ ] add nutrient gathering upgrades
+    - [x] add nutrient gathering upgrades
 - [x] Add exploration upgrades for water extraction:
     - [x] Thermal Drill
     - [x] Subsurface Aquifer Tapper
@@ -18,6 +19,9 @@ TODO:
 - [ ] Implement upgrade to increase plots from 8 to 16 and possibly more
 - [ ] Implement "tutorial" hover effect to highlight the initial actions the user should take
 - [ ] Add exploration cards for remaining exploration upgrades
+    - [x] Subsurface Aquifer Tapper
+    - [ ] Martian Polar Cap Extractor
+    - [ ] Cometary Ice Harvester
 - [ ] Implement Red Potatoes
 - [ ] Implement random events
 - [ ] Balance upgrade costs and effects

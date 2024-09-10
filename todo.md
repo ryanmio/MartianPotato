@@ -9,7 +9,7 @@ TODO:
 - [x] Update ice melting to consume ice
 - [ ] Implement Ice Mining
 - [ ] Implement Automated Ice Melting
-    - [ ] Ice Melting Basin
+    - [x] Ice Melting Basin
         - Asset: ice_melting_basin.webp
     - [ ] Nuclear Ice Melter
         - Asset: nuclear_ice_melter.webp

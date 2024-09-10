@@ -236,13 +236,13 @@ const upgrades = [
     },
     {
         name: "Ice Melting Basin",
-        cost: 500,
+        cost: 100,
         effect: () => { unlockIceMeltingBasin(); },
-        icon: "🏺",
+        icon: "🛁",
         description: "A large basin that can melt ice more efficiently. Consumes 8 ice to produce 1 water per second for 8 seconds.",
         metaMessage: "Batch processing. This upgrade introduces the concept of delayed gratification and resource management over time.",
         assetName: "ice_melting_basin.webp",
-        weight: 8,
+        weight: 5,
         category: "harvesting"
     }
 ];

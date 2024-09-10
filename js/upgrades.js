@@ -244,6 +244,20 @@ const upgrades = [
         assetName: "ice_melting_basin.webp",
         weight: 5,
         category: "harvesting"
+    },
+    {
+        name: "Nuclear Ice Melter",
+        cost: 5000,
+        effect: () => { 
+            console.log("Nuclear Ice Melter upgrade purchased");
+            unlockNuclearIceMelter();
+        },
+        icon: "☢️",
+        description: "A powerful nuclear-powered ice melter. Consumes 100 potatoes to activate, then melts 5 ice per second to produce 5 water per second.",
+        metaMessage: "High-energy solution. This upgrade introduces the concept of significant initial investment for continuous high output.",
+        assetName: "nuclear_ice_melter.webp",
+        weight: 10,
+        category: "harvesting"
     }
 ];
 
@@ -603,6 +617,17 @@ document.addEventListener('DOMContentLoaded', () => {
         bucketWheelExcavatorToggle.addEventListener('change', toggleBucketWheelExcavator);
     }
 
+    const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
+    if (nuclearIceMelterToggle) {
+        console.log("Nuclear Ice Melter toggle found");
+        nuclearIceMelterToggle.addEventListener('change', () => {
+            console.log("Nuclear Ice Melter toggle changed");
+            toggleNuclearIceMelter();
+        });
+    } else {
+        console.log("Nuclear Ice Melter toggle not found");
+    }
+
     initializeActionCards();
 });
 
@@ -789,6 +814,127 @@ function stopBucketWheelExcavator() {
     clearInterval(bucketWheelExcavatorInterval);
 }
 
+// Unlock the Nuclear Ice Melter
+function unlockNuclearIceMelter() {
+    console.log("Unlocking Nuclear Ice Melter");
+    isNuclearIceMelterUnlocked = true;
+    const melterContainer = document.getElementById('nuclear-ice-melter-container');
+    if (melterContainer) {
+        melterContainer.style.display = 'block';
+        console.log("Nuclear Ice Melter container displayed");
+    }
+
+    const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
+    if (nuclearIceMelterToggle) {
+        console.log("Adding event listener to Nuclear Ice Melter toggle");
+        nuclearIceMelterToggle.addEventListener('change', toggleNuclearIceMelter);
+    } else {
+        console.log("Nuclear Ice Melter toggle not found during unlock");
+    }
+}
+
+// Toggle the Nuclear Ice Melter
+function toggleNuclearIceMelter() {
+    console.log("toggleNuclearIceMelter called");
+    if (!isNuclearIceMelterUnlocked) {
+        console.log("Nuclear Ice Melter is not unlocked");
+        return;
+    }
+
+    console.log("Current state:", isNuclearIceMelterActive);
+    console.log("Current potato count:", potatoCount);
+
+    if (!isNuclearIceMelterActive && potatoCount >= 100) {
+        potatoCount -= 100;
+        isNuclearIceMelterActive = true;
+        console.log("Activating Nuclear Ice Melter");
+        startNuclearIceMelter();
+    } else if (isNuclearIceMelterActive) {
+        isNuclearIceMelterActive = false;
+        console.log("Deactivating Nuclear Ice Melter");
+        stopNuclearIceMelter();
+    } else {
+        console.log("Not enough potatoes to activate");
+        showToast("Not Enough Potatoes", "You need 100 potatoes to activate the Nuclear Ice Melter!", 'setback');
+    }
+
+    const toggleSwitch = document.getElementById('nuclear-ice-melter-toggle');
+    if (toggleSwitch) {
+        toggleSwitch.checked = isNuclearIceMelterActive;
+        console.log("Toggle switch checked state:", toggleSwitch.checked);
+    }
+
+    updateDisplay();
+}
+
+// Start the Nuclear Ice Melter
+function startNuclearIceMelter() {
+    nuclearIceMelterInterval = setInterval(() => {
+        if (ice >= 5) {
+            ice -= 5;
+            water += 5;
+            updateDisplay();
+        } else {
+            showToast("Resource Shortage", "Not enough ice to run the Nuclear Ice Melter!", 'setback');
+            toggleNuclearIceMelter(); // Turn off if resources are insufficient
+        }
+    }, 1000); // Run every second
+}
+
+// Stop the Nuclear Ice Melter
+function stopNuclearIceMelter() {
+    clearInterval(nuclearIceMelterInterval);
+}
+
+// Unlock the Ice Melting Basin
+function unlockIceMeltingBasin() {
+    const iceMeltingBasinContainer = document.getElementById('ice-melting-basin-container');
+    if (iceMeltingBasinContainer) {
+        iceMeltingBasinContainer.style.display = 'block';
+    }
+}
+
+// Handle the Ice Melting Basin action card click
+function handleIceMeltingBasinClick() {
+    if (iceMeltingBasinCooldown > 0) {
+        showToast("Cooldown", "The Ice Melting Basin is on cooldown. Please wait.", 'setback');
+        return;
+    }
+
+    if (ice < 8) {
+        showToast("Resource Shortage", "Not enough ice to fill the Ice Melting Basin!", 'setback');
+        return;
+    }
+
+    ice -= 8;
+    water += 1;
+    iceMeltingBasinCooldown = 8;
+    updateDisplay();
+    updateIceMeltingBasinButton();
+
+    // Queue an achievement for using the Ice Melting Basin
+    queueAchievement(
+        "Ice Melting Basin Master",
+        "You've successfully filled and used the Ice Melting Basin!",
+        "Efficient resource management. This achievement rewards your ability to plan and execute resource use effectively.",
+        "ice_melting_basin_master.webp"
+    );
+}
+
+// Update the Ice Melting Basin button
+function updateIceMeltingBasinButton() {
+    const iceMeltingBasinButton = document.getElementById('ice-melting-basin-button');
+    if (iceMeltingBasinButton) {
+        if (iceMeltingBasinCooldown > 0) {
+            iceMeltingBasinButton.disabled = true;
+            iceMeltingBasinButton.textContent = `Cooldown: ${iceMeltingBasinCooldown}s`;
+        } else {
+            iceMeltingBasinButton.disabled = false;
+            iceMeltingBasinButton.textContent = 'Fill Ice Melting Basin';
+        }
+    }
+}
+
 // Add this to the handleActionCardClick function
 function handleActionCardClick(actionName) {
     switch (actionName) {
@@ -799,7 +945,10 @@ function handleActionCardClick(actionName) {
             meltIce();
             break;
         case 'ice-melting-basin':
-            fillIceMeltingBasin();
+            handleIceMeltingBasinClick();
+            break;
+        case 'nuclear-ice-melter':
+            toggleNuclearIceMelter();
             break;
         // Add more cases for future clickable action cards
         default:
@@ -828,7 +977,10 @@ function handleActionCardClick(actionName) {
             meltIce();
             break;
         case 'ice-melting-basin':
-            fillIceMeltingBasin();
+            handleIceMeltingBasinClick();
+            break;
+        case 'nuclear-ice-melter':
+            toggleNuclearIceMelter();
             break;
         // Add more cases for future clickable action cards
         default:

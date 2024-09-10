@@ -44,6 +44,11 @@ let isIceMeltingBasinUnlocked = false;
 let iceMeltingBasinTimer = 0;
 let iceMeltingBasinActive = false;
 
+// Nuclear Ice Melter Variables
+let isNuclearIceMelterUnlocked = false;
+let isNuclearIceMelterActive = false;
+let nuclearIceMelterInterval = null;
+
 // Large Data Structures
 let potatoField = new Array(MAX_FIELD_SIZE).fill(null);
 
@@ -52,6 +57,7 @@ const achievements = {
     firstPotato: false,
     potatoCentury: false,
     iceMeltingBasinMaster: false,
+    nuclearIceMelterMaster: false,
 };
 
 // Debug Variables
@@ -207,6 +213,15 @@ function checkAchievements() {
             "ice_melting_basin_master.webp"
         );
     }
+    if (!achievements.nuclearIceMelterMaster && isNuclearIceMelterActive) {
+        achievements.nuclearIceMelterMaster = true;
+        queueAchievement(
+            "Nuclear Ice Melter Master",
+            "You've harnessed the power of the atom to melt Martian ice!",
+            "High-energy solutions bring high rewards. You're now operating at an industrial scale.",
+            "nuclear_ice_melter_master.webp"
+        );
+    }
     // Add more achievement checks here as needed
 }
 
@@ -246,6 +261,11 @@ function updateDisplay() {
             autoplantersElement.textContent = newText;
             autoplantersElement.style.display = autoplanters.length > 0 ? 'block' : 'none';
         }
+    }
+
+    const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
+    if (nuclearIceMelterToggle) {
+        nuclearIceMelterToggle.checked = isNuclearIceMelterActive;
     }
 
     updateExploreButton();
@@ -528,6 +548,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
+    if (nuclearIceMelterToggle) {
+        nuclearIceMelterToggle.addEventListener('change', (event) => {
+            console.log("Nuclear Ice Melter toggle changed, new state:", event.target.checked);
+            toggleNuclearIceMelter();
+        });
+    }
 });
 
 // Handle manual ice melting process
@@ -611,4 +639,84 @@ function updateIceMeltingBasinButton() {
             cooldownElement.textContent = 'Ready';
         }
     }
+}
+
+// Unlock the Nuclear Ice Melter
+function unlockNuclearIceMelter() {
+    console.log("Unlocking Nuclear Ice Melter");
+    isNuclearIceMelterUnlocked = true;
+    const melterContainer = document.getElementById('nuclear-ice-melter-container');
+    if (melterContainer) {
+        melterContainer.style.display = 'block';
+        console.log("Nuclear Ice Melter container displayed");
+    }
+
+    const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
+    if (nuclearIceMelterToggle) {
+        console.log("Adding event listener to Nuclear Ice Melter toggle");
+        nuclearIceMelterToggle.addEventListener('change', (event) => {
+            console.log("Nuclear Ice Melter toggle changed, new state:", event.target.checked);
+            toggleNuclearIceMelter();
+        });
+    } else {
+        console.log("Nuclear Ice Melter toggle not found during unlock");
+    }
+}
+
+// Toggle the Nuclear Ice Melter
+function toggleNuclearIceMelter() {
+    console.log("toggleNuclearIceMelter called");
+    if (!isNuclearIceMelterUnlocked) {
+        console.log("Nuclear Ice Melter is not unlocked");
+        return;
+    }
+
+    console.log("Current state:", isNuclearIceMelterActive);
+    console.log("Current potato count:", potatoCount);
+
+    const toggleSwitch = document.getElementById('nuclear-ice-melter-toggle');
+
+    if (!isNuclearIceMelterActive && potatoCount >= 100) {
+        potatoCount -= 100;
+        isNuclearIceMelterActive = true;
+        console.log("Activating Nuclear Ice Melter");
+        startNuclearIceMelter();
+        if (toggleSwitch) toggleSwitch.checked = true;
+    } else if (isNuclearIceMelterActive) {
+        isNuclearIceMelterActive = false;
+        console.log("Deactivating Nuclear Ice Melter");
+        stopNuclearIceMelter();
+        if (toggleSwitch) toggleSwitch.checked = false;
+    } else {
+        console.log("Not enough potatoes to activate");
+        showToast("Not Enough Potatoes", "You need 100 potatoes to activate the Nuclear Ice Melter!", 'setback');
+        if (toggleSwitch) toggleSwitch.checked = false;
+    }
+
+    console.log("Toggle switch checked state:", toggleSwitch ? toggleSwitch.checked : "Toggle switch not found");
+    updateDisplay();
+}
+
+// Start the Nuclear Ice Melter
+function startNuclearIceMelter() {
+    console.log("Starting Nuclear Ice Melter");
+    nuclearIceMelterInterval = setInterval(() => {
+        if (ice >= 5) {
+            ice -= 5;
+            water += 5;
+            console.log("Nuclear Ice Melter: Converted 5 ice to 5 water");
+            updateDisplay();
+        } else {
+            console.log("Not enough ice to run the Nuclear Ice Melter");
+            showToast("Resource Shortage", "Not enough ice to run the Nuclear Ice Melter!", 'setback');
+            toggleNuclearIceMelter(); // Turn off if resources are insufficient
+        }
+    }, 1000); // Run every second
+}
+
+// Stop the Nuclear Ice Melter
+function stopNuclearIceMelter() {
+    console.log("Stopping Nuclear Ice Melter");
+    clearInterval(nuclearIceMelterInterval);
+    nuclearIceMelterInterval = null;
 }

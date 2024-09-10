@@ -605,7 +605,7 @@ function updateIceMeltingBasinButton() {
     if (basinContainer && cooldownElement) {
         if (iceMeltingBasinActive) {
             basinContainer.setAttribute('disabled', 'true');
-            cooldownElement.textContent = `(${iceMeltingBasinTimer}s)`;
+            cooldownElement.textContent = `Melting (${iceMeltingBasinTimer}s)`;
         } else {
             basinContainer.removeAttribute('disabled');
             cooldownElement.textContent = 'Ready';

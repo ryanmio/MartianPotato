@@ -552,7 +552,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
     if (nuclearIceMelterToggle) {
         console.log("Nuclear Ice Melter toggle found in game.js");
-        nuclearIceMelterToggle.addEventListener('change', toggleNuclearIceMelter);
+        nuclearIceMelterToggle.addEventListener('change', (event) => {
+            event.stopPropagation(); // Prevent event from bubbling up
+            toggleNuclearIceMelter();
+        });
     }
 });
 
@@ -651,7 +654,10 @@ function unlockNuclearIceMelter() {
     const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
     if (nuclearIceMelterToggle && !nuclearIceMelterToggle.dataset.listenerAdded) {
         console.log("Adding event listener to Nuclear Ice Melter toggle");
-        nuclearIceMelterToggle.addEventListener('change', toggleNuclearIceMelter);
+        nuclearIceMelterToggle.addEventListener('change', (event) => {
+            event.stopPropagation(); // Prevent event from bubbling up
+            toggleNuclearIceMelter();
+        });
         nuclearIceMelterToggle.dataset.listenerAdded = 'true';
     }
 }

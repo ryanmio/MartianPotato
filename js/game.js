@@ -551,9 +551,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
     if (nuclearIceMelterToggle) {
-        nuclearIceMelterToggle.addEventListener('change', (event) => {
-            toggleNuclearIceMelter();
-        });
+        console.log("Nuclear Ice Melter toggle found in game.js");
+        nuclearIceMelterToggle.addEventListener('change', toggleNuclearIceMelter);
     }
 });
 
@@ -642,6 +641,7 @@ function updateIceMeltingBasinButton() {
 
 // Unlock the Nuclear Ice Melter
 function unlockNuclearIceMelter() {
+    console.log("Unlocking Nuclear Ice Melter");
     isNuclearIceMelterUnlocked = true;
     const melterContainer = document.getElementById('nuclear-ice-melter-container');
     if (melterContainer) {
@@ -650,6 +650,7 @@ function unlockNuclearIceMelter() {
 
     const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
     if (nuclearIceMelterToggle && !nuclearIceMelterToggle.dataset.listenerAdded) {
+        console.log("Adding event listener to Nuclear Ice Melter toggle");
         nuclearIceMelterToggle.addEventListener('change', toggleNuclearIceMelter);
         nuclearIceMelterToggle.dataset.listenerAdded = 'true';
     }
@@ -657,35 +658,48 @@ function unlockNuclearIceMelter() {
 
 // Toggle the Nuclear Ice Melter
 function toggleNuclearIceMelter() {
-    if (!isNuclearIceMelterUnlocked) return;
+    console.log("Toggling Nuclear Ice Melter");
+    console.log("Current state - isNuclearIceMelterActive:", isNuclearIceMelterActive, "potatoCount:", potatoCount);
+
+    if (!isNuclearIceMelterUnlocked) {
+        console.log("Nuclear Ice Melter is not unlocked");
+        return;
+    }
 
     const toggleSwitch = document.getElementById('nuclear-ice-melter-toggle');
 
     if (!isNuclearIceMelterActive && potatoCount >= 100) {
+        console.log("Activating Nuclear Ice Melter");
         potatoCount -= 100;
         isNuclearIceMelterActive = true;
         startNuclearIceMelter();
         if (toggleSwitch) toggleSwitch.checked = true;
     } else if (isNuclearIceMelterActive) {
+        console.log("Deactivating Nuclear Ice Melter");
         isNuclearIceMelterActive = false;
         stopNuclearIceMelter();
         if (toggleSwitch) toggleSwitch.checked = false;
     } else {
+        console.log("Not enough potatoes to activate Nuclear Ice Melter");
         showToast("Not Enough Potatoes", "You need 100 potatoes to activate the Nuclear Ice Melter!", 'setback');
         if (toggleSwitch) toggleSwitch.checked = false;
     }
 
+    console.log("After toggle - isNuclearIceMelterActive:", isNuclearIceMelterActive, "potatoCount:", potatoCount);
     updateDisplay();
 }
 
 // Start the Nuclear Ice Melter
 function startNuclearIceMelter() {
+    console.log("Starting Nuclear Ice Melter");
     nuclearIceMelterInterval = setInterval(() => {
+        console.log("Nuclear Ice Melter tick - ice:", ice, "water:", water);
         if (ice >= 5) {
             ice -= 5;
             water += 5;
             updateDisplay();
         } else {
+            console.log("Not enough ice to run Nuclear Ice Melter");
             showToast("Resource Shortage", "Not enough ice to run the Nuclear Ice Melter!", 'setback');
             toggleNuclearIceMelter(); // Turn off if resources are insufficient
         }
@@ -694,6 +708,7 @@ function startNuclearIceMelter() {
 
 // Stop the Nuclear Ice Melter
 function stopNuclearIceMelter() {
+    console.log("Stopping Nuclear Ice Melter");
     clearInterval(nuclearIceMelterInterval);
     nuclearIceMelterInterval = null;
 }

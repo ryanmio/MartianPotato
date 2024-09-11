@@ -814,62 +814,6 @@ function stopBucketWheelExcavator() {
     clearInterval(bucketWheelExcavatorInterval);
 }
 
-// Unlock the Nuclear Ice Melter
-function unlockNuclearIceMelter() {
-    isNuclearIceMelterUnlocked = true;
-    const melterContainer = document.getElementById('nuclear-ice-melter-container');
-    if (melterContainer) {
-        melterContainer.style.display = 'block';
-    }
-
-    const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
-    if (nuclearIceMelterToggle) {
-        nuclearIceMelterToggle.addEventListener('change', toggleNuclearIceMelter);
-    }
-}
-
-// Toggle the Nuclear Ice Melter
-function toggleNuclearIceMelter() {
-    if (!isNuclearIceMelterUnlocked) return;
-
-    const toggleSwitch = document.getElementById('nuclear-ice-melter-toggle');
-
-    if (!isNuclearIceMelterActive && potatoCount >= 100) {
-        potatoCount -= 100;
-        isNuclearIceMelterActive = true;
-        startNuclearIceMelter();
-        if (toggleSwitch) toggleSwitch.checked = true;
-    } else if (isNuclearIceMelterActive) {
-        isNuclearIceMelterActive = false;
-        stopNuclearIceMelter();
-        if (toggleSwitch) toggleSwitch.checked = false;
-    } else {
-        showToast("Not Enough Potatoes", "You need 100 potatoes to activate the Nuclear Ice Melter!", 'setback');
-        if (toggleSwitch) toggleSwitch.checked = false;
-    }
-
-    updateDisplay();
-}
-
-// Start the Nuclear Ice Melter
-function startNuclearIceMelter() {
-    nuclearIceMelterInterval = setInterval(() => {
-        if (ice >= 5) {
-            ice -= 5;
-            water += 5;
-            updateDisplay();
-        } else {
-            showToast("Resource Shortage", "Not enough ice to run the Nuclear Ice Melter!", 'setback');
-            toggleNuclearIceMelter(); // Turn off if resources are insufficient
-        }
-    }, 1000); // Run every second
-}
-
-// Stop the Nuclear Ice Melter
-function stopNuclearIceMelter() {
-    clearInterval(nuclearIceMelterInterval);
-}
-
 // Unlock the Ice Melting Basin
 function unlockIceMeltingBasin() {
     const iceMeltingBasinContainer = document.getElementById('ice-melting-basin-container');

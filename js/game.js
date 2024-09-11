@@ -649,28 +649,30 @@ function unlockNuclearIceMelter() {
     }
 
     const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
-    if (nuclearIceMelterToggle) {
-        nuclearIceMelterToggle.addEventListener('change', (event) => {
-            toggleNuclearIceMelter();
-        });
+    if (nuclearIceMelterToggle && !nuclearIceMelterToggle.dataset.listenerAdded) {
+        nuclearIceMelterToggle.addEventListener('change', toggleNuclearIceMelter);
+        nuclearIceMelterToggle.dataset.listenerAdded = 'true';
     }
 }
 
 // Toggle the Nuclear Ice Melter
 function toggleNuclearIceMelter() {
-    if (!isNuclearIceMelterUnlocked) {
-        return;
-    }
+    if (!isNuclearIceMelterUnlocked) return;
+
+    const toggleSwitch = document.getElementById('nuclear-ice-melter-toggle');
 
     if (!isNuclearIceMelterActive && potatoCount >= 100) {
         potatoCount -= 100;
         isNuclearIceMelterActive = true;
         startNuclearIceMelter();
+        if (toggleSwitch) toggleSwitch.checked = true;
     } else if (isNuclearIceMelterActive) {
         isNuclearIceMelterActive = false;
         stopNuclearIceMelter();
+        if (toggleSwitch) toggleSwitch.checked = false;
     } else {
         showToast("Not Enough Potatoes", "You need 100 potatoes to activate the Nuclear Ice Melter!", 'setback');
+        if (toggleSwitch) toggleSwitch.checked = false;
     }
 
     updateDisplay();

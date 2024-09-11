@@ -816,52 +816,36 @@ function stopBucketWheelExcavator() {
 
 // Unlock the Nuclear Ice Melter
 function unlockNuclearIceMelter() {
-    console.log("Unlocking Nuclear Ice Melter");
     isNuclearIceMelterUnlocked = true;
     const melterContainer = document.getElementById('nuclear-ice-melter-container');
     if (melterContainer) {
         melterContainer.style.display = 'block';
-        console.log("Nuclear Ice Melter container displayed");
     }
 
     const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
     if (nuclearIceMelterToggle) {
-        console.log("Adding event listener to Nuclear Ice Melter toggle");
         nuclearIceMelterToggle.addEventListener('change', toggleNuclearIceMelter);
-    } else {
-        console.log("Nuclear Ice Melter toggle not found during unlock");
     }
 }
 
 // Toggle the Nuclear Ice Melter
 function toggleNuclearIceMelter() {
-    console.log("toggleNuclearIceMelter called");
-    if (!isNuclearIceMelterUnlocked) {
-        console.log("Nuclear Ice Melter is not unlocked");
-        return;
-    }
+    if (!isNuclearIceMelterUnlocked) return;
 
-    console.log("Current state:", isNuclearIceMelterActive);
-    console.log("Current potato count:", potatoCount);
+    const toggleSwitch = document.getElementById('nuclear-ice-melter-toggle');
 
     if (!isNuclearIceMelterActive && potatoCount >= 100) {
         potatoCount -= 100;
         isNuclearIceMelterActive = true;
-        console.log("Activating Nuclear Ice Melter");
         startNuclearIceMelter();
+        if (toggleSwitch) toggleSwitch.checked = true;
     } else if (isNuclearIceMelterActive) {
         isNuclearIceMelterActive = false;
-        console.log("Deactivating Nuclear Ice Melter");
         stopNuclearIceMelter();
+        if (toggleSwitch) toggleSwitch.checked = false;
     } else {
-        console.log("Not enough potatoes to activate");
         showToast("Not Enough Potatoes", "You need 100 potatoes to activate the Nuclear Ice Melter!", 'setback');
-    }
-
-    const toggleSwitch = document.getElementById('nuclear-ice-melter-toggle');
-    if (toggleSwitch) {
-        toggleSwitch.checked = isNuclearIceMelterActive;
-        console.log("Toggle switch checked state:", toggleSwitch.checked);
+        if (toggleSwitch) toggleSwitch.checked = false;
     }
 
     updateDisplay();

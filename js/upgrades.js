@@ -907,9 +907,6 @@ function handleActionCardClick(actionName) {
         case 'ice-melting-basin':
             handleIceMeltingBasinClick();
             break;
-        case 'nuclear-ice-melter':
-            toggleNuclearIceMelter();
-            break;
         // Add more cases for future clickable action cards
         default:
             console.warn(`No handler for action card: ${actionName}`);

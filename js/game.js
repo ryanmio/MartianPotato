@@ -13,6 +13,7 @@ const CLICKS_PER_WATER = 5;
 let lastUpdateTime = 0;
 let lastFrameTime = 0;
 let debugMode = false;
+let lastSaveTime = 0;
 
 // Resource Variables
 let potatoCount = 0;
@@ -368,6 +369,12 @@ function gameLoop(currentTime) {
         updateTechTree();
         updateExploreButton();
         
+        // Auto-save every minute
+        if (currentTime - lastSaveTime >= 60000) {
+            saveGame();
+            lastSaveTime = currentTime;
+        }
+        
         if (debugMode) {
             const updateTime = performance.now() - startTime;
             updateDebugInfo(currentTime, updateTime);
@@ -559,6 +566,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add a new click event listener
         nuclearIceMelterToggle.addEventListener('click', handleNuclearIceMelterClick);
     }
+
+    const saveButton = document.getElementById('save-button');
+    saveButton.addEventListener('click', saveGame);
+
+    const resetButton = document.getElementById('reset-button');
+    resetButton.addEventListener('click', resetGame);
 });
 
 // New function to handle the click event
@@ -728,3 +741,203 @@ function updateFieldSize(newSize) {
     initializePotatoField();
     updateDisplay();
 }
+
+// Function to save the game state
+function saveGame() {
+    const gameState = {
+        potatoCount,
+        water,
+        nutrients,
+        ice,
+        rawPotatoesPerSecond,
+        processedPotatoesPerSecond,
+        processingLevel,
+        plantingDelay,
+        lastPlantTime,
+        potatoesPerClick,
+        waterEfficiency,
+        soilEfficiency,
+        iceEfficiency,
+        waterMeltingClicks,
+        isManualIceMeltingUnlocked,
+        isIceMeltingBasinUnlocked,
+        iceMeltingBasinTimer,
+        iceMeltingBasinActive,
+        isNuclearIceMelterUnlocked,
+        isNuclearIceMelterActive,
+        potatoField,
+        achievements,
+        autoplanters,
+        autoHarvesters,
+        MAX_FIELD_SIZE,
+        upgrades: upgrades.map(upgrade => ({
+            name: upgrade.name,
+            purchased: upgrade.purchased,
+            count: upgrade.count
+        }))
+    };
+    localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
+    showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
+}
+
+// Function to load the game state
+function loadGame() {
+    const savedState = localStorage.getItem('martianPotatoSave');
+    if (savedState) {
+        const gameState = JSON.parse(savedState);
+        
+        // Restore game variables
+        potatoCount = gameState.potatoCount;
+        water = gameState.water;
+        nutrients = gameState.nutrients;
+        ice = gameState.ice;
+        rawPotatoesPerSecond = gameState.rawPotatoesPerSecond;
+        processedPotatoesPerSecond = gameState.processedPotatoesPerSecond;
+        processingLevel = gameState.processingLevel;
+        plantingDelay = gameState.plantingDelay;
+        lastPlantTime = gameState.lastPlantTime;
+        potatoesPerClick = gameState.potatoesPerClick;
+        waterEfficiency = gameState.waterEfficiency;
+        soilEfficiency = gameState.soilEfficiency;
+        iceEfficiency = gameState.iceEfficiency;
+        waterMeltingClicks = gameState.waterMeltingClicks;
+        isManualIceMeltingUnlocked = gameState.isManualIceMeltingUnlocked;
+        isIceMeltingBasinUnlocked = gameState.isIceMeltingBasinUnlocked;
+        iceMeltingBasinTimer = gameState.iceMeltingBasinTimer;
+        iceMeltingBasinActive = gameState.iceMeltingBasinActive;
+        isNuclearIceMelterUnlocked = gameState.isNuclearIceMelterUnlocked;
+        isNuclearIceMelterActive = gameState.isNuclearIceMelterActive;
+        potatoField = gameState.potatoField;
+        achievements = gameState.achievements;
+        autoplanters = gameState.autoplanters;
+        autoHarvesters = gameState.autoHarvesters;
+        MAX_FIELD_SIZE = gameState.MAX_FIELD_SIZE;
+
+        // Restore upgrades
+        gameState.upgrades.forEach(savedUpgrade => {
+            const upgrade = upgrades.find(u => u.name === savedUpgrade.name);
+            if (upgrade) {
+                upgrade.purchased = savedUpgrade.purchased;
+                upgrade.count = savedUpgrade.count;
+            }
+        });
+
+        // Reinitialize game elements
+        initializePotatoField();
+        createTechTree();
+        updateDisplay();
+        updateIceMeltingProgress();
+        updateIceMeltingBasinButton();
+
+        // Restart autoplanters and auto harvesters
+        autoplanters.forEach(startAutoplanter);
+        autoHarvesters.forEach(startAutoHarvester);
+
+        // Restart Nuclear Ice Melter if it was active
+        if (isNuclearIceMelterActive) {
+            startNuclearIceMelter();
+        }
+
+        showToast('Game loaded successfully!', 'Your progress has been restored.', 'success');
+    } else {
+        showToast('No saved game found', 'Starting a new game.', 'info');
+    }
+}
+
+// Function to reset the game
+function resetGame() {
+    if (confirm('Are you sure you want to reset the game? All progress will be lost.')) {
+        localStorage.removeItem('martianPotatoSave');
+        location.reload();
+    }
+}
+
+// Initialize the game
+function initGame() {
+    loadGame();
+    requestAnimationFrame(gameLoop);
+}
+
+// Call initGame when the window loads
+window.addEventListener('load', initGame);
+
+// Function to load the game state
+function loadGame() {
+    const savedState = localStorage.getItem('martianPotatoSave');
+    if (savedState) {
+        const gameState = JSON.parse(savedState);
+        
+        // Restore game variables
+        potatoCount = gameState.potatoCount;
+        water = gameState.water;
+        nutrients = gameState.nutrients;
+        ice = gameState.ice;
+        rawPotatoesPerSecond = gameState.rawPotatoesPerSecond;
+        processedPotatoesPerSecond = gameState.processedPotatoesPerSecond;
+        processingLevel = gameState.processingLevel;
+        plantingDelay = gameState.plantingDelay;
+        lastPlantTime = gameState.lastPlantTime;
+        potatoesPerClick = gameState.potatoesPerClick;
+        waterEfficiency = gameState.waterEfficiency;
+        soilEfficiency = gameState.soilEfficiency;
+        iceEfficiency = gameState.iceEfficiency;
+        waterMeltingClicks = gameState.waterMeltingClicks;
+        isManualIceMeltingUnlocked = gameState.isManualIceMeltingUnlocked;
+        isIceMeltingBasinUnlocked = gameState.isIceMeltingBasinUnlocked;
+        iceMeltingBasinTimer = gameState.iceMeltingBasinTimer;
+        iceMeltingBasinActive = gameState.iceMeltingBasinActive;
+        isNuclearIceMelterUnlocked = gameState.isNuclearIceMelterUnlocked;
+        isNuclearIceMelterActive = gameState.isNuclearIceMelterActive;
+        potatoField = gameState.potatoField;
+        achievements = gameState.achievements;
+        autoplanters = gameState.autoplanters;
+        autoHarvesters = gameState.autoHarvesters;
+        MAX_FIELD_SIZE = gameState.MAX_FIELD_SIZE;
+
+        // Restore upgrades
+        gameState.upgrades.forEach(savedUpgrade => {
+            const upgrade = upgrades.find(u => u.name === savedUpgrade.name);
+            if (upgrade) {
+                upgrade.purchased = savedUpgrade.purchased;
+                upgrade.count = savedUpgrade.count;
+            }
+        });
+
+        // Reinitialize game elements
+        initializePotatoField();
+        createTechTree();
+        updateDisplay();
+        updateIceMeltingProgress();
+        updateIceMeltingBasinButton();
+
+        // Restart autoplanters and auto harvesters
+        autoplanters.forEach(startAutoplanter);
+        autoHarvesters.forEach(startAutoHarvester);
+
+        // Restart Nuclear Ice Melter if it was active
+        if (isNuclearIceMelterActive) {
+            startNuclearIceMelter();
+        }
+
+        showToast('Game loaded successfully!', 'Your progress has been restored.', 'success');
+    } else {
+        showToast('No saved game found', 'Starting a new game.', 'info');
+    }
+}
+
+// Function to reset the game
+function resetGame() {
+    if (confirm('Are you sure you want to reset the game? All progress will be lost.')) {
+        localStorage.removeItem('martianPotatoSave');
+        location.reload();
+    }
+}
+
+// Initialize the game
+function initGame() {
+    loadGame();
+    requestAnimationFrame(gameLoop);
+}
+
+// Call initGame when the window loads
+window.addEventListener('load', initGame);

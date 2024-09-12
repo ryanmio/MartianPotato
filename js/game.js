@@ -773,7 +773,7 @@ function saveGame() {
         upgrades: upgrades.map(upgrade => ({
             name: upgrade.name,
             purchased: upgrade.purchased,
-            count: upgrade.count
+            count: upgrade.count || 0
         }))
     };
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
@@ -809,7 +809,86 @@ function loadGame() {
             isNuclearIceMelterUnlocked = gameState.isNuclearIceMelterUnlocked || false;
             isNuclearIceMelterActive = gameState.isNuclearIceMelterActive || false;
             potatoField = gameState.potatoField || [];
-            achievements = gameState.achievements || [];
+            achievements = gameState.achievements || {};
+            autoplanters = gameState.autoplanters || [];
+            autoHarvesters = gameState.autoHarvesters || [];
+            MAX_FIELD_SIZE = gameState.MAX_FIELD_SIZE || 8;
+
+            // Restore upgrades
+            if (gameState.upgrades && Array.isArray(gameState.upgrades)) {
+                gameState.upgrades.forEach(savedUpgrade => {
+                    const upgrade = upgrades.find(u => u.name === savedUpgrade.name);
+                    if (upgrade) {
+                        upgrade.purchased = savedUpgrade.purchased || false;
+                        upgrade.count = savedUpgrade.count || 0;
+                    }
+                });
+            }
+
+            // Reinitialize game elements
+            initializePotatoField();
+            createTechTree();
+            updateDisplay();
+            updateIceMeltingProgress();
+            updateIceMeltingBasinButton();
+
+            // Restart autoplanters and auto harvesters
+            autoplanters.forEach(startAutoplanter);
+            autoHarvesters.forEach(startAutoHarvester);
+
+            // Restart Nuclear Ice Melter if it was active
+            if (isNuclearIceMelterActive) {
+                startNuclearIceMelter();
+            }
+
+            showToast('Game loaded successfully!', 'Your progress has been restored.', 'success');
+        } else {
+            showToast('No saved game found', 'Starting a new game.', 'info');
+        }
+    } catch (error) {
+        console.error('Error loading game:', error);
+        showToast('Error loading game', 'There was an error loading your saved game. Starting a new game.', 'error');
+    }
+}
+
+// Function to reset the game state
+function resetGame() {
+    if (confirm('Are you sure you want to reset the game? This will erase all your progress.')) {
+        localStorage.removeItem('martianPotatoSave');
+        location.reload();
+    }
+}
+
+// Function to load the game state
+function loadGame() {
+    try {
+        const savedState = localStorage.getItem('martianPotatoSave');
+        if (savedState) {
+            const gameState = JSON.parse(savedState);
+            
+            // Restore game variables with default values if not present
+            potatoCount = gameState.potatoCount || 0;
+            water = gameState.water || 100;
+            nutrients = gameState.nutrients || 100;
+            ice = gameState.ice || 100;
+            rawPotatoesPerSecond = gameState.rawPotatoesPerSecond || 0;
+            processedPotatoesPerSecond = gameState.processedPotatoesPerSecond || 0;
+            processingLevel = gameState.processingLevel || 0;
+            plantingDelay = gameState.plantingDelay || 5000;
+            lastPlantTime = gameState.lastPlantTime || 0;
+            potatoesPerClick = gameState.potatoesPerClick || 1;
+            waterEfficiency = gameState.waterEfficiency || 1;
+            soilEfficiency = gameState.soilEfficiency || 1;
+            iceEfficiency = gameState.iceEfficiency || 1;
+            waterMeltingClicks = gameState.waterMeltingClicks || 0;
+            isManualIceMeltingUnlocked = gameState.isManualIceMeltingUnlocked || false;
+            isIceMeltingBasinUnlocked = gameState.isIceMeltingBasinUnlocked || false;
+            iceMeltingBasinTimer = gameState.iceMeltingBasinTimer || 0;
+            iceMeltingBasinActive = gameState.iceMeltingBasinActive || false;
+            isNuclearIceMelterUnlocked = gameState.isNuclearIceMelterUnlocked || false;
+            isNuclearIceMelterActive = gameState.isNuclearIceMelterActive || false;
+            potatoField = gameState.potatoField || [];
+            achievements = gameState.achievements || {};
             autoplanters = gameState.autoplanters || [];
             autoHarvesters = gameState.autoHarvesters || [];
             MAX_FIELD_SIZE = gameState.MAX_FIELD_SIZE || 8;

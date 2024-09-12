@@ -774,7 +774,8 @@ function saveGame() {
             name: upgrade.name,
             purchased: upgrade.purchased,
             count: upgrade.count || 0
-        }))
+        })),
+        unlockedActionCards: unlockedActionCards
     };
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
@@ -816,14 +817,20 @@ function loadGame() {
 
             // Restore upgrades
             if (gameState.upgrades && Array.isArray(gameState.upgrades)) {
-                gameState.upgrades.forEach(savedUpgrade => {
-                    const upgrade = upgrades.find(u => u.name === savedUpgrade.name);
-                    if (upgrade) {
+                upgrades.forEach(upgrade => {
+                    const savedUpgrade = gameState.upgrades.find(u => u.name === upgrade.name);
+                    if (savedUpgrade) {
                         upgrade.purchased = savedUpgrade.purchased || false;
                         upgrade.count = savedUpgrade.count || 0;
+                        if (upgrade.purchased && upgrade.onPurchase) {
+                            upgrade.onPurchase(); // Re-apply the upgrade effect
+                        }
                     }
                 });
             }
+
+            // Restore unlocked action cards
+            unlockedActionCards = gameState.unlockedActionCards || [];
 
             // Reinitialize game elements
             initializePotatoField();
@@ -831,6 +838,7 @@ function loadGame() {
             updateDisplay();
             updateIceMeltingProgress();
             updateIceMeltingBasinButton();
+            updateActionCards();
 
             // Restart autoplanters and auto harvesters
             autoplanters.forEach(startAutoplanter);
@@ -851,12 +859,14 @@ function loadGame() {
     }
 }
 
-// Function to reset the game state
-function resetGame() {
-    if (confirm('Are you sure you want to reset the game? This will erase all your progress.')) {
-        localStorage.removeItem('martianPotatoSave');
-        location.reload();
-    }
+// Function to update the visibility of action cards
+function updateActionCards() {
+    unlockedActionCards.forEach(cardName => {
+        const cardElement = document.getElementById(cardName);
+        if (cardElement) {
+            cardElement.style.display = 'block';
+        }
+    });
 }
 
 // Function to load the game state
@@ -904,12 +914,16 @@ function loadGame() {
                 });
             }
 
+            // Restore unlocked action cards
+            unlockedActionCards = gameState.unlockedActionCards || [];
+
             // Reinitialize game elements
             initializePotatoField();
             createTechTree();
             updateDisplay();
             updateIceMeltingProgress();
             updateIceMeltingBasinButton();
+            updateActionCards();
 
             // Restart autoplanters and auto harvesters
             autoplanters.forEach(startAutoplanter);

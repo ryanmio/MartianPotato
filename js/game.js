@@ -2,7 +2,7 @@
 // It manages game state, resource handling, potato planting and harvesting, and UI updates
 
 // Game Constants
-const MAX_FIELD_SIZE = 8;
+let MAX_FIELD_SIZE = 8;
 const GROWTH_TIME = 8000; // 8 seconds in milliseconds
 const UPDATE_INTERVAL = 1000; // Update every second
 const FRAME_RATE = 30; // 30 fps
@@ -228,6 +228,7 @@ function checkAchievements() {
 // Initialize the visual representation of the potato field
 function initializePotatoField() {
     const fieldContainer = document.getElementById('potato-field');
+    fieldContainer.innerHTML = ''; // Clear existing slots
     for (let i = 0; i < MAX_FIELD_SIZE; i++) {
         const slotElement = document.createElement('div');
         slotElement.className = 'potato-slot';
@@ -718,4 +719,12 @@ function stopNuclearIceMelter() {
     console.log("Stopping Nuclear Ice Melter");
     clearInterval(nuclearIceMelterInterval);
     nuclearIceMelterInterval = null;
+}
+
+// Add this function to update the field size
+function updateFieldSize(newSize) {
+    MAX_FIELD_SIZE = newSize;
+    potatoField = potatoField.concat(new Array(newSize - potatoField.length).fill(null));
+    initializePotatoField();
+    updateDisplay();
 }

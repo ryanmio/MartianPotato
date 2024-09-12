@@ -22,7 +22,7 @@ TODO:
     - [x] Subsurface Aquifer Tapper
     - [x] Martian Polar Cap Extractor
     - [x] Cometary Ice Harvester
-- [ ] Implement upgrade to increase plots from 8 to 16 and possibly more
+- [x] Implement upgrade to increase plots from 8 to 16 and possibly more
 - [ ] Implement "tutorial" hover effect to highlight the initial actions the user should take
 - [ ] Add exploration cards for remaining exploration upgrades
     - [x] Subsurface Aquifer Tapper

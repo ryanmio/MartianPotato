@@ -258,6 +258,19 @@ const upgrades = [
         assetName: "nuclear_ice_melter.webp",
         weight: 10,
         category: "harvesting"
+    },
+    {
+        name: "Field Expansion",
+        cost: 1000,
+        effect: () => { 
+            updateFieldSize(16);
+            showToast("Upgrade Purchased", "Your potato field has been expanded to 16 plots!", 'upgrade');
+        },
+        icon: "🌱",
+        description: "Increase your potato field from 8 to 16 plots",
+        metaMessage: "Scaling up operations. This upgrade demonstrates how investment in infrastructure can lead to exponential growth potential.",
+        weight: 8,
+        category: "planting"
     }
 ];
 

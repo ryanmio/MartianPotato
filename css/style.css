@@ -82,8 +82,7 @@ button:hover, button:disabled {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 15px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: 20px 0;
     padding: 20px;
     background-image: url('../images/soil.webp');
     background-size: cover;
@@ -525,8 +524,8 @@ button:hover, button:disabled {
 
 .action-card {
     width: 200px;
-    height: 100px; /* Set a fixed height for all action cards */
-    margin: 0px 0;
+    height: 100px;
+    margin: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -537,7 +536,7 @@ button:hover, button:disabled {
     box-shadow: 0 4px 0 #333;
     padding: 10px;
     position: relative;
-    cursor: default; 
+    cursor: default;
 }
 
 .action-card.clickable {

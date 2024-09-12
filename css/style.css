@@ -40,9 +40,39 @@ body {
 }
 
 #parent-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#action-cards-container {
     display: flex;
-    align-items: flex-start;
+    flex-wrap: wrap;
     gap: 20px;
+    justify-content: flex-start;
+}
+
+.action-card {
+    width: calc(33.333% - 14px); /* Subtracting 14px to account for the gap */
+    min-width: 200px;
+    max-width: 240px;
+    margin: 0;
+}
+
+@media (max-width: 800px) {
+    #action-cards-container {
+        justify-content: center;
+    }
+    
+    .action-card {
+        width: calc(50% - 10px);
+    }
+}
+
+@media (max-width: 480px) {
+    .action-card {
+        width: 100%;
+    }
 }
 
 /* 3. Typography */

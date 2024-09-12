@@ -512,6 +512,9 @@ button:hover, button:disabled {
 }
 
 /* Action Cards (Explore Mars, Manual Ice Melting, etc.) */
+.toggle-switch,
+#ice-melting-container,
+#ice-cube,
 .action-card,
 .action-card * {
     user-select: none;
@@ -706,13 +709,6 @@ button:hover, button:disabled {
     width: 6px;
     background: #F0F9E3;
     transition: 0.1s;
-}
-
-#ice-melting-container, #ice-cube {
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
 }
 
 #ice-cube {

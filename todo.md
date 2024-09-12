@@ -11,7 +11,7 @@ TODO:
 - [ ] Implement Automated Ice Melting
     - [x] Ice Melting Basin
         - Asset: ice_melting_basin.webp
-    - [ ] Nuclear Ice Melter
+    - [x] Nuclear Ice Melter
         - Asset: nuclear_ice_melter.webp
     - [ ] Conveyor Belt Melting System
         - Asset: conveyor_belt_melting_system.webp

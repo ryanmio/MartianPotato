@@ -539,6 +539,7 @@ button:hover, button:disabled {
     padding: 10px;
     position: relative;
     cursor: default;
+    text-align: center;
 }
 
 .action-card.clickable {
@@ -564,7 +565,7 @@ button:hover, button:disabled {
 .action-card h3 {
     text-align: center;
     width: 100%;
-    margin: 0;
+    margin: 0 0 2px;
     font-size: 15px;
 }
 

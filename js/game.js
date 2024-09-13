@@ -645,10 +645,10 @@ function meltIce(event) {
 // Unlock the manual ice melting feature
 function unlockManualIceMelting() {
     isManualIceMeltingUnlocked = true;
-    const iceMeltingContainer = document.getElementById('ice-melting-container');
-    if (iceMeltingContainer) {
-        iceMeltingContainer.style.display = 'flex';
+    if (!unlockedActionCards.includes('ice-melting-container')) {
+        unlockedActionCards.push('ice-melting-container');
     }
+    updateActionCards();
     updateIceMeltingProgress();
 }
 
@@ -662,11 +662,12 @@ function updateIceMeltingProgress() {
 
 // Unlock the Ice Melting Basin
 function unlockIceMeltingBasin() {
+    console.log("Unlocking Ice Melting Basin");
     isIceMeltingBasinUnlocked = true;
-    const basinContainer = document.getElementById('ice-melting-basin-container');
-    if (basinContainer) {
-        basinContainer.style.display = 'block';
+    if (!unlockedActionCards.includes('ice-melting-basin-container')) {
+        unlockedActionCards.push('ice-melting-basin-container');
     }
+    updateActionCards();
     updateIceMeltingBasinButton();
 }
 
@@ -704,10 +705,10 @@ function updateIceMeltingBasinButton() {
 function unlockNuclearIceMelter() {
     console.log("Unlocking Nuclear Ice Melter");
     isNuclearIceMelterUnlocked = true;
-    const melterContainer = document.getElementById('nuclear-ice-melter-container');
-    if (melterContainer) {
-        melterContainer.style.display = 'block';
+    if (!unlockedActionCards.includes('nuclear-ice-melter-container')) {
+        unlockedActionCards.push('nuclear-ice-melter-container');
     }
+    updateActionCards();
 }
 
 // Start the Nuclear Ice Melter
@@ -770,14 +771,15 @@ function saveGame() {
         autoplanters,
         autoHarvesters,
         MAX_FIELD_SIZE,
+        unlockedActionCards,
         upgrades: upgrades.map(upgrade => ({
             name: upgrade.name,
             purchased: upgrade.purchased,
-            count: upgrade.count || 0
-        })),
-        unlockedActionCards: unlockedActionCards
+            count: upgrade.count
+        }))
     };
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
+    console.log("Game saved. Unlocked action cards:", unlockedActionCards); // Debug log
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
 }
 
@@ -785,8 +787,11 @@ function saveGame() {
 function loadGame() {
     try {
         const savedState = localStorage.getItem('martianPotatoSave');
+        console.log("Saved state:", savedState);
+
         if (savedState) {
             const gameState = JSON.parse(savedState);
+            console.log("Parsed game state:", gameState);
             
             // Restore game variables with default values if not present
             potatoCount = gameState.potatoCount || 0;
@@ -814,6 +819,38 @@ function loadGame() {
             autoplanters = gameState.autoplanters || [];
             autoHarvesters = gameState.autoHarvesters || [];
             MAX_FIELD_SIZE = gameState.MAX_FIELD_SIZE || 8;
+            unlockedActionCards = gameState.unlockedActionCards || ['exploration-container'];
+
+            // Unlock action cards based on game state
+            if (gameState.isManualIceMeltingUnlocked) {
+                unlockedActionCards.push('ice-melting-container');
+            }
+            if (gameState.isIceMeltingBasinUnlocked) {
+                unlockedActionCards.push('ice-melting-basin-container');
+            }
+            if (gameState.upgrades) {
+                gameState.upgrades.forEach(upgrade => {
+                    if (upgrade.purchased) {
+                        switch (upgrade.name) {
+                            case "Ice Melting Basin":
+                                isIceMeltingBasinUnlocked = true;
+                                unlockedActionCards.push('ice-melting-basin-container');
+                                break;
+                            case "Subsurface Aquifer Tapper":
+                                unlockedActionCards.push('subsurface-aquifer-tapper-container');
+                                break;
+                            case "Martian Bucket-Wheel Excavator":
+                                unlockedActionCards.push('bucket-wheel-excavator-container');
+                                break;
+                            case "Nuclear Ice Melter":
+                                unlockedActionCards.push('nuclear-ice-melter-container');
+                                break;
+                        }
+                    }
+                });
+            }
+
+            console.log("Unlocked action cards after loading:", unlockedActionCards);
 
             // Restore upgrades
             if (gameState.upgrades && Array.isArray(gameState.upgrades)) {
@@ -822,22 +859,20 @@ function loadGame() {
                     if (savedUpgrade) {
                         upgrade.purchased = savedUpgrade.purchased || false;
                         upgrade.count = savedUpgrade.count || 0;
-                        if (upgrade.purchased && upgrade.onPurchase) {
-                            upgrade.onPurchase(); // Re-apply the upgrade effect
+                        if (upgrade.purchased && upgrade.effect) {
+                            upgrade.effect(); // Re-apply the upgrade effect
                         }
                     }
                 });
             }
 
-            // Restore unlocked action cards
-            unlockedActionCards = gameState.unlockedActionCards || [];
-
             // Reinitialize game elements
             initializePotatoField();
             createTechTree();
             updateDisplay();
             updateIceMeltingProgress();
             updateIceMeltingBasinButton();
+            initializeActionCards();
             updateActionCards();
 
             // Restart autoplanters and auto harvesters
@@ -851,97 +886,34 @@ function loadGame() {
 
             showToast('Game loaded successfully!', 'Your progress has been restored.', 'success');
         } else {
+            console.log("No saved game found, initializing new game");
+            unlockedActionCards = ['exploration-container'];
+            initializeActionCards();
+            updateActionCards();
             showToast('No saved game found', 'Starting a new game.', 'info');
         }
     } catch (error) {
         console.error('Error loading game:', error);
+        unlockedActionCards = ['exploration-container'];
+        initializeActionCards();
+        updateActionCards();
         showToast('Error loading game', 'There was an error loading your saved game. Starting a new game.', 'error');
     }
 }
 
-// Function to update the visibility of action cards
+// Add this new function to update the visibility of action cards
 function updateActionCards() {
-    unlockedActionCards.forEach(cardName => {
-        const cardElement = document.getElementById(cardName);
-        if (cardElement) {
-            cardElement.style.display = 'block';
+    console.log("Updating action cards. Unlocked cards:", unlockedActionCards);
+    const allActionCards = document.querySelectorAll('.action-card');
+    allActionCards.forEach(card => {
+        if (unlockedActionCards.includes(card.id)) {
+            card.style.display = 'block';
+            console.log(`Showing card: ${card.id}`);
+        } else if (card.id !== 'exploration-container') { // Always show exploration
+            card.style.display = 'none';
+            console.log(`Hiding card: ${card.id}`);
         }
     });
-}
-
-// Function to load the game state
-function loadGame() {
-    try {
-        const savedState = localStorage.getItem('martianPotatoSave');
-        if (savedState) {
-            const gameState = JSON.parse(savedState);
-            
-            // Restore game variables with default values if not present
-            potatoCount = gameState.potatoCount || 0;
-            water = gameState.water || 100;
-            nutrients = gameState.nutrients || 100;
-            ice = gameState.ice || 100;
-            rawPotatoesPerSecond = gameState.rawPotatoesPerSecond || 0;
-            processedPotatoesPerSecond = gameState.processedPotatoesPerSecond || 0;
-            processingLevel = gameState.processingLevel || 0;
-            plantingDelay = gameState.plantingDelay || 5000;
-            lastPlantTime = gameState.lastPlantTime || 0;
-            potatoesPerClick = gameState.potatoesPerClick || 1;
-            waterEfficiency = gameState.waterEfficiency || 1;
-            soilEfficiency = gameState.soilEfficiency || 1;
-            iceEfficiency = gameState.iceEfficiency || 1;
-            waterMeltingClicks = gameState.waterMeltingClicks || 0;
-            isManualIceMeltingUnlocked = gameState.isManualIceMeltingUnlocked || false;
-            isIceMeltingBasinUnlocked = gameState.isIceMeltingBasinUnlocked || false;
-            iceMeltingBasinTimer = gameState.iceMeltingBasinTimer || 0;
-            iceMeltingBasinActive = gameState.iceMeltingBasinActive || false;
-            isNuclearIceMelterUnlocked = gameState.isNuclearIceMelterUnlocked || false;
-            isNuclearIceMelterActive = gameState.isNuclearIceMelterActive || false;
-            potatoField = gameState.potatoField || [];
-            achievements = gameState.achievements || {};
-            autoplanters = gameState.autoplanters || [];
-            autoHarvesters = gameState.autoHarvesters || [];
-            MAX_FIELD_SIZE = gameState.MAX_FIELD_SIZE || 8;
-
-            // Restore upgrades
-            if (gameState.upgrades && Array.isArray(gameState.upgrades)) {
-                gameState.upgrades.forEach(savedUpgrade => {
-                    const upgrade = upgrades.find(u => u.name === savedUpgrade.name);
-                    if (upgrade) {
-                        upgrade.purchased = savedUpgrade.purchased || false;
-                        upgrade.count = savedUpgrade.count || 0;
-                    }
-                });
-            }
-
-            // Restore unlocked action cards
-            unlockedActionCards = gameState.unlockedActionCards || [];
-
-            // Reinitialize game elements
-            initializePotatoField();
-            createTechTree();
-            updateDisplay();
-            updateIceMeltingProgress();
-            updateIceMeltingBasinButton();
-            updateActionCards();
-
-            // Restart autoplanters and auto harvesters
-            autoplanters.forEach(startAutoplanter);
-            autoHarvesters.forEach(startAutoHarvester);
-
-            // Restart Nuclear Ice Melter if it was active
-            if (isNuclearIceMelterActive) {
-                startNuclearIceMelter();
-            }
-
-            showToast('Game loaded successfully!', 'Your progress has been restored.', 'success');
-        } else {
-            showToast('No saved game found', 'Starting a new game.', 'info');
-        }
-    } catch (error) {
-        console.error('Error loading game:', error);
-        showToast('Error loading game', 'There was an error loading your saved game. Starting a new game.', 'error');
-    }
 }
 
 // Function to reset the game state
@@ -960,3 +932,17 @@ function initGame() {
 
 // Call initGame when the window loads
 window.addEventListener('load', initGame);
+
+// Modify the initGame function to ensure it only runs once
+let gameInitialized = false;
+function initGame() {
+    if (!gameInitialized) {
+        loadGame();
+        requestAnimationFrame(gameLoop);
+        gameInitialized = true;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initGame();
+});

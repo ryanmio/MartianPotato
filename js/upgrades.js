@@ -9,6 +9,7 @@ const BASE_HARVEST_DELAY = 1000; // 1 second in milliseconds
 let currentPlantingUpgrade = 0;
 let highestPurchasedWeight = 0;
 let lastTechTreeUpdate = 0;
+let unlockedActionCards = [];
 
 // Automation Arrays
 let autoplanters = [];
@@ -460,6 +461,12 @@ function buyUpgrade(upgrade) {
             upgrade.metaMessage
         );
 
+        // Unlock the corresponding action card if applicable
+        unlockActionCardForUpgrade(upgrade.name);
+
+        // Update action cards
+        updateActionCards();
+
         // Update the specific card that was just purchased
         const card = document.querySelector(`.tech-card[data-upgrade-name="${upgrade.name}"]`);
         if (card) {
@@ -475,8 +482,46 @@ function buyUpgrade(upgrade) {
         }
 
         createTechTree(); // Recreate the tech tree to reflect changes
+
+        saveGame(); // Save the game after purchasing an upgrade
     } else {
         showToast("Not Enough Potatoes", "You don't have enough potatoes to purchase this upgrade.", 'setback');
+    }
+}
+
+// Add this new function to unlock the corresponding action card
+function unlockActionCardForUpgrade(upgradeName) {
+    let cardId;
+    switch (upgradeName) {
+        case "Manual Ice Melting":
+            cardId = 'ice-melting-container';
+            unlockManualIceMelting();
+            break;
+        case "Ice Melting Basin":
+            cardId = 'ice-melting-basin-container';
+            unlockIceMeltingBasin();
+            break;
+        case "Subsurface Aquifer Tapper":
+            cardId = 'subsurface-aquifer-tapper-container';
+            unlockSubsurfaceAquiferTapper();
+            break;
+        case "Martian Bucket-Wheel Excavator":
+            cardId = 'bucket-wheel-excavator-container';
+            unlockBucketWheelExcavator();
+            break;
+        case "Nuclear Ice Melter":
+            cardId = 'nuclear-ice-melter-container';
+            unlockNuclearIceMelter();
+            break;
+    }
+    if (cardId) {
+        const card = document.getElementById(cardId);
+        if (card) {
+            card.style.display = 'block';
+        }
+        if (!unlockedActionCards.includes(cardId)) {
+            unlockedActionCards.push(cardId);
+        }
     }
 }
 

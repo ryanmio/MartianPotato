@@ -327,7 +327,9 @@ function createTechTree() {
     const sortedUpgrades = upgrades.slice().sort((a, b) => a.weight - b.weight);
     sortedUpgrades.forEach((upgrade) => {
         if (!upgrade.purchased || (upgrade.count !== undefined && upgrade.count > 0)) {
-            techTree.appendChild(createCard(upgrade));
+            if (upgrade.count === undefined || !upgrade.purchased || upgrade.count > 0) {
+                techTree.appendChild(createCard(upgrade));
+            }
         }
     });
 }
@@ -467,21 +469,13 @@ function buyUpgrade(upgrade) {
         // Update action cards
         updateActionCards();
 
-        // Update the specific card that was just purchased
-        const card = document.querySelector(`.tech-card[data-upgrade-name="${upgrade.name}"]`);
-        if (card) {
-            const costElement = card.querySelector('.tech-card-cost');
-            if (costElement) {
-                costElement.textContent = `Cost: ${getUpgradeCost(upgrade)} potatoes`;
-            }
-        }
-        
+        // Recreate the tech tree to reflect changes
+        createTechTree();
+
         // If a weight 10 upgrade was purchased, update all cards
         if (upgrade.weight === 10) {
             updateAllCards();
         }
-
-        createTechTree(); // Recreate the tech tree to reflect changes
 
         saveGame(); // Save the game after purchasing an upgrade
     } else {

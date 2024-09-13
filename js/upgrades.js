@@ -283,22 +283,28 @@ function updateTechTree() {
     }
     lastTechTreeUpdate = currentTime;
 
-    const techCards = document.querySelectorAll('.tech-card');
-    
-    techCards.forEach((card) => {
-        const upgradeName = card.dataset.upgradeName;
-        const upgrade = upgrades.find(u => u.name === upgradeName);
-        
-        if (upgrade) {
-            const upgradeCost = getUpgradeCost(upgrade);
-            const isPurchasable = potatoCount >= upgradeCost;
+    const techTree = document.getElementById('tech-tree');
+    const existingCards = new Set(Array.from(techTree.children).map(card => card.dataset.upgradeName));
 
-            // Update purchasability and cost display
-            card.classList.toggle('purchasable', isPurchasable);
-            const costElement = card.querySelector('.tech-card-cost');
-            if (costElement) {
-                costElement.textContent = `Cost: ${upgradeCost} potatoes`;
+    upgrades.forEach((upgrade) => {
+        if (!upgrade.purchased && (upgrade.count === undefined || upgrade.count === 0)) {
+            if (!existingCards.has(upgrade.name)) {
+                techTree.appendChild(createCard(upgrade));
+            } else {
+                const card = techTree.querySelector(`.tech-card[data-upgrade-name="${upgrade.name}"]`);
+                const upgradeCost = getUpgradeCost(upgrade);
+                const isPurchasable = potatoCount >= upgradeCost;
+
+                // Update purchasability and cost display
+                card.classList.toggle('purchasable', isPurchasable);
+                const costElement = card.querySelector('.tech-card-cost');
+                if (costElement) {
+                    costElement.textContent = `Cost: ${upgradeCost} potatoes`;
+                }
             }
+        } else if (existingCards.has(upgrade.name)) {
+            const card = techTree.querySelector(`.tech-card[data-upgrade-name="${upgrade.name}"]`);
+            card.remove();
         }
     });
 }
@@ -318,7 +324,7 @@ function gameLoop(currentTime) {
     requestAnimationFrame(gameLoop);
 }
 
-// Create and populate the tech tree UI
+// Update the createTechTree function
 function createTechTree() {
     const techTree = document.getElementById('tech-tree');
     techTree.innerHTML = ''; // Clear existing content
@@ -326,10 +332,8 @@ function createTechTree() {
     // Sort upgrades by weight and create cards for each
     const sortedUpgrades = upgrades.slice().sort((a, b) => a.weight - b.weight);
     sortedUpgrades.forEach((upgrade) => {
-        if (!upgrade.purchased || (upgrade.count !== undefined && upgrade.count > 0)) {
-            if (upgrade.count === undefined || !upgrade.purchased || upgrade.count > 0) {
-                techTree.appendChild(createCard(upgrade));
-            }
+        if (!upgrade.purchased && (upgrade.count === undefined || upgrade.count === 0)) {
+            techTree.appendChild(createCard(upgrade));
         }
     });
 }
@@ -453,6 +457,12 @@ function buyUpgrade(upgrade) {
         }
         updateDisplay();
         
+        // Remove the purchased upgrade from the tech tree
+        const techCard = document.querySelector(`.tech-card[data-upgrade-name="${upgrade.name}"]`);
+        if (techCard) {
+            techCard.remove();
+        }
+
         // Update the highest purchased weight
         highestPurchasedWeight = Math.max(highestPurchasedWeight, upgrade.weight);
 
@@ -468,9 +478,6 @@ function buyUpgrade(upgrade) {
 
         // Update action cards
         updateActionCards();
-
-        // Recreate the tech tree to reflect changes
-        createTechTree();
 
         // If a weight 10 upgrade was purchased, update all cards
         if (upgrade.weight === 10) {

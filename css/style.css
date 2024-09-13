@@ -13,6 +13,8 @@ body {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+    padding-top: 60px; /* Add space for the header */
+    position: relative; /* Add this */
 }
 
 #stats-container {
@@ -799,6 +801,46 @@ button:hover, button:disabled {
     cursor: not-allowed;
 }
 
+/* Add these new styles */
+
+#game-header {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    text-align: right;
+}
+
+#game-header h1 {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+}
+
+#save-button, #reset-button {
+    display: inline-block;
+    width: auto;
+    margin: 5px 0 5px 10px;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #333;
+    border-radius: 5px;
+    font-family: "Times New Roman", serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#save-button:hover, #reset-button:hover {
+    background-color: #e0e0e0;
+}
+
+#save-button:active, #reset-button:active {
+    background-color: #d0d0d0;
+}
+
+.game-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
 
 /* 5. Utility Classes */
 .debug-header {

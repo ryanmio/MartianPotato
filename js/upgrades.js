@@ -870,49 +870,63 @@ function stopBucketWheelExcavator() {
 
 // Unlock the Ice Melting Basin
 function unlockIceMeltingBasin() {
+    isIceMeltingBasinUnlocked = true;
     const iceMeltingBasinContainer = document.getElementById('ice-melting-basin-container');
     if (iceMeltingBasinContainer) {
         iceMeltingBasinContainer.style.display = 'block';
     }
+    updateIceMeltingBasinButton();
 }
 
-// Handle the Ice Melting Basin action card click
-function handleIceMeltingBasinClick() {
-    if (iceMeltingBasinCooldown > 0) {
-        showToast("Cooldown", "The Ice Melting Basin is on cooldown. Please wait.", 'setback');
-        return;
+// Handle filling the Ice Melting Basin
+function fillIceMeltingBasin() {
+    if (!isIceMeltingBasinUnlocked || iceMeltingBasinActive) return;
+    
+    if (ice >= 8) {
+        ice -= 8;
+        iceMeltingBasinActive = true;
+        iceMeltingBasinTimer = 8;
+        updateDisplay();
+        updateIceMeltingBasinButton();
+    } else {
+        showToast("Not Enough Ice", "You need at least 8 ice to fill the basin!", 'setback');
     }
+}
 
-    if (ice < 8) {
-        showToast("Resource Shortage", "Not enough ice to fill the Ice Melting Basin!", 'setback');
-        return;
+// Update game resources and ensure they don't go below zero
+function updateResources(currentTime) {
+    if (currentTime - lastUpdateTime >= UPDATE_INTERVAL) {
+        water = Math.max(0, water);
+        nutrients = Math.max(0, nutrients);
+        ice = Math.max(0, ice);
+        potatoCount = Math.floor(potatoCount);
+
+        if (iceMeltingBasinActive) {
+            water++;
+            iceMeltingBasinTimer--;
+            if (iceMeltingBasinTimer <= 0) {
+                iceMeltingBasinActive = false;
+            }
+            updateIceMeltingBasinButton();
+        }
+
+        lastUpdateTime = currentTime;
+        return true;
     }
-
-    ice -= 8;
-    water += 1;
-    iceMeltingBasinCooldown = 8;
-    updateDisplay();
-    updateIceMeltingBasinButton();
-
-    // Queue an achievement for using the Ice Melting Basin
-    queueAchievement(
-        "Ice Melting Basin Master",
-        "You've successfully filled and used the Ice Melting Basin!",
-        "Efficient resource management. This achievement rewards your ability to plan and execute resource use effectively.",
-        "ice_melting_basin_master.webp"
-    );
+    return false;
 }
 
 // Update the Ice Melting Basin button
 function updateIceMeltingBasinButton() {
-    const iceMeltingBasinButton = document.getElementById('ice-melting-basin-button');
-    if (iceMeltingBasinButton) {
-        if (iceMeltingBasinCooldown > 0) {
-            iceMeltingBasinButton.disabled = true;
-            iceMeltingBasinButton.textContent = `Cooldown: ${iceMeltingBasinCooldown}s`;
+    const basinContainer = document.getElementById('ice-melting-basin-container');
+    const cooldownElement = document.getElementById('basin-cooldown');
+    if (basinContainer && cooldownElement) {
+        if (iceMeltingBasinActive) {
+            basinContainer.setAttribute('disabled', 'true');
+            cooldownElement.textContent = `Melting (${iceMeltingBasinTimer}s)`;
         } else {
-            iceMeltingBasinButton.disabled = false;
-            iceMeltingBasinButton.textContent = 'Fill Ice Melting Basin';
+            basinContainer.removeAttribute('disabled');
+            cooldownElement.textContent = 'Ready';
         }
     }
 }
@@ -927,7 +941,7 @@ function handleActionCardClick(actionName) {
             meltIce();
             break;
         case 'ice-melting-basin':
-            handleIceMeltingBasinClick();
+            fillIceMeltingBasin();
             break;
         case 'nuclear-ice-melter':
             toggleNuclearIceMelter();
@@ -959,7 +973,7 @@ function handleActionCardClick(actionName) {
             meltIce();
             break;
         case 'ice-melting-basin':
-            handleIceMeltingBasinClick();
+            fillIceMeltingBasin();
             break;
         // Add more cases for future clickable action cards
         default:

@@ -3,7 +3,7 @@
 
 // Game Constants
 let MAX_FIELD_SIZE = 8;
-const GROWTH_TIME = 8000; // 8 seconds in milliseconds
+const GROWTH_TIME = 8000; // 8 seconds
 const UPDATE_INTERVAL = 1000; // Update every second
 const FRAME_RATE = 30; // 30 fps
 const FRAME_DELAY = 1000 / FRAME_RATE;
@@ -67,20 +67,32 @@ let lastDebugUpdateTime = 0;
 let lastResourceValues = { water: 0, nutrients: 0, ice: 0 };
 let lastAction = "None";
 
-// Calculate the rate of potato production
-function calculatePotatoesPerSecond() {
-    return autoplanters.length / (GROWTH_TIME / 1000);
-}
-
-// Consume resources for potato growth, applying efficiency multipliers
-function consumeResources(amount = 1) {
-    if (water >= amount && nutrients >= amount && ice >= amount) {
-        water -= amount / waterEfficiency;
-        nutrients -= amount / soilEfficiency;
-        ice -= amount / iceEfficiency;
-        return true;
+// Main game loop function
+function gameLoop(currentTime) {
+    if (currentTime - lastFrameTime >= FRAME_DELAY) {
+        updatePlantButton();
+        if (updateResources(currentTime)) {
+            updateDisplay();
+            checkAndRestartAutoplanters();
+        }
+        updatePotatoGrowth();
+        updateTechTree();
+        updateExploreButton();
+        
+        // Auto-save every minute
+        if (currentTime - lastSaveTime >= 60000) {
+            saveGame();
+            lastSaveTime = currentTime;
+        }
+        
+        if (debugMode) {
+            const updateTime = performance.now() - startTime;
+            updateDebugInfo(currentTime, updateTime);
+        }
+        
+        lastFrameTime = currentTime;
     }
-    return false;
+    requestAnimationFrame(gameLoop);
 }
 
 // Update game resources and ensure they don't go below zero
@@ -101,6 +113,29 @@ function updateResources(currentTime) {
         }
 
         lastUpdateTime = currentTime;
+        return true;
+    }
+    return false;
+}
+
+// Update non-critical elements during idle time
+function updateNonCriticalElements() {
+    requestIdleCallback(() => {
+        displayExplorationUpgrades();
+    });
+}
+
+// Calculate the rate of potato production
+function calculatePotatoesPerSecond() {
+    return autoplanters.length / (GROWTH_TIME / 1000);
+}
+
+// Consume resources for potato growth, applying efficiency multipliers
+function consumeResources(amount = 1) {
+    if (water >= amount && nutrients >= amount && ice >= amount) {
+        water -= amount / waterEfficiency;
+        nutrients -= amount / soilEfficiency;
+        ice -= amount / iceEfficiency;
         return true;
     }
     return false;
@@ -355,41 +390,6 @@ function updatePotatoElement(slotElement, potato) {
     if (growthText.textContent !== `${growthStage}%`) {
         growthText.textContent = `${growthStage}%`;
     }
-}
-
-// Main game loop function
-function gameLoop(currentTime) {
-    if (currentTime - lastFrameTime >= FRAME_DELAY) {
-        updatePlantButton();
-        if (updateResources(currentTime)) {
-            updateDisplay();
-            checkAndRestartAutoplanters();
-        }
-        updatePotatoGrowth();
-        updateTechTree();
-        updateExploreButton();
-        
-        // Auto-save every minute
-        if (currentTime - lastSaveTime >= 60000) {
-            saveGame();
-            lastSaveTime = currentTime;
-        }
-        
-        if (debugMode) {
-            const updateTime = performance.now() - startTime;
-            updateDebugInfo(currentTime, updateTime);
-        }
-        
-        lastFrameTime = currentTime;
-    }
-    requestAnimationFrame(gameLoop);
-}
-
-// Update non-critical elements during idle time
-function updateNonCriticalElements() {
-    requestIdleCallback(() => {
-        displayExplorationUpgrades();
-    });
 }
 
 // Toggle debug mode on/off

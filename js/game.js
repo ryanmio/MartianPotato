@@ -537,7 +537,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Add this near the end of the file, inside the DOMContentLoaded event listener
     const subsurfaceAquiferTapperToggle = document.getElementById('subsurface-aquifer-tapper-toggle');
     if (subsurfaceAquiferTapperToggle) {
         subsurfaceAquiferTapperToggle.addEventListener('change', toggleSubsurfaceAquiferTapper);
@@ -560,10 +559,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
     if (nuclearIceMelterToggle) {
         console.log("Nuclear Ice Melter toggle found in game.js");
-        // Remove all existing event listeners
         nuclearIceMelterToggle.removeEventListener('change', toggleNuclearIceMelter);
         nuclearIceMelterToggle.removeEventListener('click', handleNuclearIceMelterClick);
-        // Add a new click event listener
         nuclearIceMelterToggle.addEventListener('click', handleNuclearIceMelterClick);
     }
 
@@ -574,7 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resetButton.addEventListener('click', resetGame);
 });
 
-// New function to handle the click event
+// Function to handle the click event
 function handleNuclearIceMelterClick(event) {
     event.preventDefault(); // Prevent the default toggle behavior
     event.stopPropagation();
@@ -735,7 +732,7 @@ function stopNuclearIceMelter() {
     nuclearIceMelterInterval = null;
 }
 
-// Add this function to update the field size
+// Function to update the field size
 function updateFieldSize(newSize) {
     MAX_FIELD_SIZE = newSize;
     potatoField = potatoField.concat(new Array(newSize - potatoField.length).fill(null));
@@ -898,7 +895,7 @@ function loadGame() {
     }
 }
 
-// Add this new function to update the visibility of action cards
+// Function to update the visibility of action cards
 function updateActionCards() {
     console.log("Updating action cards. Unlocked cards:", unlockedActionCards);
     const allActionCards = document.querySelectorAll('.action-card');
@@ -946,9 +943,6 @@ function initGame() {
         }
     }
 }
-
-// Remove the DOMContentLoaded event listener to prevent double initialization
-// document.addEventListener('DOMContentLoaded', initGame);
 
 // Keep only this event listener
 window.addEventListener('load', initGame);

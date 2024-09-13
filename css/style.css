@@ -13,8 +13,8 @@ body {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    padding-top: 60px; /* Add space for the header */
-    position: relative; /* Add this */
+    padding-top: 60px; 
+    position: relative; 
 }
 
 #stats-container {
@@ -801,8 +801,6 @@ button:hover, button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
-
-/* Add these new styles */
 
 #game-header {
     position: absolute;

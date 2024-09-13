@@ -514,14 +514,9 @@ function unlockActionCardForUpgrade(upgradeName) {
             unlockNuclearIceMelter();
             break;
     }
-    if (cardId) {
-        const card = document.getElementById(cardId);
-        if (card) {
-            card.style.display = 'block';
-        }
-        if (!unlockedActionCards.includes(cardId)) {
-            unlockedActionCards.push(cardId);
-        }
+    if (cardId && !unlockedActionCards.includes(cardId)) {
+        unlockedActionCards.push(cardId);
+        updateActionCards();
     }
 }
 

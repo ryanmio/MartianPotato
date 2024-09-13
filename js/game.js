@@ -821,34 +821,28 @@ function loadGame() {
             MAX_FIELD_SIZE = gameState.MAX_FIELD_SIZE || 8;
             unlockedActionCards = gameState.unlockedActionCards || ['exploration-container'];
 
-            // Unlock action cards based on game state
+            // Ensure unlockedActionCards is initialized correctly
+            unlockedActionCards = ['exploration-container']; // Always include exploration
+
+            // Restore unlocked action cards
+            if (gameState.unlockedActionCards) {
+                unlockedActionCards = [...new Set([...unlockedActionCards, ...gameState.unlockedActionCards])];
+            }
+
+            // Ensure all unlocked features have their cards added
             if (gameState.isManualIceMeltingUnlocked) {
                 unlockedActionCards.push('ice-melting-container');
             }
             if (gameState.isIceMeltingBasinUnlocked) {
                 unlockedActionCards.push('ice-melting-basin-container');
             }
-            if (gameState.upgrades) {
-                gameState.upgrades.forEach(upgrade => {
-                    if (upgrade.purchased) {
-                        switch (upgrade.name) {
-                            case "Ice Melting Basin":
-                                isIceMeltingBasinUnlocked = true;
-                                unlockedActionCards.push('ice-melting-basin-container');
-                                break;
-                            case "Subsurface Aquifer Tapper":
-                                unlockedActionCards.push('subsurface-aquifer-tapper-container');
-                                break;
-                            case "Martian Bucket-Wheel Excavator":
-                                unlockedActionCards.push('bucket-wheel-excavator-container');
-                                break;
-                            case "Nuclear Ice Melter":
-                                unlockedActionCards.push('nuclear-ice-melter-container');
-                                break;
-                        }
-                    }
-                });
+            if (gameState.isNuclearIceMelterUnlocked) {
+                unlockedActionCards.push('nuclear-ice-melter-container');
             }
+            // Add similar checks for other unlockable features
+
+            // Remove duplicates
+            unlockedActionCards = [...new Set(unlockedActionCards)];
 
             console.log("Unlocked action cards after loading:", unlockedActionCards);
 
@@ -872,8 +866,13 @@ function loadGame() {
             updateDisplay();
             updateIceMeltingProgress();
             updateIceMeltingBasinButton();
-            initializeActionCards();
-            updateActionCards();
+
+            // Ensure DOM is ready before updating action cards
+            if (document.readyState === 'complete') {
+                updateActionCards();
+            } else {
+                window.addEventListener('load', updateActionCards);
+            }
 
             // Restart autoplanters and auto harvesters
             autoplanters.forEach(startAutoplanter);
@@ -888,14 +887,12 @@ function loadGame() {
         } else {
             console.log("No saved game found, initializing new game");
             unlockedActionCards = ['exploration-container'];
-            initializeActionCards();
             updateActionCards();
             showToast('No saved game found', 'Starting a new game.', 'info');
         }
     } catch (error) {
         console.error('Error loading game:', error);
         unlockedActionCards = ['exploration-container'];
-        initializeActionCards();
         updateActionCards();
         showToast('Error loading game', 'There was an error loading your saved game. Starting a new game.', 'error');
     }
@@ -940,9 +937,18 @@ function initGame() {
         loadGame();
         requestAnimationFrame(gameLoop);
         gameInitialized = true;
+        
+        // Ensure action cards are updated after the DOM is fully loaded
+        if (document.readyState === 'complete') {
+            updateActionCards();
+        } else {
+            window.addEventListener('load', updateActionCards);
+        }
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    initGame();
-});
+// Remove the DOMContentLoaded event listener to prevent double initialization
+// document.addEventListener('DOMContentLoaded', initGame);
+
+// Keep only this event listener
+window.addEventListener('load', initGame);

@@ -46,7 +46,6 @@ const upgrades = [
         cost: 0, 
         effect: () => { 
             unlockManualIceMelting();
-            showToast("Upgrade Unlocked", "You can now manually melt ice for water!", 'achievement');
         },
         icon: "🧊",
         description: "Collect water by manually melting Martian ice, 1 unit per 5 clicks.",
@@ -473,6 +472,9 @@ function buyUpgrade(upgrade) {
             upgrade.metaMessage
         );
 
+        // Show a toast notification for the purchase
+        showToast("Upgrade Unlocked", `You have unlocked the ${upgrade.name} upgrade!`, 'achievement');
+        
         // Unlock the corresponding action card if applicable
         unlockActionCardForUpgrade(upgrade.name);
 

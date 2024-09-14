@@ -54,12 +54,14 @@ let nuclearIceMelterInterval = null;
 let potatoField = new Array(MAX_FIELD_SIZE).fill(null);
 
 // Achievement Tracking
-let achievements = {
+const defaultAchievements = {
     firstPotato: false,
     potatoCentury: false,
     iceMeltingBasinMaster: false,
     nuclearIceMelterMaster: false,
+    // Add other achievements here
 };
+let achievements = { ...defaultAchievements };
 
 // Debug Variables
 let fpsValues = [];
@@ -794,7 +796,7 @@ function loadGame() {
             isNuclearIceMelterUnlocked = gameState.isNuclearIceMelterUnlocked || false;
             isNuclearIceMelterActive = gameState.isNuclearIceMelterActive || false;
             potatoField = gameState.potatoField || [];
-            achievements = gameState.achievements || {};
+            achievements = { ...defaultAchievements, ...(gameState.achievements || {}) };
             autoplanters = gameState.autoplanters || [];
             autoHarvesters = gameState.autoHarvesters || [];
             MAX_FIELD_SIZE = gameState.MAX_FIELD_SIZE || 8;
@@ -831,7 +833,7 @@ function loadGame() {
                         upgrade.purchased = savedUpgrade.purchased || false;
                         upgrade.count = savedUpgrade.count || 0;
                         if (upgrade.purchased && upgrade.effect) {
-                            upgrade.effect(); // Re-apply the upgrade effect
+                            upgrade.effect(); // Re-apply the upgrade effect without showing toasts
                         }
                     }
                 });

@@ -69,6 +69,7 @@ const upgrades = [
         cost: 5, 
         effect: () => { addAutoplanter(); }, 
         count: 0,
+        repeatable: true,
         icon: "🤖",
         description: "Automatically plants potatoes, reducing manual labor.",
         metaMessage: "Automation's allure. This upgrade significantly reduces active playtime, giving you a sense of progress and control, while quietly introducing a new constraint: power.",
@@ -80,6 +81,7 @@ const upgrades = [
         cost: 100, 
         effect: () => { addAutoHarvester(); }, 
         count: 0,
+        repeatable: true,
         icon: "🤖",
         description: "Automatically harvests mature potatoes.",
         metaMessage: "Your first step towards full automation. The game is reducing your direct involvement, shifting your focus to management and strategy.",
@@ -286,7 +288,16 @@ function updateTechTree() {
     const existingCards = new Set(Array.from(techTree.children).map(card => card.dataset.upgradeName));
 
     upgrades.forEach((upgrade) => {
-        if (!upgrade.purchased && (upgrade.count === undefined || upgrade.count === 0)) {
+        let shouldDisplayCard = false;
+        if (upgrade.repeatable) {
+            // Always display repeatable upgrades
+            shouldDisplayCard = true;
+        } else if (!upgrade.purchased) {
+            // Display non-repeatable upgrades that haven't been purchased
+            shouldDisplayCard = true;
+        }
+
+        if (shouldDisplayCard) {
             if (!existingCards.has(upgrade.name)) {
                 techTree.appendChild(createCard(upgrade));
             } else {
@@ -455,12 +466,6 @@ function buyUpgrade(upgrade) {
             upgrade.purchased = true;
         }
         updateDisplay();
-        
-        // Remove the purchased upgrade from the tech tree
-        const techCard = document.querySelector(`.tech-card[data-upgrade-name="${upgrade.name}"]`);
-        if (techCard) {
-            techCard.remove();
-        }
 
         // Update the highest purchased weight
         highestPurchasedWeight = Math.max(highestPurchasedWeight, upgrade.weight);
@@ -474,12 +479,29 @@ function buyUpgrade(upgrade) {
 
         // Show a toast notification for the purchase
         showToast("Upgrade Unlocked", `You have unlocked the ${upgrade.name} upgrade!`, 'achievement');
-        
+
         // Unlock the corresponding action card if applicable
         unlockActionCardForUpgrade(upgrade.name);
 
         // Update action cards
         updateActionCards();
+
+        // Remove the purchased upgrade from the tech tree if it's not repeatable
+        if (!upgrade.repeatable) {
+            const techCard = document.querySelector(`.tech-card[data-upgrade-name="${upgrade.name}"]`);
+            if (techCard) {
+                techCard.remove();
+            }
+        } else {
+            // For repeatable upgrades, update the cost display
+            const techCard = document.querySelector(`.tech-card[data-upgrade-name="${upgrade.name}"]`);
+            if (techCard) {
+                const costElement = techCard.querySelector('.tech-card-cost');
+                if (costElement) {
+                    costElement.textContent = `Cost: ${getUpgradeCost(upgrade)} potatoes`;
+                }
+            }
+        }
 
         // If a weight 10 upgrade was purchased, update all cards
         if (upgrade.weight === 10) {

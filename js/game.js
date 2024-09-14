@@ -23,8 +23,6 @@ let ice = 100;
 
 // Production Variables
 let rawPotatoesPerSecond = 0;
-let processedPotatoesPerSecond = 0;
-let processingLevel = 0;
 
 // Planting Variables
 let plantingDelay = 5000;

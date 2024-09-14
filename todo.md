@@ -23,7 +23,7 @@ TODO:
     - [x] Martian Polar Cap Extractor
     - [x] Cometary Ice Harvester
 - [x] Implement upgrade to increase plots from 8 to 16 and possibly more
-- [ ] Implement "tutorial" hover effect to highlight the initial actions the user should take
+- [x] Implement "tutorial" hover effect to highlight the initial actions the user should take
 - [ ] Add exploration cards for remaining exploration upgrades
     - [x] Subsurface Aquifer Tapper
     - [ ] Martian Polar Cap Extractor
@@ -31,7 +31,7 @@ TODO:
 - [ ] Implement Red Potatoes
 - [ ] Implement random events
 - [ ] Balance upgrade costs and effects
-- [ ] Implement save/load functionality
+- [x] Implement save/load functionality
 - [ ] Implement time tracking to show user how many potatoes they've harvested over the course of their playtime and graph the potatoes over time in a chart
 - [ ] Add new achievements:
     - [ ] Resource Milestones:

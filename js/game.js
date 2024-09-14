@@ -839,12 +839,7 @@ function loadGame() {
                         upgrade.purchased = savedUpgrade.purchased || false;
                         upgrade.count = savedUpgrade.count || 0;
 
-                        if (upgrade.repeatable && upgrade.effect) {
-                            // For repeatable upgrades, apply the effect for each count
-                            for (let i = 0; i < upgrade.count; i++) {
-                                upgrade.effect();
-                            }
-                        } else if (upgrade.purchased && upgrade.effect) {
+                        if (!upgrade.repeatable && upgrade.purchased && upgrade.effect) {
                             // For non-repeatable upgrades, apply the effect once
                             upgrade.effect();
                         }

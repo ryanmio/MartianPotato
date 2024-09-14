@@ -673,13 +673,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
     if (nuclearIceMelterToggle) {
-        console.log("Nuclear Ice Melter toggle found");
         nuclearIceMelterToggle.addEventListener('change', (event) => {
             event.stopPropagation(); // Prevent event from bubbling up
             toggleNuclearIceMelter();
         });
-    } else {
-        console.log("Nuclear Ice Melter toggle not found");
     }
 
     initializeActionCards();

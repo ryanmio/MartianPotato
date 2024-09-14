@@ -49,6 +49,11 @@ let isNuclearIceMelterUnlocked = false;
 let isNuclearIceMelterActive = false;
 let nuclearIceMelterInterval = null;
 
+// Polar Cap Mining Variables
+let isPolarCapMiningUnlocked = false;
+let isPolarCapMiningActive = false;
+let polarCapMiningInterval = null;
+
 // Large Data Structures
 let potatoField = new Array(MAX_FIELD_SIZE).fill(null);
 
@@ -578,6 +583,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const resetButton = document.getElementById('reset-button');
     resetButton.addEventListener('click', resetGame);
+
+    const polarCapMiningToggle = document.getElementById('polar-cap-mining-toggle');
+    if (polarCapMiningToggle) {
+        polarCapMiningToggle.addEventListener('change', () => {
+            togglePolarCapMining();
+        });
+    }
 });
 
 // Function to handle the click event
@@ -768,7 +780,9 @@ function saveGame() {
             count: upgrade.count || 0 // Ensure count is saved even if zero
         })),
         isFirstPlant: isFirstPlant,
-        hasSeenInitialGlow: hasSeenInitialGlow
+        hasSeenInitialGlow: hasSeenInitialGlow,
+        isPolarCapMiningUnlocked,
+        isPolarCapMiningActive
     };
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
@@ -801,6 +815,8 @@ function loadGame() {
             iceMeltingBasinActive = gameState.iceMeltingBasinActive || false;
             isNuclearIceMelterUnlocked = gameState.isNuclearIceMelterUnlocked || false;
             isNuclearIceMelterActive = gameState.isNuclearIceMelterActive || false;
+            isPolarCapMiningUnlocked = gameState.isPolarCapMiningUnlocked || false;
+            isPolarCapMiningActive = gameState.isPolarCapMiningActive || false;
             potatoField = gameState.potatoField || [];
             achievements = { ...defaultAchievements, ...(gameState.achievements || {}) };
             autoplanters = gameState.autoplanters || [];
@@ -825,6 +841,12 @@ function loadGame() {
             }
             if (gameState.isNuclearIceMelterUnlocked) {
                 unlockedActionCards.push('nuclear-ice-melter-container');
+            }
+            if (isPolarCapMiningUnlocked) {
+                unlockPolarCapMining();
+            }
+            if (isPolarCapMiningActive) {
+                startPolarCapMining();
             }
             // Add similar checks for other unlockable features
 
@@ -970,4 +992,45 @@ function reinitializeAutoHarvesters() {
         // Restart the interval
         startAutoHarvester(autoHarvester);
     });
+}
+
+function unlockPolarCapMining() {
+    isPolarCapMiningUnlocked = true;
+    const miningContainer = document.getElementById('polar-cap-mining-container');
+    if (miningContainer) {
+        miningContainer.style.display = 'block';
+    }
+}
+
+function togglePolarCapMining() {
+    if (!isPolarCapMiningUnlocked) return;
+
+    isPolarCapMiningActive = !isPolarCapMiningActive;
+    const toggleSwitch = document.getElementById('polar-cap-mining-toggle');
+    if (toggleSwitch) {
+        toggleSwitch.checked = isPolarCapMiningActive;
+    }
+
+    if (isPolarCapMiningActive) {
+        startPolarCapMining();
+    } else {
+        stopPolarCapMining();
+    }
+}
+
+function startPolarCapMining() {
+    polarCapMiningInterval = setInterval(() => {
+        if (potatoCount >= 2) {
+            potatoCount -= 2;
+            ice += 2;
+            updateDisplay();
+        } else {
+            showToast("Resource Shortage", "Not enough potatoes to run Polar Cap Mining!", 'setback');
+            togglePolarCapMining(); // Turn off if resources are insufficient
+        }
+    }, 1000); // Runs every second
+}
+
+function stopPolarCapMining() {
+    clearInterval(polarCapMiningInterval);
 }

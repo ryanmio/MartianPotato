@@ -209,16 +209,14 @@ const upgrades = [
         category: "exploration"
     },
     {
-        name: "Martian Polar Cap Extractor",
+        name: "Polar Cap Mining",
         cost: 2500,
         effect: () => { 
-            window.waterExplorationMultiplier = (window.waterExplorationMultiplier || 1) * 3;
-            window.polarCapBonusChance = 0.05;
-            updateAutonomousExploration();
+            unlockPolarCapMining();
         },
-        icon: "❄️",
-        description: "Allows remote extraction of water from Mars' polar ice caps during exploration missions.",
-        metaMessage: "High-risk, high-reward. This upgrade introduces an element of chance, offering the excitement of potentially large bonuses to keep players engaged.",
+        icon: "🧊",
+        description: "Enables mining operations at Mars' polar caps. Consumes 2 potatoes per second to produce 2 ice per second.",
+        metaMessage: "Tapping into new resources. This upgrade allows you to harvest ice directly from the polar caps, introducing resource management dynamics.",
         weight: 12,
         category: "exploration"
     },
@@ -547,6 +545,10 @@ function unlockActionCardForUpgrade(upgradeName) {
         case "Nuclear Ice Melter":
             cardId = 'nuclear-ice-melter-container';
             unlockNuclearIceMelter();
+            break;
+        case "Polar Cap Mining":
+            cardId = 'polar-cap-mining-container';
+            unlockPolarCapMining();
             break;
     }
     if (cardId && !unlockedActionCards.includes(cardId)) {
@@ -985,6 +987,9 @@ function handleActionCardClick(actionName) {
             break;
         case 'nuclear-ice-melter':
             toggleNuclearIceMelter();
+            break;
+        case 'polar-cap-mining':
+            togglePolarCapMining();
             break;
         // Add more cases for future clickable action cards
         default:

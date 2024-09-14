@@ -7,7 +7,7 @@ TODO:
 - [x] Implement better click effect on Plant Potato button
 - [x] Implement Ice as a resource to replace Oxygen
 - [x] Update ice melting to consume ice
-- [ ] Implement Ice Mining
+- [x] Implement Ice Mining
 - [ ] Implement Automated Ice Melting
     - [x] Ice Melting Basin
         - Asset: ice_melting_basin.webp

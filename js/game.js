@@ -776,7 +776,6 @@ function saveGame() {
         }))
     };
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
-    console.log("Game saved. Unlocked action cards:", unlockedActionCards); // Debug log
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
 }
 
@@ -897,15 +896,12 @@ function loadGame() {
 
 // Function to update the visibility of action cards
 function updateActionCards() {
-    console.log("Updating action cards. Unlocked cards:", unlockedActionCards);
     const allActionCards = document.querySelectorAll('.action-card');
     allActionCards.forEach(card => {
         if (unlockedActionCards.includes(card.id)) {
             card.style.display = 'block';
-            console.log(`Showing card: ${card.id}`);
         } else if (card.id !== 'exploration-container') { // Always show exploration
             card.style.display = 'none';
-            console.log(`Hiding card: ${card.id}`);
         }
     });
 }

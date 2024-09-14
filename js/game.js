@@ -733,8 +733,6 @@ function saveGame() {
         nutrients,
         ice,
         rawPotatoesPerSecond,
-        processedPotatoesPerSecond,
-        processingLevel,
         plantingDelay,
         lastPlantTime,
         potatoesPerClick,

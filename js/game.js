@@ -765,7 +765,7 @@ function saveGame() {
         upgrades: upgrades.map(upgrade => ({
             name: upgrade.name,
             purchased: upgrade.purchased,
-            count: upgrade.count
+            count: upgrade.count || 0 // Ensure count is saved even if zero
         })),
         isFirstPlant: isFirstPlant,
         hasSeenInitialGlow: hasSeenInitialGlow
@@ -788,8 +788,6 @@ function loadGame() {
             nutrients = gameState.nutrients || 100;
             ice = gameState.ice || 100;
             rawPotatoesPerSecond = gameState.rawPotatoesPerSecond || 0;
-            processedPotatoesPerSecond = gameState.processedPotatoesPerSecond || 0;
-            processingLevel = gameState.processingLevel || 0;
             plantingDelay = gameState.plantingDelay || 5000;
             lastPlantTime = gameState.lastPlantTime || 0;
             potatoesPerClick = gameState.potatoesPerClick || 1;
@@ -840,8 +838,15 @@ function loadGame() {
                     if (savedUpgrade) {
                         upgrade.purchased = savedUpgrade.purchased || false;
                         upgrade.count = savedUpgrade.count || 0;
-                        if (upgrade.purchased && upgrade.effect) {
-                            upgrade.effect(); // Re-apply the upgrade effect without showing toasts
+
+                        if (upgrade.repeatable && upgrade.effect) {
+                            // For repeatable upgrades, apply the effect for each count
+                            for (let i = 0; i < upgrade.count; i++) {
+                                upgrade.effect();
+                            }
+                        } else if (upgrade.purchased && upgrade.effect) {
+                            // For non-repeatable upgrades, apply the effect once
+                            upgrade.effect();
                         }
                     }
                 });
@@ -862,8 +867,8 @@ function loadGame() {
             }
 
             // Restart autoplanters and auto harvesters
-            autoplanters.forEach(startAutoplanter);
-            autoHarvesters.forEach(startAutoHarvester);
+            checkAndRestartAutoplanters();
+            checkAndRestartAutoHarvesters();
 
             // Restart Nuclear Ice Melter if it was active
             if (isNuclearIceMelterActive) {
@@ -943,3 +948,12 @@ function initGame() {
 
 // Call initGame when the window loads
 window.addEventListener('load', initGame);
+
+// Check and restart any stopped auto harvesters
+function checkAndRestartAutoHarvesters() {
+    autoHarvesters.forEach(autoHarvester => {
+        if (!autoHarvester.interval) {
+            startAutoHarvester(autoHarvester);
+        }
+    });
+}

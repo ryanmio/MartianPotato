@@ -339,10 +339,20 @@ function createTechTree() {
     const techTree = document.getElementById('tech-tree');
     techTree.innerHTML = ''; // Clear existing content
 
-    // Sort upgrades by weight and create cards for each
+    // Sort upgrades by weight
     const sortedUpgrades = upgrades.slice().sort((a, b) => a.weight - b.weight);
+
     sortedUpgrades.forEach((upgrade) => {
-        if (!upgrade.purchased && (upgrade.count === undefined || upgrade.count === 0)) {
+        let shouldDisplayCard = false;
+        if (upgrade.repeatable) {
+            // Always display repeatable upgrades
+            shouldDisplayCard = true;
+        } else if (!upgrade.purchased) {
+            // Display non-repeatable upgrades that haven't been purchased
+            shouldDisplayCard = true;
+        }
+
+        if (shouldDisplayCard) {
             techTree.appendChild(createCard(upgrade));
         }
     });
@@ -631,6 +641,15 @@ function startAutoHarvester(autoHarvester) {
     autoHarvester.interval = setInterval(() => {
         harvestOneReadyPotato();
     }, BASE_HARVEST_DELAY);
+}
+
+// Check and restart any stopped auto harvesters
+function checkAndRestartAutoHarvesters() {
+    autoHarvesters.forEach(autoHarvester => {
+        if (!autoHarvester.interval) {
+            startAutoHarvester(autoHarvester);
+        }
+    });
 }
 
 // Harvest a single ready potato from the field

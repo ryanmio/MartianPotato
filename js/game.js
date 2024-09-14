@@ -862,8 +862,8 @@ function loadGame() {
             }
 
             // Restart autoplanters and auto harvesters
-            checkAndRestartAutoplanters();
-            checkAndRestartAutoHarvesters();
+            reinitializeAutoplanters();
+            reinitializeAutoHarvesters();
 
             // Restart Nuclear Ice Melter if it was active
             if (isNuclearIceMelterActive) {
@@ -950,5 +950,24 @@ function checkAndRestartAutoHarvesters() {
         if (!autoHarvester.interval) {
             startAutoHarvester(autoHarvester);
         }
+    });
+}
+
+function reinitializeAutoplanters() {
+    rawPotatoesPerSecond = 0; // Reset rawPotatoesPerSecond
+
+    autoplanters.forEach(autoplanter => {
+        // Recalculate rawPotatoesPerSecond
+        rawPotatoesPerSecond += 1; // Each autoplanter adds 1 potato per second
+
+        // Restart the interval
+        startAutoplanter(autoplanter);
+    });
+}
+
+function reinitializeAutoHarvesters() {
+    autoHarvesters.forEach(autoHarvester => {
+        // Restart the interval
+        startAutoHarvester(autoHarvester);
     });
 }

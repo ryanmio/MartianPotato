@@ -28,6 +28,7 @@ let rawPotatoesPerSecond = 0;
 let plantingDelay = 5000;
 let lastPlantTime = 0;
 let potatoesPerClick = 1;
+let isFirstPlant = true;
 
 // Resource Efficiency Multipliers
 let waterEfficiency = 1;
@@ -66,6 +67,9 @@ let fpsValues = [];
 let lastDebugUpdateTime = 0;
 let lastResourceValues = { water: 0, nutrients: 0, ice: 0 };
 let lastAction = "None";
+
+// Add this variable at the top of the file with other game state variables
+let hasSeenInitialGlow = false;
 
 // Main game loop function
 function gameLoop(currentTime) {
@@ -169,6 +173,12 @@ function plantPotato() {
             borderRadius,
             textureClass
         };
+
+        if (!hasSeenInitialGlow) {
+            hasSeenInitialGlow = true;
+            document.getElementById('plant-button').classList.remove('glow');
+        }
+
         lastPlantTime = currentTime;
         updateDisplay();
         updateLastAction("Planted Potato");
@@ -756,7 +766,9 @@ function saveGame() {
             name: upgrade.name,
             purchased: upgrade.purchased,
             count: upgrade.count
-        }))
+        })),
+        isFirstPlant: isFirstPlant,
+        hasSeenInitialGlow: hasSeenInitialGlow
     };
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
@@ -858,8 +870,18 @@ function loadGame() {
                 startNuclearIceMelter();
             }
 
+            hasSeenInitialGlow = gameState.hasSeenInitialGlow || false;
+
+            // Only add the glow if it's a new player
+            if (!hasSeenInitialGlow) {
+                document.getElementById('plant-button').classList.add('glow');
+            }
+
             showToast('Game loaded successfully!', 'Your progress has been restored.', 'success');
         } else {
+            // New game
+            hasSeenInitialGlow = false;
+            document.getElementById('plant-button').classList.add('glow');
             unlockedActionCards = ['exploration-container'];
             updateActionCards();
             showToast('No saved game found', 'Starting a new game.', 'info');
@@ -909,6 +931,7 @@ function initGame() {
         requestAnimationFrame(gameLoop);
         gameInitialized = true;
         
+        
         // Ensure action cards are updated after the DOM is fully loaded
         if (document.readyState === 'complete') {
             updateActionCards();
@@ -918,5 +941,5 @@ function initGame() {
     }
 }
 
-// Keep only this event listener
+// Call initGame when the window loads
 window.addEventListener('load', initGame);

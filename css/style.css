@@ -79,6 +79,16 @@ button:hover, button:disabled {
     background: rgba(0,0,0,.1);
 }
 
+@keyframes buttonPulse {
+    0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.7); }
+    50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.9); }
+    100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.7); }
+}
+
+#plant-button.glow {
+    animation: buttonPulse 2s infinite ease-in-out;
+}
+
 /* Potato Field */
 #potato-field {
     display: grid;

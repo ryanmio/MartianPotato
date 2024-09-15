@@ -95,3 +95,6 @@ TODO:
         - [ ] "Potato Empire": Have 1000 potatoes, 1000 water, 1000 soil nutrients, and 1000 oxygen simultaneously
             - Asset: potato_empire.webp
             - Prompt: "A grand Martian citadel made entirely of interconnected potato-shaped domes. Each dome represents a resource: potatoes, water, nutrients, and oxygen. Holographic '1000' floats above each dome. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
+
+Bugs:
+- [ ] Manual exploration should reward no water and twice as much ice as nutrients since ice is melted into water and we want to encourage that action without ice going to 0 to use the nutrients gained from exploration

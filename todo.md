@@ -96,5 +96,26 @@ TODO:
             - Asset: potato_empire.webp
             - Prompt: "A grand Martian citadel made entirely of interconnected potato-shaped domes. Each dome represents a resource: potatoes, water, nutrients, and oxygen. Holographic '1000' floats above each dome. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
 
-Bugs:
+Bugs/Issues:
 - [ ] Manual exploration should reward no water and twice as much ice as nutrients since ice is melted into water and we want to encourage that action without ice going to 0 to use the nutrients gained from exploration
+- [ ] Reduce initial planting delay
+- [ ] Adjust costs of upgrades
+    - hand trowel from 0 to 1 potatoes
+    - manual ice melting from 0 to 3 potatoes
+    - martian map from 10 to 5 potatoes
+    - watering can from 1 to 5 potatoes and lower weight
+    - automated planter from 5 to 25 potatoes
+    - binoculars from 50 to 20 potatoes
+    - automated harvester from 25 to 50 potatoes
+    - Ice melting basin from 100 to 25 potatoes and lower weight
+    - thermal drill from 200 to 100 potatoes and lower weight (potentially remove)
+    - subsurface aquifer tapper from 500 to 250 potatoes and lower weight
+    - field expansion from 1000 to 500 potatoes
+    - spudnik satellite from 2000 to 300 potatoes and lower weight
+    - nuclear ice melter from 5000 to 1000 potatoes and increase weight
+    - martian bucket excavator from 3500 to 750 potatoes
+    - polar cap mining from 2500 to 1500 potatoes
+    - subterranean tunneler from 5000 to 2500 potatoes
+    - martian potato colonizer from 20000 to 50,000 and increase weight
+    - cometary ice harvester from 10,000 to 5,000 potatoes and increase weight
+- Implement quantum spud spawnder functionality

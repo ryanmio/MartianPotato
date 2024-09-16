@@ -21,7 +21,11 @@ function exploreMarsSurface() {
 
     // Calculate rewards for manual exploration
     const nutrientReward = Math.floor(Math.random() * 10 + 1) * window.explorationResourceMultiplier;
-    const iceReward = nutrientReward * 2; // Twice as much ice as nutrients
+    
+    // Introduce randomness to iceReward to average out at twice the nutrients
+    // Ice reward will vary between 1x to 3x the nutrientsReward to average 2x
+    const iceMultiplier = Math.random() * 2 + 1; // Generates a value between 1 and 3
+    const iceReward = Math.floor(nutrientReward * iceMultiplier);
 
     // Add rewards to global resource counters (no water rewarded)
     nutrients += nutrientReward;
@@ -30,7 +34,7 @@ function exploreMarsSurface() {
     // Prepare reward message for user feedback
     const rewards = [];
     if (nutrientReward > 0) rewards.push(`${nutrientReward.toFixed(1)} nutrients`);
-    if (iceReward > 0) rewards.push(`${iceReward} ice`); // Removed `.toFixed(1)` for integer ice values
+    if (iceReward > 0) rewards.push(`${iceReward} ice`);
 
     const rewardString = rewards.join(', ').replace(/,([^,]*)$/, ' and$1');
 

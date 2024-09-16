@@ -782,7 +782,8 @@ function saveGame() {
         isFirstPlant: isFirstPlant,
         hasSeenInitialGlow: hasSeenInitialGlow,
         isPolarCapMiningUnlocked,
-        isPolarCapMiningActive
+        isPolarCapMiningActive,
+        highestPurchasedWeight // Add this line to save the variable
     };
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
@@ -823,6 +824,7 @@ function loadGame() {
             autoHarvesters = gameState.autoHarvesters || [];
             MAX_FIELD_SIZE = gameState.MAX_FIELD_SIZE || 8;
             unlockedActionCards = gameState.unlockedActionCards || ['exploration-container'];
+            highestPurchasedWeight = gameState.highestPurchasedWeight || 0; // Add this line to load the variable
 
             // Ensure unlockedActionCards is initialized correctly
             unlockedActionCards = ['exploration-container']; // Always include exploration

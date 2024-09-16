@@ -24,7 +24,7 @@ TODO:
 - [x] Implement "tutorial" hover effect to highlight the initial actions the user should take
 - [ ] Add exploration cards for remaining exploration upgrades
     - [x] Subsurface Aquifer Tapper
-    - [ ] Martian Polar Cap Extractor
+    - [x] Martian Polar Cap Extractor
     - [ ] Cometary Ice Harvester
 - [ ] Implement random events
 - [ ] Balance upgrade costs and effects
@@ -86,9 +86,6 @@ TODO:
             - Asset: field_full.webp
             - Prompt: "A top-down view of a perfectly organized Martian potato field with 8 distinct, fully-grown potato plots. Each plot glows slightly, indicating peak health. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
     - [ ] Combination Achievements:
-        - [ ] "Self-Sustaining": Produce more resources than you consume for 5 minutes straight
-            - Asset: self_sustaining.webp
-            - Prompt: "A closed-loop system diagram showing potato plants, water recycling, nutrient production, and oxygen generation. Arrows between elements pulse with energy, all numbers are in the green. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
         - [ ] "Potato Empire": Have 1000 potatoes, 1000 water, 1000 soil nutrients, and 1000 oxygen simultaneously
             - Asset: potato_empire.webp
             - Prompt: "A grand Martian citadel made entirely of interconnected potato-shaped domes. Each dome represents a resource: potatoes, water, nutrients, and oxygen. Holographic '1000' floats above each dome. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
@@ -97,3 +94,4 @@ Bugs/Issues:
 - [ ] Manual exploration should reward no water and twice as much ice as nutrients since ice is melted into water and we want to encourage that action without ice going to 0 to use the nutrients gained from exploration
 - [ ] Reduce initial planting delay
 - Implement quantum spud spawnder functionality
+- [x] The blur on the tech tree is reappearing on load even after a level 10 upgrade is purchased

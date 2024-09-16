@@ -51,9 +51,6 @@ TODO:
         - [ ] "One Sol Wonder": Play the game continuously for 1 Martian day (24 hours and 37 minutes)
             - Asset: one_sol_wonder.webp
             - Prompt: "A split-screen showing a Martian day cycle: one half in daylight, the other in Martian night. A potato plant grows progressively across the image. A clock face overlaid shows 24:37. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
-        - [ ] "Week on Mars": Accumulate 7 days of total play time
-            - Asset: week_on_mars.webp
-            - Prompt: "Seven potato plants in a row, each representing a day of growth on Mars. The background transitions from a newly established base to a thriving potato farm. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
     - [ ] Other Achievements:
         - [ ] "Potato Empire": Have 1000 potatoes, 1000 water, 1000 soil nutrients, and 1000 oxygen simultaneously
             - Asset: potato_empire.webp
@@ -61,5 +58,6 @@ TODO:
 
 Bugs/Issues:
 - [x] The blur on the tech tree is reappearing on load even after a level 10 upgrade is purchased
-- [ ] Manual exploration should reward no water and twice as much ice as nutrients since ice is melted into water and we want to encourage that action without ice going to 0 to use the nutrients gained from exploration
+- [x] Manual exploration should reward no water and twice as much ice as nutrients since ice is melted into water and we want to encourage that action without ice going to 0 to use the nutrients gained from exploration
 - [ ] Reduce initial planting delay from 5 to 3 seconds, and adjust the upgrades to match
+- [ ] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.

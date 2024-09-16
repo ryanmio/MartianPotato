@@ -9,7 +9,6 @@ window.exploreDelay = 10000; // 10 seconds initial delay between manual explorat
 
 // Add these global variables at the top of the file
 window.waterExplorationMultiplier = 1;
-window.polarCapBonusChance = 0;
 
 function exploreMarsSurface() {
     const currentTime = Date.now();
@@ -24,13 +23,6 @@ function exploreMarsSurface() {
     const nutrientReward = Math.floor(Math.random() * 10 + 1) * window.explorationResourceMultiplier;
     const iceReward = nutrientReward * 2; // Twice as much ice as nutrients
 
-    // Check for polar cap bonus
-    if (Math.random() < window.polarCapBonusChance) {
-        const bonusIce = Math.floor(Math.random() * 11 + 10); // 10-20 bonus ice instead of water
-        ice += bonusIce;
-        showToast("Polar Cap Bonus!", `You've extracted an additional ${bonusIce} ice from the Martian polar caps!`, 'achievement');
-    }
-
     // Add rewards to global resource counters (no water rewarded)
     nutrients += nutrientReward;
     ice += iceReward;
@@ -38,13 +30,13 @@ function exploreMarsSurface() {
     // Prepare reward message for user feedback
     const rewards = [];
     if (nutrientReward > 0) rewards.push(`${nutrientReward.toFixed(1)} nutrients`);
-    if (iceReward > 0) rewards.push(`${iceReward.toFixed(1)} ice`);
+    if (iceReward > 0) rewards.push(`${iceReward} ice`); // Removed `.toFixed(1)` for integer ice values
 
     const rewardString = rewards.join(', ').replace(/,([^,]*)$/, ' and$1');
 
     showToast(
         "Resources Acquired",
-        `An exploration of the martian surface yielded: ${rewardString}.`,
+        `An exploration of the Martian surface yielded: ${rewardString}.`,
         'achievement'
     );
 
@@ -61,12 +53,6 @@ function autonomousExploration() {
         const waterReward = (Math.random() * 2.5 + 0.5) * window.totalExplorationRate * window.explorationResourceMultiplier * window.waterExplorationMultiplier;
         const nutrientReward = (Math.random() * 5 + 1) * window.totalExplorationRate * window.explorationResourceMultiplier;
         const iceReward = (Math.random() * 5 + 1) * window.totalExplorationRate * window.explorationResourceMultiplier;
-
-        // Check for polar cap bonus
-        if (Math.random() < window.polarCapBonusChance) {
-            const bonusWater = Math.floor(Math.random() * 11 + 10); // 10-20 bonus water
-            water += bonusWater;
-        }
 
         // Add rewards to global resource counters
         water += waterReward;

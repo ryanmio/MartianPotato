@@ -21,25 +21,22 @@ function exploreMarsSurface() {
     }
 
     // Calculate rewards for manual exploration
-    const waterReward = Math.floor(Math.random() * 5 + 1) * window.explorationResourceMultiplier * window.waterExplorationMultiplier;
     const nutrientReward = Math.floor(Math.random() * 10 + 1) * window.explorationResourceMultiplier;
-    const iceReward = Math.floor(Math.random() * 10 + 1) * window.explorationResourceMultiplier;
+    const iceReward = nutrientReward * 2; // Twice as much ice as nutrients
 
     // Check for polar cap bonus
     if (Math.random() < window.polarCapBonusChance) {
-        const bonusWater = Math.floor(Math.random() * 11 + 10); // 10-20 bonus water
-        water += bonusWater;
-        showToast("Polar Cap Bonus!", `You've extracted an additional ${bonusWater} water from the Martian polar caps!`, 'achievement');
+        const bonusIce = Math.floor(Math.random() * 11 + 10); // 10-20 bonus ice instead of water
+        ice += bonusIce;
+        showToast("Polar Cap Bonus!", `You've extracted an additional ${bonusIce} ice from the Martian polar caps!`, 'achievement');
     }
 
-    // Add rewards to global resource counters
-    water += waterReward;
+    // Add rewards to global resource counters (no water rewarded)
     nutrients += nutrientReward;
     ice += iceReward;
 
     // Prepare reward message for user feedback
     const rewards = [];
-    if (waterReward > 0) rewards.push(`${waterReward.toFixed(1)} water`);
     if (nutrientReward > 0) rewards.push(`${nutrientReward.toFixed(1)} nutrients`);
     if (iceReward > 0) rewards.push(`${iceReward.toFixed(1)} ice`);
 

@@ -25,7 +25,7 @@ let ice = 100;
 let rawPotatoesPerSecond = 0;
 
 // Planting Variables
-let plantingDelay = 5000;
+let plantingDelay = 3000;
 let lastPlantTime = 0;
 let potatoesPerClick = 1;
 let isFirstPlant = true;

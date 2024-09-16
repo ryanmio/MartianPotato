@@ -33,17 +33,17 @@ let bucketWheelExcavatorInterval = null;
 const upgrades = [
     { 
         name: "Hand Trowel", 
-        cost: 1, // Changed from 0 to 1
-        effect: () => { plantingDelay = 4000; },
+        cost: 1,
+        effect: () => { plantingDelay = Math.max(2500, plantingDelay - 500); },
         icon: "🖐️",
-        description: "The simplest tool for planting potatoes.",
+        description: "Reduces planting time by 0.5 seconds.",
         metaMessage: "Manual labor. The game begins with the simplest form of interaction, making future efficiencies feel like significant advancements.",
         weight: 1,
         category: "planting"
     },
     { 
         name: "Manual Ice Melting", 
-        cost: 3, // Changed from 0 to 3
+        cost: 3,
         effect: () => { 
             unlockManualIceMelting();
         },
@@ -56,17 +56,17 @@ const upgrades = [
     },
     { 
         name: "Watering Can", 
-        cost: 5, // Changed from 1 to 5
-        effect: () => { plantingDelay = 3000; },
+        cost: 5,
+        effect: () => { plantingDelay = Math.max(2000, plantingDelay - 500); },
         icon: "🚿",
-        description: "Speeds up the planting process by efficiently watering the soil.",
+        description: "Further reduces planting time by 0.5 seconds.",
         metaMessage: "Integrating water delivery. This upgrade speeds up the planting process, giving you a sense of progress while subtly introducing the concept of resource management.",
-        weight: 2, // Lowered weight
+        weight: 2,
         category: "planting"
     },
     { 
         name: "Automated Planter", 
-        cost: 25, // Changed from 5 to 25
+        cost: 25,
         effect: () => { addAutoplanter(); }, 
         count: 0,
         repeatable: true,
@@ -78,7 +78,7 @@ const upgrades = [
     },
     { 
         name: "Auto Harvester", 
-        cost: 50, // Changed from 100 to 50
+        cost: 50,
         effect: () => { addAutoHarvester(); }, 
         count: 0,
         repeatable: true,
@@ -93,14 +93,14 @@ const upgrades = [
         cost: 1000000, 
         effect: () => { plantingDelay = 500; },
         icon: "⚛️",
-        description: "Utilizes quantum technology for near-instant potato planting.",
+        description: "Utilizes quantum technology for near-instant potato planting (0.5 seconds).",
         metaMessage: "The ultimate efficiency. The game offers peak performance, yet at a steep resource cost. This reflects the paradox of progress: as you achieve perfection, your burden increases.",
         weight: 20,
         category: "planting"
     },
     { 
         name: "Martian Map", 
-        cost: 5, // Changed from 10 to 5
+        cost: 5,
         effect: () => { 
             window.exploreDelay = Math.max(1000, window.exploreDelay - 5000);
             updateExploreButton();
@@ -113,7 +113,7 @@ const upgrades = [
     },
     { 
         name: "Binoculars", 
-        cost: 20, // Changed from 50 to 20
+        cost: 20,
         effect: () => { 
             window.exploreDelay = Math.max(1000, window.exploreDelay - 1000);
             updateExploreButton();
@@ -139,7 +139,7 @@ const upgrades = [
     },
     { 
         name: "Spudnik Satellite", 
-        cost: 300, // Changed from 2000 to 300
+        cost: 300,
         effect: () => { 
             window.explorationResourceMultiplier = 1.5; 
             showToast("Upgrade Effect", "Spudnik Satellite now increases resource yields from exploration by 50%!", 'achievement');
@@ -147,12 +147,12 @@ const upgrades = [
         icon: "🛰️",
         description: "Orbits Mars, providing detailed surface scans and increasing resource discovery by 50%.",
         metaMessage: "Global perspective. This upgrade demonstrates how technology can provide a broader view, leading to more efficient resource discovery and management.",
-        weight: 7, // Lowered weight
+        weight: 7,
         category: "exploration"
     },
     { 
         name: "Martian Bucket-Wheel Excavator", 
-        cost: 750, // Changed from 3500 to 750
+        cost: 750,
         effect: () => { 
             unlockBucketWheelExcavator();
         },
@@ -165,7 +165,7 @@ const upgrades = [
     },
     { 
         name: "Subterranean Tuber Tunneler", 
-        cost: 2500, // Changed from 5000 to 2500
+        cost: 2500,
         effect: () => { window.totalExplorationRate += 1; updateAutonomousExploration(); },
         icon: "🕳️",
         description: "Burrows beneath the Martian surface, uncovering hidden resource deposits.",
@@ -175,12 +175,12 @@ const upgrades = [
     },
     { 
         name: "Martian Potato Colonizer", 
-        cost: 50000, // Changed from 20000 to 50000
+        cost: 50000,
         effect: () => { window.totalExplorationRate += 2; updateAutonomousExploration(); },
         icon: "🏙️",
         description: "Establishes autonomous potato-growing colonies across Mars, greatly increasing resource discovery.",
         metaMessage: "Full automation. This final upgrade represents the pinnacle of your Martian potato empire, showcasing how far you've come from manual labor to planet-wide automation.",
-        weight: 16, // Increased weight
+        weight: 16,
         category: "exploration"
     },
     {
@@ -193,24 +193,24 @@ const upgrades = [
         icon: "🔥",
         description: "A specialized drill that uses heat to extract water from ice deposits more effectively.",
         metaMessage: "Efficiency through technology. This upgrade introduces the concept of specialized tools, showing how targeted innovations can significantly boost resource gathering.",
-        weight: 5, // Lowered weight
+        weight: 5,
         category: "exploration"
     },
     {
         name: "Subsurface Aquifer Tapper",
-        cost: 250, // Changed from 500 to 250
+        cost: 250,
         effect: () => { 
             unlockSubsurfaceAquiferTapper();
         },
         icon: "💧",
         description: "Accesses underground water reserves. Consumes 1 potato per second to produce 2 water per second when active.",
         metaMessage: "Automated resource conversion. This upgrade introduces the concept of continuous resource transformation, requiring players to balance potato production and water generation.",
-        weight: 6, // Lowered weight
+        weight: 6,
         category: "exploration"
     },
     {
         name: "Polar Cap Mining",
-        cost: 1500, // Changed from 2500 to 1500
+        cost: 1500,
         effect: () => { 
             unlockPolarCapMining();
         },
@@ -222,7 +222,7 @@ const upgrades = [
     },
     {
         name: "Cometary Ice Harvester",
-        cost: 5000, // Changed from 10000 to 5000
+        cost: 5000,
         effect: () => { 
             window.waterExplorationMultiplier = (window.waterExplorationMultiplier || 1) * 2.5;
             window.totalExplorationRate *= 1.1;
@@ -231,23 +231,23 @@ const upgrades = [
         icon: "☄️",
         description: "Occasionally intercepts and harvests passing comets for their water-rich ice, boosting both exploration and water collection.",
         metaMessage: "Thinking beyond Mars. This upgrade expands the game's scope, showing how advanced technology can turn previously unreachable resources into viable options.",
-        weight: 17, // Increased weight
+        weight: 17,
         category: "exploration"
     },
     {
         name: "Ice Melting Basin",
-        cost: 25, // Changed from 100 to 25
+        cost: 25,
         effect: () => { unlockIceMeltingBasin(); },
         icon: "🛁",
         description: "A large basin that can melt ice more efficiently. Consumes 8 ice to produce 1 water per second for 8 seconds.",
         metaMessage: "Batch processing. This upgrade introduces the concept of delayed gratification and resource management over time.",
         assetName: "ice_melting_basin.webp",
-        weight: 4, // Lowered weight
+        weight: 4,
         category: "harvesting"
     },
     {
         name: "Nuclear Ice Melter",
-        cost: 1000, // Changed from 5000 to 1000
+        cost: 1000,
         effect: () => { 
             console.log("Nuclear Ice Melter upgrade purchased");
             unlockNuclearIceMelter();
@@ -256,12 +256,12 @@ const upgrades = [
         description: "A powerful nuclear-powered ice melter. Consumes 100 potatoes to activate, then melts 5 ice per second to produce 5 water per second.",
         metaMessage: "High-energy solution. This upgrade introduces the concept of significant initial investment for continuous high output.",
         assetName: "nuclear_ice_melter.webp",
-        weight: 12, // Increased weight
+        weight: 12,
         category: "harvesting"
     },
     {
         name: "Field Expansion",
-        cost: 500, // Changed from 1000 to 500
+        cost: 500,
         effect: () => { 
             updateFieldSize(16);
             showToast("Upgrade Purchased", "Your potato field has been expanded to 16 plots!", 'upgrade');

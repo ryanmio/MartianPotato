@@ -23,7 +23,7 @@ TODO:
 - [x] Implement upgrade to increase plots from 8 to 16 and possibly more
 - [x] Implement "tutorial" hover effect to highlight the initial actions the user should take
 - [x] Implement save/load functionality
-- [ ] Make it so that planting potatoes does not consume or require ice, just water and nutrients
+- [x] Make it so that planting potatoes does not consume or require ice, just water and nutrients
 - [ ] Implement upgrades that reduce the time it takes for potatoes to be ready to harvest
 - [ ] Add exploration cards for remaining upgrades
     - [x] Subsurface Aquifer Tapper

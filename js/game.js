@@ -141,10 +141,9 @@ function calculatePotatoesPerSecond() {
 
 // Consume resources for potato growth, applying efficiency multipliers
 function consumeResources(amount = 1) {
-    if (water >= amount && nutrients >= amount && ice >= amount) {
+    if (water >= amount && nutrients >= amount) {
         water -= amount / waterEfficiency;
         nutrients -= amount / soilEfficiency;
-        ice -= amount / iceEfficiency;
         return true;
     }
     return false;

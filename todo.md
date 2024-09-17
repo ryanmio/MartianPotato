@@ -24,27 +24,14 @@ TODO:
 - [x] Implement "tutorial" hover effect to highlight the initial actions the user should take
 - [x] Implement save/load functionality
 - [x] Make it so that planting potatoes does not consume or require ice, just water and nutrients
-- [ ] Implement upgrades that reduce the time it takes for potatoes to be ready to harvest:
-    - [ ] "Martian Soil Enrichment": Reduces potato growth time by 50%
-        - Cost: 100 potatoes
-        - Icon: 🌱
-        - Description: "Enrich Martian soil with special nutrients to speed up potato growth."
-        - Weight: 5
-    - [ ] "Potato Genome Modification": Reduces potato growth time by 50%
-        - Cost: 50 potatoes
-        - Icon: 🧬
-        - Description: "Genetically modify potatoes to grow faster in Martian conditions."
-        - Weight: 10
-    - [ ] "Martian Soil Bacteria Inoculant": Reduces potato growth time by 50%
-        - Cost: 175 potatoes
-        - Icon: 🦠
-        - Description: "Introduce beneficial Martian soil bacteria to enhance nutrient uptake and accelerate potato growth."
-        - Weight: 12
-    - [ ] "Gravitropism Accelerator": Reduces potato growth time by 50%
-        - Cost: 250 potatoes
-        - Icon: 🌍
-        - Description: "Manipulate the gravity sensing mechanisms in potato roots to accelerate growth in Martian gravity."
-        - Weight: 15
+- [x] Implement upgrades that reduce the time it takes for potatoes to be ready to harvest
+- [ ] Replace soil enrichment with potato compost
+- [ ] Implement martian trade agreement
+- [ ] Implement research grant
+- [ ] Implement the following upgrades which unlock additional technologies in the tech tree:
+    - [ ] Potato Battery
+    - [ ] Potato Computer Chip
+    - [ ] Potato Computer
 - [ ] Add exploration cards for remaining upgrades
     - [x] Subsurface Aquifer Tapper
     - [x] Martian Polar Cap Extractor
@@ -52,7 +39,6 @@ TODO:
     - [ ] Martian Potato Colonizer
     - [ ] Quantum Spud Spawner
     - [ ] Subterranean Tunneler
-- [ ] Implement random events
 - [ ] Balance upgrade costs and effects
 - [ ] Implement time tracking to show user how many potatoes they've harvested over the course of their playtime and graph the potatoes over time in a chart
 - [ ] Hide debug menu

@@ -273,15 +273,15 @@ const upgrades = [
         category: "planting"
     },
     {
-        name: "Martian Soil Enrichment",
-        cost: 100,
+        name: "Potato Compost",
+        cost: 50,
         effect: () => {
             growthTimeMultiplier *= 0.5;
             showToast("Upgrade Effect", "Potato growth time reduced by 50%!", 'achievement');
         },
         icon: "🌱",
-        description: "Enrich Martian soil with special nutrients to speed up potato growth.",
-        metaMessage: "Enhance your soil to boost potato growth rates.",
+        description: "Soil enrichment with potato compost to speed up potato growth by 50%.",
+        metaMessage: "",
         weight: 5,
         category: "growth"
     },

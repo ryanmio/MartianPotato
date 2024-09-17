@@ -25,7 +25,8 @@ TODO:
 - [x] Implement save/load functionality
 - [x] Make it so that planting potatoes does not consume or require ice, just water and nutrients
 - [x] Implement upgrades that reduce the time it takes for potatoes to be ready to harvest
-- [ ] Replace soil enrichment with potato compost
+- [x] Replace soil enrichment with potato compost
+--------------------------------------------------------------------------------------------
 - [ ] Implement martian trade agreement
 - [ ] Implement research grant
 - [ ] Implement the following upgrades which unlock additional technologies in the tech tree:
@@ -66,4 +67,5 @@ Bugs/Issues:
 - [x] The blur on the tech tree is reappearing on load even after a level 10 upgrade is purchased
 - [x] Manual exploration should reward no water and twice as much ice as nutrients since ice is melted into water and we want to encourage that action without ice going to 0 to use the nutrients gained from exploration
 - [x] Reduce initial planting delay from 5 to 3 seconds, and adjust the upgrades to match
+--------------------------------------------------------------------------------------------
 - [ ] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.

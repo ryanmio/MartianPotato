@@ -271,6 +271,58 @@ const upgrades = [
         metaMessage: "Scaling up operations. This upgrade demonstrates how investment in infrastructure can lead to exponential growth potential.",
         weight: 10,
         category: "planting"
+    },
+    {
+        name: "Martian Soil Enrichment",
+        cost: 100,
+        effect: () => {
+            growthTimeMultiplier *= 0.5;
+            showToast("Upgrade Effect", "Potato growth time reduced by 50%!", 'achievement');
+        },
+        icon: "🌱",
+        description: "Enrich Martian soil with special nutrients to speed up potato growth.",
+        metaMessage: "Enhance your soil to boost potato growth rates.",
+        weight: 5,
+        category: "growth"
+    },
+    {
+        name: "Potato Genome Modification",
+        cost: 50,
+        effect: () => {
+            growthTimeMultiplier *= 0.5;
+            showToast("Upgrade Effect", "Potato growth time reduced by an additional 50%!", 'achievement');
+        },
+        icon: "🧬",
+        description: "Genetically modify potatoes to grow faster in Martian conditions.",
+        metaMessage: "Modify potato genes for rapid growth.",
+        weight: 10,
+        category: "growth"
+    },
+    {
+        name: "Martian Soil Bacteria Inoculant",
+        cost: 175,
+        effect: () => {
+            growthTimeMultiplier *= 0.5;
+            showToast("Upgrade Effect", "Potato growth time reduced by an additional 50%!", 'achievement');
+        },
+        icon: "🦠",
+        description: "Introduce beneficial Martian soil bacteria to enhance nutrient uptake and accelerate potato growth.",
+        metaMessage: "Boost nutrient uptake with specialized bacteria.",
+        weight: 12,
+        category: "growth"
+    },
+    {
+        name: "Gravitropism Accelerator",
+        cost: 250,
+        effect: () => {
+            growthTimeMultiplier *= 0.5;
+            showToast("Upgrade Effect", "Potato growth time reduced by an additional 50%!", 'achievement');
+        },
+        icon: "🌍",
+        description: "Manipulate the gravity sensing mechanisms in potato roots to accelerate growth in Martian gravity.",
+        metaMessage: "Harness gravity to speed up potato growth.",
+        weight: 15,
+        category: "growth"
     }
 ];
 

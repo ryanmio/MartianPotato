@@ -24,7 +24,27 @@ TODO:
 - [x] Implement "tutorial" hover effect to highlight the initial actions the user should take
 - [x] Implement save/load functionality
 - [x] Make it so that planting potatoes does not consume or require ice, just water and nutrients
-- [ ] Implement upgrades that reduce the time it takes for potatoes to be ready to harvest
+- [ ] Implement upgrades that reduce the time it takes for potatoes to be ready to harvest:
+    - [ ] "Martian Soil Enrichment": Reduces potato growth time by 50%
+        - Cost: 100 potatoes
+        - Icon: 🌱
+        - Description: "Enrich Martian soil with special nutrients to speed up potato growth."
+        - Weight: 5
+    - [ ] "Potato Genome Modification": Reduces potato growth time by 50%
+        - Cost: 50 potatoes
+        - Icon: 🧬
+        - Description: "Genetically modify potatoes to grow faster in Martian conditions."
+        - Weight: 10
+    - [ ] "Martian Soil Bacteria Inoculant": Reduces potato growth time by 50%
+        - Cost: 175 potatoes
+        - Icon: 🦠
+        - Description: "Introduce beneficial Martian soil bacteria to enhance nutrient uptake and accelerate potato growth."
+        - Weight: 12
+    - [ ] "Gravitropism Accelerator": Reduces potato growth time by 50%
+        - Cost: 250 potatoes
+        - Icon: 🌍
+        - Description: "Manipulate the gravity sensing mechanisms in potato roots to accelerate growth in Martian gravity."
+        - Weight: 15
 - [ ] Add exploration cards for remaining upgrades
     - [x] Subsurface Aquifer Tapper
     - [x] Martian Polar Cap Extractor
@@ -59,5 +79,5 @@ TODO:
 Bugs/Issues:
 - [x] The blur on the tech tree is reappearing on load even after a level 10 upgrade is purchased
 - [x] Manual exploration should reward no water and twice as much ice as nutrients since ice is melted into water and we want to encourage that action without ice going to 0 to use the nutrients gained from exploration
-- [ ] Reduce initial planting delay from 5 to 3 seconds, and adjust the upgrades to match
+- [x] Reduce initial planting delay from 5 to 3 seconds, and adjust the upgrades to match
 - [ ] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.

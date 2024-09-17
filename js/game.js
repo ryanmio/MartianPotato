@@ -3,7 +3,7 @@
 
 // Game Constants
 let MAX_FIELD_SIZE = 8;
-const GROWTH_TIME = 8000; // 8 seconds
+const GROWTH_TIME = 8000; // Base growth time in milliseconds
 const UPDATE_INTERVAL = 1000; // Update every second
 const FRAME_RATE = 30; // 30 fps
 const FRAME_DELAY = 1000 / FRAME_RATE;
@@ -75,6 +75,9 @@ let lastAction = "None";
 
 // Add this variable at the top of the file with other game state variables
 let hasSeenInitialGlow = false;
+
+// **Introduce a multiplier for growth time**
+let growthTimeMultiplier = 1; // Starts at 1, decreases with upgrades
 
 // Main game loop function
 function gameLoop(currentTime) {
@@ -198,7 +201,8 @@ function updatePotatoGrowth() {
     potatoField = potatoField.map(potato => {
         if (potato !== null) {
             const growthTime = currentTime - potato.plantedAt;
-            potato.growthStage = Math.min(100, Math.floor((growthTime / GROWTH_TIME) * 100));
+            const actualGrowthTime = GROWTH_TIME * growthTimeMultiplier;
+            potato.growthStage = Math.min(100, Math.floor((growthTime / actualGrowthTime) * 100));
         }
         return potato;
     });
@@ -782,7 +786,8 @@ function saveGame() {
         hasSeenInitialGlow: hasSeenInitialGlow,
         isPolarCapMiningUnlocked,
         isPolarCapMiningActive,
-        highestPurchasedWeight // Add this line to save the variable
+        highestPurchasedWeight, // Add this line to save the variable
+        growthTimeMultiplier, // Add this line to save the variable
     };
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
@@ -824,6 +829,7 @@ function loadGame() {
             MAX_FIELD_SIZE = gameState.MAX_FIELD_SIZE || 8;
             unlockedActionCards = gameState.unlockedActionCards || ['exploration-container'];
             highestPurchasedWeight = gameState.highestPurchasedWeight || 0; // Add this line to load the variable
+            growthTimeMultiplier = gameState.growthTimeMultiplier || 1; // Add this line to load the variable
 
             // Ensure unlockedActionCards is initialized correctly
             unlockedActionCards = ['exploration-container']; // Always include exploration

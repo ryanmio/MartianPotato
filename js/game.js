@@ -66,6 +66,7 @@ const defaultAchievements = {
     // Add other achievements here
 };
 let achievements = { ...defaultAchievements };
+let MAX_TIER = 5;
 
 // Debug Variables
 let fpsValues = [];
@@ -841,7 +842,9 @@ function loadGame() {
                         upgrade.purchased = savedUpgrade.purchased || false;
                         upgrade.count = savedUpgrade.count || 0;
 
-                        if (!upgrade.repeatable && upgrade.purchased && upgrade.effect) {
+                        const isMilestoneUpgrade = upgrade.unlocksNextTier || false;
+
+                        if (!upgrade.repeatable && upgrade.purchased && upgrade.effect && !isMilestoneUpgrade) {
                             // For non-repeatable upgrades, apply the effect once
                             upgrade.effect();
                         }

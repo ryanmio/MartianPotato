@@ -354,6 +354,7 @@ const upgrades = [
             // Existing effect code
             unlockNextTier(); // Function to unlock the next tier
         },
+        unlocksNextTier: true,
         icon: "🔋",
         description: "Generates electricity from potatoes.",
         metaMessage: "The irony of power from food...",
@@ -367,6 +368,7 @@ const upgrades = [
         effect: () => {
             unlockNextTier(); // Unlock tier 3
         },
+        unlocksNextTier: true,
         icon: "💻",
         description: "Create basic computing circuits using potato-based components.",
         metaMessage: "From food to thought...",
@@ -380,6 +382,7 @@ const upgrades = [
         effect: () => {
             unlockNextTier(); // Unlock tier 4
         },
+        unlocksNextTier: true,
         icon: "🖥️",
         description: "Assemble a functional computer using potato-based components.",
         metaMessage: "The rise of tuber technology.",
@@ -393,6 +396,7 @@ const upgrades = [
         effect: () => {
             unlockNextTier(); // Unlock tier 5
         },
+        unlocksNextTier: true,
         icon: "🔬",
         description: "Harness quantum properties of specially grown potatoes for advanced computing.",
         metaMessage: "Quantum supremacy, potato style.",
@@ -406,6 +410,7 @@ const upgrades = [
         effect: () => {
             // Add sentience effect here
         },
+        unlocksNextTier: true,
         icon: "🧠",
         description: "Achieve the unthinkable: sentient potatoes.",
         metaMessage: "We were so preoccupied with whether we could, we didn't stop to think if we should.",
@@ -415,10 +420,14 @@ const upgrades = [
     }
 ];
 
-function unlockNextTier() {
-    currentTier += 1;
-    showToast("New Technology Tier Unlocked!", `Tier ${currentTier} technologies are now available.`, 'upgrade');
-    updateTechTree();
+function unlockNextTier(fromLoad = false) {
+    if (currentTier < MAX_TIER) {
+        currentTier += 1;
+        if (!fromLoad) {
+            showToast("New Technology Tier Unlocked!", `Tier ${currentTier} technologies are now available.`, 'upgrade');
+            updateTechTree();
+        }
+    }
 }
 
 // Update the tech tree UI, throttled to run at most once per second

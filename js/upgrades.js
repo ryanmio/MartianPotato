@@ -466,7 +466,36 @@ function updateTechTree() {
             }
         }
     });
+
+    // After updating the tech tree, update the arrow visibility
+    updateCarouselArrows();
 }
+
+// Function to update the visibility of carousel arrows
+function updateCarouselArrows() {
+    const techTreeContainer = document.getElementById('tech-tree');
+    const leftArrow = document.getElementById('tech-tree-left');
+    const rightArrow = document.getElementById('tech-tree-right');
+
+    // Check if scrolling to the left is possible
+    if (techTreeContainer.scrollLeft > 0) {
+        leftArrow.style.display = 'block';
+    } else {
+        leftArrow.style.display = 'none';
+    }
+
+    // Check if scrolling to the right is possible
+    if (techTreeContainer.scrollWidth - techTreeContainer.clientWidth - techTreeContainer.scrollLeft > 0) {
+        rightArrow.style.display = 'block';
+    } else {
+        rightArrow.style.display = 'none';
+    }
+}
+
+
+// Also, call updateCarouselArrows when the window is resized or when the tech tree is scrolled
+window.addEventListener('resize', updateCarouselArrows);
+document.getElementById('tech-tree').addEventListener('scroll', updateCarouselArrows);
 
 // Main game loop function, called on each animation frame
 function gameLoop(currentTime) {

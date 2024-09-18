@@ -39,7 +39,8 @@ const upgrades = [
         description: "Reduces planting time by 0.5 seconds.",
         metaMessage: "Manual labor. The game begins with the simplest form of interaction, making future efficiencies feel like significant advancements.",
         weight: 1,
-        category: "planting"
+        category: "planting",
+        tier: 1
     },
     { 
         name: "Manual Ice Melting", 
@@ -52,7 +53,8 @@ const upgrades = [
         metaMessage: "The grind begins. By starting with a low-yield, high-effort method, the game establishes a baseline against which all future upgrades will feel like progress, even if they simply shift the type of effort required.",
         assetName: "manual_ice_melting.webp",
         weight: 2,
-        category: "harvesting"
+        category: "harvesting",
+        tier: 1
     },
     { 
         name: "Watering Can", 
@@ -62,7 +64,8 @@ const upgrades = [
         description: "Further reduces planting time by 0.5 seconds.",
         metaMessage: "Integrating water delivery. This upgrade speeds up the planting process, giving you a sense of progress while subtly introducing the concept of resource management.",
         weight: 2,
-        category: "planting"
+        category: "planting",
+        tier: 1
     },
     { 
         name: "Automated Planter", 
@@ -74,7 +77,8 @@ const upgrades = [
         description: "Automatically plants potatoes, reducing manual labor.",
         metaMessage: "Automation's allure. This upgrade significantly reduces active playtime, giving you a sense of progress and control, while quietly introducing a new constraint: power.",
         weight: 4,
-        category: "planting"
+        category: "planting",
+        tier: 1
     },
     { 
         name: "Auto Harvester", 
@@ -86,7 +90,8 @@ const upgrades = [
         description: "Automatically harvests mature potatoes.",
         metaMessage: "Your first step towards full automation. The game is reducing your direct involvement, shifting your focus to management and strategy.",
         weight: 5,
-        category: "harvesting"
+        category: "harvesting",
+        tier: 1
     },
     { 
         name: "Quantum Spud Spawner", 
@@ -96,7 +101,8 @@ const upgrades = [
         description: "Utilizes quantum technology for near-instant potato planting (0.5 seconds).",
         metaMessage: "The ultimate efficiency. The game offers peak performance, yet at a steep resource cost. This reflects the paradox of progress: as you achieve perfection, your burden increases.",
         weight: 20,
-        category: "planting"
+        category: "planting",
+        tier: 4
     },
     { 
         name: "Martian Map", 
@@ -109,7 +115,8 @@ const upgrades = [
         description: "Reduces exploration time by 5 seconds.",
         metaMessage: "Efficiency through knowledge. This upgrade demonstrates how information can lead to faster progress, subtly encouraging you to value data and exploration.",
         weight: 2,
-        category: "exploration"
+        category: "exploration",
+        tier: 1
     },
     { 
         name: "Binoculars", 
@@ -122,7 +129,8 @@ const upgrades = [
         description: "Further reduces exploration time by 1 second.",
         metaMessage: "Incremental improvements. This upgrade shows how small advancements can accumulate, encouraging continued investment in seemingly minor upgrades.",
         weight: 3,
-        category: "exploration"
+        category: "exploration",
+        tier: 1
     },
     { 
         name: "Jetpack", 
@@ -135,7 +143,8 @@ const upgrades = [
         description: "Halves the exploration cooldown time.",
         metaMessage: "Technological leaps. This upgrade represents a significant advancement, showing how larger investments can lead to more substantial improvements.",
         weight: 6,
-        category: "exploration"
+        category: "exploration",
+        tier: 2
     },
     { 
         name: "Spudnik Satellite", 
@@ -148,7 +157,8 @@ const upgrades = [
         description: "Orbits Mars, providing detailed surface scans and increasing resource discovery by 50%.",
         metaMessage: "Global perspective. This upgrade demonstrates how technology can provide a broader view, leading to more efficient resource discovery and management.",
         weight: 7,
-        category: "exploration"
+        category: "exploration",
+        tier: 2
     },
     { 
         name: "Martian Bucket-Wheel Excavator", 
@@ -161,7 +171,8 @@ const upgrades = [
         metaMessage: "Industrial-scale operations. This upgrade showcases how large-scale machinery can dramatically increase resource gathering efficiency, shifting the game's scale.",
         assetName: "bucket_wheel_excavator.webp",
         weight: 12,
-        category: "exploration"
+        category: "exploration",
+        tier: 3
     },
     { 
         name: "Subterranean Tuber Tunneler", 
@@ -181,7 +192,8 @@ const upgrades = [
         description: "Establishes autonomous potato-growing colonies across Mars, greatly increasing resource discovery.",
         metaMessage: "Full automation. This final upgrade represents the pinnacle of your Martian potato empire, showcasing how far you've come from manual labor to planet-wide automation.",
         weight: 16,
-        category: "exploration"
+        category: "exploration",
+        tier: 4
     },
     {
         name: "Thermal Drill",
@@ -194,7 +206,8 @@ const upgrades = [
         description: "A specialized drill that uses heat to extract water from ice deposits more effectively.",
         metaMessage: "Efficiency through technology. This upgrade introduces the concept of specialized tools, showing how targeted innovations can significantly boost resource gathering.",
         weight: 5,
-        category: "exploration"
+        category: "exploration",
+        tier: 1
     },
     {
         name: "Subsurface Aquifer Tapper",
@@ -206,7 +219,8 @@ const upgrades = [
         description: "Accesses underground water reserves. Consumes 1 potato per second to produce 2 water per second when active.",
         metaMessage: "Automated resource conversion. This upgrade introduces the concept of continuous resource transformation, requiring players to balance potato production and water generation.",
         weight: 6,
-        category: "exploration"
+        category: "exploration",
+        tier: 2
     },
     {
         name: "Polar Cap Mining",
@@ -218,7 +232,8 @@ const upgrades = [
         description: "Enables mining operations at Mars' polar caps. Consumes 2 potatoes per second to produce 2 ice per second.",
         metaMessage: "Tapping into new resources. This upgrade allows you to harvest ice directly from the polar caps, introducing resource management dynamics.",
         weight: 12,
-        category: "exploration"
+        category: "exploration",
+        tier: 3
     },
     {
         name: "Cometary Ice Harvester",
@@ -232,7 +247,8 @@ const upgrades = [
         description: "Occasionally intercepts and harvests passing comets for their water-rich ice, boosting both exploration and water collection.",
         metaMessage: "Thinking beyond Mars. This upgrade expands the game's scope, showing how advanced technology can turn previously unreachable resources into viable options.",
         weight: 17,
-        category: "exploration"
+        category: "exploration",
+        tier: 4
     },
     {
         name: "Ice Melting Basin",
@@ -243,7 +259,8 @@ const upgrades = [
         metaMessage: "Batch processing. This upgrade introduces the concept of delayed gratification and resource management over time.",
         assetName: "ice_melting_basin.webp",
         weight: 4,
-        category: "harvesting"
+        category: "harvesting",
+        tier: 1
     },
     {
         name: "Nuclear Ice Melter",
@@ -257,7 +274,8 @@ const upgrades = [
         metaMessage: "High-energy solution. This upgrade introduces the concept of significant initial investment for continuous high output.",
         assetName: "nuclear_ice_melter.webp",
         weight: 12,
-        category: "harvesting"
+        category: "harvesting",
+        tier: 3
     },
     {
         name: "Field Expansion",
@@ -270,7 +288,8 @@ const upgrades = [
         description: "Increase your potato field from 8 to 16 plots",
         metaMessage: "Scaling up operations. This upgrade demonstrates how investment in infrastructure can lead to exponential growth potential.",
         weight: 10,
-        category: "planting"
+        category: "planting",
+        tier: 2
     },
     {
         name: "Potato Compost",
@@ -283,7 +302,8 @@ const upgrades = [
         description: "Soil enrichment with potato compost to speed up potato growth by 50%.",
         metaMessage: "",
         weight: 5,
-        category: "growth"
+        category: "growth",
+        tier: 1
     },
     {
         name: "Potato Genome Modification",
@@ -296,7 +316,8 @@ const upgrades = [
         description: "Genetically modify potatoes to grow faster in Martian conditions.",
         metaMessage: "Modify potato genes for rapid growth.",
         weight: 10,
-        category: "growth"
+        category: "growth",
+        tier: 2
     },
     {
         name: "Martian Soil Bacteria Inoculant",
@@ -309,7 +330,8 @@ const upgrades = [
         description: "Introduce beneficial Martian soil bacteria to enhance nutrient uptake and accelerate potato growth.",
         metaMessage: "Boost nutrient uptake with specialized bacteria.",
         weight: 12,
-        category: "growth"
+        category: "growth",
+        tier: 3
     },
     {
         name: "Gravitropism Accelerator",
@@ -322,7 +344,8 @@ const upgrades = [
         description: "Manipulate the gravity sensing mechanisms in potato roots to accelerate growth in Martian gravity.",
         metaMessage: "Harness gravity to speed up potato growth.",
         weight: 15,
-        category: "growth"
+        category: "growth",
+        tier: 3
     }
 ];
 

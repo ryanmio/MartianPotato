@@ -346,6 +346,73 @@ const upgrades = [
         weight: 15,
         category: "growth",
         tier: 3
+    },
+    // Milestone upgrades
+    {
+        name: "Potato Battery",
+        cost: 50,
+        effect: () => { 
+            // Existing effect code
+            unlockNextTier(); // Function to unlock the next tier
+        },
+        icon: "🔋",
+        description: "Generates electricity from potatoes.",
+        metaMessage: "The irony of power from food...",
+        weight: 6,
+        category: "energy",
+        tier: 1
+    },
+    {
+        name: "Potato Computer Chip",
+        cost: 500,
+        effect: () => {
+            unlockNextTier(); // Unlock tier 3
+        },
+        icon: "💻",
+        description: "Create basic computing circuits using potato-based components.",
+        metaMessage: "From food to thought...",
+        weight: 11,
+        category: "technology",
+        tier: 2
+    },
+    {
+        name: "Potato Computer",
+        cost: 2000,
+        effect: () => {
+            unlockNextTier(); // Unlock tier 4
+        },
+        icon: "🖥️",
+        description: "Assemble a functional computer using potato-based components.",
+        metaMessage: "The rise of tuber technology.",
+        weight: 16,
+        category: "technology",
+        tier: 3
+    },
+    {
+        name: "Potato Quantum Computer",
+        cost: 10000,
+        effect: () => {
+            unlockNextTier(); // Unlock tier 5
+        },
+        icon: "🔬",
+        description: "Harness quantum properties of specially grown potatoes for advanced computing.",
+        metaMessage: "Quantum supremacy, potato style.",
+        weight: 21,
+        category: "technology",
+        tier: 4
+    },
+    {
+        name: "Potato Sentience",
+        cost: 1000000,
+        effect: () => {
+            // Add sentience effect here
+        },
+        icon: "🧠",
+        description: "Achieve the unthinkable: sentient potatoes.",
+        metaMessage: "We were so preoccupied with whether we could, we didn't stop to think if we should.",
+        weight: 25,
+        category: "technology",
+        tier: 5
     }
 ];
 

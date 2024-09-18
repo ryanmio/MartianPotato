@@ -27,12 +27,11 @@ TODO:
 - [x] Implement upgrades that reduce the time it takes for potatoes to be ready to harvest
 - [x] Replace soil enrichment with potato compost
 --------------------------------------------------------------------------------------------
-- [ ] Implement martian trade agreement
-- [ ] Implement research grant
 - [ ] Implement the following upgrades which unlock additional technologies in the tech tree:
     - [ ] Potato Battery
     - [ ] Potato Computer Chip
     - [ ] Potato Computer
+    - [ ] Potato Quantum Computer
 - [ ] Add exploration cards for remaining upgrades
     - [x] Subsurface Aquifer Tapper
     - [x] Martian Polar Cap Extractor
@@ -40,6 +39,8 @@ TODO:
     - [ ] Martian Potato Colonizer
     - [ ] Quantum Spud Spawner
     - [ ] Subterranean Tunneler
+- [ ] Implement martian trade agreement
+- [ ] Implement research grant
 - [ ] Balance upgrade costs and effects
 - [ ] Implement time tracking to show user how many potatoes they've harvested over the course of their playtime and graph the potatoes over time in a chart
 - [ ] Hide debug menu
@@ -69,3 +70,4 @@ Bugs/Issues:
 - [x] Reduce initial planting delay from 5 to 3 seconds, and adjust the upgrades to match
 --------------------------------------------------------------------------------------------
 - [ ] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.
+- [ ] clicking tech tree cards should open the modal not try to purchase the upgrade

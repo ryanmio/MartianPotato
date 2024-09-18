@@ -777,16 +777,17 @@ function saveGame() {
         autoHarvesters,
         MAX_FIELD_SIZE,
         unlockedActionCards,
+        currentTier, // Save the currentTier
         upgrades: upgrades.map(upgrade => ({
             name: upgrade.name,
-            purchased: upgrade.purchased,
+            purchased: upgrade.purchased || false,
             count: upgrade.count || 0 // Ensure count is saved even if zero
         })),
         isFirstPlant: isFirstPlant,
         hasSeenInitialGlow: hasSeenInitialGlow,
         isPolarCapMiningUnlocked,
         isPolarCapMiningActive,
-        highestPurchasedWeight, // Add this line to save the variable
+
         growthTimeMultiplier, // Add this line to save the variable
     };
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
@@ -828,37 +829,9 @@ function loadGame() {
             autoHarvesters = gameState.autoHarvesters || [];
             MAX_FIELD_SIZE = gameState.MAX_FIELD_SIZE || 8;
             unlockedActionCards = gameState.unlockedActionCards || ['exploration-container'];
-            highestPurchasedWeight = gameState.highestPurchasedWeight || 0; // Add this line to load the variable
-            growthTimeMultiplier = gameState.growthTimeMultiplier || 1; // Add this line to load the variable
-
-            // Ensure unlockedActionCards is initialized correctly
-            unlockedActionCards = ['exploration-container']; // Always include exploration
-
-            // Restore unlocked action cards
-            if (gameState.unlockedActionCards) {
-                unlockedActionCards = [...new Set([...unlockedActionCards, ...gameState.unlockedActionCards])];
-            }
-
-            // Ensure all unlocked features have their cards added
-            if (gameState.isManualIceMeltingUnlocked) {
-                unlockedActionCards.push('ice-melting-container');
-            }
-            if (gameState.isIceMeltingBasinUnlocked) {
-                unlockedActionCards.push('ice-melting-basin-container');
-            }
-            if (gameState.isNuclearIceMelterUnlocked) {
-                unlockedActionCards.push('nuclear-ice-melter-container');
-            }
-            if (isPolarCapMiningUnlocked) {
-                unlockPolarCapMining();
-            }
-            if (isPolarCapMiningActive) {
-                startPolarCapMining();
-            }
-            // Add similar checks for other unlockable features
-
-            // Remove duplicates
-            unlockedActionCards = [...new Set(unlockedActionCards)];
+            currentTier = gameState.currentTier || 1; // Restore currentTier
+            hasSeenInitialGlow = gameState.hasSeenInitialGlow || false;
+            growthTimeMultiplier = gameState.growthTimeMultiplier || 1;
 
             // Restore upgrades
             if (gameState.upgrades && Array.isArray(gameState.upgrades)) {
@@ -875,6 +848,29 @@ function loadGame() {
                     }
                 });
             }
+
+            // Restore unlocked action cards
+            if (gameState.unlockedActionCards) {
+                unlockedActionCards = [...new Set([...unlockedActionCards, ...gameState.unlockedActionCards])];
+            }
+
+            // Ensure all unlocked features have their cards added
+            if (isManualIceMeltingUnlocked) {
+                unlockedActionCards.push('ice-melting-container');
+            }
+            if (isIceMeltingBasinUnlocked) {
+                unlockedActionCards.push('ice-melting-basin-container');
+            }
+            if (isNuclearIceMelterUnlocked) {
+                unlockedActionCards.push('nuclear-ice-melter-container');
+            }
+            if (isPolarCapMiningUnlocked) {
+                unlockedActionCards.push('polar-cap-mining-container');
+            }
+            // Add similar checks for other unlockable features
+
+            // Remove duplicates
+            unlockedActionCards = [...new Set(unlockedActionCards)];
 
             // Reinitialize game elements
             initializePotatoField();
@@ -899,16 +895,16 @@ function loadGame() {
                 startNuclearIceMelter();
             }
 
-            hasSeenInitialGlow = gameState.hasSeenInitialGlow || false;
+            // Restart other active features if necessary
 
-            // Only add the glow if it's a new player
+            // Handle initial glow on the plant button
             if (!hasSeenInitialGlow) {
                 document.getElementById('plant-button').classList.add('glow');
             }
 
             showToast('Game loaded successfully!', 'Your progress has been restored.', 'success');
         } else {
-            // New game
+            // New game initialization
             hasSeenInitialGlow = false;
             document.getElementById('plant-button').classList.add('glow');
             unlockedActionCards = ['exploration-container'];

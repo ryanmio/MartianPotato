@@ -7,9 +7,10 @@ const BASE_HARVEST_DELAY = 1000; // 1 second in milliseconds
 
 // Upgrade System Variables
 let currentPlantingUpgrade = 0;
-let highestPurchasedWeight = 0;
 let lastTechTreeUpdate = 0;
 let unlockedActionCards = [];
+
+let currentTier = 1; // Initialize current tier to 1
 
 // Automation Arrays
 let autoplanters = [];
@@ -45,9 +46,7 @@ const upgrades = [
     { 
         name: "Manual Ice Melting", 
         cost: 3,
-        effect: () => { 
-            unlockManualIceMelting();
-        },
+        effect: () => { unlockManualIceMelting(); },
         icon: "🧊",
         description: "Collect water by manually melting Martian ice, 1 unit per 5 clicks.",
         metaMessage: "The grind begins. By starting with a low-yield, high-effort method, the game establishes a baseline against which all future upgrades will feel like progress, even if they simply shift the type of effort required.",
@@ -416,6 +415,12 @@ const upgrades = [
     }
 ];
 
+function unlockNextTier() {
+    currentTier += 1;
+    showToast("New Technology Tier Unlocked!", `Tier ${currentTier} technologies are now available.`, 'upgrade');
+    updateTechTree();
+}
+
 // Update the tech tree UI, throttled to run at most once per second
 function updateTechTree() {
     const currentTime = Date.now();
@@ -425,23 +430,24 @@ function updateTechTree() {
     lastTechTreeUpdate = currentTime;
 
     const techTree = document.getElementById('tech-tree');
-    const existingCards = new Set(Array.from(techTree.children).map(card => card.dataset.upgradeName));
+    const existingCards = new Set(Array.from(techTree.children).map(card => card.id));
 
     upgrades.forEach((upgrade) => {
         let shouldDisplayCard = false;
-        if (upgrade.repeatable) {
-            // Always display repeatable upgrades
-            shouldDisplayCard = true;
-        } else if (!upgrade.purchased) {
-            // Display non-repeatable upgrades that haven't been purchased
-            shouldDisplayCard = true;
+        if (upgrade.tier <= currentTier) {
+            if (upgrade.repeatable || !upgrade.purchased) {
+                shouldDisplayCard = true;
+            }
         }
 
+        const cardId = `upgrade-${upgrade.name.replace(/\s+/g, '-').toLowerCase()}`;
+
         if (shouldDisplayCard) {
-            if (!existingCards.has(upgrade.name)) {
+            if (!existingCards.has(cardId)) {
                 techTree.appendChild(createCard(upgrade));
+                existingCards.add(cardId);
             } else {
-                const card = techTree.querySelector(`.tech-card[data-upgrade-name="${upgrade.name}"]`);
+                const card = document.getElementById(cardId);
                 const upgradeCost = getUpgradeCost(upgrade);
                 const isPurchasable = potatoCount >= upgradeCost;
 
@@ -452,9 +458,12 @@ function updateTechTree() {
                     costElement.textContent = `Cost: ${upgradeCost} potatoes`;
                 }
             }
-        } else if (existingCards.has(upgrade.name)) {
-            const card = techTree.querySelector(`.tech-card[data-upgrade-name="${upgrade.name}"]`);
-            card.remove();
+        } else if (existingCards.has(cardId)) {
+            const card = document.getElementById(cardId);
+            if (card) {
+                techTree.removeChild(card);
+                existingCards.delete(cardId);
+            }
         }
     });
 }
@@ -479,21 +488,17 @@ function createTechTree() {
     const techTree = document.getElementById('tech-tree');
     techTree.innerHTML = ''; // Clear existing content
 
-    // Sort upgrades by weight
-    const sortedUpgrades = upgrades.slice().sort((a, b) => a.weight - b.weight);
-
-    sortedUpgrades.forEach((upgrade) => {
+    upgrades.forEach((upgrade) => {
         let shouldDisplayCard = false;
-        if (upgrade.repeatable) {
-            // Always display repeatable upgrades
-            shouldDisplayCard = true;
-        } else if (!upgrade.purchased) {
-            // Display non-repeatable upgrades that haven't been purchased
-            shouldDisplayCard = true;
+        if (upgrade.tier <= currentTier) {
+            if (upgrade.repeatable || !upgrade.purchased) {
+                shouldDisplayCard = true;
+            }
         }
 
         if (shouldDisplayCard) {
-            techTree.appendChild(createCard(upgrade));
+            const card = createCard(upgrade);
+            techTree.appendChild(card);
         }
     });
 }
@@ -501,9 +506,12 @@ function createTechTree() {
 // Create a single tech card for the given upgrade
 function createCard(upgrade) {
     const card = document.createElement('div');
+    const cardId = `upgrade-${upgrade.name.replace(/\s+/g, '-').toLowerCase()}`;
+    card.id = cardId; // Assign unique ID to prevent duplicates
     card.className = 'tech-card';
     card.dataset.upgradeName = upgrade.name;
     card.dataset.weight = upgrade.weight;
+    card.dataset.tier = upgrade.tier; // Add tier data attribute
 
     const iconElement = document.createElement('div');
     iconElement.className = 'tech-card-icon';
@@ -522,7 +530,8 @@ function createCard(upgrade) {
         iconElement.appendChild(img);
     };
 
-    iconElement.textContent = upgrade.icon; // Fallback content
+    // Fallback content
+    iconElement.textContent = upgrade.icon; 
 
     const detailsElement = document.createElement('div');
     detailsElement.className = 'tech-card-details';
@@ -531,8 +540,8 @@ function createCard(upgrade) {
         <p class="tech-card-cost">Cost: ${getUpgradeCost(upgrade)} potatoes</p>
     `;
 
-    // Only add the details button if the upgrade weight is not above 10 or if a weight 10 upgrade has been purchased
-    if (upgrade.weight <= 10 || highestPurchasedWeight >= 10) {
+    // Add the details button if the upgrade's tier is less than or equal to the current tier
+    if (upgrade.tier <= currentTier) {
         const detailsButton = document.createElement('button');
         detailsButton.className = 'details-button';
         detailsButton.textContent = 'Details';
@@ -541,14 +550,27 @@ function createCard(upgrade) {
             showUpgradeModal(upgrade);
         });
         detailsElement.appendChild(detailsButton);
+    } else {
+        // For upgrades in higher tiers, you can optionally display a lock icon or message
+        const lockedMessage = document.createElement('div');
+        lockedMessage.className = 'locked-message';
+        lockedMessage.textContent = 'Locked';
+        detailsElement.appendChild(lockedMessage);
     }
 
     card.appendChild(iconElement);
     card.appendChild(detailsElement);
 
-    // Add blur class if the upgrade weight is above 10 and no weight 10 upgrade has been purchased
-    if (upgrade.weight > 10 && highestPurchasedWeight < 10) {
+    // Add blur class if the upgrade is in a higher tier than the current tier
+    if (upgrade.tier > currentTier) {
         card.classList.add('blurred');
+    }
+
+    // Add click event listener only if the upgrade is purchasable (current or lower tier)
+    if (upgrade.tier <= currentTier) {
+        card.addEventListener('click', () => {
+            buyUpgrade(upgrade);
+        });
     }
 
     return card;
@@ -609,7 +631,9 @@ function buyUpgrade(upgrade) {
     const cost = getUpgradeCost(upgrade);
     if (potatoCount >= cost) {
         potatoCount -= cost;
-        upgrade.effect();
+        if (upgrade.effect) {
+            upgrade.effect();
+        }
         if (upgrade.count !== undefined) {
             upgrade.count++;
         } else {
@@ -617,34 +641,15 @@ function buyUpgrade(upgrade) {
         }
         updateDisplay();
 
-        // Update the highest purchased weight
-        highestPurchasedWeight = Math.max(highestPurchasedWeight, upgrade.weight);
-
-        // Queue an achievement for the upgrade purchase
-        queueAchievement(
-            `Technology Unlocked: ${upgrade.name}`,
-            upgrade.description,
-            upgrade.metaMessage
-        );
-
-        // Show a toast notification for the purchase
-        showToast("Upgrade Unlocked", `You have unlocked the ${upgrade.name} upgrade!`, 'achievement');
-
-        // Unlock the corresponding action card if applicable
-        unlockActionCardForUpgrade(upgrade.name);
-
-        // Update action cards
-        updateActionCards();
-
         // Remove the purchased upgrade from the tech tree if it's not repeatable
         if (!upgrade.repeatable) {
-            const techCard = document.querySelector(`.tech-card[data-upgrade-name="${upgrade.name}"]`);
+            const techCard = document.getElementById(`upgrade-${upgrade.name.replace(/\s+/g, '-').toLowerCase()}`);
             if (techCard) {
                 techCard.remove();
             }
         } else {
             // For repeatable upgrades, update the cost display
-            const techCard = document.querySelector(`.tech-card[data-upgrade-name="${upgrade.name}"]`);
+            const techCard = document.getElementById(`upgrade-${upgrade.name.replace(/\s+/g, '-').toLowerCase()}`);
             if (techCard) {
                 const costElement = techCard.querySelector('.tech-card-cost');
                 if (costElement) {
@@ -653,12 +658,17 @@ function buyUpgrade(upgrade) {
             }
         }
 
-        // If a weight 10 upgrade was purchased, update all cards
-        if (upgrade.weight === 10) {
-            updateAllCards();
-        }
+        // Show a toast notification for the purchase
+        showToast("Upgrade Unlocked", `You have unlocked the ${upgrade.name} upgrade!`, 'achievement');
 
-        saveGame(); // Save the game after purchasing an upgrade
+        // Unlock the corresponding action card if applicable
+        unlockActionCardForUpgrade(upgrade.name);
+
+        // Save the game after purchasing an upgrade
+        saveGame();
+
+        // Update the tech tree to reflect changes
+        updateTechTree();
     } else {
         showToast("Not Enough Potatoes", "You don't have enough potatoes to purchase this upgrade.", 'setback');
     }
@@ -697,31 +707,6 @@ function unlockActionCardForUpgrade(upgradeName) {
         unlockedActionCards.push(cardId);
         updateActionCards();
     }
-}
-
-// Update all tech cards when a weight 10 upgrade is purchased
-function updateAllCards() {
-    const cards = document.querySelectorAll('.tech-card');
-    cards.forEach(card => {
-        const weight = parseInt(card.dataset.weight, 10);
-        if (weight > 10) {
-            card.classList.remove('blurred');
-            if (!card.querySelector('.details-button')) {
-                const detailsButton = document.createElement('button');
-                detailsButton.className = 'details-button';
-                detailsButton.textContent = 'Details';
-                detailsButton.addEventListener('click', (event) => {
-                    event.stopPropagation();
-                    const upgradeName = card.dataset.upgradeName;
-                    const upgrade = upgrades.find(u => u.name === upgradeName);
-                    if (upgrade) {
-                        showUpgradeModal(upgrade);
-                    }
-                });
-                card.querySelector('.tech-card-details').appendChild(detailsButton);
-            }
-        }
-    });
 }
 
 // Add a new autoplanter to the game

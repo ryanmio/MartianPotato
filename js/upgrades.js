@@ -604,10 +604,10 @@ function createCard(upgrade) {
         card.classList.add('blurred');
     }
 
-    // Add click event listener only if the upgrade is purchasable (current or lower tier)
+    // Add click event listener to open the upgrade modal
     if (upgrade.tier <= currentTier) {
         card.addEventListener('click', () => {
-            buyUpgrade(upgrade);
+            showUpgradeModal(upgrade);
         });
     }
 

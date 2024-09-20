@@ -23,16 +23,12 @@ body {
     margin-bottom: 20px;
 }
 
-#resources, #production, #exploration {
+#resources, #production {
     flex: 1;
     margin-right: 20px;
 }
 
-#exploration {
-    margin-right: 0;
-}
-
-#resources p, #production p, #exploration p {
+#resources p, #production p {
     margin: 5px 0;
     line-height: 1.2;
 }

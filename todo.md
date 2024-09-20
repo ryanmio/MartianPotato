@@ -26,12 +26,13 @@ TODO:
 - [x] Make it so that planting potatoes does not consume or require ice, just water and nutrients
 - [x] Implement upgrades that reduce the time it takes for potatoes to be ready to harvest
 - [x] Replace soil enrichment with potato compost
+- [x] Implement the following upgrades which unlock additional technologies in the tech tree:
+    - [x] Potato Battery
+    - [x] Potato Computer Chip
+    - [x] Potato Computer
+    - [x] Potato Quantum Computer
 --------------------------------------------------------------------------------------------
-- [ ] Implement the following upgrades which unlock additional technologies in the tech tree:
-    - [ ] Potato Battery
-    - [ ] Potato Computer Chip
-    - [ ] Potato Computer
-    - [ ] Potato Quantum Computer
+- [x] Remove exploration stats
 - [ ] Add exploration cards for remaining upgrades
     - [x] Subsurface Aquifer Tapper
     - [x] Martian Polar Cap Extractor
@@ -46,7 +47,6 @@ TODO:
 - [ ] Hide debug menu
 - [ ] Remove harvest all ready potatoes debug button
 - [ ] Revisit Potatoes per second calculation
-- [ ] Remove exploration stats
 - [ ] Add new achievements:
     - [ ] Upgrade Milestones:
         - [ ] "Tech Savvy": Purchase your first 5 upgrades

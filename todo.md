@@ -35,6 +35,7 @@ TODO:
 - [x] Implement time tracking to show user how many potatoes they've harvested over the course of their playtime and graph the potatoes over time in a chart
 - [x] Remove harvest all ready potatoes debug button
 - [x] Fix or remove Potatoes per second calculation
+- [x] Hide debug menu
 --------------------------------------------------------------------------------------------
 - [ ] Add exploration cards for remaining upgrades
     - [x] Subsurface Aquifer Tapper
@@ -44,7 +45,6 @@ TODO:
     - [ ] Quantum Spud Spawner
     - [ ] Subterranean Tunneler
 - [ ] Write real meta messages and descriptions
-- [ ] Hide debug menu
 - [ ] Balance upgrade costs and effects
 - [ ] Add new achievements:
     - [ ] Upgrade Milestones:

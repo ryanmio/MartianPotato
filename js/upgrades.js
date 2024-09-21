@@ -9,7 +9,6 @@ const BASE_HARVEST_DELAY = 1000; // 1 second in milliseconds
 let currentPlantingUpgrade = 0;
 let lastTechTreeUpdate = 0;
 let unlockedActionCards = [];
-
 let currentTier = 1; // Initialize current tier to 1
 
 // Automation Arrays
@@ -598,11 +597,6 @@ function createCard(upgrade) {
 
     card.appendChild(iconElement);
     card.appendChild(detailsElement);
-
-    // Add blur class if the upgrade is in a higher tier than the current tier
-    if (upgrade.tier > currentTier) {
-        card.classList.add('blurred');
-    }
 
     // Add click event listener to open the upgrade modal
     if (upgrade.tier <= currentTier) {

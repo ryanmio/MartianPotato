@@ -511,7 +511,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     requestAnimationFrame(gameLoop);
 
-    // Add a new event listener for the 'D' key press
+    // Debug mode event listener for the 'D' key press
     document.addEventListener('keydown', (event) => {
         if (event.key.toLowerCase() === 'd') {
             toggleDebugMode();
@@ -784,7 +784,7 @@ function loadGame() {
             const gameState = JSON.parse(savedState);
             
             // Restore game variables with default values if not present
-            gameStartTime = gameState.gameStartTime || Date.now(); // Load or initialize
+            gameStartTime = gameState.gameStartTime || Date.now();
             potatoCount = gameState.potatoCount || 0;
             water = gameState.water || 100;
             nutrients = gameState.nutrients || 100;
@@ -810,29 +810,13 @@ function loadGame() {
             autoHarvesters = gameState.autoHarvesters || [];
             MAX_FIELD_SIZE = gameState.MAX_FIELD_SIZE || 8;
             unlockedActionCards = gameState.unlockedActionCards || ['exploration-container'];
-            currentTier = gameState.currentTier || 1; // Restore currentTier
+            currentTier = gameState.currentTier || 1;
             hasSeenInitialGlow = gameState.hasSeenInitialGlow || false;
             growthTimeMultiplier = gameState.growthTimeMultiplier || 1;
-            totalPotatoesHarvested = gameState.totalPotatoesHarvested || 0; // Add this line
-            harvestHistory = gameState.harvestHistory || [];               // Add this line
+            totalPotatoesHarvested = gameState.totalPotatoesHarvested || 0;
+            harvestHistory = gameState.harvestHistory || [];
 
-            // Restore upgrades
-            if (gameState.upgrades && Array.isArray(gameState.upgrades)) {
-                upgrades.forEach(upgrade => {
-                    const savedUpgrade = gameState.upgrades.find(u => u.name === upgrade.name);
-                    if (savedUpgrade) {
-                        upgrade.purchased = savedUpgrade.purchased || false;
-                        upgrade.count = savedUpgrade.count || 0;
-
-                        const isMilestoneUpgrade = upgrade.unlocksNextTier || false;
-
-                        if (!upgrade.repeatable && upgrade.purchased && upgrade.effect && !isMilestoneUpgrade) {
-                            // For non-repeatable upgrades, apply the effect once
-                            upgrade.effect();
-                        }
-                    }
-                });
-            }
+            restoreUpgrades(gameState.upgrades);
 
             // Restore unlocked action cards
             if (gameState.unlockedActionCards) {
@@ -894,7 +878,7 @@ function loadGame() {
             showToast('Game loaded successfully!', 'Your progress has been restored.', 'success');
         } else {
             // New game initialization
-            gameStartTime = Date.now(); // Start time for new game
+            gameStartTime = Date.now();
             hasSeenInitialGlow = false;
             document.getElementById('plant-button').classList.add('glow');
             unlockedActionCards = ['exploration-container'];
@@ -903,10 +887,29 @@ function loadGame() {
         }
     } catch (error) {
         console.error('Error loading game:', error);
-        gameStartTime = Date.now(); // Ensure it's set even if load fails
+        gameStartTime = Date.now();
         unlockedActionCards = ['exploration-container'];
         updateActionCards();
         showToast('Error loading game', 'There was an error loading your saved game. Starting a new game.', 'error');
+    }
+}
+
+function restoreUpgrades(savedUpgrades) {
+    if (savedUpgrades && Array.isArray(savedUpgrades)) {
+        upgrades.forEach(upgrade => {
+            const savedUpgrade = savedUpgrades.find(u => u.name === upgrade.name);
+            if (savedUpgrade) {
+                upgrade.purchased = savedUpgrade.purchased || false;
+                upgrade.count = savedUpgrade.count || 0;
+
+                const isMilestoneUpgrade = upgrade.unlocksNextTier || false;
+
+                if (!upgrade.repeatable && upgrade.purchased && upgrade.effect && !isMilestoneUpgrade) {
+                    // For non-repeatable upgrades, apply the effect once
+                    upgrade.effect();
+                }
+            }
+        });
     }
 }
 
@@ -916,7 +919,7 @@ function updateActionCards() {
     allActionCards.forEach(card => {
         if (unlockedActionCards.includes(card.id)) {
             card.style.display = 'block';
-        } else if (card.id !== 'exploration-container') { // Always show exploration
+        } else if (card.id !== 'exploration-container') {
             card.style.display = 'none';
         }
     });
@@ -946,7 +949,6 @@ function initGame() {
         loadGame();
         requestAnimationFrame(gameLoop);
         gameInitialized = true;
-        
         
         // Ensure action cards are updated after the DOM is fully loaded
         if (document.readyState === 'complete') {
@@ -1035,7 +1037,7 @@ function getPlaytime() {
 
 // Function to aggregate harvest history data
 function aggregateHarvestHistory() {
-    const maxDataPoints = 200; // Set a maximum number of data points
+    const maxDataPoints = 200;
     if (harvestHistory.length > maxDataPoints) {
         const aggregatedHistory = [];
         for (let i = 0; i < harvestHistory.length; i += 2) {
@@ -1056,16 +1058,16 @@ let harvestChart;
 
 function initializeHarvestChart() {
     if (harvestChart) {
-        harvestChart.destroy(); // Destroy existing chart instance if it exists
+        harvestChart.destroy();
     }
     const ctx = document.getElementById('harvestChart').getContext('2d');
     harvestChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: [], // Timestamps
+            labels: [],
             datasets: [{
                 label: 'Total Potatoes Harvested',
-                data: [], // Total potatoes
+                data: [],
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 2,
                 fill: false,
@@ -1073,7 +1075,7 @@ function initializeHarvestChart() {
             }]
         },
         options: {
-            animation: false, // Disable animations for the chart
+            animation: false,
             scales: {
                 x: {
                     type: 'time',

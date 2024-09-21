@@ -119,9 +119,24 @@
                 <p id="resource-generation">Resource Generation: Water (0/s), Soil (0/s), Ice (0/s)</p>
                 <p id="last-action">Last Action: None</p>
                 <p id="planting-delay">Planting Delay: 4000ms</p>
+                <p id="playtime-debug">Playtime: 0h 0m 0s</p>
             </div>
         </div>
     </div>
+    <div id="chart-container">
+        <h2>Potatoes Harvested Over Time</h2>
+        <canvas id="harvestChart" width="400" height="200"></canvas>
+    </div>
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Include date-fns -->
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/dist/date-fns.min.js"></script>
+
+    <!-- Include the Chart.js date-fns adapter (updated to version 3.0.0) -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+    <!-- Your game script -->
     <script src="js/game.js"></script>
     <script src="js/upgrades.js"></script>
     <script src="js/exploration.js"></script>

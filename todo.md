@@ -31,8 +31,8 @@ TODO:
     - [x] Potato Computer Chip
     - [x] Potato Computer
     - [x] Potato Quantum Computer
---------------------------------------------------------------------------------------------
 - [x] Remove exploration stats
+--------------------------------------------------------------------------------------------
 - [ ] Add exploration cards for remaining upgrades
     - [x] Subsurface Aquifer Tapper
     - [x] Martian Polar Cap Extractor
@@ -43,10 +43,11 @@ TODO:
 - [ ] Implement martian trade agreement
 - [ ] Implement research grant
 - [ ] Balance upgrade costs and effects
+- [ ] Write real meta messages and descriptions
 - [ ] Implement time tracking to show user how many potatoes they've harvested over the course of their playtime and graph the potatoes over time in a chart
 - [ ] Hide debug menu
 - [ ] Remove harvest all ready potatoes debug button
-- [ ] Revisit Potatoes per second calculation
+- [ ] Fix or remove Potatoes per second calculation
 - [ ] Add new achievements:
     - [ ] Upgrade Milestones:
         - [ ] "Tech Savvy": Purchase your first 5 upgrades
@@ -71,3 +72,11 @@ Bugs/Issues:
 - [x] clicking tech tree cards should open the modal not try to purchase the upgrade
 --------------------------------------------------------------------------------------------
 - [ ] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.
+- [ ] remove ice baron acheivmeent
+- [ ] increase weight of thermal drill
+- [ ] instead of the exlore mars button giving a red toast when clicked early, just have the click do nothing, no red toast neeeed
+- [ ] disabled action cards should not have a click effect
+- [ ] increase cost of potatoe genome modification
+- [ ] reduce cost of jetpack to 200 potatoes
+- [ ] remove the ice 2x multiple for manual exploration, in fact try 0.5 what it currently is
+- [ ] potato century achievent should be based on cumulative total, not just current count

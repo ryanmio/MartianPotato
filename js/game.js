@@ -80,6 +80,15 @@ let hasSeenInitialGlow = false;
 // **Introduce a multiplier for growth time**
 let growthTimeMultiplier = 1; // Starts at 1, decreases with upgrades
 
+// Add this with other variables
+let totalPotatoesHarvested = 0;
+
+// Add harvest history array to store harvest events
+let harvestHistory = [];
+
+// Initialize game start time
+let gameStartTime = Date.now();
+
 // Main game loop function
 function gameLoop(currentTime) {
     if (currentTime - lastFrameTime >= FRAME_DELAY) {
@@ -215,8 +224,19 @@ function harvestPotatoAtIndex(index) {
     updateLastAction(`Attempting to harvest potato at index ${index}`);
     if (potatoField[index] && potatoField[index].growthStage >= 100) {
         potatoCount = Math.floor(potatoCount + 1);
+        totalPotatoesHarvested += 1; // Increment total harvested
         potatoField[index] = null; // Replace with empty slot instead of removing
         updateLastAction(`Harvested potato at index ${index}`);
+
+        // Record the harvest event
+        harvestHistory.push({
+            timestamp: Date.now(),
+            totalPotatoes: totalPotatoesHarvested // Use cumulative total
+        });
+
+        aggregateHarvestHistory(); // Aggregate data if necessary
+        updateHarvestChart(); // Update the chart with new data
+
         updateDisplay();
         checkAchievements();
     } else {
@@ -464,6 +484,9 @@ function updateDebugInfo(currentTime, updateTime) {
         updateElement('resource-generation', `Resource Generation: Water (${resourceGeneration.water}/s), Nutrients (${resourceGeneration.nutrients}/s), Potatoes (${resourceGeneration.potatoes}/s)`);
         updateElement('last-action', `Last Action: ${lastAction}`);
         updateElement('planting-delay', `Planting Delay: ${plantingDelay}ms`);
+        
+        const playtime = getPlaytime();
+        updateElement('playtime-debug', `Playtime: ${playtime}`);
         
         lastDebugUpdateTime = currentTime;
         lastResourceValues = { water, nutrients, potatoes: potatoCount };
@@ -784,12 +807,15 @@ function saveGame() {
             purchased: upgrade.purchased || false,
             count: upgrade.count || 0 // Ensure count is saved even if zero
         })),
-        isFirstPlant: isFirstPlant,
-        hasSeenInitialGlow: hasSeenInitialGlow,
+        isFirstPlant,
+        hasSeenInitialGlow,
         isPolarCapMiningUnlocked,
         isPolarCapMiningActive,
 
         growthTimeMultiplier, // Add this line to save the variable
+        totalPotatoesHarvested, // Add this line
+        harvestHistory,          // Add this line
+        gameStartTime,           // Add this line
     };
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
@@ -804,6 +830,7 @@ function loadGame() {
             const gameState = JSON.parse(savedState);
             
             // Restore game variables with default values if not present
+            gameStartTime = gameState.gameStartTime || Date.now(); // Load or initialize
             potatoCount = gameState.potatoCount || 0;
             water = gameState.water || 100;
             nutrients = gameState.nutrients || 100;
@@ -833,6 +860,8 @@ function loadGame() {
             currentTier = gameState.currentTier || 1; // Restore currentTier
             hasSeenInitialGlow = gameState.hasSeenInitialGlow || false;
             growthTimeMultiplier = gameState.growthTimeMultiplier || 1;
+            totalPotatoesHarvested = gameState.totalPotatoesHarvested || 0; // Add this line
+            harvestHistory = gameState.harvestHistory || [];               // Add this line
 
             // Restore upgrades
             if (gameState.upgrades && Array.isArray(gameState.upgrades)) {
@@ -905,9 +934,14 @@ function loadGame() {
                 document.getElementById('plant-button').classList.add('glow');
             }
 
+            // Re-initialize chart with loaded data
+            initializeHarvestChart();
+            updateHarvestChart();
+
             showToast('Game loaded successfully!', 'Your progress has been restored.', 'success');
         } else {
             // New game initialization
+            gameStartTime = Date.now(); // Start time for new game
             hasSeenInitialGlow = false;
             document.getElementById('plant-button').classList.add('glow');
             unlockedActionCards = ['exploration-container'];
@@ -916,6 +950,7 @@ function loadGame() {
         }
     } catch (error) {
         console.error('Error loading game:', error);
+        gameStartTime = Date.now(); // Ensure it's set even if load fails
         unlockedActionCards = ['exploration-container'];
         updateActionCards();
         showToast('Error loading game', 'There was an error loading your saved game. Starting a new game.', 'error');
@@ -1040,3 +1075,107 @@ function startPolarCapMining() {
 function stopPolarCapMining() {
     clearInterval(polarCapMiningInterval);
 }
+
+// Function to get the playtime
+function getPlaytime() {
+    const playtimeMillis = Date.now() - gameStartTime;
+    const playtimeSeconds = Math.floor((playtimeMillis / 1000) % 60);
+    const playtimeMinutes = Math.floor((playtimeMillis / (1000 * 60)) % 60);
+    const playtimeHours = Math.floor(playtimeMillis / (1000 * 60 * 60));
+    return `${playtimeHours}h ${playtimeMinutes}m ${playtimeSeconds}s`;
+}
+
+// Function to aggregate harvest history data
+function aggregateHarvestHistory() {
+    const maxDataPoints = 200; // Set a maximum number of data points
+    if (harvestHistory.length > maxDataPoints) {
+        const aggregatedHistory = [];
+        for (let i = 0; i < harvestHistory.length; i += 2) {
+            const first = harvestHistory[i];
+            const second = harvestHistory[i + 1];
+            const aggregatedEntry = {
+                timestamp: second ? Math.floor((first.timestamp + second.timestamp) / 2) : first.timestamp,
+                totalPotatoes: second ? Math.floor((first.totalPotatoes + second.totalPotatoes) / 2) : first.totalPotatoes
+            };
+            aggregatedHistory.push(aggregatedEntry);
+        }
+        harvestHistory = aggregatedHistory;
+    }
+}
+
+// Initialize the harvest chart
+let harvestChart;
+
+function initializeHarvestChart() {
+    const ctx = document.getElementById('harvestChart').getContext('2d');
+    harvestChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [], // Timestamps
+            datasets: [{
+                label: 'Total Potatoes Harvested',
+                data: [], // Total potatoes
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2,
+                fill: false,
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'minute',
+                        tooltipFormat: 'MMM d, h:mm:ss a' // Corrected token 'd'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Time'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Total Potatoes Harvested'
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.dataset.label || '';
+                            const value = context.parsed.y || 0;
+                            return `${label}: ${value}`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Update the harvest chart data
+function updateHarvestChart() {
+    if (!harvestChart) return;
+
+    // Map harvestHistory to chart data
+    const timestamps = harvestHistory.map(entry => new Date(entry.timestamp));
+    const totals = harvestHistory.map(entry => entry.totalPotatoes);
+
+    harvestChart.data.labels = timestamps;
+    harvestChart.data.datasets[0].data = totals;
+    harvestChart.update();
+}
+
+// Initialize the chart on window load
+window.addEventListener('load', () => {
+    initializeHarvestChart();
+
+    // If harvestHistory has data (e.g., after loading a saved game), update the chart
+    if (harvestHistory.length > 0) {
+        updateHarvestChart();
+    }
+});

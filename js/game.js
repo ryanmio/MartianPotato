@@ -1060,6 +1060,9 @@ function aggregateHarvestHistory() {
 let harvestChart;
 
 function initializeHarvestChart() {
+    if (harvestChart) {
+        harvestChart.destroy(); // Destroy existing chart instance if it exists
+    }
     const ctx = document.getElementById('harvestChart').getContext('2d');
     harvestChart = new Chart(ctx, {
         type: 'line',

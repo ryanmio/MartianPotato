@@ -937,15 +937,6 @@ function resetGame() {
 }
 
 // Initialize the game
-function initGame() {
-    loadGame();
-    requestAnimationFrame(gameLoop);
-}
-
-// Call initGame when the window loads
-window.addEventListener('load', initGame);
-
-// Modify the initGame function to ensure it only runs once
 let gameInitialized = false;
 function initGame() {
     if (!gameInitialized) {

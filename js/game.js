@@ -354,7 +354,7 @@ function updatePotatoField() {
         }
 
         if (potato === null) {
-            if (slotElement.firstChild) slotElement.innerHTML = '';
+            slotElement.innerHTML = '';
         } else {
             updatePotatoElement(slotElement, potato);
         }
@@ -378,28 +378,20 @@ function updatePotatoElement(slotElement, potato) {
 
     const growthStage = potato.growthStage;
     const harvestableClass = growthStage >= 100 ? 'harvestable' : '';
-    const growthColor = growthStage < 33 ? 'rgba(139, 195, 74, 0.4)' : growthStage < 66 ? 'rgba(76, 175, 80, 0.4)' : 'rgba(56, 142, 60, 0.4)';
+    const growthColor = growthStage < 33 ? 'rgba(139, 195, 74, 0.4)' : 
+                        growthStage < 66 ? 'rgba(76, 175, 80, 0.4)' : 
+                        'rgba(56, 142, 60, 0.4)';
 
-    if (potatoElement.className !== `potato ${harvestableClass} ${potato.textureClass}`) {
-        potatoElement.className = `potato ${harvestableClass} ${potato.textureClass}`;
-    }
-    if (potatoElement.style.transform !== `scale(${potato.scaleX}, ${potato.scaleY})`) {
-        potatoElement.style.transform = `scale(${potato.scaleX}, ${potato.scaleY})`;
-    }
-    if (potatoElement.style.borderRadius !== potato.borderRadius) {
-        potatoElement.style.borderRadius = potato.borderRadius;
-    }
+    potatoElement.className = `potato ${harvestableClass} ${potato.textureClass}`;
+    potatoElement.style.transform = `scale(${potato.scaleX}, ${potato.scaleY})`;
+    potatoElement.style.borderRadius = potato.borderRadius;
     
-    let growthIndicator = potatoElement.querySelector('.growth-indicator');
-    if (growthIndicator.style.height !== `${growthStage}%` || growthIndicator.style.backgroundColor !== growthColor) {
-        growthIndicator.style.height = `${growthStage}%`;
-        growthIndicator.style.backgroundColor = growthColor;
-    }
+    const growthIndicator = potatoElement.querySelector('.growth-indicator');
+    growthIndicator.style.height = `${growthStage}%`;
+    growthIndicator.style.backgroundColor = growthColor;
     
-    let growthText = potatoElement.querySelector('.growth-text');
-    if (growthText.textContent !== `${growthStage}%`) {
-        growthText.textContent = `${growthStage}%`;
-    }
+    const growthText = potatoElement.querySelector('.growth-text');
+    growthText.textContent = `${growthStage}%`;
 }
 
 // Toggle debug mode on/off

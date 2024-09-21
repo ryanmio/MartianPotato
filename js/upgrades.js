@@ -35,14 +35,21 @@ const upgrades = [
     { 
         name: "Manual Ice Melting", 
         cost: 3,
-        effect: () => { unlockManualIceMelting(); },
+        effect: () => { 
+            isManualIceMeltingUnlocked = true;
+            const iceMeltingContainer = document.getElementById('ice-melting-container');
+            if (iceMeltingContainer) {
+                iceMeltingContainer.style.display = 'block';
+            }
+        },
         icon: "🧊",
         description: "Collect water by manually melting Martian ice, 1 unit per 5 clicks.",
         metaMessage: "The grind begins. By starting with a low-yield, high-effort method, the game establishes a baseline against which all future upgrades will feel like progress, even if they simply shift the type of effort required.",
         assetName: "manual_ice_melting.webp",
         weight: 2,
         category: "harvesting",
-        tier: 1
+        tier: 1,
+        actionCardId: 'ice-melting-container' // Added property
     },
     { 
         name: "Watering Can", 
@@ -160,7 +167,8 @@ const upgrades = [
         assetName: "bucket_wheel_excavator.webp",
         weight: 12,
         category: "exploration",
-        tier: 3
+        tier: 3,
+        actionCardId: 'bucket-wheel-excavator-container' // Added property
     },
     { 
         name: "Subterranean Tuber Tunneler", 
@@ -176,7 +184,7 @@ const upgrades = [
         name: "Martian Potato Colonizer", 
         cost: 50000,
         effect: () => { window.totalExplorationRate += 2; updateAutonomousExploration(); },
-        icon: "🏙️",
+        icon: "️",
         description: "Establishes autonomous potato-growing colonies across Mars, greatly increasing resource discovery.",
         metaMessage: "Full automation. This final upgrade represents the pinnacle of your Martian potato empire, showcasing how far you've come from manual labor to planet-wide automation.",
         weight: 16,
@@ -208,7 +216,8 @@ const upgrades = [
         metaMessage: "Automated resource conversion. This upgrade introduces the concept of continuous resource transformation, requiring players to balance potato production and water generation.",
         weight: 6,
         category: "exploration",
-        tier: 2
+        tier: 2,
+        actionCardId: 'subsurface-aquifer-tapper-container' // Added property
     },
     {
         name: "Polar Cap Mining",
@@ -221,7 +230,8 @@ const upgrades = [
         metaMessage: "Tapping into new resources. This upgrade allows you to harvest ice directly from the polar caps, introducing resource management dynamics.",
         weight: 12,
         category: "exploration",
-        tier: 3
+        tier: 3,
+        actionCardId: 'polar-cap-mining-container' // Added property
     },
     {
         name: "Cometary Ice Harvester",
@@ -248,7 +258,8 @@ const upgrades = [
         assetName: "ice_melting_basin.webp",
         weight: 4,
         category: "harvesting",
-        tier: 1
+        tier: 1,
+        actionCardId: 'ice-melting-basin-container' // Added property
     },
     {
         name: "Nuclear Ice Melter",
@@ -263,7 +274,8 @@ const upgrades = [
         assetName: "nuclear_ice_melter.webp",
         weight: 12,
         category: "harvesting",
-        tier: 3
+        tier: 3,
+        actionCardId: 'nuclear-ice-melter-container' // Added property
     },
     {
         name: "Field Expansion",
@@ -698,36 +710,17 @@ function buyUpgrade(upgrade) {
 
 // Add this new function to unlock the corresponding action card
 function unlockActionCardForUpgrade(upgradeName) {
-    let cardId;
-    switch (upgradeName) {
-        case "Manual Ice Melting":
-            cardId = 'ice-melting-container';
-            unlockManualIceMelting();
-            break;
-        case "Ice Melting Basin":
-            cardId = 'ice-melting-basin-container';
-            unlockIceMeltingBasin();
-            break;
-        case "Subsurface Aquifer Tapper":
-            cardId = 'subsurface-aquifer-tapper-container';
-            unlockSubsurfaceAquiferTapper();
-            break;
-        case "Martian Bucket-Wheel Excavator":
-            cardId = 'bucket-wheel-excavator-container';
-            unlockBucketWheelExcavator();
-            break;
-        case "Nuclear Ice Melter":
-            cardId = 'nuclear-ice-melter-container';
-            unlockNuclearIceMelter();
-            break;
-        case "Polar Cap Mining":
-            cardId = 'polar-cap-mining-container';
-            unlockPolarCapMining();
-            break;
-    }
-    if (cardId && !unlockedActionCards.includes(cardId)) {
-        unlockedActionCards.push(cardId);
-        updateActionCards();
+    const upgrade = upgrades.find(u => u.name === upgradeName);
+    if (upgrade && upgrade.actionCardId) {
+        const cardId = upgrade.actionCardId;
+        if (!unlockedActionCards.includes(cardId)) {
+            unlockedActionCards.push(cardId);
+            updateActionCards();
+        }
+        // Call the unlock function if it exists
+        if (typeof upgrade.effect === 'function') {
+            upgrade.effect();
+        }
     }
 }
 

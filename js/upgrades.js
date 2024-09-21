@@ -178,7 +178,8 @@ const upgrades = [
         description: "Burrows beneath the Martian surface, uncovering hidden resource deposits.",
         metaMessage: "Digging deeper. This upgrade shows how exploring new frontiers (in this case, underground) can lead to significant resource gains, encouraging players to think beyond the obvious.",
         weight: 13,
-        category: "exploration"
+        category: "exploration",
+        tier: 3
     },
     { 
         name: "Martian Potato Colonizer", 

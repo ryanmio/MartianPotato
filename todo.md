@@ -40,10 +40,10 @@ TODO:
 - [ ] Add exploration cards for remaining upgrades
     - [x] Subsurface Aquifer Tapper
     - [x] Martian Polar Cap Extractor
+    - [ ] Subterranean Tunneler
     - [ ] Cometary Ice Harvester
     - [ ] Martian Potato Colonizer
     - [ ] Quantum Spud Spawner
-    - [ ] Subterranean Tunneler
 - [ ] Write real meta messages and descriptions
 - [ ] Balance upgrade costs and effects
 - [ ] Add new achievements:

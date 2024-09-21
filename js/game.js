@@ -21,9 +21,6 @@ let water = 100;
 let nutrients = 100;
 let ice = 100;
 
-// Production Variables
-let rawPotatoesPerSecond = 0;
-
 // Planting Variables
 let plantingDelay = 3000;
 let lastPlantTime = 0;
@@ -143,11 +140,6 @@ function updateNonCriticalElements() {
     requestIdleCallback(() => {
         displayExplorationUpgrades();
     });
-}
-
-// Calculate the rate of potato production
-function calculatePotatoesPerSecond() {
-    return autoplanters.length / (GROWTH_TIME / 1000);
 }
 
 // Consume resources for potato growth, applying efficiency multipliers
@@ -302,7 +294,6 @@ function updateDisplay() {
     };
 
     updateElementIfChanged('potato-count', `Potatoes: ${Math.floor(potatoCount)}`);
-    updateElementIfChanged('potatoes-per-second', `Potatoes per second: ${rawPotatoesPerSecond.toFixed(1)}`);
     updateElementIfChanged('water-count', `Water: ${Math.floor(water)}`);
     updateElementIfChanged('nutrients', `Nutrients: ${Math.floor(nutrients)}`);
     updateElementIfChanged('ice-level', `Ice: ${Math.floor(ice)}`);
@@ -750,7 +741,6 @@ function saveGame() {
         water,
         nutrients,
         ice,
-        rawPotatoesPerSecond,
         plantingDelay,
         lastPlantTime,
         potatoesPerClick,
@@ -804,7 +794,6 @@ function loadGame() {
             water = gameState.water || 100;
             nutrients = gameState.nutrients || 100;
             ice = gameState.ice || 100;
-            rawPotatoesPerSecond = gameState.rawPotatoesPerSecond || 0;
             plantingDelay = gameState.plantingDelay || 5000;
             lastPlantTime = gameState.lastPlantTime || 0;
             potatoesPerClick = gameState.potatoesPerClick || 1;
@@ -986,12 +975,7 @@ function checkAndRestartAutoHarvesters() {
 }
 
 function reinitializeAutoplanters() {
-    rawPotatoesPerSecond = 0; // Reset rawPotatoesPerSecond
-
     autoplanters.forEach(autoplanter => {
-        // Recalculate rawPotatoesPerSecond
-        rawPotatoesPerSecond += 1; // Each autoplanter adds 1 potato per second
-
         // Restart the interval
         startAutoplanter(autoplanter);
     });

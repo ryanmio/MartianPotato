@@ -32,6 +32,9 @@ TODO:
     - [x] Potato Computer
     - [x] Potato Quantum Computer
 - [x] Remove exploration stats
+- [x] Implement time tracking to show user how many potatoes they've harvested over the course of their playtime and graph the potatoes over time in a chart
+- [x] Remove harvest all ready potatoes debug button
+- [x] Fix or remove Potatoes per second calculation
 --------------------------------------------------------------------------------------------
 - [ ] Add exploration cards for remaining upgrades
     - [x] Subsurface Aquifer Tapper
@@ -40,14 +43,9 @@ TODO:
     - [ ] Martian Potato Colonizer
     - [ ] Quantum Spud Spawner
     - [ ] Subterranean Tunneler
-- [ ] Implement martian trade agreement
-- [ ] Implement research grant
-- [ ] Balance upgrade costs and effects
 - [ ] Write real meta messages and descriptions
-- [ ] Implement time tracking to show user how many potatoes they've harvested over the course of their playtime and graph the potatoes over time in a chart
 - [ ] Hide debug menu
-- [ ] Remove harvest all ready potatoes debug button
-- [ ] Fix or remove Potatoes per second calculation
+- [ ] Balance upgrade costs and effects
 - [ ] Add new achievements:
     - [ ] Upgrade Milestones:
         - [ ] "Tech Savvy": Purchase your first 5 upgrades

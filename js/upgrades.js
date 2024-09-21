@@ -19,16 +19,6 @@ let autoHarvesters = [];
 let achievementQueue = [];
 let isAchievementModalOpen = false;
 
-// Subsurface Aquifer Tapper Variables
-let isSubsurfaceAquiferTapperUnlocked = false;
-let isSubsurfaceAquiferTapperActive = false;
-let subsurfaceAquiferTapperInterval = null;
-
-// Martian Bucket-Wheel Excavator Variables
-let isBucketWheelExcavatorUnlocked = false;
-let isBucketWheelExcavatorActive = false;
-let bucketWheelExcavatorInterval = null;
-
 // Upgrade Definitions
 const upgrades = [
     { 
@@ -978,96 +968,109 @@ function resumeGame() {
     buttons.forEach(button => button.disabled = false);
 }
 
-// Unlock the Subsurface Aquifer Tapper
-function unlockSubsurfaceAquiferTapper() {
-    isSubsurfaceAquiferTapperUnlocked = true;
-    const tapperContainer = document.getElementById('subsurface-aquifer-tapper-container');
-    if (tapperContainer) {
-        tapperContainer.style.display = 'block';
-    }
-}
+// General function to manage automation devices
+function createAutomationDevice(deviceConfig) {
+    const { 
+        id, 
+        containerId, 
+        toggleId, 
+        isUnlocked, 
+        isActive, 
+        unlockFunction, 
+        startFunction, 
+        stopFunction, 
+        resourceCheck, 
+        resourceConsume, 
+        resourceProduce, 
+        intervalTime 
+    } = deviceConfig;
 
-// Toggle the Subsurface Aquifer Tapper
-function toggleSubsurfaceAquiferTapper() {
-    if (!isSubsurfaceAquiferTapperUnlocked) return;
-
-    isSubsurfaceAquiferTapperActive = !isSubsurfaceAquiferTapperActive;
-    const toggleSwitch = document.getElementById('subsurface-aquifer-tapper-toggle');
-    if (toggleSwitch) {
-        toggleSwitch.checked = isSubsurfaceAquiferTapperActive;
-    }
-
-    if (isSubsurfaceAquiferTapperActive) {
-        startSubsurfaceAquiferTapper();
-    } else {
-        stopSubsurfaceAquiferTapper();
-    }
-}
-
-// Start the Subsurface Aquifer Tapper
-function startSubsurfaceAquiferTapper() {
-    subsurfaceAquiferTapperInterval = setInterval(() => {
-        if (potatoCount >= 1) {
-            potatoCount -= 1;
-            water += 2;
-            updateDisplay();
-        } else {
-            showToast("Resource Shortage", "Not enough potatoes to run the Subsurface Aquifer Tapper!", 'setback');
-            toggleSubsurfaceAquiferTapper(); // Turn off if resources are insufficient
+    // Unlock the device
+    window[unlockFunction] = function() {
+        window[isUnlocked] = true;
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.style.display = 'block';
         }
-    }, 1000); // Run every second
-}
+    };
 
-// Stop the Subsurface Aquifer Tapper
-function stopSubsurfaceAquiferTapper() {
-    clearInterval(subsurfaceAquiferTapperInterval);
-}
+    // Toggle the device
+    window[`toggle${id}`] = function() {
+        if (!window[isUnlocked]) return;
 
-// Unlock the Bucket-Wheel Excavator
-function unlockBucketWheelExcavator() {
-    isBucketWheelExcavatorUnlocked = true;
-    const excavatorContainer = document.getElementById('bucket-wheel-excavator-container');
-    if (excavatorContainer) {
-        excavatorContainer.style.display = 'block';
-    }
-}
-
-// Toggle the Bucket-Wheel Excavator
-function toggleBucketWheelExcavator() {
-    if (!isBucketWheelExcavatorUnlocked) return;
-
-    isBucketWheelExcavatorActive = !isBucketWheelExcavatorActive;
-    const toggleSwitch = document.getElementById('bucket-wheel-excavator-toggle');
-    if (toggleSwitch) {
-        toggleSwitch.checked = isBucketWheelExcavatorActive;
-    }
-
-    if (isBucketWheelExcavatorActive) {
-        startBucketWheelExcavator();
-    } else {
-        stopBucketWheelExcavator();
-    }
-}
-
-// Start the Bucket-Wheel Excavator
-function startBucketWheelExcavator() {
-    bucketWheelExcavatorInterval = setInterval(() => {
-        if (potatoCount >= 1) {
-            potatoCount -= 1;
-            nutrients += 2;
-            ice += 2;
-            updateDisplay();
-        } else {
-            showToast("Resource Shortage", "Not enough potatoes to run the Martian Bucket-Wheel Excavator!", 'setback');
-            toggleBucketWheelExcavator(); // Turn off if resources are insufficient
+        window[isActive] = !window[isActive];
+        const toggleSwitch = document.getElementById(toggleId);
+        if (toggleSwitch) {
+            toggleSwitch.checked = window[isActive];
         }
-    }, 1000); // Run every second
+
+        if (window[isActive]) {
+            window[startFunction]();
+        } else {
+            window[stopFunction]();
+        }
+    };
+
+    // Start the device
+    window[startFunction] = function() {
+        window[`${id}Interval`] = setInterval(() => {
+            if (resourceCheck()) {
+                resourceConsume();
+                resourceProduce();
+                updateDisplay();
+            } else {
+                showToast("Resource Shortage", `Not enough resources to run the ${id.replace(/([A-Z])/g, ' $1')}!`, 'setback');
+                window[`toggle${id}`](); // Turn off if resources are insufficient
+            }
+        }, intervalTime); // Run at specified interval
+    };
+
+    // Stop the device
+    window[stopFunction] = function() {
+        clearInterval(window[`${id}Interval`]);
+    };
 }
 
-// Stop the Bucket-Wheel Excavator
-function stopBucketWheelExcavator() {
-    clearInterval(bucketWheelExcavatorInterval);
-}
+// Configuration for Subsurface Aquifer Tapper
+createAutomationDevice({
+    id: 'SubsurfaceAquiferTapper',
+    containerId: 'subsurface-aquifer-tapper-container',
+    toggleId: 'subsurface-aquifer-tapper-toggle',
+    isUnlocked: 'isSubsurfaceAquiferTapperUnlocked',
+    isActive: 'isSubsurfaceAquiferTapperActive',
+    unlockFunction: 'unlockSubsurfaceAquiferTapper',
+    startFunction: 'startSubsurfaceAquiferTapper',
+    stopFunction: 'stopSubsurfaceAquiferTapper',
+    resourceCheck: () => potatoCount >= 1,
+    resourceConsume: () => { potatoCount -= 1; },
+    resourceProduce: () => { water += 2; },
+    intervalTime: 1000
+});
+
+// Configuration for Bucket-Wheel Excavator
+createAutomationDevice({
+    id: 'BucketWheelExcavator',
+    containerId: 'bucket-wheel-excavator-container',
+    toggleId: 'bucket-wheel-excavator-toggle',
+    isUnlocked: 'isBucketWheelExcavatorUnlocked',
+    isActive: 'isBucketWheelExcavatorActive',
+    unlockFunction: 'unlockBucketWheelExcavator',
+    startFunction: 'startBucketWheelExcavator',
+    stopFunction: 'stopBucketWheelExcavator',
+    resourceCheck: () => potatoCount >= 1,
+    resourceConsume: () => { potatoCount -= 1; },
+    resourceProduce: () => { nutrients += 2; ice += 2; },
+    intervalTime: 1000
+});
+
+// Update event listeners
+document.getElementById('subsurface-aquifer-tapper-toggle').addEventListener('change', () => {
+    window['toggleSubsurfaceAquiferTapper']();
+});
+
+document.getElementById('bucket-wheel-excavator-toggle').addEventListener('change', () => {
+    window['toggleBucketWheelExcavator']();
+});
 
 // Unlock the Ice Melting Basin
 function unlockIceMeltingBasin() {

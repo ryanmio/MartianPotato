@@ -543,9 +543,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    addEventListenerIfExists('subsurface-aquifer-tapper-toggle', 'change', toggleSubsurfaceAquiferTapper);
+    addEventListenerIfExists('subsurface-aquifer-tapper-toggle', 'change', () => window['toggleSubsurfaceAquiferTapper']());
 
-    addEventListenerIfExists('bucket-wheel-excavator-toggle', 'change', toggleBucketWheelExcavator);
+    addEventListenerIfExists('bucket-wheel-excavator-toggle', 'change', () => window['toggleBucketWheelExcavator']());
 
     addEventListenerIfExists('ice-melting-basin-container', 'click', () => {
         if (!document.getElementById('ice-melting-basin-container').hasAttribute('disabled')) {

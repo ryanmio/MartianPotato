@@ -529,17 +529,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     requestAnimationFrame(gameLoop);
 
-    const debugHarvestButton = document.getElementById('debug-harvest');
-    debugHarvestButton.addEventListener('click', () => {
-        updateLastAction("Debug: Attempting to harvest all ready potatoes");
-        potatoField.forEach((potato, index) => {
-            if (potato && potato.growthStage >= 100) {
-                harvestPotatoAtIndex(index);
-            }
-        });
-        updateDisplay();
-    });
-
     const toggleDebugModeButton = document.getElementById('toggle-debug-mode');
     toggleDebugModeButton.addEventListener('click', toggleDebugMode);
 

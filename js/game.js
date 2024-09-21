@@ -236,7 +236,7 @@ function harvestPotatoAtIndex(index) {
         updateHarvestChart(); // Update the chart with new data
 
         updateDisplay();
-        checkAchievements();
+        checkAchievements(); // Call checkAchievements after updating totalPotatoesHarvested
     } else {
         updateLastAction(`Potato at index ${index} is not ready for harvesting`);
     }
@@ -259,7 +259,7 @@ function updatePlantButton() {
 
 // Check and update game achievements
 function checkAchievements() {
-    if (potatoCount >= 1 && !achievements.firstPotato) {
+    if (totalPotatoesHarvested >= 1 && !achievements.firstPotato) {
         achievements.firstPotato = true;
         queueAchievement(
             "First Potato",
@@ -268,7 +268,7 @@ function checkAchievements() {
             "🥔" // Use the potato emoji instead of an image file
         );
     }
-    if (potatoCount >= 100 && !achievements.potatoCentury) {
+    if (totalPotatoesHarvested >= 100 && !achievements.potatoCentury) {
         achievements.potatoCentury = true;
         queueAchievement(
             "Potato Century",

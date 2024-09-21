@@ -820,11 +820,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const leftArrow = document.getElementById('tech-tree-left');
     const rightArrow = document.getElementById('tech-tree-right');
 
-    const updateArrows = () => {
-        leftArrow.style.display = techTree.scrollLeft > 0 ? 'block' : 'none';
-        rightArrow.style.display = techTree.scrollWidth > techTree.clientWidth + techTree.scrollLeft ? 'block' : 'none';
-    };
-
     leftArrow.addEventListener('click', () => {
         techTree.scrollBy({ left: -200, behavior: 'smooth' });
     });
@@ -833,10 +828,11 @@ document.addEventListener('DOMContentLoaded', () => {
         techTree.scrollBy({ left: 200, behavior: 'smooth' });
     });
 
-    techTree.addEventListener('scroll', updateArrows);
-    window.addEventListener('resize', updateArrows);
+    // Use the existing updateCarouselArrows function
+    techTree.addEventListener('scroll', updateCarouselArrows);
+    window.addEventListener('resize', updateCarouselArrows);
 
-    updateArrows(); // Initial check
+    updateCarouselArrows(); // Initial check
 
     const iceMeltingContainer = document.getElementById('ice-melting-container');
     if (iceMeltingContainer) {

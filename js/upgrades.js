@@ -204,7 +204,7 @@ const upgrades = [
         icon: "🔥",
         description: "A specialized drill that uses heat to extract water from ice deposits more effectively.",
         metaMessage: "Efficiency through technology. This upgrade introduces the concept of specialized tools, showing how targeted innovations can significantly boost resource gathering.",
-        weight: 5,
+        weight: 10, // Changed from 5 to 10
         category: "exploration",
         tier: 1
     },
@@ -306,7 +306,7 @@ const upgrades = [
     },
     {
         name: "Potato Genome Modification",
-        cost: 50,
+        cost: 100, // Changed from 50 to 100
         effect: () => {
             growthTimeMultiplier *= 0.5;
             showToast("Upgrade Effect", "Potato growth time reduced by an additional 50%!", 'achievement');

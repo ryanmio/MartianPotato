@@ -73,10 +73,11 @@ Bugs/Issues:
 --------------------------------------------------------------------------------------------
 - [ ] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.
 - [ ] remove ice baron acheivmeent
-- [ ] increase weight of thermal drill
-- [ ] instead of the exlore mars button giving a red toast when clicked early, just have the click do nothing, no red toast neeeed
+- [ ] increase weight of thermal drill by 5
 - [ ] disabled action cards should not have a click effect
-- [ ] increase cost of potatoe genome modification
+- [ ] increase cost of potato genome modification
 - [ ] reduce cost of jetpack to 200 potatoes
 - [ ] remove the ice 2x multiple for manual exploration, in fact try 0.5 what it currently is
+- [ ] instead of the exlore mars button giving a red toast when clicked early, just have the click do nothing, no red toast neeeed
 - [ ] potato century achievent should be based on cumulative total, not just current count
+- [ ] review logic of potatos over time graph, it seems like it is not saving enough data from early on and is aggregating the early points too much or something

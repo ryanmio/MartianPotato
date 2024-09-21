@@ -133,7 +133,7 @@ const upgrades = [
     },
     { 
         name: "Jetpack", 
-        cost: 250, 
+        cost: 200, 
         effect: () => { 
             window.exploreDelay = Math.max(1000, Math.floor(window.exploreDelay * 0.5));
             updateExploreButton();

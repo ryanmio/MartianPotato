@@ -76,8 +76,8 @@ Bugs/Issues:
 - [x] remove ice melting acheivments
     - [x] iceMeltingBasinMaster
     - [x] nuclearIceMelterMaster
+- [x] reduce cost of jetpack to 200 potatoes
 --------------------------------------------------------------------------------------------
-- [ ] reduce cost of jetpack to 200 potatoes
 - [ ] remove the ice 2x multiple for manual exploration, in fact try 0.5 what it currently is
 - [ ] instead of the exlore mars button giving a red toast when clicked early, just have the click do nothing, no red toast neeeed
 - [ ] potato century achievent should be based on cumulative total, not just current count

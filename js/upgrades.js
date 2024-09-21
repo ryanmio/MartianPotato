@@ -171,15 +171,20 @@ const upgrades = [
         actionCardId: 'bucket-wheel-excavator-container' // Added property
     },
     { 
-        name: "Subterranean Tuber Tunneler", 
+        name: "Subterranean Tuber Tunneler",
         cost: 2500,
-        effect: () => { window.totalExplorationRate += 1; updateAutonomousExploration(); },
+        effect: () => { 
+            unlockSubterraneanTuberTunneler();
+            window.totalExplorationRate += 1; 
+            updateAutonomousExploration(); 
+        },
         icon: "🕳️",
         description: "Burrows beneath the Martian surface, uncovering hidden resource deposits.",
         metaMessage: "Digging deeper. This upgrade shows how exploring new frontiers (in this case, underground) can lead to significant resource gains, encouraging players to think beyond the obvious.",
         weight: 13,
         category: "exploration",
-        tier: 3
+        tier: 3,
+        actionCardId: 'subterranean-tuber-tunneler-container' // Added property
     },
     { 
         name: "Martian Potato Colonizer", 
@@ -727,6 +732,10 @@ function unlockActionCardForUpgrade(upgradeName) {
         if (typeof upgrade.effect === 'function') {
             upgrade.effect();
         }
+        // Specifically for Subterranean Tuber Tunneler
+        if (upgradeName === "Subterranean Tuber Tunneler") {
+            unlockSubterraneanTuberTunneler();
+        }
     }
 }
 
@@ -1058,6 +1067,25 @@ createAutomationDevice({
     intervalTime: 1000
 });
 
+// Configuration for Subterranean Tuber Tunneler
+createAutomationDevice({
+    id: 'SubterraneanTuberTunneler',
+    containerId: 'subterranean-tuber-tunneler-container',
+    toggleId: 'subterranean-tuber-tunneler-toggle',
+    isUnlocked: 'isSubterraneanTuberTunnelerUnlocked',
+    isActive: 'isSubterraneanTuberTunnelerActive',
+    unlockFunction: 'unlockSubterraneanTuberTunneler',
+    startFunction: 'startSubterraneanTuberTunneler',
+    stopFunction: 'stopSubterraneanTuberTunneler',
+    resourceCheck: () => potatoCount >= 2,
+    resourceConsume: () => { potatoCount -= 2; },
+    resourceProduce: () => { 
+        nutrients += 1; 
+        ice += 1; 
+    },
+    intervalTime: 2000 // Runs every 2 seconds
+});
+
 // Update event listeners
 document.getElementById('subsurface-aquifer-tapper-toggle').addEventListener('change', () => {
     window['toggleSubsurfaceAquiferTapper']();
@@ -1065,6 +1093,10 @@ document.getElementById('subsurface-aquifer-tapper-toggle').addEventListener('ch
 
 document.getElementById('bucket-wheel-excavator-toggle').addEventListener('change', () => {
     window['toggleBucketWheelExcavator']();
+});
+
+document.getElementById('subterranean-tuber-tunneler-toggle').addEventListener('change', () => {
+    window['toggleSubterraneanTuberTunneler']();
 });
 
 // Unlock the Ice Melting Basin

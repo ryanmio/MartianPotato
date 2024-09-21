@@ -19,22 +19,28 @@ function exploreMarsSurface() {
         return;
     }
 
-    // Calculate rewards for manual exploration
-    const nutrientReward = Math.floor(Math.random() * 10 + 1) * window.explorationResourceMultiplier;
-    
-    // Introduce randomness to iceReward to average out at twice the nutrients
-    // Ice reward will vary between 1x to 3x the nutrientsReward to average 2x
-    const iceMultiplier = Math.random() * 2 + 1; // Generates a value between 1 and 3
-    const iceReward = Math.floor(nutrientReward * iceMultiplier);
+    // Define reward ranges
+    const nutrientMin = 1;
+    const nutrientMax = 10;
+    const iceMin = 1;
+    const iceMax = 10;
 
-    // Add rewards to global resource counters (no water rewarded)
-    nutrients += nutrientReward;
-    ice += iceReward;
+    // Calculate rewards for manual exploration with independent randomness
+    const nutrientReward = Math.floor(Math.random() * (nutrientMax - nutrientMin + 1)) + nutrientMin;
+    const iceReward = Math.floor(Math.random() * (iceMax - iceMin + 1)) + iceMin;
+
+    // Apply multipliers
+    const scaledNutrientReward = nutrientReward * window.explorationResourceMultiplier;
+    const scaledIceReward = iceReward * window.explorationResourceMultiplier * window.waterExplorationMultiplier;
+
+    // Add rewards to global resource counters
+    nutrients += scaledNutrientReward;
+    ice += scaledIceReward;
 
     // Prepare reward message for user feedback
     const rewards = [];
-    if (nutrientReward > 0) rewards.push(`${nutrientReward.toFixed(1)} nutrients`);
-    if (iceReward > 0) rewards.push(`${iceReward} ice`);
+    if (scaledNutrientReward > 0) rewards.push(`${scaledNutrientReward.toFixed(1)} nutrients`);
+    if (scaledIceReward > 0) rewards.push(`${scaledIceReward} ice`);
 
     const rewardString = rewards.join(', ').replace(/,([^,]*)$/, ' and$1');
 

@@ -1163,20 +1163,3 @@ function initializeActionCards() {
         });
     });
 }
-
-function handleActionCardClick(actionName) {
-    switch (actionName) {
-        case 'exploration':
-            exploreMarsSurface();
-            break;
-        case 'ice-melting':
-            meltIce();
-            break;
-        case 'ice-melting-basin':
-            fillIceMeltingBasin();
-            break;
-        // Add more cases for future clickable action cards
-        default:
-            console.warn(`No handler for action card: ${actionName}`);
-    }
-}

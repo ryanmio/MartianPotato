@@ -6,8 +6,6 @@ window.totalExplorationRate = 0;
 window.explorationResourceMultiplier = 1;
 window.lastExploreTime = 0;
 window.exploreDelay = 10000; // 10 seconds initial delay between manual explorations
-
-// Add these global variables at the top of the file
 window.waterExplorationMultiplier = 1;
 
 function exploreMarsSurface() {
@@ -81,7 +79,7 @@ function updateAutonomousExploration() {
     }
 }
 
-// Set up event listener for manual exploration and initialize autonomous exploration
+// Event listener for manual exploration and initialize autonomous exploration
 document.addEventListener('DOMContentLoaded', () => {
     const exploreButton = document.getElementById('explore-button');
     if (exploreButton) {

@@ -414,7 +414,9 @@ function toggleDebugMode() {
             // Add 1,000,000 potatoes when debug mode is enabled
             potatoCount += 1000000;
             updateDisplay();
-            showToast("Debug Mode", "Added 1,000,000 potatoes for testing", 'debug');
+            showToast("Debug Mode Enabled", "Added 1,000,000 potatoes for testing. Press 'D' to toggle.", 'debug');
+        } else {
+            showToast("Debug Mode Disabled", "Press 'D' to re-enable debug mode.", 'debug');
         }
     }
 }
@@ -520,8 +522,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     requestAnimationFrame(gameLoop);
 
-    const toggleDebugModeButton = document.getElementById('toggle-debug-mode');
-    toggleDebugModeButton.addEventListener('click', toggleDebugMode);
+    // Add a new event listener for the 'D' key press
+    document.addEventListener('keydown', (event) => {
+        if (event.key.toLowerCase() === 'd') {
+            toggleDebugMode();
+        }
+    });
 
     const minimizeDebugButton = document.getElementById('minimize-debug');
     const debugInfo = document.getElementById('debug-info');

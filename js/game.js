@@ -1078,12 +1078,13 @@ function initializeHarvestChart() {
             }]
         },
         options: {
+            animation: false, // Disable animations for the chart
             scales: {
                 x: {
                     type: 'time',
                     time: {
                         unit: 'minute',
-                        tooltipFormat: 'MMM d, h:mm:ss a' // Corrected token 'd'
+                        tooltipFormat: 'MMM d, h:mm:ss a'
                     },
                     title: {
                         display: true,

@@ -73,6 +73,14 @@ let lastResourceValues = { water: 0, nutrients: 0, ice: 0 };
 let lastAction = "None";
 
 
+// Helper function to add event listeners if the element exists
+function addEventListenerIfExists(id, event, handler) {
+    const element = document.getElementById(id);
+    if (element) {
+        element.addEventListener(event, handler);
+    }
+}
+
 // Main game loop function
 function gameLoop(currentTime) {
     if (currentTime - lastFrameTime >= FRAME_DELAY) {
@@ -495,12 +503,11 @@ window.showToast = function(title, message, type = 'achievement') {
 
 // Initialize the game when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
-    const plantButton = document.getElementById('plant-button');
-    plantButton.addEventListener('click', plantPotato);
+    addEventListenerIfExists('plant-button', 'click', plantPotato);
 
     initializePotatoField();
 
-    document.getElementById('potato-field').addEventListener('click', (event) => {
+    addEventListenerIfExists('potato-field', 'click', (event) => {
         const slotElement = event.target.closest('.potato-slot');
         if (slotElement) {
             const index = parseInt(slotElement.getAttribute('data-index'), 10);
@@ -521,40 +528,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const minimizeDebugButton = document.getElementById('minimize-debug');
-    const debugInfo = document.getElementById('debug-info');
-
-    minimizeDebugButton.addEventListener('click', () => {
+    addEventListenerIfExists('minimize-debug', 'click', () => {
+        const debugInfo = document.getElementById('debug-info');
         debugInfo.classList.toggle('minimized');
+        const minimizeDebugButton = document.getElementById('minimize-debug');
         minimizeDebugButton.setAttribute('data-text', 
             debugInfo.classList.contains('minimized') ? 'Maximize' : 'Minimize');
     });
 
-    const exploreCard = document.getElementById('exploration-container');
-    exploreCard.addEventListener('click', () => {
+    addEventListenerIfExists('exploration-container', 'click', () => {
+        const exploreCard = document.getElementById('exploration-container');
         if (!exploreCard.hasAttribute('disabled')) {
             exploreMarsSurface(); // Use the function from exploration.js
         }
     });
 
-    const subsurfaceAquiferTapperToggle = document.getElementById('subsurface-aquifer-tapper-toggle');
-    if (subsurfaceAquiferTapperToggle) {
-        subsurfaceAquiferTapperToggle.addEventListener('change', toggleSubsurfaceAquiferTapper);
-    }
+    addEventListenerIfExists('subsurface-aquifer-tapper-toggle', 'change', toggleSubsurfaceAquiferTapper);
 
-    const bucketWheelExcavatorToggle = document.getElementById('bucket-wheel-excavator-toggle');
-    if (bucketWheelExcavatorToggle) {
-        bucketWheelExcavatorToggle.addEventListener('change', toggleBucketWheelExcavator);
-    }
+    addEventListenerIfExists('bucket-wheel-excavator-toggle', 'change', toggleBucketWheelExcavator);
 
-    const iceMeltingBasinContainer = document.getElementById('ice-melting-basin-container');
-    if (iceMeltingBasinContainer) {
-        iceMeltingBasinContainer.addEventListener('click', () => {
-            if (!iceMeltingBasinContainer.hasAttribute('disabled')) {
-                fillIceMeltingBasin();
-            }
-        });
-    }
+    addEventListenerIfExists('ice-melting-basin-container', 'click', () => {
+        if (!document.getElementById('ice-melting-basin-container').hasAttribute('disabled')) {
+            fillIceMeltingBasin();
+        }
+    });
 
     const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
     if (nuclearIceMelterToggle) {
@@ -563,18 +560,11 @@ document.addEventListener('DOMContentLoaded', () => {
         nuclearIceMelterToggle.addEventListener('click', handleNuclearIceMelterClick);
     }
 
-    const saveButton = document.getElementById('save-button');
-    saveButton.addEventListener('click', saveGame);
+    addEventListenerIfExists('save-button', 'click', saveGame);
 
-    const resetButton = document.getElementById('reset-button');
-    resetButton.addEventListener('click', resetGame);
+    addEventListenerIfExists('reset-button', 'click', resetGame);
 
-    const polarCapMiningToggle = document.getElementById('polar-cap-mining-toggle');
-    if (polarCapMiningToggle) {
-        polarCapMiningToggle.addEventListener('change', () => {
-            togglePolarCapMining();
-        });
-    }
+    addEventListenerIfExists('polar-cap-mining-toggle', 'change', togglePolarCapMining);
 });
 
 // Function to handle the click event

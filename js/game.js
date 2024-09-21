@@ -61,8 +61,6 @@ let potatoField = new Array(MAX_FIELD_SIZE).fill(null);
 const defaultAchievements = {
     firstPotato: false,
     potatoCentury: false,
-    iceMeltingBasinMaster: false,
-    nuclearIceMelterMaster: false,
     // Add other achievements here
 };
 let achievements = { ...defaultAchievements };
@@ -277,24 +275,6 @@ function checkAchievements() {
             "You've harvested 100 Martian potatoes!",
             "Your potato farm is starting to take shape. The future of Mars is looking delicious!",
             "potato_century.webp"
-        );
-    }
-    if (!achievements.iceMeltingBasinMaster && iceMeltingBasinTimer === 1) {
-        achievements.iceMeltingBasinMaster = true;
-        queueAchievement(
-            "Ice Melting Basin Master",
-            "You've mastered the art of efficient ice melting!",
-            "Efficiency is key on Mars. You're turning ice into a steady stream of water.",
-            "ice_melting_basin_master.webp"
-        );
-    }
-    if (!achievements.nuclearIceMelterMaster && isNuclearIceMelterActive) {
-        achievements.nuclearIceMelterMaster = true;
-        queueAchievement(
-            "Nuclear Ice Melter Master",
-            "You've harnessed the power of the atom to melt Martian ice!",
-            "High-energy solutions bring high rewards. You're now operating at an industrial scale.",
-            "nuclear_ice_melter_master.webp"
         );
     }
     // Add more achievement checks here as needed

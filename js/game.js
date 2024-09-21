@@ -275,21 +275,35 @@ function initializePotatoField() {
 
 // Update the game display with current resource counts and rates
 function updateDisplay() {
-    const updateElementIfChanged = (id, newText) => {
-        const element = document.getElementById(id);
-        if (element && element.textContent !== newText) {
-            element.textContent = newText;
-        }
-    };
+    updateResourceCounts();
+    updateExplorationInfo();
+    updateAutoHarvestersInfo();
+    updateAutoPlantersInfo();
+    updateNuclearIceMelterToggle();
+    updateExploreButton();
+    updatePotatoField();
+    updateTechTree();
+    updateIceMeltingProgress();
+    updateIceMeltingBasinButton();
+}
 
+function updateResourceCounts() {
     updateElementIfChanged('potato-count', `Potatoes: ${Math.floor(potatoCount)}`);
     updateElementIfChanged('water-count', `Water: ${Math.floor(water)}`);
     updateElementIfChanged('nutrients', `Nutrients: ${Math.floor(nutrients)}`);
     updateElementIfChanged('ice-level', `Ice: ${Math.floor(ice)}`);
+}
+
+function updateExplorationInfo() {
     updateElementIfChanged('exploration-rate', `Exploration Rate: ${Math.floor(window.totalExplorationRate * 60)} per minute`);
     updateElementIfChanged('purchased-upgrades', `Purchased Upgrades: ${(window.purchasedUpgrades || []).map(u => u.name).join(', ')}`);
-    updateElementIfChanged('auto-harvesters', `Auto Harvesters: ${autoHarvesters.length}`);
+}
 
+function updateAutoHarvestersInfo() {
+    updateElementIfChanged('auto-harvesters', `Auto Harvesters: ${autoHarvesters.length}`);
+}
+
+function updateAutoPlantersInfo() {
     const autoplantersElement = document.getElementById('automated-planters');
     if (autoplantersElement) {
         const newText = `Automated Planters: ${autoplanters.length}`;
@@ -298,17 +312,20 @@ function updateDisplay() {
             autoplantersElement.style.display = autoplanters.length > 0 ? 'block' : 'none';
         }
     }
+}
 
+function updateNuclearIceMelterToggle() {
     const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
     if (nuclearIceMelterToggle) {
         nuclearIceMelterToggle.checked = isNuclearIceMelterActive;
     }
+}
 
-    updateExploreButton();
-    updatePotatoField();
-    updateTechTree();
-    updateIceMeltingProgress();
-    updateIceMeltingBasinButton();
+function updateElementIfChanged(id, newText) {
+    const element = document.getElementById(id);
+    if (element && element.textContent !== newText) {
+        element.textContent = newText;
+    }
 }
 
 // Update the explore button state and cooldown display

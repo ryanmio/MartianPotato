@@ -598,7 +598,7 @@ function createCard(upgrade) {
     card.appendChild(iconElement);
     card.appendChild(detailsElement);
 
-    // Add click event listener to open the upgrade modal
+    // Click event listener to open the upgrade modal
     if (upgrade.tier <= currentTier) {
         card.addEventListener('click', () => {
             showUpgradeModal(upgrade);

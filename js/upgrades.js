@@ -431,6 +431,11 @@ function unlockNextTier(fromLoad = false) {
     }
 }
 
+// Helper function to generate a standardized card ID based on the upgrade name
+function getCardId(upgradeName) {
+    return `upgrade-${upgradeName.replace(/\s+/g, '-').toLowerCase()}`;
+}
+
 // Update the tech tree UI, throttled to run at most once per second
 function updateTechTree() {
     const currentTime = Date.now();
@@ -450,7 +455,7 @@ function updateTechTree() {
             }
         }
 
-        const cardId = `upgrade-${upgrade.name.replace(/\s+/g, '-').toLowerCase()}`;
+        const cardId = getCardId(upgrade.name); // Use helper function
 
         if (shouldDisplayCard) {
             if (!existingCards.has(cardId)) {
@@ -545,7 +550,7 @@ function createTechTree() {
 // Create a single tech card for the given upgrade
 function createCard(upgrade) {
     const card = document.createElement('div');
-    const cardId = `upgrade-${upgrade.name.replace(/\s+/g, '-').toLowerCase()}`;
+    const cardId = getCardId(upgrade.name); // Use helper function
     card.id = cardId; // Assign unique ID to prevent duplicates
     card.className = 'tech-card';
     card.dataset.upgradeName = upgrade.name;
@@ -677,13 +682,13 @@ function buyUpgrade(upgrade) {
 
         // Remove the purchased upgrade from the tech tree if it's not repeatable
         if (!upgrade.repeatable) {
-            const techCard = document.getElementById(`upgrade-${upgrade.name.replace(/\s+/g, '-').toLowerCase()}`);
+            const techCard = document.getElementById(getCardId(upgrade.name)); // Use helper function
             if (techCard) {
                 techCard.remove();
             }
         } else {
             // For repeatable upgrades, update the cost display
-            const techCard = document.getElementById(`upgrade-${upgrade.name.replace(/\s+/g, '-').toLowerCase()}`);
+            const techCard = document.getElementById(getCardId(upgrade.name)); // Use helper function
             if (techCard) {
                 const costElement = techCard.querySelector('.tech-card-cost');
                 if (costElement) {

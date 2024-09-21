@@ -3,7 +3,6 @@
 
 // Game Constants
 let MAX_FIELD_SIZE = 8;
-const GROWTH_TIME = 8000; // Base growth time in milliseconds
 const UPDATE_INTERVAL = 1000; // Update every second
 const FRAME_RATE = 30; // 30 fps
 const FRAME_DELAY = 1000 / FRAME_RATE;
@@ -14,25 +13,29 @@ let lastUpdateTime = 0;
 let lastFrameTime = 0;
 let debugMode = false;
 let lastSaveTime = 0;
+let MAX_TIER = 5;
+let hasSeenInitialGlow = false;
+let gameStartTime = Date.now();
 
 // Resource Variables
 let potatoCount = 0;
 let water = 100;
 let nutrients = 100;
 let ice = 100;
+let waterEfficiency = 1;
+let soilEfficiency = 1;
+let iceEfficiency = 1;
 
 // Planting Variables
 let plantingDelay = 3000;
 let lastPlantTime = 0;
 let potatoesPerClick = 1;
 let isFirstPlant = true;
+const GROWTH_TIME = 8000; // Base growth time in milliseconds
+let growthTimeMultiplier = 1; // Starts at 1, decreases with upgrades
+let totalPotatoesHarvested = 0;
 
-// Resource Efficiency Multipliers
-let waterEfficiency = 1;
-let soilEfficiency = 1;
-let iceEfficiency = 1;
-
-// Ice Melting Variables
+// Manual Ice Melting Variables
 let waterMeltingClicks = 0;
 let isManualIceMeltingUnlocked = false;
 
@@ -61,7 +64,7 @@ const defaultAchievements = {
     // Add other achievements here
 };
 let achievements = { ...defaultAchievements };
-let MAX_TIER = 5;
+let harvestHistory = [];
 
 // Debug Variables
 let fpsValues = [];
@@ -69,20 +72,6 @@ let lastDebugUpdateTime = 0;
 let lastResourceValues = { water: 0, nutrients: 0, ice: 0 };
 let lastAction = "None";
 
-// Add this variable at the top of the file with other game state variables
-let hasSeenInitialGlow = false;
-
-// **Introduce a multiplier for growth time**
-let growthTimeMultiplier = 1; // Starts at 1, decreases with upgrades
-
-// Add this with other variables
-let totalPotatoesHarvested = 0;
-
-// Add harvest history array to store harvest events
-let harvestHistory = [];
-
-// Initialize game start time
-let gameStartTime = Date.now();
 
 // Main game loop function
 function gameLoop(currentTime) {

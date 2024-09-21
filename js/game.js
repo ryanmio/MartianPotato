@@ -276,7 +276,6 @@ function initializePotatoField() {
 // Update the game display with current resource counts and rates
 function updateDisplay() {
     updateResourceCounts();
-    updateExplorationInfo();
     updateAutoHarvestersInfo();
     updateAutoPlantersInfo();
     updateNuclearIceMelterToggle();
@@ -292,11 +291,6 @@ function updateResourceCounts() {
     updateElementIfChanged('water-count', `Water: ${Math.floor(water)}`);
     updateElementIfChanged('nutrients', `Nutrients: ${Math.floor(nutrients)}`);
     updateElementIfChanged('ice-level', `Ice: ${Math.floor(ice)}`);
-}
-
-function updateExplorationInfo() {
-    updateElementIfChanged('exploration-rate', `Exploration Rate: ${Math.floor(window.totalExplorationRate * 60)} per minute`);
-    updateElementIfChanged('purchased-upgrades', `Purchased Upgrades: ${(window.purchasedUpgrades || []).map(u => u.name).join(', ')}`);
 }
 
 function updateAutoHarvestersInfo() {

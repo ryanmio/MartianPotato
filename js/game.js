@@ -779,6 +779,7 @@ function startMartianPotatoColonizer() {
 
         // Add resources
         potatoCount += resourceAmount;
+        totalPotatoesHarvested += resourceAmount;
         water += resourceAmount;
         nutrients += resourceAmount;
         ice += resourceAmount;

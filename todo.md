@@ -36,14 +36,15 @@ TODO:
 - [x] Remove harvest all ready potatoes debug button
 - [x] Fix or remove Potatoes per second calculation
 - [x] Hide debug menu
---------------------------------------------------------------------------------------------
-- [ ] Add exploration cards for remaining upgrades
+- [x] Add exploration cards for remaining upgrades
     - [x] Subsurface Aquifer Tapper
     - [x] Martian Polar Cap Extractor
     - [x] Subterranean Tunneler
     - [x] Cometary Ice Harvester
     - [x] Martian Potato Colonizer
-- [ ] Change the martian potato colonizer to be a spinner countdown or something instead of a toggle
+--------------------------------------------------------------------------------------------
+- [ ] Change the martian potato colonizer and commetary action card toggle switch to be a spinner countdown or something instead of a toggle
+- [ ] Style the toggle switches to match the specificresource generated
 - [ ] Implement functionality for Quantum Spud Spawner
 - [ ] Write real meta messages and descriptions
 - [ ] Balance upgrade costs and effects

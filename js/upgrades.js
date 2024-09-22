@@ -1098,11 +1098,11 @@ createAutomationDevice({
     resourceCheck: () => potatoCount >= 5,
     resourceConsume: () => { potatoCount -= 5; },
     resourceProduce: () => {
-        ice += 100;
+        ice += 50;
         updateDisplay();
-        showToast("Resources Acquired", "Cometary Ice Harvester collected 10 units of water!", 'achievement');
+        showToast("Resources Acquired", "Cometary Ice Harvester collected 50 units of ice!", 'achievement');
     },
-    intervalTime: 60000 // Runs every 60 seconds
+    intervalTime: 30000 // Runs every 30 seconds
 });
 
 // Update event listeners

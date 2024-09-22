@@ -189,13 +189,16 @@ const upgrades = [
     { 
         name: "Martian Potato Colonizer", 
         cost: 50000,
-        effect: () => { window.totalExplorationRate += 2; updateAutonomousExploration(); },
-        icon: "️",
-        description: "Establishes autonomous potato-growing colonies across Mars, greatly increasing resource discovery.",
-        metaMessage: "Full automation. This final upgrade represents the pinnacle of your Martian potato empire, showcasing how far you've come from manual labor to planet-wide automation.",
+        effect: () => {
+            unlockMartianPotatoColonizer();
+        },
+        icon: "🚀",
+        description: "Deploys potato colonies across Mars, harvesting exponentially increasing resources over time.",
+        metaMessage: "Full automation and colonization. You've transformed Mars into a thriving potato planet.",
         weight: 16,
         category: "exploration",
-        tier: 4
+        tier: 4,
+        actionCardId: 'martian-potato-colonizer-container' // Added property
     },
     {
         name: "Thermal Drill",

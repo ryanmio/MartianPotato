@@ -42,7 +42,8 @@ TODO:
     - [x] Martian Polar Cap Extractor
     - [x] Subterranean Tunneler
     - [x] Cometary Ice Harvester
-    - [ ] Martian Potato Colonizer
+    - [x] Martian Potato Colonizer
+- [ ] Change the martian potato colonizer to be a spinner countdown or something instead of a toggle
 - [ ] Implement functionality for Quantum Spud Spawner
 - [ ] Write real meta messages and descriptions
 - [ ] Balance upgrade costs and effects

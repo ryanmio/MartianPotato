@@ -54,6 +54,11 @@ let isPolarCapMiningUnlocked = false;
 let isPolarCapMiningActive = false;
 let polarCapMiningInterval = null;
 
+// Cometary Ice Harvester Variables
+let isCometaryIceHarvesterUnlocked = false;
+let isCometaryIceHarvesterActive = false;
+let cometaryIceHarvesterInterval = null;
+
 // Large Data Structures
 let potatoField = new Array(MAX_FIELD_SIZE).fill(null);
 
@@ -712,6 +717,14 @@ function startNuclearIceMelter() {
 function stopNuclearIceMelter() {
     clearInterval(nuclearIceMelterInterval);
     nuclearIceMelterInterval = null;
+}
+
+function unlockCometaryIceHarvester() {
+    isCometaryIceHarvesterUnlocked = true;
+    if (!unlockedActionCards.includes('cometary-ice-harvester-container')) {
+        unlockedActionCards.push('cometary-ice-harvester-container');
+    }
+    updateActionCards();
 }
 
 // Function to update the field size

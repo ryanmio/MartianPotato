@@ -243,16 +243,15 @@ const upgrades = [
         name: "Cometary Ice Harvester",
         cost: 5000,
         effect: () => { 
-            window.waterExplorationMultiplier = (window.waterExplorationMultiplier || 1) * 2.5;
-            window.totalExplorationRate *= 1.1;
-            updateAutonomousExploration();
+            unlockCometaryIceHarvester();
         },
         icon: "☄️",
-        description: "Occasionally intercepts and harvests passing comets for their water-rich ice, boosting both exploration and water collection.",
-        metaMessage: "Thinking beyond Mars. This upgrade expands the game's scope, showing how advanced technology can turn previously unreachable resources into viable options.",
-        weight: 17,
+        description: "Harnesses passing comets to harvest ice, providing 10 units of water every 10 seconds.",
+        metaMessage: "Celestial opportunities. This upgrade highlights the vast potential of space, encouraging players to look beyond their immediate surroundings and harness cosmic resources.",
+        weight: 14,
         category: "exploration",
-        tier: 4
+        tier: 3,
+        actionCardId: 'cometary-ice-harvester-container' // Added property
     },
     {
         name: "Ice Melting Basin",
@@ -1086,6 +1085,26 @@ createAutomationDevice({
     intervalTime: 2000 // Runs every 2 seconds
 });
 
+// Configuration for Cometary Ice Harvester
+createAutomationDevice({
+    id: 'CometaryIceHarvester',
+    containerId: 'cometary-ice-harvester-container',
+    toggleId: 'cometary-ice-harvester-toggle',
+    isUnlocked: 'isCometaryIceHarvesterUnlocked',
+    isActive: 'isCometaryIceHarvesterActive',
+    unlockFunction: 'unlockCometaryIceHarvester',
+    startFunction: 'startCometaryIceHarvester',
+    stopFunction: 'stopCometaryIceHarvester',
+    resourceCheck: () => potatoCount >= 5,
+    resourceConsume: () => { potatoCount -= 5; },
+    resourceProduce: () => {
+        ice += 100;
+        updateDisplay();
+        showToast("Resources Acquired", "Cometary Ice Harvester collected 10 units of water!", 'achievement');
+    },
+    intervalTime: 60000 // Runs every 60 seconds
+});
+
 // Update event listeners
 document.getElementById('subsurface-aquifer-tapper-toggle').addEventListener('change', () => {
     window['toggleSubsurfaceAquiferTapper']();
@@ -1097,6 +1116,10 @@ document.getElementById('bucket-wheel-excavator-toggle').addEventListener('chang
 
 document.getElementById('subterranean-tuber-tunneler-toggle').addEventListener('change', () => {
     window['toggleSubterraneanTuberTunneler']();
+});
+
+document.getElementById('cometary-ice-harvester-toggle').addEventListener('change', () => {
+    toggleCometaryIceHarvester();
 });
 
 // Unlock the Ice Melting Basin

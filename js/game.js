@@ -736,6 +736,7 @@ function unlockCometaryIceHarvester() {
 
 function unlockMartianPotatoColonizer() {
     isMartianPotatoColonizerUnlocked = true;
+    colonizerCycle = 0; // Initialize cycle
     if (!unlockedActionCards.includes('martian-potato-colonizer-container')) {
         unlockedActionCards.push('martian-potato-colonizer-container');
     }
@@ -765,14 +766,16 @@ function startMartianPotatoColonizer() {
         const toggleSwitch = document.getElementById('martian-potato-colonizer-toggle');
         if (toggleSwitch) {
             toggleSwitch.checked = false;
-            toggleSwitch.disabled = true;
         }
+        updateActionCards();
         return;
     }
 
     colonizerInterval = setInterval(() => {
         colonizerCycle++;
-        let resourceAmount = Math.pow(2, colonizerCycle - 1) * 100; // 100, 200, 400, 800,...
+        let resourceAmount = Math.pow(4, colonizerCycle - 1) * 100;
+
+        console.log(`Cycle: ${colonizerCycle}, Resource Amount: ${resourceAmount}`);
 
         // Add resources
         potatoCount += resourceAmount;
@@ -783,17 +786,21 @@ function startMartianPotatoColonizer() {
         updateDisplay();
 
         // Show a toast message
-        showToast("Resources Acquired", `Martian Potato Colonizer harvested ${resourceAmount} of each resource!`, 'achievement');
+        showToast(
+            "Resources Acquired",
+            `Martian Potato Colonizer harvested ${resourceAmount} of each resource!`,
+            'achievement'
+        );
 
         // Check if max cycles reached
         if (colonizerCycle >= maxColonizerCycles) {
             stopMartianPotatoColonizer();
-            showToast("All Resources Depleted", "No resources left to exploit on Mars. You've harvested everything!", 'setback');
-            // Disable the toggle switch
-            const toggleSwitch = document.getElementById('martian-potato-colonizer-toggle');
-            if (toggleSwitch) {
-                toggleSwitch.disabled = true;
-            }
+            showToast(
+                "All Resources Depleted",
+                "No resources left to exploit on Mars. You've harvested everything!",
+                'achievement'
+            );
+            updateActionCards(); // Update the action card to reflect depletion
         }
     }, 60000); // Every 60 seconds
 }
@@ -806,6 +813,7 @@ function stopMartianPotatoColonizer() {
     if (toggleSwitch) {
         toggleSwitch.checked = false;
     }
+    updateActionCards(); // Ensure the action card reflects the current state
 }
 
 // Add this after initializing action cards
@@ -931,16 +939,19 @@ function loadGame() {
             if (isPolarCapMiningUnlocked) {
                 unlockedActionCards.push('polar-cap-mining-container');
             }
-            if (savedData.isMartianPotatoColonizerUnlocked) {
-                isMartianPotatoColonizerUnlocked = savedData.isMartianPotatoColonizerUnlocked;
+
+            // Corrected variable names here
+            if (gameState.isMartianPotatoColonizerUnlocked) {
+                isMartianPotatoColonizerUnlocked = gameState.isMartianPotatoColonizerUnlocked;
+                unlockedActionCards.push('martian-potato-colonizer-container');
             }
-            
-            if (savedData.colonizerCycle) {
-                colonizerCycle = savedData.colonizerCycle;
+
+            if (gameState.colonizerCycle) {
+                colonizerCycle = gameState.colonizerCycle;
             }
-            
-            if (savedData.isMartianPotatoColonizerActive && colonizerCycle < maxColonizerCycles) {
-                isMartianPotatoColonizerActive = savedData.isMartianPotatoColonizerActive;
+
+            if (gameState.isMartianPotatoColonizerActive && colonizerCycle < maxColonizerCycles) {
+                isMartianPotatoColonizerActive = gameState.isMartianPotatoColonizerActive;
                 startMartianPotatoColonizer();
             } else {
                 isMartianPotatoColonizerActive = false;
@@ -951,7 +962,6 @@ function loadGame() {
                     }
                 }
             }
-            // Add similar checks for other unlockable features
 
             // Remove duplicates
             unlockedActionCards = [...new Set(unlockedActionCards)];
@@ -978,8 +988,6 @@ function loadGame() {
             if (isNuclearIceMelterActive) {
                 startNuclearIceMelter();
             }
-
-            // Restart other active features if necessary
 
             // Handle initial glow on the plant button
             if (!hasSeenInitialGlow) {
@@ -1035,23 +1043,50 @@ function updateActionCards() {
         if (unlockedActionCards.includes(card.id)) {
             card.style.display = 'block';
 
-            // Specifically handle Martian Potato Colonizer toggle
+            // Handle depletions using the reusable function
             if (card.id === 'martian-potato-colonizer-container') {
-                const toggleSwitch = document.getElementById('martian-potato-colonizer-toggle');
-                if (colonizerCycle >= maxColonizerCycles) {
-                    // Disable the toggle if max cycles reached
-                    if (toggleSwitch) {
-                        toggleSwitch.disabled = true;
-                    }
-                }
+                const isDepleted = colonizerCycle >= maxColonizerCycles;
+                updateDepletedActionCard(card.id, isDepleted, "Resources Depleted");
             }
+
+            // Add similar checks for other action cards here if needed
+
         } else if (card.id !== 'exploration-container') {
             card.style.display = 'none';
         }
     });
 }
 
+function updateDepletedActionCard(actionCardId, isDepleted, message) {
+    const card = document.getElementById(actionCardId);
+    if (card) {
+        const toggleContainer = card.querySelector('.toggle-switch-container');
+        let depletedMessage = card.querySelector('.depleted-message');
 
+        if (isDepleted) {
+            // Hide the toggle switch
+            if (toggleContainer) {
+                toggleContainer.style.display = 'none';
+            }
+            // Display the depleted message
+            if (!depletedMessage) {
+                depletedMessage = document.createElement('p');
+                depletedMessage.classList.add('depleted-message');
+                depletedMessage.textContent = message;
+                card.appendChild(depletedMessage);
+            }
+        } else {
+            // Show the toggle switch
+            if (toggleContainer) {
+                toggleContainer.style.display = 'block';
+            }
+            // Remove the depleted message
+            if (depletedMessage) {
+                depletedMessage.remove();
+            }
+        }
+    }
+}
 
 // Function to reset the game state
 function resetGame() {

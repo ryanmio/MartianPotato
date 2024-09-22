@@ -42,6 +42,7 @@ TODO:
     - [x] Subterranean Tunneler
     - [x] Cometary Ice Harvester
     - [x] Martian Potato Colonizer
+- [ ] add hide/show button for the potatoes over time graph
 --------------------------------------------------------------------------------------------
 - [ ] Change the martian potato colonizer and commetary action card toggle switch to be a spinner countdown or something instead of a toggle
 - [ ] Style the toggle switches to match the specificresource generated
@@ -81,3 +82,4 @@ Bugs/Issues:
 - [x] potato century achievent should be based on cumulative total, not just current count
 --------------------------------------------------------------------------------------------
 - [ ] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.
+- [ ] The last milestone tech cards arent being removed

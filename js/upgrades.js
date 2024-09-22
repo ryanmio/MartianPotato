@@ -748,7 +748,6 @@ function addAutoplanter() {
         cost: Math.floor(20 * Math.pow(1.15, upgrades.find(u => u.name === "Automated Planter").count))
     };
     autoplanters.push(autoplanter);
-    rawPotatoesPerSecond += 1; // Each autoplanter adds 1 potato per second
     startAutoplanter(autoplanter);
     updateDisplay();
 }
@@ -1002,7 +1001,8 @@ function createAutomationDevice(deviceConfig) {
 
     // Toggle the device
     window[`toggle${id}`] = function() {
-        if (!window[isUnlocked]) return;
+        // Prevent toggling on if resources are depleted
+        if (!window[isUnlocked] || areResourcesDepleted) return;
 
         window[isActive] = !window[isActive];
         const toggleSwitch = document.getElementById(toggleId);
@@ -1019,6 +1019,17 @@ function createAutomationDevice(deviceConfig) {
 
     // Start the device
     window[startFunction] = function() {
+        // Check if resources are depleted
+        if (areResourcesDepleted) {
+            window[isActive] = false;
+            const toggleSwitch = document.getElementById(toggleId);
+            if (toggleSwitch) {
+                toggleSwitch.checked = false;
+            }
+            updateDepletedActionCard(containerId, true, "Resources Depleted");
+            return;
+        }
+
         window[`${id}Interval`] = setInterval(() => {
             if (resourceCheck()) {
                 resourceConsume();
@@ -1034,6 +1045,12 @@ function createAutomationDevice(deviceConfig) {
     // Stop the device
     window[stopFunction] = function() {
         clearInterval(window[`${id}Interval`]);
+        window[`${id}Interval`] = null; // Ensure the interval is cleared
+        window[isActive] = false;
+        const toggleSwitch = document.getElementById(toggleId);
+        if (toggleSwitch) {
+            toggleSwitch.checked = false;
+        }
     };
 }
 

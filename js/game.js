@@ -25,6 +25,7 @@ let ice = 100;
 let waterEfficiency = 1;
 let soilEfficiency = 1;
 let iceEfficiency = 1;
+let areResourcesDepleted = false;
 
 // Planting Variables
 let plantingDelay = 3000;
@@ -760,7 +761,7 @@ function toggleMartianPotatoColonizer() {
 }
 
 function startMartianPotatoColonizer() {
-    // If colonizer has already completed, do not start again
+    // Prevent starting if max cycles reached
     if (colonizerCycle >= maxColonizerCycles) {
         isMartianPotatoColonizerActive = false;
         const toggleSwitch = document.getElementById('martian-potato-colonizer-toggle');
@@ -779,7 +780,7 @@ function startMartianPotatoColonizer() {
 
         // Add resources
         potatoCount += resourceAmount;
-        totalPotatoesHarvested += resourceAmount;
+        totalPotatoesHarvested += resourceAmount; // Increment totalPotatoesHarvested
         water += resourceAmount;
         nutrients += resourceAmount;
         ice += resourceAmount;
@@ -795,14 +796,25 @@ function startMartianPotatoColonizer() {
 
         // Check if max cycles reached
         if (colonizerCycle >= maxColonizerCycles) {
+            areResourcesDepleted = true; // Set global depletion flag
             stopMartianPotatoColonizer();
             showToast(
                 "All Resources Depleted",
                 "No resources left to exploit on Mars. You've harvested everything!",
                 'achievement'
             );
-            updateActionCards(); // Update the action card to reflect depletion
+            onResourcesDepleted(); // Stop other devices and update action cards
         }
+
+        // Update harvest history and chart
+        harvestHistory.push({
+            timestamp: Date.now(),
+            totalPotatoes: totalPotatoesHarvested
+        });
+        aggregateHarvestHistory(); // Aggregate data if necessary
+        updateHarvestChart(); // Update the chart with new data
+
+        checkAchievements(); // Check for any new achievements
     }, 60000); // Every 60 seconds
 }
 
@@ -822,6 +834,17 @@ document.getElementById('martian-potato-colonizer-toggle').addEventListener('cha
     toggleMartianPotatoColonizer();
 });
 
+function onResourcesDepleted() {
+    // Stop all other automation devices
+    stopSubsurfaceAquiferTapper();
+    stopBucketWheelExcavator();
+    stopSubterraneanTuberTunneler();
+    stopPolarCapMining();
+
+    // Update the action cards to reflect depletion
+    updateActionCards();
+}
+
 // Function to update the field size
 function updateFieldSize(newSize) {
     MAX_FIELD_SIZE = newSize;
@@ -837,6 +860,7 @@ function saveGame() {
         water,
         nutrients,
         ice,
+        areResourcesDepleted,
         plantingDelay,
         lastPlantTime,
         potatoesPerClick,
@@ -951,6 +975,10 @@ function loadGame() {
                 colonizerCycle = gameState.colonizerCycle;
             }
 
+            if (gameState.areResourcesDepleted !== undefined) {
+                areResourcesDepleted = gameState.areResourcesDepleted;
+            }
+
             if (gameState.isMartianPotatoColonizerActive && colonizerCycle < maxColonizerCycles) {
                 isMartianPotatoColonizerActive = gameState.isMartianPotatoColonizerActive;
                 startMartianPotatoColonizer();
@@ -1045,12 +1073,18 @@ function updateActionCards() {
             card.style.display = 'block';
 
             // Handle depletions using the reusable function
-            if (card.id === 'martian-potato-colonizer-container') {
-                const isDepleted = colonizerCycle >= maxColonizerCycles;
-                updateDepletedActionCard(card.id, isDepleted, "Resources Depleted");
+            if (areResourcesDepleted && [
+                'martian-potato-colonizer-container',
+                'subsurface-aquifer-tapper-container',
+                'bucket-wheel-excavator-container',
+                'subterranean-tuber-tunneler-container',
+                'polar-cap-mining-container'
+            ].includes(card.id)) {
+                updateDepletedActionCard(card.id, true, "Resources Depleted");
+            } else {
+                // For other action cards, ensure they are active unless individually depleted
+                updateDepletedActionCard(card.id, false);
             }
-
-            // Add similar checks for other action cards here if needed
 
         } else if (card.id !== 'exploration-container') {
             card.style.display = 'none';

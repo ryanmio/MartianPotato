@@ -24,22 +24,28 @@ const upgrades = [
     { 
         name: "Hand Trowel", 
         cost: 1,
-        effect: () => { plantingDelay = Math.max(2500, plantingDelay - 500); },
+        effect: function() { 
+            plantingDelay = Math.max(2500, plantingDelay - 500); 
+        },
         icon: "🖐️",
         description: "Reduces planting time by 0.5 seconds.",
         metaMessage: "Manual labor. The game begins with the simplest form of interaction, making future efficiencies feel like significant advancements.",
         weight: 1,
         category: "planting",
-        tier: 1
+        tier: 1,
+        count: 0, // Initialize count
+        repeatable: false // Specify if the upgrade is repeatable
     },
     { 
         name: "Manual Ice Melting", 
         cost: 3,
-        effect: () => { 
-            isManualIceMeltingUnlocked = true;
-            const iceMeltingContainer = document.getElementById('ice-melting-container');
-            if (iceMeltingContainer) {
-                iceMeltingContainer.style.display = 'block';
+        effect: function() { // Changed from arrow function to regular function
+            if (this.count === 1) { // Use `this` to refer to the current upgrade
+                isManualIceMeltingUnlocked = true;
+                const iceMeltingContainer = document.getElementById('ice-melting-container');
+                if (iceMeltingContainer) {
+                    iceMeltingContainer.style.display = 'block';
+                }
             }
         },
         icon: "🧊",
@@ -49,55 +55,65 @@ const upgrades = [
         weight: 2,
         category: "harvesting",
         tier: 1,
+        count: 0,
+        repeatable: false,
         actionCardId: 'ice-melting-container' // Added property
     },
     { 
         name: "Watering Can", 
         cost: 5,
-        effect: () => { plantingDelay = Math.max(2000, plantingDelay - 500); },
+        effect: function() { 
+            plantingDelay = Math.max(2000, plantingDelay - 500); 
+        },
         icon: "🚿",
         description: "Further reduces planting time by 0.5 seconds.",
         metaMessage: "Integrating water delivery. This upgrade speeds up the planting process, giving you a sense of progress while subtly introducing the concept of resource management.",
         weight: 2,
         category: "planting",
-        tier: 1
+        tier: 1,
+        count: 0,
+        repeatable: false
     },
     { 
         name: "Automated Planter", 
         cost: 25,
         effect: () => { addAutoplanter(); }, 
-        count: 0,
-        repeatable: true,
         icon: "🤖",
         description: "Automatically plants potatoes, reducing manual labor.",
         metaMessage: "Automation's allure. This upgrade significantly reduces active playtime, giving you a sense of progress and control, while quietly introducing a new constraint: power.",
         weight: 4,
         category: "planting",
-        tier: 1
+        tier: 1,
+        count: 0,
+        repeatable: true
     },
     { 
         name: "Auto Harvester", 
         cost: 50,
         effect: () => { addAutoHarvester(); }, 
-        count: 0,
-        repeatable: true,
         icon: "🤖",
         description: "Automatically harvests mature potatoes.",
         metaMessage: "Your first step towards full automation. The game is reducing your direct involvement, shifting your focus to management and strategy.",
         weight: 5,
         category: "harvesting",
-        tier: 1
+        tier: 1,
+        count: 0,
+        repeatable: true
     },
     { 
         name: "Quantum Spud Spawner", 
         cost: 1000000, 
-        effect: () => { plantingDelay = 500; },
+        effect: function() { // Changed to regular function
+            plantingDelay = 500; 
+        },
         icon: "⚛️",
         description: "Utilizes quantum technology for near-instant potato planting (0.5 seconds).",
         metaMessage: "The ultimate efficiency. The game offers peak performance, yet at a steep resource cost. This reflects the paradox of progress: as you achieve perfection, your burden increases.",
         weight: 20,
         category: "planting",
-        tier: 4
+        tier: 4,
+        count: 0,
+        repeatable: false
     },
     { 
         name: "Martian Map", 
@@ -111,7 +127,9 @@ const upgrades = [
         metaMessage: "Efficiency through knowledge. This upgrade demonstrates how information can lead to faster progress, subtly encouraging you to value data and exploration.",
         weight: 2,
         category: "exploration",
-        tier: 1
+        tier: 1,
+        count: 0,
+        repeatable: false
     },
     { 
         name: "Binoculars", 
@@ -125,7 +143,9 @@ const upgrades = [
         metaMessage: "Incremental improvements. This upgrade shows how small advancements can accumulate, encouraging continued investment in seemingly minor upgrades.",
         weight: 3,
         category: "exploration",
-        tier: 1
+        tier: 1,
+        count: 0,
+        repeatable: false
     },
     { 
         name: "Jetpack", 
@@ -139,7 +159,9 @@ const upgrades = [
         metaMessage: "Technological leaps. This upgrade represents a significant advancement, showing how larger investments can lead to more substantial improvements.",
         weight: 6,
         category: "exploration",
-        tier: 2
+        tier: 2,
+        count: 0,
+        repeatable: false
     },
     { 
         name: "Spudnik Satellite", 
@@ -153,7 +175,9 @@ const upgrades = [
         metaMessage: "Global perspective. This upgrade demonstrates how technology can provide a broader view, leading to more efficient resource discovery and management.",
         weight: 7,
         category: "exploration",
-        tier: 2
+        tier: 2,
+        count: 0,
+        repeatable: false
     },
     { 
         name: "Martian Bucket-Wheel Excavator", 
@@ -168,6 +192,8 @@ const upgrades = [
         weight: 12,
         category: "exploration",
         tier: 3,
+        count: 0,
+        repeatable: false,
         actionCardId: 'bucket-wheel-excavator-container' // Added property
     },
     { 
@@ -184,6 +210,8 @@ const upgrades = [
         weight: 13,
         category: "exploration",
         tier: 3,
+        count: 0,
+        repeatable: false,
         actionCardId: 'subterranean-tuber-tunneler-container' // Added property
     },
     { 
@@ -198,6 +226,8 @@ const upgrades = [
         weight: 16,
         category: "exploration",
         tier: 4,
+        count: 0,
+        repeatable: false,
         actionCardId: 'martian-potato-colonizer-container' // Added property
     },
     {
@@ -212,7 +242,9 @@ const upgrades = [
         metaMessage: "Efficiency through technology. This upgrade introduces the concept of specialized tools, showing how targeted innovations can significantly boost resource gathering.",
         weight: 10, // Changed from 5 to 10
         category: "exploration",
-        tier: 1
+        tier: 1,
+        count: 0,
+        repeatable: false
     },
     {
         name: "Subsurface Aquifer Tapper",
@@ -226,6 +258,8 @@ const upgrades = [
         weight: 6,
         category: "exploration",
         tier: 2,
+        count: 0,
+        repeatable: false,
         actionCardId: 'subsurface-aquifer-tapper-container' // Added property
     },
     {
@@ -240,6 +274,8 @@ const upgrades = [
         weight: 12,
         category: "exploration",
         tier: 3,
+        count: 0,
+        repeatable: false,
         actionCardId: 'polar-cap-mining-container' // Added property
     },
     {
@@ -254,6 +290,8 @@ const upgrades = [
         weight: 14,
         category: "exploration",
         tier: 3,
+        count: 0,
+        repeatable: false,
         actionCardId: 'cometary-ice-harvester-container' // Added property
     },
     {
@@ -267,6 +305,8 @@ const upgrades = [
         weight: 4,
         category: "harvesting",
         tier: 1,
+        count: 0,
+        repeatable: false,
         actionCardId: 'ice-melting-basin-container' // Added property
     },
     {
@@ -283,6 +323,8 @@ const upgrades = [
         weight: 12,
         category: "harvesting",
         tier: 3,
+        count: 0,
+        repeatable: false,
         actionCardId: 'nuclear-ice-melter-container' // Added property
     },
     {
@@ -297,7 +339,9 @@ const upgrades = [
         metaMessage: "Scaling up operations. This upgrade demonstrates how investment in infrastructure can lead to exponential growth potential.",
         weight: 10,
         category: "planting",
-        tier: 2
+        tier: 2,
+        count: 0,
+        repeatable: false
     },
     {
         name: "Potato Compost",
@@ -311,7 +355,9 @@ const upgrades = [
         metaMessage: "",
         weight: 5,
         category: "growth",
-        tier: 1
+        tier: 1,
+        count: 0,
+        repeatable: false
     },
     {
         name: "Potato Genome Modification",
@@ -325,7 +371,9 @@ const upgrades = [
         metaMessage: "Modify potato genes for rapid growth.",
         weight: 10,
         category: "growth",
-        tier: 2
+        tier: 2,
+        count: 0,
+        repeatable: false
     },
     {
         name: "Martian Soil Bacteria Inoculant",
@@ -339,7 +387,9 @@ const upgrades = [
         metaMessage: "Boost nutrient uptake with specialized bacteria.",
         weight: 12,
         category: "growth",
-        tier: 3
+        tier: 3,
+        count: 0,
+        repeatable: false
     },
     {
         name: "Gravitropism Accelerator",
@@ -353,7 +403,9 @@ const upgrades = [
         metaMessage: "Harness gravity to speed up potato growth.",
         weight: 15,
         category: "growth",
-        tier: 3
+        tier: 3,
+        count: 0,
+        repeatable: false
     },
     // Milestone upgrades
     {
@@ -369,7 +421,9 @@ const upgrades = [
         metaMessage: "The irony of power from food...",
         weight: 6,
         category: "energy",
-        tier: 1
+        tier: 1,
+        count: 0,
+        repeatable: false
     },
     {
         name: "Potato Computer Chip",
@@ -383,7 +437,9 @@ const upgrades = [
         metaMessage: "From food to thought...",
         weight: 11,
         category: "technology",
-        tier: 2
+        tier: 2,
+        count: 0,
+        repeatable: false
     },
     {
         name: "Potato Computer",
@@ -397,7 +453,9 @@ const upgrades = [
         metaMessage: "The rise of tuber technology.",
         weight: 16,
         category: "technology",
-        tier: 3
+        tier: 3,
+        count: 0,
+        repeatable: false
     },
     {
         name: "Potato Quantum Computer",
@@ -411,7 +469,9 @@ const upgrades = [
         metaMessage: "Quantum supremacy, potato style.",
         weight: 21,
         category: "technology",
-        tier: 4
+        tier: 4,
+        count: 0,
+        repeatable: false
     },
     {
         name: "Potato Sentience",
@@ -425,7 +485,9 @@ const upgrades = [
         metaMessage: "We were so preoccupied with whether we could, we didn't stop to think if we should.",
         weight: 25,
         category: "technology",
-        tier: 5
+        tier: 5,
+        count: 0,
+        repeatable: false
     }
 ];
 
@@ -458,7 +520,7 @@ function updateTechTree() {
     upgrades.forEach((upgrade) => {
         let shouldDisplayCard = false;
         if (upgrade.tier <= currentTier) {
-            if (upgrade.repeatable || !upgrade.purchased) {
+            if (upgrade.repeatable || upgrade.count === 0) { // Display if repeatable or not yet purchased
                 shouldDisplayCard = true;
             }
         }
@@ -472,7 +534,7 @@ function updateTechTree() {
             } else {
                 const card = document.getElementById(cardId);
                 const upgradeCost = getUpgradeCost(upgrade);
-                const isPurchasable = potatoCount >= upgradeCost;
+                const isPurchasable = (upgrade.repeatable ? (potatoCount >= upgradeCost) : (potatoCount >= upgradeCost && upgrade.count === 0));
 
                 // Update purchasability and cost display
                 card.classList.toggle('purchasable', isPurchasable);
@@ -543,7 +605,7 @@ function createTechTree() {
     upgrades.forEach((upgrade) => {
         let shouldDisplayCard = false;
         if (upgrade.tier <= currentTier) {
-            if (upgrade.repeatable || !upgrade.purchased) {
+            if (upgrade.repeatable || upgrade.count === 0) { // Display if repeatable or not yet purchased
                 shouldDisplayCard = true;
             }
         }
@@ -681,23 +743,14 @@ function buyUpgrade(upgrade) {
         if (upgrade.effect) {
             upgrade.effect();
         }
-        if (upgrade.count !== undefined) {
-            upgrade.count++;
-        } else {
-            upgrade.purchased = true;
-        }
+        upgrade.count++;
         updateDisplay();
 
-        // Remove the purchased upgrade from the tech tree if it's not repeatable
-        if (!upgrade.repeatable) {
-            const techCard = document.getElementById(getCardId(upgrade.name)); // Use helper function
-            if (techCard) {
+        const techCard = document.getElementById(getCardId(upgrade.name));
+        if (techCard) {
+            if (!upgrade.repeatable && upgrade.count >= 1) {
                 techCard.remove();
-            }
-        } else {
-            // For repeatable upgrades, update the cost display
-            const techCard = document.getElementById(getCardId(upgrade.name)); // Use helper function
-            if (techCard) {
+            } else if (upgrade.repeatable) {
                 const costElement = techCard.querySelector('.tech-card-cost');
                 if (costElement) {
                     costElement.textContent = `Cost: ${getUpgradeCost(upgrade)} potatoes`;
@@ -705,7 +758,6 @@ function buyUpgrade(upgrade) {
             }
         }
 
-        // Show a toast notification for the purchase
         showToast("Upgrade Unlocked", `You have unlocked the ${upgrade.name} upgrade!`, 'achievement');
 
         // Unlock the corresponding action card if applicable
@@ -723,20 +775,22 @@ function buyUpgrade(upgrade) {
 
 // Add this new function to unlock the corresponding action card
 function unlockActionCardForUpgrade(upgradeName) {
-    const upgrade = upgrades.find(u => u.name === upgradeName);
-    if (upgrade && upgrade.actionCardId) {
-        const cardId = upgrade.actionCardId;
-        if (!unlockedActionCards.includes(cardId)) {
-            unlockedActionCards.push(cardId);
-            updateActionCards();
-        }
-        // Call the unlock function if it exists
-        if (typeof upgrade.effect === 'function') {
-            upgrade.effect();
-        }
-        // Specifically for Subterranean Tuber Tunneler
-        if (upgradeName === "Subterranean Tuber Tunneler") {
-            unlockSubterraneanTuberTunneler();
+    const actionCardIdMap = {
+        "Manual Ice Melting": 'ice-melting-container',
+        "Ice Melting Basin": 'ice-melting-basin-container',
+        "Nuclear Ice Melter": 'nuclear-ice-melter-container',
+        "Cometary Ice Harvester": 'cometary-ice-harvester-container',
+        "Martian Potato Colonizer": 'martian-potato-colonizer-container',
+        // ... other mappings
+    };
+
+    const actionCardId = actionCardIdMap[upgradeName];
+    if (actionCardId && !unlockedActionCards.includes(actionCardId)) {
+        unlockedActionCards.push(actionCardId);
+        const actionCard = document.getElementById(actionCardId);
+        if (actionCard) {
+            actionCard.style.display = 'block';
+            console.log(`Unlocked action card: ${actionCardId}`);
         }
     }
 }

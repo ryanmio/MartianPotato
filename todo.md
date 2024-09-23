@@ -83,6 +83,6 @@ Bugs/Issues:
 - [x] reduce cost of jetpack to 200 potatoes
 - [x] remove the ice 2x multiple for manual exploration
 - [x] potato century achievent should be based on cumulative total, not just current count
+- [x] The last milestone tech cards arent being removed
 --------------------------------------------------------------------------------------------
 - [ ] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.
-- [ ] The last milestone tech cards arent being removed

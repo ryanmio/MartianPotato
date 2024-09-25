@@ -578,6 +578,36 @@ document.addEventListener('DOMContentLoaded', () => {
     addEventListenerIfExists('reset-button', 'click', resetGame);
 
     addEventListenerIfExists('polar-cap-mining-toggle', 'change', togglePolarCapMining);
+
+    // Add event listeners for the chart modal
+    let harvestChartInitialized = false;
+    
+    const chartButton = document.getElementById('chart-button');
+    const chartModal = document.getElementById('chart-modal');
+    const closeChartModal = document.querySelector('.close-chart-modal');
+    
+    if (chartButton && chartModal && closeChartModal) {
+        chartButton.addEventListener('click', () => {
+            chartModal.style.display = 'flex';
+            // Initialize the chart if necessary
+            if (!harvestChartInitialized) {
+                initializeHarvestChart();
+                harvestChartInitialized = true;
+            }
+            updateHarvestChart();
+        });
+ 
+        closeChartModal.addEventListener('click', () => {
+            chartModal.style.display = 'none';
+        });
+ 
+        // Close modal when clicking outside of modal-content
+        chartModal.addEventListener('click', (event) => {
+            if (event.target === chartModal) {
+                chartModal.style.display = 'none';
+            }
+        });
+    }
 });
 
 // Function to handle the click event
@@ -1313,12 +1343,35 @@ function updateHarvestChart() {
     harvestChart.update();
 }
 
-// Initialize the chart on window load
-window.addEventListener('load', () => {
-    initializeHarvestChart();
-
-    // If harvestHistory has data (e.g., after loading a saved game), update the chart
-    if (harvestHistory.length > 0) {
-        updateHarvestChart();
+// Add event listeners for the chart modal within the DOMContentLoaded event
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize the chart variables
+    let harvestChartInitialized = false;
+    
+    const chartButton = document.getElementById('chart-button');
+    const chartModal = document.getElementById('chart-modal');
+    const closeChartModal = document.querySelector('.close-chart-modal');
+    
+    if (chartButton && chartModal && closeChartModal) {
+        chartButton.addEventListener('click', () => {
+            chartModal.style.display = 'flex';
+            // Initialize the chart if necessary
+            if (!harvestChartInitialized) {
+                initializeHarvestChart();
+                harvestChartInitialized = true;
+            }
+            updateHarvestChart();
+        });
+        
+        closeChartModal.addEventListener('click', () => {
+            chartModal.style.display = 'none';
+        });
+        
+        // Close modal when clicking outside of modal-content
+        chartModal.addEventListener('click', (event) => {
+            if (event.target === chartModal) {
+                chartModal.style.display = 'none';
+            }
+        });
     }
 });

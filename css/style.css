@@ -748,6 +748,11 @@ button:hover, button:disabled {
     position: relative;
 }
 
+.chart-modal-content {
+    width: 650px;          /* Set the desired width for the chart modal */
+    max-width: 90%;        /* Ensure it scales down on smaller screens */
+}
+
 .close-modal {
     position: absolute;
     top: 10px;

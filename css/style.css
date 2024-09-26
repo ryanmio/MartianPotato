@@ -769,6 +769,11 @@ button:hover, button:disabled {
     color: #333;
 }
 
+#mission-time-value {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+}
+
 .chart-graph-title {
     text-align: center;
     margin-top: 15px;

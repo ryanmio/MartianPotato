@@ -1349,19 +1349,24 @@ function updateHarvestChart() {
         totalPotatoesCount.textContent = totalPotatoesHarvested;
     }
 
-    // Update the elapsed mission time
+    // Update the elapsed mission time using Martian time
     const missionTimeValue = document.getElementById('mission-time-value');
     if (missionTimeValue) {
-        missionTimeValue.textContent = getElapsedMissionTime();
+        missionTimeValue.textContent = getElapsedMartianTime();
     }
 }
 
-function getElapsedMissionTime() {
+function getElapsedMartianTime() {
     const elapsedMillis = Date.now() - gameStartTime;
-    const elapsedSeconds = Math.floor((elapsedMillis / 1000) % 60);
-    const elapsedMinutes = Math.floor((elapsedMillis / (1000 * 60)) % 60);
-    const elapsedHours = Math.floor(elapsedMillis / (1000 * 60 * 60));
-    return `${elapsedHours}h ${elapsedMinutes}m ${elapsedSeconds}s`;
+    const elapsedEarthSeconds = elapsedMillis / 1000;
+    const martianSeconds = elapsedEarthSeconds / 1.02749;
+    
+    const martianHours = Math.floor(martianSeconds / 3698.958);
+    const remainingSeconds = martianSeconds % 3698.958;
+    const martianMinutes = Math.floor(remainingSeconds / 61.6493);
+    const finalMartianSeconds = Math.floor(remainingSeconds % 61.6493);
+    
+    return `${martianHours.toString().padStart(2, '0')}:${martianMinutes.toString().padStart(2, '0')}:${finalMartianSeconds.toString().padStart(2, '0')} MTC`;
 }
 
 // Add event listeners for the chart modal within the DOMContentLoaded event

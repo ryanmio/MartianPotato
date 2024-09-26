@@ -164,9 +164,12 @@
     <!-- Add the chart modal at the end of the body -->
     <!-- Chart Modal -->
     <div id="chart-modal" class="modal" style="display: none;">
-        <div class="modal-content chart-modal-content"> <!-- Added chart-modal-content class -->
+        <div class="modal-content chart-modal-content">
             <span class="close-modal close-chart-modal">&times;</span>
-            <h2>Potatoes Harvested Over Time</h2>
+            <h2>Statistics</h2>
+            <p class="chart-subtitle">Total Potatoes Harvested: <span id="total-potatoes-count"></span></p>
+            <p class="chart-subtitle">Elapsed Mission Time: <span id="mission-time-value"></span></p>
+            <h3 class="chart-graph-title">Cumulative Potatoes Harvested Over Time</h3>
             <canvas id="harvestChart" width="600" height="400"></canvas>
         </div>
     </div>

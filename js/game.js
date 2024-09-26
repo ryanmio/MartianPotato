@@ -1287,7 +1287,7 @@ function initializeHarvestChart() {
             datasets: [{
                 label: 'Total Potatoes Harvested',
                 data: [],
-                borderColor: 'rgba(255, 99, 132, 1)',
+                borderColor: '#C2A378', // Potato color
                 borderWidth: 2,
                 fill: false,
                 tension: 0.1
@@ -1316,12 +1316,13 @@ function initializeHarvestChart() {
                 }
             },
             plugins: {
+                legend: {
+                    display: false // Remove the legend
+                },
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            const label = context.dataset.label || '';
-                            const value = context.parsed.y || 0;
-                            return `${label}: ${value}`;
+                            return `Total Potatoes: ${context.parsed.y}`;
                         }
                     }
                 }
@@ -1341,6 +1342,26 @@ function updateHarvestChart() {
     harvestChart.data.labels = timestamps;
     harvestChart.data.datasets[0].data = totals;
     harvestChart.update();
+
+    // Update the total potatoes count in the subtitle
+    const totalPotatoesCount = document.getElementById('total-potatoes-count');
+    if (totalPotatoesCount) {
+        totalPotatoesCount.textContent = totalPotatoesHarvested;
+    }
+
+    // Update the elapsed mission time
+    const missionTimeValue = document.getElementById('mission-time-value');
+    if (missionTimeValue) {
+        missionTimeValue.textContent = getElapsedMissionTime();
+    }
+}
+
+function getElapsedMissionTime() {
+    const elapsedMillis = Date.now() - gameStartTime;
+    const elapsedSeconds = Math.floor((elapsedMillis / 1000) % 60);
+    const elapsedMinutes = Math.floor((elapsedMillis / (1000 * 60)) % 60);
+    const elapsedHours = Math.floor(elapsedMillis / (1000 * 60 * 60));
+    return `${elapsedHours}h ${elapsedMinutes}m ${elapsedSeconds}s`;
 }
 
 // Add event listeners for the chart modal within the DOMContentLoaded event

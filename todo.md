@@ -51,6 +51,8 @@ TODO:
 - [ ] Change the martian potato colonizer and commetary action card toggle switch to be a spinner countdown or something instead of a toggle
 - [ ] Style the toggle switches to match the specificresource generated
 - [ ] Write real meta messages and descriptions
+- [ ] Add production stats
+- [ ] Add cumulative potato stats to graph modal
 - [ ] Balance upgrade costs and effects
 - [ ] Add new achievements:
     - [ ] Upgrade Milestones:

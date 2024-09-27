@@ -102,18 +102,19 @@ const upgrades = [
     },
     { 
         name: "Quantum Spud Spawner", 
-        cost: 1000000, 
-        effect: function() { // Changed to regular function
-            plantingDelay = 500; 
+        cost: 1000000, // Define an appropriate cost
+        effect: function() { 
+            unlockQuantumSpudSpawner(); 
         },
         icon: "⚛️",
-        description: "Utilizes quantum technology for near-instant potato planting (0.5 seconds).",
-        metaMessage: "The ultimate efficiency. The game offers peak performance, yet at a steep resource cost. This reflects the paradox of progress: as you achieve perfection, your burden increases.",
+        description: "Automatically plants and harvests potatoes across all field slots instantly.",
+        metaMessage: "Harness quantum mechanics to revolutionize potato farming on Mars.",
         weight: 20,
-        category: "planting",
-        tier: 4,
+        category: "automation",
+        tier: 5,
         count: 0,
-        repeatable: false
+        repeatable: false,
+        actionCardId: 'quantum-spud-spawner-container' // Added property for UI integration
     },
     { 
         name: "Martian Map", 

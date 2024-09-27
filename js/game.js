@@ -85,6 +85,10 @@ let lastDebugUpdateTime = 0;
 let lastResourceValues = { water: 0, nutrients: 0, ice: 0 };
 let lastAction = "None";
 
+// Quantum Spud Spawner Variables
+let isQuantumSpudSpawnerUnlocked = false;
+let isQuantumSpudSpawnerActive = false;
+let quantumSpudSpawnerInterval = null;
 
 // Helper function to add event listeners if the element exists
 function addEventListenerIfExists(id, event, handler) {
@@ -176,20 +180,7 @@ function plantPotato() {
     }
 
     if (consumeResources()) {
-        // Generate random potato appearance properties
-        const scaleX = 0.95 + Math.random() * 0.1;
-        const scaleY = 0.95 + Math.random() * 0.1;
-        const borderRadius = `${45 + Math.random() * 10}% ${55 + Math.random() * 10}% ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% / ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% ${55 + Math.random() * 10}% ${45 + Math.random() * 10}%`;
-        const textureClass = `potato-texture-${Math.floor(Math.random() * 8) + 1}`;
-        
-        potatoField[emptySlotIndex] = {
-            plantedAt: currentTime,
-            growthStage: 0,
-            scaleX,
-            scaleY,
-            borderRadius,
-            textureClass
-        };
+        potatoField[emptySlotIndex] = createPotato();
 
         if (!hasSeenInitialGlow) {
             hasSeenInitialGlow = true;
@@ -197,6 +188,7 @@ function plantPotato() {
         }
 
         lastPlantTime = currentTime;
+        updatePotatoFieldDisplay();
         updateDisplay();
         updateLastAction("Planted Potato");
     } else {
@@ -220,27 +212,37 @@ function updatePotatoGrowth() {
 }
 
 // Harvest a fully grown potato at the specified index
-function harvestPotatoAtIndex(index) {
-    updateLastAction(`Attempting to harvest potato at index ${index}`);
+function harvestPotatoAtIndex(index, isAutomated = false) {
     if (potatoField[index] && potatoField[index].growthStage >= 100) {
-        potatoCount = Math.floor(potatoCount + 1);
-        totalPotatoesHarvested += 1; // Increment total harvested
-        potatoField[index] = null; // Replace with empty slot instead of removing
-        updateLastAction(`Harvested potato at index ${index}`);
-
-        // Record the harvest event
+        potatoCount++;
+        totalPotatoesHarvested++;
+        
+        // Trigger poof animation
+        const potatoElement = document.querySelector(`.potato-slot[data-index="${index}"] .potato`);
+        if (potatoElement) {
+            const poofElement = document.createElement('div');
+            poofElement.className = 'poof-animation-red';
+            potatoElement.appendChild(poofElement);
+            setTimeout(() => poofElement.remove(), 1000);
+        }
+        
+        potatoField[index] = null;
+        updatePotatoFieldDisplay();
+        updateDisplay();
+        
+        if (!isAutomated) {
+            updateLastAction(`Harvested potato at index ${index}`);
+        }
+        
+        // Record the harvest event and update the chart
         harvestHistory.push({
             timestamp: Date.now(),
-            totalPotatoes: totalPotatoesHarvested // Use cumulative total
+            totalPotatoes: totalPotatoesHarvested
         });
-
-        aggregateHarvestHistory(); // Aggregate data if necessary
-        updateHarvestChart(); // Update the chart with new data
-
-        updateDisplay();
-        checkAchievements(); // Call checkAchievements after updating totalPotatoesHarvested
-    } else {
-        updateLastAction(`Potato at index ${index} is not ready for harvesting`);
+        aggregateHarvestHistory();
+        updateHarvestChart();
+        
+        checkAchievements();
     }
 }
 
@@ -608,6 +610,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Add event listener for the Quantum Spud Spawner toggle
+    const quantumSpudSpawnerToggle = document.getElementById('quantum-spud-spawner-toggle');
+    if (quantumSpudSpawnerToggle) {
+        quantumSpudSpawnerToggle.addEventListener('change', toggleQuantumSpudSpawner);
+    }
 });
 
 // Function to handle the click event
@@ -787,6 +795,111 @@ function toggleMartianPotatoColonizer() {
         startMartianPotatoColonizer();
     } else {
         stopMartianPotatoColonizer();
+    }
+}
+
+// Add this function to handle the Quantum Spud Spawner logic
+function startQuantumSpudSpawner() {
+    if (!isQuantumSpudSpawnerActive) {
+        isQuantumSpudSpawnerActive = true;
+        quantumSpudSpawnerInterval = setInterval(() => {
+            for (let i = 0; i < potatoField.length; i++) {
+                if (potatoField[i] === null && consumeResources()) {
+                    // Plant a new potato
+                    potatoField[i] = createPotato(true);
+                    updatePotatoFieldDisplay();
+                } else if (potatoField[i] && potatoField[i].growthStage >= 100) {
+                    // Harvest the potato
+                    harvestPotatoAtIndex(i, true);
+                }
+            }
+            updateDisplay();
+        }, 1000); // Run every second
+    }
+}
+
+function stopQuantumSpudSpawner() {
+    if (isQuantumSpudSpawnerActive) {
+        isQuantumSpudSpawnerActive = false;
+        clearInterval(quantumSpudSpawnerInterval);
+    }
+}
+
+// Modify the createPotato function to allow for instant growth
+function createPotato(instantGrowth = false) {
+    const currentTime = Date.now();
+    const scaleX = 0.95 + Math.random() * 0.1;
+    const scaleY = 0.95 + Math.random() * 0.1;
+    const borderRadius = `${45 + Math.random() * 10}% ${55 + Math.random() * 10}% ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% / ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% ${55 + Math.random() * 10}% ${45 + Math.random() * 10}%`;
+    const textureClass = `potato-texture-${Math.floor(Math.random() * 8) + 1}`;
+    
+    return {
+        plantedAt: currentTime,
+        growthStage: instantGrowth ? 100 : 0,
+        scaleX,
+        scaleY,
+        borderRadius,
+        textureClass
+    };
+}
+
+// Update the updatePotatoFieldDisplay function to handle both manual and automated actions
+function updatePotatoFieldDisplay() {
+    const fieldContainer = document.getElementById('potato-field');
+    if (!fieldContainer) return;
+
+    potatoField.forEach((potato, index) => {
+        const slotElement = fieldContainer.children[index];
+        if (!slotElement) return;
+
+        if (potato) {
+            let potatoElement = slotElement.querySelector('.potato');
+            if (!potatoElement) {
+                potatoElement = document.createElement('div');
+                potatoElement.className = 'potato';
+                slotElement.appendChild(potatoElement);
+            }
+
+            potatoElement.style.transform = `scale(${potato.scaleX}, ${potato.scaleY})`;
+            potatoElement.style.borderRadius = potato.borderRadius;
+            potatoElement.className = `potato ${potato.textureClass}`;
+
+            const growthIndicator = potatoElement.querySelector('.growth-indicator') || document.createElement('div');
+            growthIndicator.className = 'growth-indicator';
+            growthIndicator.style.height = `${potato.growthStage}%`;
+            potatoElement.appendChild(growthIndicator);
+
+            const growthText = potatoElement.querySelector('.growth-text') || document.createElement('div');
+            growthText.className = 'growth-text';
+            growthText.textContent = `${Math.floor(potato.growthStage)}%`;
+            potatoElement.appendChild(growthText);
+
+            if (potato.growthStage >= 100) {
+                potatoElement.classList.add('harvestable');
+            } else {
+                potatoElement.classList.remove('harvestable');
+            }
+        } else {
+            slotElement.innerHTML = '';
+        }
+    });
+}
+
+// Add this function to toggle the Quantum Spud Spawner
+function toggleQuantumSpudSpawner() {
+    if (isQuantumSpudSpawnerActive) {
+        stopQuantumSpudSpawner();
+    } else {
+        startQuantumSpudSpawner();
+    }
+    updateQuantumSpudSpawnerToggle();
+}
+
+// Add this function to update the Quantum Spud Spawner toggle button
+function updateQuantumSpudSpawnerToggle() {
+    const toggleElement = document.getElementById('quantum-spud-spawner-toggle');
+    if (toggleElement) {
+        toggleElement.checked = isQuantumSpudSpawnerActive;
     }
 }
 

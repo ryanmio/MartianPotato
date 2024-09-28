@@ -769,7 +769,6 @@ function buyUpgrade(upgrade) {
     }
 }
 
-// Add this function to unlock the Quantum Spud Spawner
 function unlockQuantumSpudSpawner() {
     console.log("Unlocking Quantum Spud Spawner");
     isQuantumSpudSpawnerUnlocked = true;
@@ -792,31 +791,6 @@ function unlockQuantumSpudSpawner() {
     // Update the game state or UI as needed
     updateActionCards();
     updateDisplay();
-}
-
-// Modify the unlockActionCardForUpgrade function to include the Quantum Spud Spawner
-function unlockActionCardForUpgrade(upgradeName) {
-    const actionCardIdMap = {
-        "Manual Ice Melting": 'ice-melting-container',
-        "Ice Melting Basin": 'ice-melting-basin-container',
-        "Nuclear Ice Melter": 'nuclear-ice-melter-container',
-        "Cometary Ice Harvester": 'cometary-ice-harvester-container',
-        "Martian Potato Colonizer": 'martian-potato-colonizer-container',
-        "Quantum Spud Spawner": 'quantum-spud-spawner-container',
-        // ... other mappings
-    };
-
-    const actionCardId = actionCardIdMap[upgradeName];
-    if (actionCardId && !unlockedActionCards.includes(actionCardId)) {
-        unlockedActionCards.push(actionCardId);
-        const actionCard = document.getElementById(actionCardId);
-        if (actionCard) {
-            actionCard.style.display = 'block';
-            console.log(`Unlocked action card: ${actionCardId}`);
-        } else {
-            console.warn(`Action card element not found: ${actionCardId}`);
-        }
-    }
 }
 
 // Add a new autoplanter to the game
@@ -1274,28 +1248,26 @@ function updateIceMeltingBasinButton() {
     }
 }
 
-// Add this to the handleActionCardClick function
+// ==========================================
+//            ACTION CARD FUNCTIONS
+// ==========================================
+
+// This function handles clicks on action cards, executing the appropriate function based on the action name.
 function handleActionCardClick(actionName) {
-    console.log(`Action card clicked: ${actionName}`);
     switch (actionName) {
         case 'exploration':
-            console.log('Calling exploreMarsSurface()');
             exploreMarsSurface();
             break;
         case 'ice-melting':
-            console.log('Calling meltIce()');
             meltIce();
             break;
         case 'ice-melting-basin':
-            console.log('Calling fillIceMeltingBasin()');
             fillIceMeltingBasin();
             break;
         case 'nuclear-ice-melter':
-            console.log('Calling toggleNuclearIceMelter()');
             toggleNuclearIceMelter();
             break;
         case 'polar-cap-mining':
-            console.log('Calling togglePolarCapMining()');
             togglePolarCapMining();
             break;
         // Add more cases for future clickable action cards
@@ -1311,11 +1283,35 @@ function initializeActionCards() {
         card.addEventListener('click', () => {
             if (!card.hasAttribute('disabled')) {
                 const actionName = card.id.replace('-container', '');
-                console.log(`Handling action for: ${actionName}`);
                 handleActionCardClick(actionName);
             } else {
                 console.log(`Action card ${card.id} is disabled`);
             }
         });
     });
+}
+
+// Modify the unlockActionCardForUpgrade function to include the Quantum Spud Spawner
+function unlockActionCardForUpgrade(upgradeName) {
+    const actionCardIdMap = {
+        "Manual Ice Melting": 'ice-melting-container',
+        "Ice Melting Basin": 'ice-melting-basin-container',
+        "Nuclear Ice Melter": 'nuclear-ice-melter-container',
+        "Cometary Ice Harvester": 'cometary-ice-harvester-container',
+        "Martian Potato Colonizer": 'martian-potato-colonizer-container',
+        "Quantum Spud Spawner": 'quantum-spud-spawner-container',
+        // ... add new mappings here as they are created
+    };
+
+    const actionCardId = actionCardIdMap[upgradeName];
+    if (actionCardId && !unlockedActionCards.includes(actionCardId)) {
+        unlockedActionCards.push(actionCardId);
+        const actionCard = document.getElementById(actionCardId);
+        if (actionCard) {
+            actionCard.style.display = 'block';
+            console.log(`Unlocked action card: ${actionCardId}`);
+        } else {
+            console.warn(`Action card element not found: ${actionCardId}`);
+        }
+    }
 }

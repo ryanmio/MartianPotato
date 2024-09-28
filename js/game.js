@@ -218,63 +218,70 @@ function harvestPotatoAtIndex(index, isAutomated = false) {
         potatoCount++;
         totalPotatoesHarvested++;
 
-        const potatoElement = document.querySelector(`.potato-slot[data-index="${index}"] .potato`);
+        const slotElement = document.querySelector(`.potato-slot[data-index="${index}"]`);
+        const potatoElement = slotElement.querySelector('.potato');
+
         if (potatoElement && harvestedPotato.isQuantumSpawned) {
             console.log('Triggering poof animation for quantum-spawned potato at index:', index);
-
-            // Get the position of the potatoElement relative to the viewport
-            const rect = potatoElement.getBoundingClientRect();
 
             // Create the poof element
             const poofElement = document.createElement('div');
             poofElement.className = 'poof-animation-red';
 
-            // Position the poofElement absolutely in the document
+            // Append the poof to the slotElement
+            slotElement.appendChild(poofElement);
+
+            // Ensure the poof covers the entire slot
             poofElement.style.position = 'absolute';
-            poofElement.style.left = (rect.left + rect.width / 2) + "px";
-            poofElement.style.top = (rect.top + rect.height / 2) + "px";
-            poofElement.style.width = rect.width + "px";
-            poofElement.style.height = rect.height + "px";
-            poofElement.style.transform = 'translate(-50%, -50%)'; // Center the poof over the potato
+            poofElement.style.left = '0';
+            poofElement.style.top = '0';
+            poofElement.style.width = '100%';
+            poofElement.style.height = '100%';
+            poofElement.style.zIndex = '10';
 
-            // Append the poof to the body
-            document.body.appendChild(poofElement);
-
-            // Force a reflow to ensure the animation plays
-            void poofElement.offsetWidth;
+            // Hide the potatoElement during the animation
+            potatoElement.style.visibility = 'hidden';
 
             // Remove the poof element after the animation
             poofElement.addEventListener('animationend', () => {
                 console.log('Poof animation ended for quantum-spawned potato at index:', index);
                 poofElement.remove();
+
+                // Now remove the potato and update the display
+                potatoField[index] = null;
+                updatePotatoFieldDisplay();
+                updateDisplay();
+
+                // Record the harvest event and update the chart
+                harvestHistory.push({
+                    timestamp: Date.now(),
+                    totalPotatoes: totalPotatoesHarvested
+                });
+                aggregateHarvestHistory();
+                updateHarvestChart();
+
+                checkAchievements();
             });
+        } else {
+            // For normal potatoes or if potatoElement not found
+            potatoField[index] = null;
+            updatePotatoFieldDisplay();
+            updateDisplay();
 
-            // Temporarily hide the potato element during the animation
-            potatoElement.style.visibility = 'hidden';
-            setTimeout(() => {
-                potatoElement.style.visibility = 'visible';
-            }, 500); // Duration matches the animation duration
-        } else if (!potatoElement) {
-            console.warn('Potato element not found for index:', index);
+            // Record the harvest event and update the chart
+            harvestHistory.push({
+                timestamp: Date.now(),
+                totalPotatoes: totalPotatoesHarvested
+            });
+            aggregateHarvestHistory();
+            updateHarvestChart();
+
+            checkAchievements();
         }
-
-        potatoField[index] = null;
-        updatePotatoFieldDisplay();
-        updateDisplay();
 
         if (!isAutomated) {
             updateLastAction(`Harvested potato at index ${index}`);
         }
-        
-        // Record the harvest event and update the chart
-        harvestHistory.push({
-            timestamp: Date.now(),
-            totalPotatoes: totalPotatoesHarvested
-        });
-        aggregateHarvestHistory();
-        updateHarvestChart();
-        
-        checkAchievements();
     }
 }
 

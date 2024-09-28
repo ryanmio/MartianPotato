@@ -214,12 +214,13 @@ function updatePotatoGrowth() {
 // Harvest a fully grown potato at the specified index
 function harvestPotatoAtIndex(index, isAutomated = false) {
     if (potatoField[index] && potatoField[index].growthStage >= 100) {
+        const harvestedPotato = potatoField[index];
         potatoCount++;
         totalPotatoesHarvested++;
 
         const potatoElement = document.querySelector(`.potato-slot[data-index="${index}"] .potato`);
-        if (potatoElement) {
-            console.log('Triggering poof animation for potato at index:', index);
+        if (potatoElement && harvestedPotato.isQuantumSpawned) {
+            console.log('Triggering poof animation for quantum-spawned potato at index:', index);
 
             // Get the position of the potatoElement relative to the viewport
             const rect = potatoElement.getBoundingClientRect();
@@ -244,7 +245,7 @@ function harvestPotatoAtIndex(index, isAutomated = false) {
 
             // Remove the poof element after the animation
             poofElement.addEventListener('animationend', () => {
-                console.log('Poof animation ended for potato at index:', index);
+                console.log('Poof animation ended for quantum-spawned potato at index:', index);
                 poofElement.remove();
             });
 
@@ -253,7 +254,7 @@ function harvestPotatoAtIndex(index, isAutomated = false) {
             setTimeout(() => {
                 potatoElement.style.visibility = 'visible';
             }, 500); // Duration matches the animation duration
-        } else {
+        } else if (!potatoElement) {
             console.warn('Potato element not found for index:', index);
         }
 
@@ -832,12 +833,12 @@ function toggleMartianPotatoColonizer() {
 // Add this function to handle the Quantum Spud Spawner logic
 function startQuantumSpudSpawner() {
     if (!isQuantumSpudSpawnerActive) {
-    isQuantumSpudSpawnerActive = true;
-    quantumSpudSpawnerInterval = setInterval(() => {
-        for (let i = 0; i < potatoField.length; i++) {
+        isQuantumSpudSpawnerActive = true;
+        quantumSpudSpawnerInterval = setInterval(() => {
+            for (let i = 0; i < potatoField.length; i++) {
                 if (potatoField[i] === null && consumeResources()) {
-                    // Plant a new potato
-                    potatoField[i] = createPotato(true);
+                    // Plant a new potato with isQuantumSpawned set to true
+                    potatoField[i] = createPotato(true, true);
                     updatePotatoFieldDisplay();
                 } else if (potatoField[i] && potatoField[i].growthStage >= 100) {
                     // Harvest the potato
@@ -857,7 +858,7 @@ function stopQuantumSpudSpawner() {
 }
 
 // Modify the createPotato function to allow for instant growth
-function createPotato(instantGrowth = false) {
+function createPotato(instantGrowth = false, isQuantumSpawned = false) {
     const currentTime = Date.now();
     const scaleX = 0.95 + Math.random() * 0.1;
     const scaleY = 0.95 + Math.random() * 0.1;
@@ -870,7 +871,8 @@ function createPotato(instantGrowth = false) {
         scaleX,
         scaleY,
         borderRadius,
-        textureClass
+        textureClass,
+        isQuantumSpawned
     };
 }
 

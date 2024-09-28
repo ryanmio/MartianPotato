@@ -774,7 +774,32 @@ function buyUpgrade(upgrade) {
     }
 }
 
-// Add this new function to unlock the corresponding action card
+// Add this function to unlock the Quantum Spud Spawner
+function unlockQuantumSpudSpawner() {
+    console.log("Unlocking Quantum Spud Spawner");
+    isQuantumSpudSpawnerUnlocked = true;
+    const spawnerContainer = document.getElementById('quantum-spud-spawner-container');
+    if (spawnerContainer) {
+        spawnerContainer.style.display = 'block';
+        console.log("Quantum Spud Spawner container displayed");
+    } else {
+        console.warn("Quantum Spud Spawner container not found in the DOM");
+    }
+    
+    // Add the Quantum Spud Spawner to the unlockedActionCards array
+    if (!unlockedActionCards.includes('quantum-spud-spawner-container')) {
+        unlockedActionCards.push('quantum-spud-spawner-container');
+        console.log("Added Quantum Spud Spawner to unlockedActionCards");
+    }
+    
+    showToast("New Technology Unlocked", "You've unlocked the Quantum Spud Spawner!", 'upgrade');
+    
+    // Update the game state or UI as needed
+    updateActionCards();
+    updateDisplay();
+}
+
+// Modify the unlockActionCardForUpgrade function to include the Quantum Spud Spawner
 function unlockActionCardForUpgrade(upgradeName) {
     const actionCardIdMap = {
         "Manual Ice Melting": 'ice-melting-container',
@@ -782,6 +807,7 @@ function unlockActionCardForUpgrade(upgradeName) {
         "Nuclear Ice Melter": 'nuclear-ice-melter-container',
         "Cometary Ice Harvester": 'cometary-ice-harvester-container',
         "Martian Potato Colonizer": 'martian-potato-colonizer-container',
+        "Quantum Spud Spawner": 'quantum-spud-spawner-container',
         // ... other mappings
     };
 
@@ -792,6 +818,8 @@ function unlockActionCardForUpgrade(upgradeName) {
         if (actionCard) {
             actionCard.style.display = 'block';
             console.log(`Unlocked action card: ${actionCardId}`);
+        } else {
+            console.warn(`Action card element not found: ${actionCardId}`);
         }
     }
 }

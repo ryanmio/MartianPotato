@@ -443,11 +443,12 @@ function updatePotatoElement(slotElement, potato) {
 
     const growthStage = potato.growthStage;
     const harvestableClass = growthStage >= 100 ? 'harvestable' : '';
+    const quantumClass = potato.isQuantumSpawned ? 'quantum-potato' : '';
     const growthColor = growthStage < 33 ? 'rgba(139, 195, 74, 0.4)' : 
                         growthStage < 66 ? 'rgba(76, 175, 80, 0.4)' : 
                         'rgba(56, 142, 60, 0.4)';
 
-    potatoElement.className = `potato ${harvestableClass} ${potato.textureClass}`;
+    potatoElement.className = `potato ${harvestableClass} ${quantumClass} ${potato.textureClass}`;
     potatoElement.style.transform = `scale(${potato.scaleX}, ${potato.scaleY})`;
     potatoElement.style.borderRadius = potato.borderRadius;
     

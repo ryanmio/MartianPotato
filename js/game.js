@@ -202,9 +202,12 @@ function updatePotatoGrowth() {
     const currentTime = Date.now();
     potatoField = potatoField.map(potato => {
         if (potato !== null) {
-            const growthTime = currentTime - potato.plantedAt;
-            const actualGrowthTime = GROWTH_TIME * growthTimeMultiplier;
-            potato.growthStage = Math.min(100, Math.floor((growthTime / actualGrowthTime) * 100));
+            // Only update potatoes that are not fully grown
+            if (potato.growthStage < 100) {
+                const growthTime = currentTime - potato.plantedAt;
+                const actualGrowthTime = GROWTH_TIME * growthTimeMultiplier;
+                potato.growthStage = Math.min(100, Math.floor((growthTime / actualGrowthTime) * 100));
+            }
         }
         return potato;
     });

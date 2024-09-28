@@ -216,20 +216,51 @@ function harvestPotatoAtIndex(index, isAutomated = false) {
     if (potatoField[index] && potatoField[index].growthStage >= 100) {
         potatoCount++;
         totalPotatoesHarvested++;
-        
-        // Trigger poof animation
+
         const potatoElement = document.querySelector(`.potato-slot[data-index="${index}"] .potato`);
         if (potatoElement) {
+            console.log('Triggering poof animation for potato at index:', index);
+
+            // Get the position of the potatoElement relative to the viewport
+            const rect = potatoElement.getBoundingClientRect();
+
+            // Create the poof element
             const poofElement = document.createElement('div');
             poofElement.className = 'poof-animation-red';
-            potatoElement.appendChild(poofElement);
-            setTimeout(() => poofElement.remove(), 1000);
+
+            // Position the poofElement absolutely in the document
+            poofElement.style.position = 'absolute';
+            poofElement.style.left = (rect.left + rect.width / 2) + "px";
+            poofElement.style.top = (rect.top + rect.height / 2) + "px";
+            poofElement.style.width = rect.width + "px";
+            poofElement.style.height = rect.height + "px";
+            poofElement.style.transform = 'translate(-50%, -50%)'; // Center the poof over the potato
+
+            // Append the poof to the body
+            document.body.appendChild(poofElement);
+
+            // Force a reflow to ensure the animation plays
+            void poofElement.offsetWidth;
+
+            // Remove the poof element after the animation
+            poofElement.addEventListener('animationend', () => {
+                console.log('Poof animation ended for potato at index:', index);
+                poofElement.remove();
+            });
+
+            // Temporarily hide the potato element during the animation
+            potatoElement.style.visibility = 'hidden';
+            setTimeout(() => {
+                potatoElement.style.visibility = 'visible';
+            }, 500); // Duration matches the animation duration
+        } else {
+            console.warn('Potato element not found for index:', index);
         }
-        
+
         potatoField[index] = null;
         updatePotatoFieldDisplay();
         updateDisplay();
-        
+
         if (!isAutomated) {
             updateLastAction(`Harvested potato at index ${index}`);
         }
@@ -801,9 +832,9 @@ function toggleMartianPotatoColonizer() {
 // Add this function to handle the Quantum Spud Spawner logic
 function startQuantumSpudSpawner() {
     if (!isQuantumSpudSpawnerActive) {
-        isQuantumSpudSpawnerActive = true;
-        quantumSpudSpawnerInterval = setInterval(() => {
-            for (let i = 0; i < potatoField.length; i++) {
+    isQuantumSpudSpawnerActive = true;
+    quantumSpudSpawnerInterval = setInterval(() => {
+        for (let i = 0; i < potatoField.length; i++) {
                 if (potatoField[i] === null && consumeResources()) {
                     // Plant a new potato
                     potatoField[i] = createPotato(true);
@@ -843,6 +874,7 @@ function createPotato(instantGrowth = false) {
     };
 }
 
+
 // Update the updatePotatoFieldDisplay function to handle both manual and automated actions
 function updatePotatoFieldDisplay() {
     const fieldContainer = document.getElementById('potato-field');
@@ -851,6 +883,10 @@ function updatePotatoFieldDisplay() {
     potatoField.forEach((potato, index) => {
         const slotElement = fieldContainer.children[index];
         if (!slotElement) return;
+
+        // Don't remove existing poof animations
+        const existingPoof = slotElement.querySelector('.poof-animation-red');
+        if (existingPoof) return;
 
         if (potato) {
             let potatoElement = slotElement.querySelector('.potato');
@@ -880,7 +916,11 @@ function updatePotatoFieldDisplay() {
                 potatoElement.classList.remove('harvestable');
             }
         } else {
-            slotElement.innerHTML = '';
+            // Only clear potato-related elements, not the poof animation
+            const potatoElement = slotElement.querySelector('.potato');
+            if (potatoElement) {
+                potatoElement.remove();
+            }
         }
     });
 }
@@ -888,7 +928,7 @@ function updatePotatoFieldDisplay() {
 // Add this function to toggle the Quantum Spud Spawner
 function toggleQuantumSpudSpawner() {
     if (isQuantumSpudSpawnerActive) {
-        stopQuantumSpudSpawner();
+            stopQuantumSpudSpawner();
     } else {
         startQuantumSpudSpawner();
     }
@@ -912,8 +952,8 @@ function startMartianPotatoColonizer() {
             toggleSwitch.checked = false;
         }
         updateActionCards();
-        return;
-    }
+            return;
+        }
 
     colonizerInterval = setInterval(() => {
         colonizerCycle++;
@@ -1141,7 +1181,7 @@ function loadGame() {
             // Reinitialize game elements
             initializePotatoField();
             createTechTree();
-            updateDisplay();
+        updateDisplay();
             updateIceMeltingProgress();
             updateIceMeltingBasinButton();
 

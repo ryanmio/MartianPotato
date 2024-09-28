@@ -698,14 +698,20 @@ function toggleNuclearIceMelter() {
 
 // Handle manual ice melting process
 function meltIce(event) {
+    console.log('meltIce() called');
+    
     if (event && event.stopPropagation) {
         event.stopPropagation(); // Prevent event bubbling only if event exists
     }
     
-    if (!isManualIceMeltingUnlocked) return;
+    if (!isManualIceMeltingUnlocked) {
+        console.log('Manual Ice Melting is not unlocked');
+        return;
+    }
     
     if (ice >= 1) {  // Check if there's enough ice
         waterMeltingClicks++;
+        console.log(`waterMeltingClicks: ${waterMeltingClicks}`);
         updateIceMeltingProgress();
         
         if (waterMeltingClicks >= CLICKS_PER_WATER) {
@@ -713,22 +719,32 @@ function meltIce(event) {
             water++;
             waterMeltingClicks = 0;
             showToast("Water Collected", "You've melted ice and collected 1 unit of water!", 'achievement');
+            console.log(`Ice melted: 1, water increased to: ${water}`);
         }
         updateDisplay();
         updateLastAction("Melted ice");
     } else {
         showToast("Not Enough Ice", "You need at least 1 ice to melt!", 'setback');
+        console.log('Not enough ice to melt. Current ice level:', ice);
     }
 }
 
+// Make meltIce globally accessible
+window.meltIce = meltIce;
+
 // Unlock the manual ice melting feature
 function unlockManualIceMelting() {
+    console.log('unlockManualIceMelting() called');
     isManualIceMeltingUnlocked = true;
-    if (!unlockedActionCards.includes('ice-melting-container')) {
-        unlockedActionCards.push('ice-melting-container');
+    console.log('isManualIceMeltingUnlocked set to:', isManualIceMeltingUnlocked);
+    
+    const iceMeltingContainer = document.getElementById('ice-melting-container');
+    if (iceMeltingContainer) {
+        iceMeltingContainer.style.display = 'block';
+        console.log('ice-melting-container displayed');
+    } else {
+        console.warn('ice-melting-container element not found');
     }
-    updateActionCards();
-    updateIceMeltingProgress();
 }
 
 // Update the visual progress of ice melting

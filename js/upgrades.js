@@ -39,14 +39,9 @@ const upgrades = [
     { 
         name: "Manual Ice Melting", 
         cost: 3,
-        effect: function() { // Changed from arrow function to regular function
-            if (this.count === 1) { // Use `this` to refer to the current upgrade
-                isManualIceMeltingUnlocked = true;
-                const iceMeltingContainer = document.getElementById('ice-melting-container');
-                if (iceMeltingContainer) {
-                    iceMeltingContainer.style.display = 'block';
-                }
-            }
+        effect: () => { 
+            console.log("Manual Ice Melting upgrade purchased");
+            unlockManualIceMelting(); // Call the function from game.js
         },
         icon: "🧊",
         description: "Collect water by manually melting Martian ice, 1 unit per 5 clicks.",
@@ -964,15 +959,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeActionCards();
 });
 
-// Unlock the manual ice melting feature
-function unlockManualIceMelting() {
-    isManualIceMeltingUnlocked = true;
-    const iceMeltingContainer = document.getElementById('ice-melting-container');
-    if (iceMeltingContainer) {
-        iceMeltingContainer.style.display = 'block';
-    }
-}
-
 // Queue an achievement for display
 function queueAchievement(title, message, metaMessage = '', imageName = '') {
     achievementQueue.push({ title, message, metaMessage, imageName });
@@ -1290,20 +1276,26 @@ function updateIceMeltingBasinButton() {
 
 // Add this to the handleActionCardClick function
 function handleActionCardClick(actionName) {
+    console.log(`Action card clicked: ${actionName}`);
     switch (actionName) {
         case 'exploration':
+            console.log('Calling exploreMarsSurface()');
             exploreMarsSurface();
             break;
         case 'ice-melting':
+            console.log('Calling meltIce()');
             meltIce();
             break;
         case 'ice-melting-basin':
+            console.log('Calling fillIceMeltingBasin()');
             fillIceMeltingBasin();
             break;
         case 'nuclear-ice-melter':
+            console.log('Calling toggleNuclearIceMelter()');
             toggleNuclearIceMelter();
             break;
         case 'polar-cap-mining':
+            console.log('Calling togglePolarCapMining()');
             togglePolarCapMining();
             break;
         // Add more cases for future clickable action cards
@@ -1315,10 +1307,14 @@ function handleActionCardClick(actionName) {
 function initializeActionCards() {
     const clickableCards = document.querySelectorAll('.action-card.clickable');
     clickableCards.forEach(card => {
+        console.log(`Initializing click listener for action card: ${card.id}`);
         card.addEventListener('click', () => {
             if (!card.hasAttribute('disabled')) {
                 const actionName = card.id.replace('-container', '');
+                console.log(`Handling action for: ${actionName}`);
                 handleActionCardClick(actionName);
+            } else {
+                console.log(`Action card ${card.id} is disabled`);
             }
         });
     });

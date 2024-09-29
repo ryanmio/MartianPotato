@@ -1109,6 +1109,27 @@ button:hover, button:disabled {
     transition: 0.1s;
 }
 
+.button-container {
+    margin-bottom: 10px;
+}
+
+.action-button {
+    width: 100px;
+    height: 40px;
+    background: #102838;
+    border: 2px solid #102838;
+    border-radius: 7px;
+    color: #F0F9E3;
+    font-family: "Times New Roman", serif;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.action-button:hover {
+    background: #1a3c54;
+}
+
 /* Adjust the action card to accommodate the LED bar */
 .action-card {
     height: auto;

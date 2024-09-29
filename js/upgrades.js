@@ -1255,7 +1255,7 @@ document.getElementById('subterranean-tuber-tunneler-toggle').addEventListener('
     window['toggleSubterraneanTuberTunneler']();
 });
 
-document.getElementById('cometary-ice-harvester-toggle').addEventListener('change', () => {
+document.getElementById('cometary-ice-harvester-button').addEventListener('change', () => {
     toggleCometaryIceHarvester();
 });
 

@@ -870,11 +870,12 @@ function stopQuantumSpudSpawner() {
     }
 }
 
-function createCyclicActionCard(containerId, toggleId, startFunction, stopFunction, cycleEffect, cycleDuration) {
+function createCyclicActionCard(containerId, buttonId, startFunction, stopFunction, cycleEffect, cycleDuration) {
     let interval = null;
     let cycleProgress = 0;
     const LED_COUNT = 10;
     const LED_INTERVAL = cycleDuration / LED_COUNT;
+    let isFirstLaunch = true;
 
     function updateLEDProgress(progress) {
         const container = document.getElementById(containerId);
@@ -892,22 +893,16 @@ function createCyclicActionCard(containerId, toggleId, startFunction, stopFuncti
 
     function start() {
         if (interval) return;
-
-        cycleProgress = 0;
-        updateLEDProgress(cycleProgress);
-
+        startFunction();
         interval = setInterval(() => {
-            cycleProgress++;
+            cycleProgress = (cycleProgress + 1) % LED_COUNT;
             updateLEDProgress(cycleProgress);
-
-            if (cycleProgress >= LED_COUNT) {
-                cycleProgress = 0;
+            if (cycleProgress === 0) {
                 cycleEffect();
-                updateDisplay();
             }
         }, LED_INTERVAL);
-
-        startFunction();
+        document.getElementById(buttonId).textContent = "Harvesting...";
+        document.getElementById(buttonId).classList.add('active');
     }
 
     function stop() {
@@ -916,25 +911,30 @@ function createCyclicActionCard(containerId, toggleId, startFunction, stopFuncti
         cycleProgress = 0;
         updateLEDProgress(cycleProgress);
         stopFunction();
+        document.getElementById(buttonId).textContent = "Standby";
+        document.getElementById(buttonId).classList.remove('active');
     }
 
     function toggle() {
-        const toggleSwitch = document.getElementById(toggleId);
-        if (toggleSwitch.checked) {
-            start();
-        } else {
+        if (interval) {
             stop();
+        } else {
+            if (isFirstLaunch) {
+                isFirstLaunch = false;
+                document.getElementById(buttonId).textContent = "Harvesting...";
+            }
+            start();
         }
     }
 
-    document.getElementById(toggleId).addEventListener('change', toggle);
+    document.getElementById(buttonId).addEventListener('click', toggle);
 
     return { start, stop, toggle };
 }
 
 const cometaryIceHarvester = createCyclicActionCard(
     'cometary-ice-harvester-container',
-    'cometary-ice-harvester-toggle',
+    'cometary-ice-harvester-button',
     () => { 
         console.log('Cometary Ice Harvester started');
         isCometaryIceHarvesterActive = true;

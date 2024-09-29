@@ -820,27 +820,138 @@ function unlockCometaryIceHarvester() {
 
 function unlockMartianPotatoColonizer() {
     isMartianPotatoColonizerUnlocked = true;
-    colonizerCycle = 0; // Initialize cycle
+    colonizerCycle = 0;
     if (!unlockedActionCards.includes('martian-potato-colonizer-container')) {
         unlockedActionCards.push('martian-potato-colonizer-container');
     }
     updateActionCards();
+    initializeMartianPotatoColonizer();
+    // Remove auto-start
+    // isMartianPotatoColonizerActive = true;
+    // runMartianPotatoColonizerCycle();
+}
+
+function initializeMartianPotatoColonizer() {
+    const button = document.getElementById('martian-potato-colonizer-button');
+    if (button) {
+        // Remove any existing event listeners to prevent duplicates
+        button.removeEventListener('click', toggleMartianPotatoColonizer);
+        // Add the event listener
+        button.addEventListener('click', toggleMartianPotatoColonizer);
+    }
+    updateMartianPotatoColonizerUI(); // Update UI to reflect current state
 }
 
 function toggleMartianPotatoColonizer() {
-    if (!isMartianPotatoColonizerUnlocked) return;
-
-    isMartianPotatoColonizerActive = !isMartianPotatoColonizerActive;
-    const toggleSwitch = document.getElementById('martian-potato-colonizer-toggle');
-    if (toggleSwitch) {
-        toggleSwitch.checked = isMartianPotatoColonizerActive;
-    }
-
     if (isMartianPotatoColonizerActive) {
-        startMartianPotatoColonizer();
-    } else {
         stopMartianPotatoColonizer();
+    } else {
+        startMartianPotatoColonizer();
     }
+    updateMartianPotatoColonizerUI(); // Add this line to update UI immediately
+}
+
+function startMartianPotatoColonizer() {
+    if (colonizerCycle >= maxColonizerCycles) {
+        showToast("Colonizer Depleted", "The Martian Potato Colonizer has reached its maximum cycles.", 'warning');
+        return;
+    }
+    isMartianPotatoColonizerActive = true;
+    updateMartianPotatoColonizerUI();
+    runMartianPotatoColonizerCycle();
+}
+
+function stopMartianPotatoColonizer() {
+    isMartianPotatoColonizerActive = false;
+    updateMartianPotatoColonizerUI();
+    // Add this line to stop the current cycle
+    if (window.martianPotatoColonizerIntervalId) {
+        clearInterval(window.martianPotatoColonizerIntervalId);
+        window.martianPotatoColonizerIntervalId = null;
+    }
+}
+
+function updateHarvestHistory() {
+    harvestHistory.push({
+        timestamp: Date.now(),
+        totalPotatoes: totalPotatoesHarvested
+    });
+    aggregateHarvestHistory(); // Make sure this function exists
+    updateHarvestChart(); // Make sure this function exists
+}
+
+function runMartianPotatoColonizerCycle() {
+    if (!isMartianPotatoColonizerActive) return;
+
+    const cycleDuration = 60000; // 60 seconds
+    const ledCount = 10;
+    const ledUpdateInterval = cycleDuration / ledCount;
+
+    let currentLed = 0;
+    window.martianPotatoColonizerIntervalId = setInterval(() => {
+        if (!isMartianPotatoColonizerActive) {
+            clearInterval(window.martianPotatoColonizerIntervalId);
+            window.martianPotatoColonizerIntervalId = null;
+            return;
+        }
+
+        updateLEDProgress('martian-potato-colonizer-container', currentLed + 1);
+        currentLed++;
+
+        if (currentLed >= ledCount) {
+            clearInterval(window.martianPotatoColonizerIntervalId);
+            window.martianPotatoColonizerIntervalId = null;
+            martianPotatoColonizerEffect();
+            colonizerCycle++;
+            updateMartianPotatoColonizerUI();
+
+            if (colonizerCycle < maxColonizerCycles && isMartianPotatoColonizerActive) {
+                runMartianPotatoColonizerCycle();
+            } else {
+                stopMartianPotatoColonizer();
+            }
+        }
+    }, ledUpdateInterval);
+}
+
+function updateMartianPotatoColonizerUI() {
+    const button = document.getElementById('martian-potato-colonizer-button');
+    if (button) {
+        button.textContent = isMartianPotatoColonizerActive ? "Stop" : "Launch";
+        button.classList.toggle('active', isMartianPotatoColonizerActive);
+    }
+    updateLEDProgress('martian-potato-colonizer-container', 0);
+}
+
+function updateLEDProgress(containerId, progress) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const leds = container.querySelectorAll('.led-light');
+    leds.forEach((led, index) => {
+        led.classList.toggle('active', index < progress);
+    });
+}
+
+function martianPotatoColonizerEffect() {
+    let resourceAmount = Math.pow(4, colonizerCycle) * 100;
+
+    potatoCount += resourceAmount;
+    totalPotatoesHarvested += resourceAmount;
+    water += resourceAmount;
+    nutrients += resourceAmount;
+    ice += resourceAmount;
+
+    updateDisplay();
+    showToast("Resources Acquired", `Martian Potato Colonizer harvested ${resourceAmount} of each resource!`, 'achievement');
+
+    if (colonizerCycle >= maxColonizerCycles) {
+        areResourcesDepleted = true;
+        showToast("All Resources Depleted", "No resources left to exploit on Mars. You've harvested everything!", 'achievement');
+        onResourcesDepleted();
+    }
+
+    updateHarvestHistory();
 }
 
 // Add this function to handle the Quantum Spud Spawner logic
@@ -1061,91 +1172,6 @@ function updateQuantumSpudSpawnerToggle() {
     }
 }
 
-function startMartianPotatoColonizer() {
-    // Prevent starting if max cycles reached
-    if (colonizerCycle >= maxColonizerCycles) {
-        isMartianPotatoColonizerActive = false;
-        const toggleSwitch = document.getElementById('martian-potato-colonizer-toggle');
-        if (toggleSwitch) {
-            toggleSwitch.checked = false;
-        }
-        updateActionCards();
-            return;
-        }
-
-    colonizerInterval = setInterval(() => {
-        colonizerCycle++;
-        let resourceAmount = Math.pow(4, colonizerCycle - 1) * 100;
-
-        console.log(`Cycle: ${colonizerCycle}, Resource Amount: ${resourceAmount}`);
-
-        // Add resources
-        potatoCount += resourceAmount;
-        totalPotatoesHarvested += resourceAmount; // Increment totalPotatoesHarvested
-        water += resourceAmount;
-        nutrients += resourceAmount;
-        ice += resourceAmount;
-
-        updateDisplay();
-
-        // Show a toast message
-        showToast(
-            "Resources Acquired",
-            `Martian Potato Colonizer harvested ${resourceAmount} of each resource!`,
-            'achievement'
-        );
-
-        // Check if max cycles reached
-        if (colonizerCycle >= maxColonizerCycles) {
-            areResourcesDepleted = true; // Set global depletion flag
-            stopMartianPotatoColonizer();
-            showToast(
-                "All Resources Depleted",
-                "No resources left to exploit on Mars. You've harvested everything!",
-                'achievement'
-            );
-            onResourcesDepleted(); // Stop other devices and update action cards
-        }
-
-        // Update harvest history and chart
-        harvestHistory.push({
-            timestamp: Date.now(),
-            totalPotatoes: totalPotatoesHarvested
-        });
-        aggregateHarvestHistory(); // Aggregate data if necessary
-        updateHarvestChart(); // Update the chart with new data
-
-        checkAchievements(); // Check for any new achievements
-    }, 60000); // Every 60 seconds
-}
-
-function stopMartianPotatoColonizer() {
-    clearInterval(colonizerInterval);
-    colonizerInterval = null;
-    isMartianPotatoColonizerActive = false;
-    const toggleSwitch = document.getElementById('martian-potato-colonizer-toggle');
-    if (toggleSwitch) {
-        toggleSwitch.checked = false;
-    }
-    updateActionCards(); // Ensure the action card reflects the current state
-}
-
-// Add this after initializing action cards
-document.getElementById('martian-potato-colonizer-toggle').addEventListener('change', () => {
-    toggleMartianPotatoColonizer();
-});
-
-function onResourcesDepleted() {
-    // Stop all other automation devices
-    stopSubsurfaceAquiferTapper();
-    stopBucketWheelExcavator();
-    stopSubterraneanTuberTunneler();
-    stopPolarCapMining();
-
-    // Update the action cards to reflect depletion
-    updateActionCards();
-}
-
 // Function to update the field size
 function updateFieldSize(newSize) {
     MAX_FIELD_SIZE = newSize;
@@ -1278,6 +1304,10 @@ function loadGame() {
 
             if (gameState.areResourcesDepleted !== undefined) {
                 areResourcesDepleted = gameState.areResourcesDepleted;
+            }
+
+            if (isMartianPotatoColonizerUnlocked) {
+                initializeMartianPotatoColonizer();
             }
 
             if (gameState.isMartianPotatoColonizerActive && colonizerCycle < maxColonizerCycles) {

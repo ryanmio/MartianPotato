@@ -894,13 +894,22 @@ function createCyclicActionCard(containerId, buttonId, startFunction, stopFuncti
     function start() {
         if (interval) return;
         startFunction();
+        
+        // Immediately light up the first LED
+        cycleProgress = 1;
+        updateLEDProgress(cycleProgress);
+        
         interval = setInterval(() => {
-            cycleProgress = (cycleProgress + 1) % LED_COUNT;
-            updateLEDProgress(cycleProgress);
-            if (cycleProgress === 0) {
+            cycleProgress++;
+            if (cycleProgress === LED_COUNT) {
                 cycleEffect();
             }
+            if (cycleProgress > LED_COUNT) {
+                cycleProgress = 1;
+            }
+            updateLEDProgress(cycleProgress);
         }, LED_INTERVAL);
+        
         document.getElementById(buttonId).textContent = "Harvesting...";
         document.getElementById(buttonId).classList.add('active');
     }

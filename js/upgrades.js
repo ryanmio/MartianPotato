@@ -1016,6 +1016,80 @@ function resumeGame() {
     buttons.forEach(button => button.disabled = false);
 }
 
+
+// ==========================================
+//            MANUAL ACTION FUNCTIONS
+// ==========================================
+
+
+// Unlock the Ice Melting Basin
+function unlockIceMeltingBasin() {
+    isIceMeltingBasinUnlocked = true;
+    const iceMeltingBasinContainer = document.getElementById('ice-melting-basin-container');
+    if (iceMeltingBasinContainer) {
+        iceMeltingBasinContainer.style.display = 'block';
+    }
+    updateIceMeltingBasinButton();
+}
+
+// Handle filling the Ice Melting Basin
+function fillIceMeltingBasin() {
+    if (!isIceMeltingBasinUnlocked || iceMeltingBasinActive) return;
+    
+    if (ice >= 8) {
+        ice -= 8;
+        iceMeltingBasinActive = true;
+        iceMeltingBasinTimer = 8;
+        updateDisplay();
+        updateIceMeltingBasinButton();
+    } else {
+        showToast("Not Enough Ice", "You need at least 8 ice to fill the basin!", 'setback');
+    }
+}
+
+// Update game resources and ensure they don't go below zero
+function updateResources(currentTime) {
+    if (currentTime - lastUpdateTime >= UPDATE_INTERVAL) {
+        water = Math.max(0, water);
+        nutrients = Math.max(0, nutrients);
+        ice = Math.max(0, ice);
+        potatoCount = Math.floor(potatoCount);
+
+        if (iceMeltingBasinActive) {
+            water++;
+            iceMeltingBasinTimer--;
+            if (iceMeltingBasinTimer <= 0) {
+                iceMeltingBasinActive = false;
+            }
+            updateIceMeltingBasinButton();
+        }
+
+        lastUpdateTime = currentTime;
+        return true;
+    }
+    return false;
+}
+
+// Update the Ice Melting Basin button
+function updateIceMeltingBasinButton() {
+    const basinContainer = document.getElementById('ice-melting-basin-container');
+    const cooldownElement = document.getElementById('basin-cooldown');
+    if (basinContainer && cooldownElement) {
+        if (iceMeltingBasinActive) {
+            basinContainer.setAttribute('disabled', 'true');
+            cooldownElement.textContent = `Melting (${iceMeltingBasinTimer}s)`;
+        } else {
+            basinContainer.removeAttribute('disabled');
+            cooldownElement.textContent = 'Ready';
+        }
+    }
+}
+
+
+// ==========================================
+//            AUTOMATION FUNCTIONS
+// ==========================================
+
 // General function to manage automation devices
 function createAutomationDevice(deviceConfig) {
     const { 
@@ -1185,68 +1259,6 @@ document.getElementById('cometary-ice-harvester-toggle').addEventListener('chang
     toggleCometaryIceHarvester();
 });
 
-// Unlock the Ice Melting Basin
-function unlockIceMeltingBasin() {
-    isIceMeltingBasinUnlocked = true;
-    const iceMeltingBasinContainer = document.getElementById('ice-melting-basin-container');
-    if (iceMeltingBasinContainer) {
-        iceMeltingBasinContainer.style.display = 'block';
-    }
-    updateIceMeltingBasinButton();
-}
-
-// Handle filling the Ice Melting Basin
-function fillIceMeltingBasin() {
-    if (!isIceMeltingBasinUnlocked || iceMeltingBasinActive) return;
-    
-    if (ice >= 8) {
-        ice -= 8;
-        iceMeltingBasinActive = true;
-        iceMeltingBasinTimer = 8;
-        updateDisplay();
-        updateIceMeltingBasinButton();
-    } else {
-        showToast("Not Enough Ice", "You need at least 8 ice to fill the basin!", 'setback');
-    }
-}
-
-// Update game resources and ensure they don't go below zero
-function updateResources(currentTime) {
-    if (currentTime - lastUpdateTime >= UPDATE_INTERVAL) {
-        water = Math.max(0, water);
-        nutrients = Math.max(0, nutrients);
-        ice = Math.max(0, ice);
-        potatoCount = Math.floor(potatoCount);
-
-        if (iceMeltingBasinActive) {
-            water++;
-            iceMeltingBasinTimer--;
-            if (iceMeltingBasinTimer <= 0) {
-                iceMeltingBasinActive = false;
-            }
-            updateIceMeltingBasinButton();
-        }
-
-        lastUpdateTime = currentTime;
-        return true;
-    }
-    return false;
-}
-
-// Update the Ice Melting Basin button
-function updateIceMeltingBasinButton() {
-    const basinContainer = document.getElementById('ice-melting-basin-container');
-    const cooldownElement = document.getElementById('basin-cooldown');
-    if (basinContainer && cooldownElement) {
-        if (iceMeltingBasinActive) {
-            basinContainer.setAttribute('disabled', 'true');
-            cooldownElement.textContent = `Melting (${iceMeltingBasinTimer}s)`;
-        } else {
-            basinContainer.removeAttribute('disabled');
-            cooldownElement.textContent = 'Ready';
-        }
-    }
-}
 
 // ==========================================
 //            ACTION CARD FUNCTIONS

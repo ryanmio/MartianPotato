@@ -870,6 +870,100 @@ function stopQuantumSpudSpawner() {
     }
 }
 
+function createCyclicActionCard(containerId, toggleId, startFunction, stopFunction, cycleEffect, cycleDuration) {
+    let interval = null;
+    let cycleProgress = 0;
+    const LED_COUNT = 10;
+    const LED_INTERVAL = cycleDuration / LED_COUNT;
+
+    function updateLEDProgress(progress) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        const leds = container.querySelectorAll('.led-light');
+        leds.forEach((led, index) => {
+            if (index < progress) {
+                led.classList.add('active');
+            } else {
+                led.classList.remove('active');
+            }
+        });
+    }
+
+    function start() {
+        if (interval) return;
+
+        cycleProgress = 0;
+        updateLEDProgress(cycleProgress);
+
+        interval = setInterval(() => {
+            cycleProgress++;
+            updateLEDProgress(cycleProgress);
+
+            if (cycleProgress >= LED_COUNT) {
+                cycleProgress = 0;
+                cycleEffect();
+                updateDisplay();
+            }
+        }, LED_INTERVAL);
+
+        startFunction();
+    }
+
+    function stop() {
+        clearInterval(interval);
+        interval = null;
+        cycleProgress = 0;
+        updateLEDProgress(cycleProgress);
+        stopFunction();
+    }
+
+    function toggle() {
+        const toggleSwitch = document.getElementById(toggleId);
+        if (toggleSwitch.checked) {
+            start();
+        } else {
+            stop();
+        }
+    }
+
+    document.getElementById(toggleId).addEventListener('change', toggle);
+
+    return { start, stop, toggle };
+}
+
+const cometaryIceHarvester = createCyclicActionCard(
+    'cometary-ice-harvester-container',
+    'cometary-ice-harvester-toggle',
+    () => { 
+        console.log('Cometary Ice Harvester started');
+        isCometaryIceHarvesterActive = true;
+    },
+    () => { 
+        console.log('Cometary Ice Harvester stopped');
+        isCometaryIceHarvesterActive = false;
+    },
+    () => {
+        ice += 50;
+        updateDisplay();
+        showToast("Resources Acquired", "Cometary Ice Harvester collected 50 units of ice!", 'achievement');
+    },
+    30000 // 30 seconds cycle duration
+);
+
+function toggleCometaryIceHarvester() {
+    if (!isCometaryIceHarvesterUnlocked) return;
+    cometaryIceHarvester.toggle();
+}
+
+function unlockCometaryIceHarvester() {
+    isCometaryIceHarvesterUnlocked = true;
+    if (!unlockedActionCards.includes('cometary-ice-harvester-container')) {
+        unlockedActionCards.push('cometary-ice-harvester-container');
+    }
+    updateActionCards();
+}
+
 // Modify the createPotato function to allow for instant growth
 function createPotato(instantGrowth = false, isQuantumSpawned = false) {
     const currentTime = Date.now();

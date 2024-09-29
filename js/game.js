@@ -917,7 +917,7 @@ function runMartianPotatoColonizerCycle() {
 function updateMartianPotatoColonizerUI() {
     const button = document.getElementById('martian-potato-colonizer-button');
     if (button) {
-        button.textContent = isMartianPotatoColonizerActive ? "Stop" : "Launch";
+        button.textContent = isMartianPotatoColonizerActive ? "Colonizing..." : "Colonize";
         button.classList.toggle('active', isMartianPotatoColonizerActive);
     }
     updateLEDProgress('martian-potato-colonizer-container', 0);
@@ -981,7 +981,7 @@ function stopQuantumSpudSpawner() {
     }
 }
 
-function createCyclicActionCard(containerId, buttonId, startFunction, stopFunction, cycleEffect, cycleDuration) {
+function createCyclicActionCard(containerId, buttonId, startFunction, stopFunction, cycleEffect, cycleDuration, initialText, activeText, inactiveText) {
     let interval = null;
     let cycleProgress = 0;
     const LED_COUNT = 10;
@@ -1021,7 +1021,7 @@ function createCyclicActionCard(containerId, buttonId, startFunction, stopFuncti
             updateLEDProgress(cycleProgress);
         }, LED_INTERVAL);
         
-        document.getElementById(buttonId).textContent = "Harvesting...";
+        document.getElementById(buttonId).textContent = activeText;
         document.getElementById(buttonId).classList.add('active');
     }
 
@@ -1031,7 +1031,7 @@ function createCyclicActionCard(containerId, buttonId, startFunction, stopFuncti
         cycleProgress = 0;
         updateLEDProgress(cycleProgress);
         stopFunction();
-        document.getElementById(buttonId).textContent = "Standby";
+        document.getElementById(buttonId).textContent = inactiveText;
         document.getElementById(buttonId).classList.remove('active');
     }
 
@@ -1041,12 +1041,13 @@ function createCyclicActionCard(containerId, buttonId, startFunction, stopFuncti
         } else {
             if (isFirstLaunch) {
                 isFirstLaunch = false;
-                document.getElementById(buttonId).textContent = "Harvesting...";
             }
             start();
         }
     }
 
+    // Set initial button text
+    document.getElementById(buttonId).textContent = initialText;
     document.getElementById(buttonId).addEventListener('click', toggle);
 
     return { start, stop, toggle };
@@ -1068,7 +1069,10 @@ const cometaryIceHarvester = createCyclicActionCard(
         updateDisplay();
         showToast("Resources Acquired", "Cometary Ice Harvester collected 50 units of ice!", 'achievement');
     },
-    30000 // 30 seconds cycle duration
+    30000, // 30 seconds cycle duration
+    "Launch", // initialText
+    "Harvesting...", // activeText
+    "Harvest Comets" // inactiveText
 );
 
 function toggleCometaryIceHarvester() {

@@ -90,6 +90,39 @@ let isQuantumSpudSpawnerUnlocked = false;
 let isQuantumSpudSpawnerActive = false;
 let quantumSpudSpawnerInterval = null;
 
+
+// ==========================================
+//            CORE GAME FUNCTIONS
+// ==========================================
+
+// Call initGame when the window loads
+window.addEventListener('load', initGame);
+
+// Initialize the game
+let gameInitialized = false;
+function initGame() {
+    if (!gameInitialized) {
+        loadGame();
+        requestAnimationFrame(gameLoop);
+        gameInitialized = true;
+        
+        // Ensure action cards are updated after the DOM is fully loaded
+        if (document.readyState === 'complete') {
+            updateActionCards();
+        } else {
+            window.addEventListener('load', updateActionCards);
+        }
+    }
+}
+
+// Function to reset the game state
+function resetGame() {
+    if (confirm('Are you sure you want to reset the game? This will erase all your progress.')) {
+        localStorage.removeItem('martianPotatoSave');
+        location.reload();
+    }
+}
+
 // Helper function to add event listeners if the element exists
 function addEventListenerIfExists(id, event, handler) {
     const element = document.getElementById(id);
@@ -125,6 +158,18 @@ function gameLoop(currentTime) {
     }
     requestAnimationFrame(gameLoop);
 }
+
+// Function to update the field size
+function updateFieldSize(newSize) {
+    MAX_FIELD_SIZE = newSize;
+    potatoField = potatoField.concat(new Array(newSize - potatoField.length).fill(null));
+    initializePotatoField();
+    updateDisplay();
+}
+
+// ==========================================
+//            RESOURCE MANAGEMENT
+// ==========================================
 
 // Update game resources and ensure they don't go below zero
 function updateResources(currentTime) {
@@ -165,6 +210,48 @@ function consumeResources(amount = 1) {
     }
     return false;
 }
+
+function updateResourceCounts() {
+    updateElementIfChanged('potato-count', `Potatoes: ${Math.floor(potatoCount)}`);
+    updateElementIfChanged('water-count', `Water: ${Math.floor(water)}`);
+    updateElementIfChanged('nutrients', `Nutrients: ${Math.floor(nutrients)}`);
+    updateElementIfChanged('ice-level', `Ice: ${Math.floor(ice)}`);
+}
+
+function updateDepletedActionCard(actionCardId, isDepleted, message) {
+    const card = document.getElementById(actionCardId);
+    if (card) {
+        const toggleContainer = card.querySelector('.toggle-switch-container');
+        let depletedMessage = card.querySelector('.depleted-message');
+
+        if (isDepleted) {
+            // Hide the toggle switch
+            if (toggleContainer) {
+                toggleContainer.style.display = 'none';
+            }
+            // Display the depleted message
+            if (!depletedMessage) {
+                depletedMessage = document.createElement('p');
+                depletedMessage.classList.add('depleted-message');
+                depletedMessage.textContent = message;
+                card.appendChild(depletedMessage);
+            }
+        } else {
+            // Show the toggle switch
+            if (toggleContainer) {
+                toggleContainer.style.display = 'block';
+            }
+            // Remove the depleted message
+            if (depletedMessage) {
+                depletedMessage.remove();
+            }
+        }
+    }
+}
+
+// ==========================================
+//            PLANTING AND HARVESTING
+// ==========================================
 
 // Plant a potato in an empty field slot
 function plantPotato() {
@@ -303,811 +390,6 @@ function updatePlantButton() {
     }
 }
 
-// Check and update game achievements
-function checkAchievements() {
-    if (totalPotatoesHarvested >= 1 && !achievements.firstPotato) {
-        achievements.firstPotato = true;
-        queueAchievement(
-            "First Potato",
-            "You've harvested your first Martian potato!",
-            "This marks the beginning of your journey to colonize Mars with potatoes.",
-            "🥔" // Use the potato emoji instead of an image file
-        );
-    }
-    if (totalPotatoesHarvested >= 100 && !achievements.potatoCentury) {
-        achievements.potatoCentury = true;
-        queueAchievement(
-            "Potato Century",
-            "You've harvested 100 Martian potatoes!",
-            "Your potato farm is starting to take shape. The future of Mars is looking delicious!",
-            "potato_century.webp"
-        );
-    }
-    // Add more achievement checks here as needed
-}
-
-// Initialize the visual representation of the potato field
-function initializePotatoField() {
-    const fieldContainer = document.getElementById('potato-field');
-    fieldContainer.innerHTML = ''; // Clear existing slots
-    for (let i = 0; i < MAX_FIELD_SIZE; i++) {
-        const slotElement = document.createElement('div');
-        slotElement.className = 'potato-slot';
-        slotElement.setAttribute('data-index', i);
-        fieldContainer.appendChild(slotElement);
-    }
-}
-
-// Update the game display with current resource counts and rates
-function updateDisplay() {
-    updateResourceCounts();
-    updateAutoHarvestersInfo();
-    updateAutoPlantersInfo();
-    updateNuclearIceMelterToggle();
-    updateExploreButton();
-    updatePotatoField();
-    updateTechTree();
-    updateIceMeltingProgress();
-    updateIceMeltingBasinButton();
-}
-
-function updateResourceCounts() {
-    updateElementIfChanged('potato-count', `Potatoes: ${Math.floor(potatoCount)}`);
-    updateElementIfChanged('water-count', `Water: ${Math.floor(water)}`);
-    updateElementIfChanged('nutrients', `Nutrients: ${Math.floor(nutrients)}`);
-    updateElementIfChanged('ice-level', `Ice: ${Math.floor(ice)}`);
-}
-
-function updateAutoHarvestersInfo() {
-    updateElementIfChanged('auto-harvesters', `Auto Harvesters: ${autoHarvesters.length}`);
-}
-
-function updateAutoPlantersInfo() {
-    const autoplantersElement = document.getElementById('automated-planters');
-    if (autoplantersElement) {
-        const newText = `Automated Planters: ${autoplanters.length}`;
-        if (autoplantersElement.textContent !== newText) {
-            autoplantersElement.textContent = newText;
-            autoplantersElement.style.display = autoplanters.length > 0 ? 'block' : 'none';
-        }
-    }
-}
-
-function updateNuclearIceMelterToggle() {
-    const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
-    if (nuclearIceMelterToggle) {
-        nuclearIceMelterToggle.checked = isNuclearIceMelterActive;
-    }
-}
-
-function updateElementIfChanged(id, newText) {
-    const element = document.getElementById(id);
-    if (element && element.textContent !== newText) {
-        element.textContent = newText;
-    }
-}
-
-// Update the explore button state and cooldown display
-function updateExploreButton() {
-    const exploreCard = document.getElementById('exploration-container');
-    const cooldownElement = document.getElementById('exploration-cooldown');
-    
-    if (!exploreCard || !cooldownElement) return;
-
-    const currentTime = Date.now();
-    const timeLeft = Math.max(0, window.exploreDelay - (currentTime - window.lastExploreTime));
-    
-    if (timeLeft > 0) {
-        exploreCard.setAttribute('disabled', 'true');
-        cooldownElement.textContent = `(${(timeLeft / 1000).toFixed(1)}s)`;
-    } else {
-        exploreCard.removeAttribute('disabled');
-        cooldownElement.textContent = 'Ready';
-    }
-}
-
-// Update the visual representation of the potato field
-function updatePotatoField() {
-    const fieldContainer = document.getElementById('potato-field');
-    potatoField.forEach((potato, index) => {
-        let slotElement = fieldContainer.querySelector(`.potato-slot[data-index="${index}"]`);
-        if (!slotElement) {
-            slotElement = document.createElement('div');
-            slotElement.className = 'potato-slot';
-            slotElement.setAttribute('data-index', index);
-            fieldContainer.appendChild(slotElement);
-        }
-
-        if (potato === null) {
-            slotElement.innerHTML = '';
-        } else {
-            updatePotatoElement(slotElement, potato);
-        }
-    });
-}
-
-// Update the visual representation of a single potato
-function updatePotatoElement(slotElement, potato) {
-    let potatoElement = slotElement.querySelector('.potato');
-    if (!potatoElement) {
-        potatoElement = document.createElement('div');
-        potatoElement.className = 'potato';
-        potatoElement.innerHTML = `
-            <div class="growth-indicator"></div>
-            <div class="growth-text-container">
-                <span class="growth-text"></span>
-            </div>
-        `;
-        slotElement.appendChild(potatoElement);
-    }
-
-    const growthStage = potato.growthStage;
-    const harvestableClass = growthStage >= 100 ? 'harvestable' : '';
-    const quantumClass = potato.isQuantumSpawned ? 'quantum-potato' : '';
-    const growthColor = growthStage < 33 ? 'rgba(139, 195, 74, 0.4)' : 
-                        growthStage < 66 ? 'rgba(76, 175, 80, 0.4)' : 
-                        'rgba(56, 142, 60, 0.4)';
-
-    potatoElement.className = `potato ${harvestableClass} ${quantumClass} ${potato.textureClass}`;
-    potatoElement.style.transform = `scale(${potato.scaleX}, ${potato.scaleY})`;
-    potatoElement.style.borderRadius = potato.borderRadius;
-    
-    const growthIndicator = potatoElement.querySelector('.growth-indicator');
-    growthIndicator.style.height = `${growthStage}%`;
-    growthIndicator.style.backgroundColor = growthColor;
-    
-    const growthText = potatoElement.querySelector('.growth-text');
-    growthText.textContent = `${growthStage}%`;
-}
-
-// Toggle debug mode on/off
-function toggleDebugMode() {
-    debugMode = !debugMode;
-    const debugInfo = document.getElementById('debug-info');
-    if (debugInfo) {
-        debugInfo.style.display = debugMode ? 'block' : 'none';
-        if (debugMode) {
-            // Initialize debug info when first enabled
-            updateDebugInfo(performance.now(), 0);
-            // Add 1,000,000 potatoes when debug mode is enabled
-            potatoCount += 1000000;
-            updateDisplay();
-            showToast("Debug Mode Enabled", "Added 1,000,000 potatoes for testing. Press 'D' to toggle.", 'debug');
-        } else {
-            showToast("Debug Mode Disabled", "Press 'D' to re-enable debug mode.", 'debug');
-        }
-    }
-}
-
-// Update debug information display
-function updateDebugInfo(currentTime, updateTime) {
-    const debugInfoContainer = document.getElementById('debug-info');
-    if (!debugInfoContainer || debugInfoContainer.style.display === 'none') {
-        return; // Exit if debug info is not visible
-    }
-
-    try {
-        const fps = 1000 / (currentTime - lastDebugUpdateTime);
-        fpsValues.push(fps);
-        if (fpsValues.length > 60) fpsValues.shift();
-        const averageFps = fpsValues.reduce((a, b) => a + b, 0) / fpsValues.length;
-        
-        const memoryUsage = performance.memory ? (performance.memory.usedJSHeapSize / (1024 * 1024)).toFixed(2) : 'N/A';
-        const activePotatoes = potatoField.filter(potato => potato !== null).length;
-        
-        const resourceGeneration = {
-            water: ((water - lastResourceValues.water) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2),
-            nutrients: ((nutrients - lastResourceValues.nutrients) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2),
-            potatoes: ((potatoCount - lastResourceValues.potatoes) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2)
-        };
-        
-        const updateElement = (id, text) => {
-            const element = debugInfoContainer.querySelector(`#${id}`);
-            if (element) element.textContent = text;
-        };
-
-        updateElement('fps', `FPS: ${averageFps.toFixed(2)}`);
-        updateElement('update-time', `Last Update Time: ${updateTime.toFixed(2)}ms`);
-        updateElement('memory-usage', `Memory Usage: ${memoryUsage} MB`);
-        updateElement('potato-count-debug', `Potato Count: ${potatoCount.toFixed(2)}`);
-        updateElement('active-potatoes', `Active Potatoes: ${activePotatoes}`);
-        updateElement('resource-usage', `Resource Usage: Water (${water.toFixed(2)}), Nutrients (${nutrients.toFixed(2)}), Potatoes (${potatoCount.toFixed(2)})`);
-        updateElement('resource-generation', `Resource Generation: Water (${resourceGeneration.water}/s), Nutrients (${resourceGeneration.nutrients}/s), Potatoes (${resourceGeneration.potatoes}/s)`);
-        updateElement('last-action', `Last Action: ${lastAction}`);
-        updateElement('planting-delay', `Planting Delay: ${plantingDelay}ms`);
-        
-        const playtime = getPlaytime();
-        updateElement('playtime-debug', `Playtime: ${playtime}`);
-        
-        lastDebugUpdateTime = currentTime;
-        lastResourceValues = { water, nutrients, potatoes: potatoCount };
-    } catch (error) {
-        console.error('Error updating debug info:', error);
-    }
-}
-
-// Update the last action for debugging purposes
-function updateLastAction(action) {
-    lastAction = action;
-    if (debugMode) {
-        document.getElementById('last-action').textContent = `Last Action: ${lastAction}`;
-    }
-}
-
-// Display a toast notification to the user
-window.showToast = function(title, message, type = 'achievement') {
-    console.log("Showing toast:", title, message, type);
-    const toastContainer = document.getElementById('toast-container');
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.innerHTML = `
-        <div class="toast-title">${title}</div>
-        <div class="toast-message">${message}</div>
-    `;
-    toastContainer.appendChild(toast);
-
-    // Trigger reflow to enable transition
-    toast.offsetHeight;
-
-    toast.classList.add('show');
-
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => {
-            toastContainer.removeChild(toast);
-        }, 300);
-    }, 3000);
-}
-
-// Initialize the game when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', () => {
-    addEventListenerIfExists('plant-button', 'click', plantPotato);
-
-    initializePotatoField();
-
-    addEventListenerIfExists('potato-field', 'click', (event) => {
-        const slotElement = event.target.closest('.potato-slot');
-        if (slotElement) {
-            const index = parseInt(slotElement.getAttribute('data-index'), 10);
-            if (potatoField[index] && potatoField[index].growthStage >= 100) {
-                harvestPotatoAtIndex(index);
-            }
-        }
-    });
-
-    createTechTree(); // Create the tech tree
-
-    requestAnimationFrame(gameLoop);
-
-    // Debug mode event listener for the 'D' key press
-    document.addEventListener('keydown', (event) => {
-        if (event.key.toLowerCase() === 'd') {
-            toggleDebugMode();
-        }
-    });
-
-    addEventListenerIfExists('minimize-debug', 'click', () => {
-        const debugInfo = document.getElementById('debug-info');
-        debugInfo.classList.toggle('minimized');
-        const minimizeDebugButton = document.getElementById('minimize-debug');
-        minimizeDebugButton.setAttribute('data-text', 
-            debugInfo.classList.contains('minimized') ? 'Maximize' : 'Minimize');
-    });
-
-    addEventListenerIfExists('exploration-container', 'click', () => {
-        const exploreCard = document.getElementById('exploration-container');
-        if (!exploreCard.hasAttribute('disabled')) {
-            exploreMarsSurface(); // Use the function from exploration.js
-        }
-    });
-
-    addEventListenerIfExists('subsurface-aquifer-tapper-toggle', 'change', () => window['toggleSubsurfaceAquiferTapper']());
-
-    addEventListenerIfExists('bucket-wheel-excavator-toggle', 'change', () => window['toggleBucketWheelExcavator']());
-
-    addEventListenerIfExists('ice-melting-basin-container', 'click', () => {
-        if (!document.getElementById('ice-melting-basin-container').hasAttribute('disabled')) {
-            fillIceMeltingBasin();
-        }
-    });
-
-    const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
-    if (nuclearIceMelterToggle) {
-        nuclearIceMelterToggle.removeEventListener('change', toggleNuclearIceMelter);
-        nuclearIceMelterToggle.removeEventListener('click', handleNuclearIceMelterClick);
-        nuclearIceMelterToggle.addEventListener('click', handleNuclearIceMelterClick);
-    }
-
-    addEventListenerIfExists('save-button', 'click', saveGame);
-
-    addEventListenerIfExists('reset-button', 'click', resetGame);
-
-    addEventListenerIfExists('polar-cap-mining-toggle', 'change', togglePolarCapMining);
-
-    // Add event listeners for the chart modal
-    let harvestChartInitialized = false;
-    
-    const chartButton = document.getElementById('chart-button');
-    const chartModal = document.getElementById('chart-modal');
-    const closeChartModal = document.querySelector('.close-chart-modal');
-    
-    if (chartButton && chartModal && closeChartModal) {
-        chartButton.addEventListener('click', () => {
-            chartModal.style.display = 'flex';
-            // Initialize the chart if necessary
-            if (!harvestChartInitialized) {
-                initializeHarvestChart();
-                harvestChartInitialized = true;
-            }
-            updateHarvestChart();
-        });
- 
-        closeChartModal.addEventListener('click', () => {
-            chartModal.style.display = 'none';
-        });
- 
-        // Close modal when clicking outside of modal-content
-        chartModal.addEventListener('click', (event) => {
-            if (event.target === chartModal) {
-                chartModal.style.display = 'none';
-            }
-        });
-    }
-
-    // Add event listener for the Quantum Spud Spawner toggle
-    const quantumSpudSpawnerToggle = document.getElementById('quantum-spud-spawner-toggle');
-    if (quantumSpudSpawnerToggle) {
-        quantumSpudSpawnerToggle.addEventListener('change', toggleQuantumSpudSpawner);
-    }
-});
-
-// Function to handle the click event
-function handleNuclearIceMelterClick(event) {
-    event.preventDefault(); // Prevent the default toggle behavior
-    event.stopPropagation();
-    toggleNuclearIceMelter();
-}
-
-// Modify the toggleNuclearIceMelter function
-function toggleNuclearIceMelter() {
-    if (!isNuclearIceMelterUnlocked) {
-        return;
-    }
-
-    const toggleSwitch = document.getElementById('nuclear-ice-melter-toggle');
-
-    if (!isNuclearIceMelterActive) {
-        if (potatoCount >= 100) {
-            potatoCount -= 100; 
-            isNuclearIceMelterActive = true;
-            startNuclearIceMelter();
-            if (toggleSwitch) toggleSwitch.checked = true;
-        } else {
-            showToast("Not Enough Potatoes", "You need 100 potatoes to activate the Nuclear Ice Melter!", 'setback');
-            if (toggleSwitch) toggleSwitch.checked = false;
-            return;
-        }
-    } else {
-        isNuclearIceMelterActive = false;
-        stopNuclearIceMelter();
-        if (toggleSwitch) toggleSwitch.checked = false;
-    }
-
-    updateDisplay();
-}
-
-// Handle manual ice melting process
-function meltIce(event) {
-    if (event && event.stopPropagation) {
-        event.stopPropagation(); // Prevent event bubbling only if event exists
-    }
-    
-    if (!isManualIceMeltingUnlocked) {
-        return;
-    }
-    
-    if (ice >= 1) {  // Check if there's enough ice
-        waterMeltingClicks++;
-        updateIceMeltingProgress();
-        
-        if (waterMeltingClicks >= CLICKS_PER_WATER) {
-            ice--;  // Consume 1 ice
-            water++;
-            waterMeltingClicks = 0;
-            showToast("Water Collected", "You've melted ice and collected 1 unit of water!", 'achievement');
-        }
-        updateDisplay();
-        updateLastAction("Melted ice");
-    } else {
-        showToast("Not Enough Ice", "You need at least 1 ice to melt!", 'setback');
-    }
-}
-
-// Unlock the manual ice melting feature
-function unlockManualIceMelting() {
-    isManualIceMeltingUnlocked = true;
-    
-    const iceMeltingContainer = document.getElementById('ice-melting-container');
-    if (iceMeltingContainer) {
-        iceMeltingContainer.style.display = 'block';
-    }
-}
-
-// Update the visual progress of ice melting
-function updateIceMeltingProgress() {
-    const progressElement = document.getElementById('ice-melting-progress');
-    if (progressElement) {
-        progressElement.textContent = `Clicks: ${waterMeltingClicks} / ${CLICKS_PER_WATER}`;
-    }
-}
-
-// Unlock the Ice Melting Basin
-function unlockIceMeltingBasin() {
-    isIceMeltingBasinUnlocked = true;
-    if (!unlockedActionCards.includes('ice-melting-basin-container')) {
-        unlockedActionCards.push('ice-melting-basin-container');
-    }
-    updateActionCards();
-    updateIceMeltingBasinButton();
-}
-
-// Handle filling the Ice Melting Basin
-function fillIceMeltingBasin() {
-    if (!isIceMeltingBasinUnlocked || iceMeltingBasinActive) return;
-    
-    if (ice >= 8) {
-        ice -= 8;
-        iceMeltingBasinActive = true;
-        iceMeltingBasinTimer = 8;
-        updateDisplay();
-        updateIceMeltingBasinButton();
-    } else {
-        showToast("Not Enough Ice", "You need at least 8 ice to fill the basin!", 'setback');
-    }
-}
-
-// Update the Ice Melting Basin button
-function updateIceMeltingBasinButton() {
-    const basinContainer = document.getElementById('ice-melting-basin-container');
-    const cooldownElement = document.getElementById('basin-cooldown');
-    if (basinContainer && cooldownElement) {
-        if (iceMeltingBasinActive) {
-            basinContainer.setAttribute('disabled', 'true');
-            cooldownElement.textContent = `Melting (${iceMeltingBasinTimer}s)`;
-        } else {
-            basinContainer.removeAttribute('disabled');
-            cooldownElement.textContent = 'Ready';
-        }
-    }
-}
-
-// Unlock the Nuclear Ice Melter
-function unlockNuclearIceMelter() {
-    isNuclearIceMelterUnlocked = true;
-    if (!unlockedActionCards.includes('nuclear-ice-melter-container')) {
-        unlockedActionCards.push('nuclear-ice-melter-container');
-    }
-    updateActionCards();
-}
-
-// Start the Nuclear Ice Melter
-function startNuclearIceMelter() {
-    nuclearIceMelterInterval = setInterval(() => {
-        if (ice >= 5) {
-            ice -= 5;
-            water += 5;
-            updateDisplay();
-        } else {
-            showToast("Resource Shortage", "Not enough ice to run the Nuclear Ice Melter!", 'setback');
-            toggleNuclearIceMelter(); // Turn off if resources are insufficient
-        }
-    }, 1000); // Run every second
-}
-
-// Stop the Nuclear Ice Melter
-function stopNuclearIceMelter() {
-    clearInterval(nuclearIceMelterInterval);
-    nuclearIceMelterInterval = null;
-}
-
-function unlockCometaryIceHarvester() {
-    isCometaryIceHarvesterUnlocked = true;
-    if (!unlockedActionCards.includes('cometary-ice-harvester-container')) {
-        unlockedActionCards.push('cometary-ice-harvester-container');
-    }
-    updateActionCards();
-}
-
-function unlockMartianPotatoColonizer() {
-    isMartianPotatoColonizerUnlocked = true;
-    colonizerCycle = 0;
-    if (!unlockedActionCards.includes('martian-potato-colonizer-container')) {
-        unlockedActionCards.push('martian-potato-colonizer-container');
-    }
-    updateActionCards();
-    initializeMartianPotatoColonizer();
-    // Remove auto-start
-    // isMartianPotatoColonizerActive = true;
-    // runMartianPotatoColonizerCycle();
-}
-
-function initializeMartianPotatoColonizer() {
-    const button = document.getElementById('martian-potato-colonizer-button');
-    if (button) {
-        // Remove any existing event listeners to prevent duplicates
-        button.removeEventListener('click', toggleMartianPotatoColonizer);
-        // Add the event listener
-        button.addEventListener('click', toggleMartianPotatoColonizer);
-    }
-    updateMartianPotatoColonizerUI(); // Update UI to reflect current state
-}
-
-function toggleMartianPotatoColonizer() {
-    if (isMartianPotatoColonizerActive) {
-        stopMartianPotatoColonizer();
-    } else {
-        startMartianPotatoColonizer();
-    }
-    updateMartianPotatoColonizerUI(); // Add this line to update UI immediately
-}
-
-function startMartianPotatoColonizer() {
-    if (colonizerCycle >= maxColonizerCycles) {
-        showToast("Colonizer Depleted", "The Martian Potato Colonizer has reached its maximum cycles.", 'warning');
-        return;
-    }
-    isMartianPotatoColonizerActive = true;
-    updateMartianPotatoColonizerUI();
-    runMartianPotatoColonizerCycle();
-}
-
-function stopMartianPotatoColonizer() {
-    isMartianPotatoColonizerActive = false;
-    updateMartianPotatoColonizerUI();
-    // Add this line to stop the current cycle
-    if (window.martianPotatoColonizerIntervalId) {
-        clearInterval(window.martianPotatoColonizerIntervalId);
-        window.martianPotatoColonizerIntervalId = null;
-    }
-}
-
-function updateHarvestHistory() {
-    harvestHistory.push({
-        timestamp: Date.now(),
-        totalPotatoes: totalPotatoesHarvested
-    });
-    aggregateHarvestHistory(); // Make sure this function exists
-    updateHarvestChart(); // Make sure this function exists
-}
-
-function runMartianPotatoColonizerCycle() {
-    if (!isMartianPotatoColonizerActive) return;
-
-    const cycleDuration = 60000; // 60 seconds
-    const ledCount = 10;
-    const ledUpdateInterval = cycleDuration / ledCount;
-
-    let currentLed = 0;
-    window.martianPotatoColonizerIntervalId = setInterval(() => {
-        if (!isMartianPotatoColonizerActive) {
-            clearInterval(window.martianPotatoColonizerIntervalId);
-            window.martianPotatoColonizerIntervalId = null;
-            return;
-        }
-
-        updateLEDProgress('martian-potato-colonizer-container', currentLed + 1);
-        currentLed++;
-
-        if (currentLed >= ledCount) {
-            clearInterval(window.martianPotatoColonizerIntervalId);
-            window.martianPotatoColonizerIntervalId = null;
-            martianPotatoColonizerEffect();
-            colonizerCycle++;
-            updateMartianPotatoColonizerUI();
-
-            if (colonizerCycle < maxColonizerCycles && isMartianPotatoColonizerActive) {
-                runMartianPotatoColonizerCycle();
-            } else {
-                stopMartianPotatoColonizer();
-            }
-        }
-    }, ledUpdateInterval);
-}
-
-function updateMartianPotatoColonizerUI() {
-    const button = document.getElementById('martian-potato-colonizer-button');
-    if (button) {
-        button.textContent = isMartianPotatoColonizerActive ? "Colonizing..." : "Colonize";
-        button.classList.toggle('active', isMartianPotatoColonizerActive);
-    }
-    updateLEDProgress('martian-potato-colonizer-container', 0);
-}
-
-function updateLEDProgress(containerId, progress) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    const leds = container.querySelectorAll('.led-light');
-    leds.forEach((led, index) => {
-        led.classList.toggle('active', index < progress);
-    });
-}
-
-function martianPotatoColonizerEffect() {
-    let resourceAmount = Math.pow(4, colonizerCycle) * 100;
-
-    potatoCount += resourceAmount;
-    totalPotatoesHarvested += resourceAmount;
-    water += resourceAmount;
-    nutrients += resourceAmount;
-    ice += resourceAmount;
-
-    updateDisplay();
-    showToast("Resources Acquired", `Martian Potato Colonizer harvested ${resourceAmount} of each resource!`, 'achievement');
-
-    if (colonizerCycle >= maxColonizerCycles) {
-        areResourcesDepleted = true;
-        showToast("All Resources Depleted", "No resources left to exploit on Mars. You've harvested everything!", 'achievement');
-        onResourcesDepleted();
-    }
-
-    updateHarvestHistory();
-}
-
-// Add this function to handle the Quantum Spud Spawner logic
-function startQuantumSpudSpawner() {
-    if (!isQuantumSpudSpawnerActive) {
-        isQuantumSpudSpawnerActive = true;
-        quantumSpudSpawnerInterval = setInterval(() => {
-            for (let i = 0; i < potatoField.length; i++) {
-                if (potatoField[i] === null && consumeResources()) {
-                    // Plant a new potato with isQuantumSpawned set to true
-                    potatoField[i] = createPotato(true, true);
-                    updatePotatoFieldDisplay();
-                } else if (potatoField[i] && potatoField[i].growthStage >= 100) {
-                    // Harvest the potato
-                    harvestPotatoAtIndex(i, true);
-                }
-            }
-            updateDisplay();
-        }, 1000); // Run every second
-    }
-}
-
-function stopQuantumSpudSpawner() {
-    if (isQuantumSpudSpawnerActive) {
-        isQuantumSpudSpawnerActive = false;
-        clearInterval(quantumSpudSpawnerInterval);
-    }
-}
-
-function createCyclicActionCard(containerId, buttonId, startFunction, stopFunction, cycleEffect, cycleDuration, initialText, activeText, inactiveText) {
-    let interval = null;
-    let cycleProgress = 0;
-    const LED_COUNT = 10;
-    const LED_INTERVAL = cycleDuration / LED_COUNT;
-    let isFirstLaunch = true;
-
-    function updateLEDProgress(progress) {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-
-        const leds = container.querySelectorAll('.led-light');
-        leds.forEach((led, index) => {
-            if (index < progress) {
-                led.classList.add('active');
-            } else {
-                led.classList.remove('active');
-            }
-        });
-    }
-
-    function start() {
-        if (interval) return;
-        startFunction();
-        
-        // Immediately light up the first LED
-        cycleProgress = 1;
-        updateLEDProgress(cycleProgress);
-        
-        interval = setInterval(() => {
-            cycleProgress++;
-            if (cycleProgress === LED_COUNT) {
-                cycleEffect();
-            }
-            if (cycleProgress > LED_COUNT) {
-                cycleProgress = 1;
-            }
-            updateLEDProgress(cycleProgress);
-        }, LED_INTERVAL);
-        
-        document.getElementById(buttonId).textContent = activeText;
-        document.getElementById(buttonId).classList.add('active');
-    }
-
-    function stop() {
-        clearInterval(interval);
-        interval = null;
-        cycleProgress = 0;
-        updateLEDProgress(cycleProgress);
-        stopFunction();
-        document.getElementById(buttonId).textContent = inactiveText;
-        document.getElementById(buttonId).classList.remove('active');
-    }
-
-    function toggle() {
-        if (interval) {
-            stop();
-        } else {
-            if (isFirstLaunch) {
-                isFirstLaunch = false;
-            }
-            start();
-        }
-    }
-
-    // Set initial button text
-    document.getElementById(buttonId).textContent = initialText;
-    document.getElementById(buttonId).addEventListener('click', toggle);
-
-    return { start, stop, toggle };
-}
-
-const cometaryIceHarvester = createCyclicActionCard(
-    'cometary-ice-harvester-container',
-    'cometary-ice-harvester-button',
-    () => { 
-        console.log('Cometary Ice Harvester started');
-        isCometaryIceHarvesterActive = true;
-    },
-    () => { 
-        console.log('Cometary Ice Harvester stopped');
-        isCometaryIceHarvesterActive = false;
-    },
-    () => {
-        ice += 50;
-        updateDisplay();
-        showToast("Resources Acquired", "Cometary Ice Harvester collected 50 units of ice!", 'achievement');
-    },
-    30000, // 30 seconds cycle duration
-    "Launch", // initialText
-    "Harvesting...", // activeText
-    "Harvest Comets" // inactiveText
-);
-
-function toggleCometaryIceHarvester() {
-    if (!isCometaryIceHarvesterUnlocked) return;
-    cometaryIceHarvester.toggle();
-}
-
-function unlockCometaryIceHarvester() {
-    isCometaryIceHarvesterUnlocked = true;
-    if (!unlockedActionCards.includes('cometary-ice-harvester-container')) {
-        unlockedActionCards.push('cometary-ice-harvester-container');
-    }
-    updateActionCards();
-}
-
-// Modify the createPotato function to allow for instant growth
-function createPotato(instantGrowth = false, isQuantumSpawned = false) {
-    const currentTime = Date.now();
-    const scaleX = 0.95 + Math.random() * 0.1;
-    const scaleY = 0.95 + Math.random() * 0.1;
-    const borderRadius = `${45 + Math.random() * 10}% ${55 + Math.random() * 10}% ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% / ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% ${55 + Math.random() * 10}% ${45 + Math.random() * 10}%`;
-    const textureClass = `potato-texture-${Math.floor(Math.random() * 8) + 1}`;
-    
-    return {
-        plantedAt: currentTime,
-        growthStage: instantGrowth ? 100 : 0,
-        scaleX,
-        scaleY,
-        borderRadius,
-        textureClass,
-        isQuantumSpawned
-    };
-}
-
-
 // Update the updatePotatoFieldDisplay function to handle both manual and automated actions
 function updatePotatoFieldDisplay() {
     const fieldContainer = document.getElementById('potato-field');
@@ -1158,31 +440,10 @@ function updatePotatoFieldDisplay() {
     });
 }
 
-// Add this function to toggle the Quantum Spud Spawner
-function toggleQuantumSpudSpawner() {
-    if (isQuantumSpudSpawnerActive) {
-            stopQuantumSpudSpawner();
-    } else {
-        startQuantumSpudSpawner();
-    }
-    updateQuantumSpudSpawnerToggle();
-}
 
-// Add this function to update the Quantum Spud Spawner toggle button
-function updateQuantumSpudSpawnerToggle() {
-    const toggleElement = document.getElementById('quantum-spud-spawner-toggle');
-    if (toggleElement) {
-        toggleElement.checked = isQuantumSpudSpawnerActive;
-    }
-}
-
-// Function to update the field size
-function updateFieldSize(newSize) {
-    MAX_FIELD_SIZE = newSize;
-    potatoField = potatoField.concat(new Array(newSize - potatoField.length).fill(null));
-    initializePotatoField();
-    updateDisplay();
-}
+// ==========================================
+//           SAVE AND LOAD
+// ==========================================
 
 // Function to save the game state
 function saveGame() {
@@ -1224,11 +485,10 @@ colonizerCycle,
         hasSeenInitialGlow,
         isPolarCapMiningUnlocked,
         isPolarCapMiningActive,
-
-        growthTimeMultiplier, // Add this line to save the variable
-        totalPotatoesHarvested, // Add this line
-        harvestHistory,          // Add this line
-        gameStartTime,           // Add this line
+        growthTimeMultiplier,
+        totalPotatoesHarvested,
+        harvestHistory,         
+        gameStartTime,          
     };
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
@@ -1427,64 +687,9 @@ function updateActionCards() {
     });
 }
 
-function updateDepletedActionCard(actionCardId, isDepleted, message) {
-    const card = document.getElementById(actionCardId);
-    if (card) {
-        const toggleContainer = card.querySelector('.toggle-switch-container');
-        let depletedMessage = card.querySelector('.depleted-message');
-
-        if (isDepleted) {
-            // Hide the toggle switch
-            if (toggleContainer) {
-                toggleContainer.style.display = 'none';
-            }
-            // Display the depleted message
-            if (!depletedMessage) {
-                depletedMessage = document.createElement('p');
-                depletedMessage.classList.add('depleted-message');
-                depletedMessage.textContent = message;
-                card.appendChild(depletedMessage);
-            }
-        } else {
-            // Show the toggle switch
-            if (toggleContainer) {
-                toggleContainer.style.display = 'block';
-            }
-            // Remove the depleted message
-            if (depletedMessage) {
-                depletedMessage.remove();
-            }
-        }
-    }
-}
-
-// Function to reset the game state
-function resetGame() {
-    if (confirm('Are you sure you want to reset the game? This will erase all your progress.')) {
-        localStorage.removeItem('martianPotatoSave');
-        location.reload();
-    }
-}
-
-// Initialize the game
-let gameInitialized = false;
-function initGame() {
-    if (!gameInitialized) {
-        loadGame();
-        requestAnimationFrame(gameLoop);
-        gameInitialized = true;
-        
-        // Ensure action cards are updated after the DOM is fully loaded
-        if (document.readyState === 'complete') {
-            updateActionCards();
-        } else {
-            window.addEventListener('load', updateActionCards);
-        }
-    }
-}
-
-// Call initGame when the window loads
-window.addEventListener('load', initGame);
+// ==========================================
+//            AUTOMATION
+// ==========================================
 
 // Check and restart any stopped auto harvesters
 function checkAndRestartAutoHarvesters() {
@@ -1508,6 +713,771 @@ function reinitializeAutoHarvesters() {
         startAutoHarvester(autoHarvester);
     });
 }
+
+function createCyclicActionCard(containerId, buttonId, startFunction, stopFunction, cycleEffect, cycleDuration, initialText, activeText, inactiveText) {
+    let interval = null;
+    let cycleProgress = 0;
+    const LED_COUNT = 10;
+    const LED_INTERVAL = cycleDuration / LED_COUNT;
+    let isFirstLaunch = true;
+
+    function updateLEDProgress(progress) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        const leds = container.querySelectorAll('.led-light');
+        leds.forEach((led, index) => {
+            if (index < progress) {
+                led.classList.add('active');
+            } else {
+                led.classList.remove('active');
+            }
+        });
+    }
+
+    function start() {
+        if (interval) return;
+        startFunction();
+        
+        // Immediately light up the first LED
+        cycleProgress = 1;
+        updateLEDProgress(cycleProgress);
+        
+        interval = setInterval(() => {
+            cycleProgress++;
+            if (cycleProgress === LED_COUNT) {
+                cycleEffect();
+            }
+            if (cycleProgress > LED_COUNT) {
+                cycleProgress = 1;
+            }
+            updateLEDProgress(cycleProgress);
+        }, LED_INTERVAL);
+        
+        document.getElementById(buttonId).textContent = activeText;
+        document.getElementById(buttonId).classList.add('active');
+    }
+
+    function stop() {
+        clearInterval(interval);
+        interval = null;
+        cycleProgress = 0;
+        updateLEDProgress(cycleProgress);
+        stopFunction();
+        document.getElementById(buttonId).textContent = inactiveText;
+        document.getElementById(buttonId).classList.remove('active');
+    }
+
+    function toggle() {
+        if (interval) {
+            stop();
+        } else {
+            if (isFirstLaunch) {
+                isFirstLaunch = false;
+            }
+            start();
+        }
+    }
+
+    // Set initial button text
+    document.getElementById(buttonId).textContent = initialText;
+    document.getElementById(buttonId).addEventListener('click', toggle);
+
+    return { start, stop, toggle };
+}
+
+const cometaryIceHarvester = createCyclicActionCard(
+    'cometary-ice-harvester-container',
+    'cometary-ice-harvester-button',
+    () => { 
+        console.log('Cometary Ice Harvester started');
+        isCometaryIceHarvesterActive = true;
+    },
+    () => { 
+        console.log('Cometary Ice Harvester stopped');
+        isCometaryIceHarvesterActive = false;
+    },
+    () => {
+        ice += 50;
+        updateDisplay();
+        showToast("Resources Acquired", "Cometary Ice Harvester collected 50 units of ice!", 'achievement');
+    },
+    30000, // 30 seconds cycle duration
+    "Launch", // initialText
+    "Harvesting...", // activeText
+    "Harvest Comets" // inactiveText
+);
+
+// ==========================================
+//            ACHIEVEMENTS
+// ==========================================
+
+// Display a toast notification to the user
+window.showToast = function(title, message, type = 'achievement') {
+    console.log("Showing toast:", title, message, type);
+    const toastContainer = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.innerHTML = `
+        <div class="toast-title">${title}</div>
+        <div class="toast-message">${message}</div>
+    `;
+    toastContainer.appendChild(toast);
+
+    // Trigger reflow to enable transition
+    toast.offsetHeight;
+
+    toast.classList.add('show');
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            toastContainer.removeChild(toast);
+        }, 300);
+    }, 3000);
+}
+
+// Check and update game achievements
+function checkAchievements() {
+    if (totalPotatoesHarvested >= 1 && !achievements.firstPotato) {
+        achievements.firstPotato = true;
+        queueAchievement(
+            "First Potato",
+            "You've harvested your first Martian potato!",
+            "This marks the beginning of your journey to colonize Mars with potatoes.",
+            "🥔" // Use the potato emoji instead of an image file
+        );
+    }
+    if (totalPotatoesHarvested >= 100 && !achievements.potatoCentury) {
+        achievements.potatoCentury = true;
+        queueAchievement(
+            "Potato Century",
+            "You've harvested 100 Martian potatoes!",
+            "Your potato farm is starting to take shape. The future of Mars is looking delicious!",
+            "potato_century.webp"
+        );
+    }
+    // Add more achievement checks here as needed
+}
+
+// ==========================================
+//            DISPLAY
+// ==========================================
+
+// Initialize the visual representation of the potato field
+function initializePotatoField() {
+    const fieldContainer = document.getElementById('potato-field');
+    fieldContainer.innerHTML = ''; // Clear existing slots
+    for (let i = 0; i < MAX_FIELD_SIZE; i++) {
+        const slotElement = document.createElement('div');
+        slotElement.className = 'potato-slot';
+        slotElement.setAttribute('data-index', i);
+        fieldContainer.appendChild(slotElement);
+    }
+}
+
+// Update the game display with current resource counts and rates
+function updateDisplay() {
+    updateResourceCounts();
+    updateAutoHarvestersInfo();
+    updateAutoPlantersInfo();
+    updateNuclearIceMelterToggle();
+    updateExploreButton();
+    updatePotatoField();
+    updateTechTree();
+    updateIceMeltingProgress();
+    updateIceMeltingBasinButton();
+}
+
+function updateAutoHarvestersInfo() {
+    updateElementIfChanged('auto-harvesters', `Auto Harvesters: ${autoHarvesters.length}`);
+}
+
+function updateAutoPlantersInfo() {
+    const autoplantersElement = document.getElementById('automated-planters');
+    if (autoplantersElement) {
+        const newText = `Automated Planters: ${autoplanters.length}`;
+        if (autoplantersElement.textContent !== newText) {
+            autoplantersElement.textContent = newText;
+            autoplantersElement.style.display = autoplanters.length > 0 ? 'block' : 'none';
+        }
+    }
+}
+
+function updateNuclearIceMelterToggle() {
+    const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
+    if (nuclearIceMelterToggle) {
+        nuclearIceMelterToggle.checked = isNuclearIceMelterActive;
+    }
+}
+
+function updateElementIfChanged(id, newText) {
+    const element = document.getElementById(id);
+    if (element && element.textContent !== newText) {
+        element.textContent = newText;
+    }
+}
+
+// Update the explore button state and cooldown display
+function updateExploreButton() {
+    const exploreCard = document.getElementById('exploration-container');
+    const cooldownElement = document.getElementById('exploration-cooldown');
+    
+    if (!exploreCard || !cooldownElement) return;
+
+    const currentTime = Date.now();
+    const timeLeft = Math.max(0, window.exploreDelay - (currentTime - window.lastExploreTime));
+    
+    if (timeLeft > 0) {
+        exploreCard.setAttribute('disabled', 'true');
+        cooldownElement.textContent = `(${(timeLeft / 1000).toFixed(1)}s)`;
+    } else {
+        exploreCard.removeAttribute('disabled');
+        cooldownElement.textContent = 'Ready';
+    }
+}
+
+// Update the visual representation of the potato field
+function updatePotatoField() {
+    const fieldContainer = document.getElementById('potato-field');
+    potatoField.forEach((potato, index) => {
+        let slotElement = fieldContainer.querySelector(`.potato-slot[data-index="${index}"]`);
+        if (!slotElement) {
+            slotElement = document.createElement('div');
+            slotElement.className = 'potato-slot';
+            slotElement.setAttribute('data-index', index);
+            fieldContainer.appendChild(slotElement);
+        }
+
+        if (potato === null) {
+            slotElement.innerHTML = '';
+        } else {
+            updatePotatoElement(slotElement, potato);
+        }
+    });
+}
+
+// Update the visual representation of a single potato
+function updatePotatoElement(slotElement, potato) {
+    let potatoElement = slotElement.querySelector('.potato');
+    if (!potatoElement) {
+        potatoElement = document.createElement('div');
+        potatoElement.className = 'potato';
+        potatoElement.innerHTML = `
+            <div class="growth-indicator"></div>
+            <div class="growth-text-container">
+                <span class="growth-text"></span>
+            </div>
+        `;
+        slotElement.appendChild(potatoElement);
+    }
+
+    const growthStage = potato.growthStage;
+    const harvestableClass = growthStage >= 100 ? 'harvestable' : '';
+    const quantumClass = potato.isQuantumSpawned ? 'quantum-potato' : '';
+    const growthColor = growthStage < 33 ? 'rgba(139, 195, 74, 0.4)' : 
+                        growthStage < 66 ? 'rgba(76, 175, 80, 0.4)' : 
+                        'rgba(56, 142, 60, 0.4)';
+
+    potatoElement.className = `potato ${harvestableClass} ${quantumClass} ${potato.textureClass}`;
+    potatoElement.style.transform = `scale(${potato.scaleX}, ${potato.scaleY})`;
+    potatoElement.style.borderRadius = potato.borderRadius;
+    
+    const growthIndicator = potatoElement.querySelector('.growth-indicator');
+    growthIndicator.style.height = `${growthStage}%`;
+    growthIndicator.style.backgroundColor = growthColor;
+    
+    const growthText = potatoElement.querySelector('.growth-text');
+    growthText.textContent = `${growthStage}%`;
+}
+
+
+// Initialize the game when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    addEventListenerIfExists('plant-button', 'click', plantPotato);
+
+    initializePotatoField();
+
+    addEventListenerIfExists('potato-field', 'click', (event) => {
+        const slotElement = event.target.closest('.potato-slot');
+        if (slotElement) {
+            const index = parseInt(slotElement.getAttribute('data-index'), 10);
+            if (potatoField[index] && potatoField[index].growthStage >= 100) {
+                harvestPotatoAtIndex(index);
+            }
+        }
+    });
+
+    createTechTree(); // Create the tech tree
+
+    requestAnimationFrame(gameLoop);
+
+    // Debug mode event listener for the 'D' key press
+    document.addEventListener('keydown', (event) => {
+        if (event.key.toLowerCase() === 'd') {
+            toggleDebugMode();
+        }
+    });
+
+    addEventListenerIfExists('minimize-debug', 'click', () => {
+        const debugInfo = document.getElementById('debug-info');
+        debugInfo.classList.toggle('minimized');
+        const minimizeDebugButton = document.getElementById('minimize-debug');
+        minimizeDebugButton.setAttribute('data-text', 
+            debugInfo.classList.contains('minimized') ? 'Maximize' : 'Minimize');
+    });
+
+    addEventListenerIfExists('exploration-container', 'click', () => {
+        const exploreCard = document.getElementById('exploration-container');
+        if (!exploreCard.hasAttribute('disabled')) {
+            exploreMarsSurface(); // Use the function from exploration.js
+        }
+    });
+
+    addEventListenerIfExists('subsurface-aquifer-tapper-toggle', 'change', () => window['toggleSubsurfaceAquiferTapper']());
+
+    addEventListenerIfExists('bucket-wheel-excavator-toggle', 'change', () => window['toggleBucketWheelExcavator']());
+
+    addEventListenerIfExists('ice-melting-basin-container', 'click', () => {
+        if (!document.getElementById('ice-melting-basin-container').hasAttribute('disabled')) {
+            fillIceMeltingBasin();
+        }
+    });
+
+    const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
+    if (nuclearIceMelterToggle) {
+        nuclearIceMelterToggle.removeEventListener('change', toggleNuclearIceMelter);
+        nuclearIceMelterToggle.removeEventListener('click', handleNuclearIceMelterClick);
+        nuclearIceMelterToggle.addEventListener('click', handleNuclearIceMelterClick);
+    }
+
+    addEventListenerIfExists('save-button', 'click', saveGame);
+
+    addEventListenerIfExists('reset-button', 'click', resetGame);
+
+    addEventListenerIfExists('polar-cap-mining-toggle', 'change', togglePolarCapMining);
+
+    // Add event listeners for the chart modal
+    let harvestChartInitialized = false;
+    
+    const chartButton = document.getElementById('chart-button');
+    const chartModal = document.getElementById('chart-modal');
+    const closeChartModal = document.querySelector('.close-chart-modal');
+    
+    if (chartButton && chartModal && closeChartModal) {
+        chartButton.addEventListener('click', () => {
+            chartModal.style.display = 'flex';
+            // Initialize the chart if necessary
+            if (!harvestChartInitialized) {
+                initializeHarvestChart();
+                harvestChartInitialized = true;
+            }
+            updateHarvestChart();
+        });
+ 
+        closeChartModal.addEventListener('click', () => {
+            chartModal.style.display = 'none';
+        });
+ 
+        // Close modal when clicking outside of modal-content
+        chartModal.addEventListener('click', (event) => {
+            if (event.target === chartModal) {
+                chartModal.style.display = 'none';
+            }
+        });
+    }
+
+    // Add event listener for the Quantum Spud Spawner toggle
+    const quantumSpudSpawnerToggle = document.getElementById('quantum-spud-spawner-toggle');
+    if (quantumSpudSpawnerToggle) {
+        quantumSpudSpawnerToggle.addEventListener('change', toggleQuantumSpudSpawner);
+    }
+});
+
+// Function to handle the click event
+function handleNuclearIceMelterClick(event) {
+    event.preventDefault(); // Prevent the default toggle behavior
+    event.stopPropagation();
+    toggleNuclearIceMelter();
+}
+
+
+// ==========================================
+//            MANUAL ACTION FUNCTIONS
+// ==========================================
+
+
+// Handle manual ice melting process
+function meltIce(event) {
+    if (event && event.stopPropagation) {
+        event.stopPropagation(); // Prevent event bubbling only if event exists
+    }
+    
+    if (!isManualIceMeltingUnlocked) {
+        return;
+    }
+    
+    if (ice >= 1) {  // Check if there's enough ice
+        waterMeltingClicks++;
+        updateIceMeltingProgress();
+        
+        if (waterMeltingClicks >= CLICKS_PER_WATER) {
+            ice--;  // Consume 1 ice
+            water++;
+            waterMeltingClicks = 0;
+            showToast("Water Collected", "You've melted ice and collected 1 unit of water!", 'achievement');
+        }
+        updateDisplay();
+        updateLastAction("Melted ice");
+    } else {
+        showToast("Not Enough Ice", "You need at least 1 ice to melt!", 'setback');
+    }
+}
+
+// Unlock the manual ice melting feature
+function unlockManualIceMelting() {
+    isManualIceMeltingUnlocked = true;
+    
+    const iceMeltingContainer = document.getElementById('ice-melting-container');
+    if (iceMeltingContainer) {
+        iceMeltingContainer.style.display = 'block';
+    }
+}
+
+// Update the visual progress of ice melting
+function updateIceMeltingProgress() {
+    const progressElement = document.getElementById('ice-melting-progress');
+    if (progressElement) {
+        progressElement.textContent = `Clicks: ${waterMeltingClicks} / ${CLICKS_PER_WATER}`;
+    }
+}
+
+// Unlock the Ice Melting Basin
+function unlockIceMeltingBasin() {
+    isIceMeltingBasinUnlocked = true;
+    if (!unlockedActionCards.includes('ice-melting-basin-container')) {
+        unlockedActionCards.push('ice-melting-basin-container');
+    }
+    updateActionCards();
+    updateIceMeltingBasinButton();
+}
+
+// Handle filling the Ice Melting Basin
+function fillIceMeltingBasin() {
+    if (!isIceMeltingBasinUnlocked || iceMeltingBasinActive) return;
+    
+    if (ice >= 8) {
+        ice -= 8;
+        iceMeltingBasinActive = true;
+        iceMeltingBasinTimer = 8;
+        updateDisplay();
+        updateIceMeltingBasinButton();
+    } else {
+        showToast("Not Enough Ice", "You need at least 8 ice to fill the basin!", 'setback');
+    }
+}
+
+// Update the Ice Melting Basin button
+function updateIceMeltingBasinButton() {
+    const basinContainer = document.getElementById('ice-melting-basin-container');
+    const cooldownElement = document.getElementById('basin-cooldown');
+    if (basinContainer && cooldownElement) {
+        if (iceMeltingBasinActive) {
+            basinContainer.setAttribute('disabled', 'true');
+            cooldownElement.textContent = `Melting (${iceMeltingBasinTimer}s)`;
+        } else {
+            basinContainer.removeAttribute('disabled');
+            cooldownElement.textContent = 'Ready';
+        }
+    }
+}
+
+// ==========================================
+//            COMETARY ICE FUNCTIONS
+// ==========================================
+
+function unlockCometaryIceHarvester() {
+    isCometaryIceHarvesterUnlocked = true;
+    if (!unlockedActionCards.includes('cometary-ice-harvester-container')) {
+        unlockedActionCards.push('cometary-ice-harvester-container');
+    }
+    updateActionCards();
+}
+
+
+function toggleCometaryIceHarvester() {
+    if (!isCometaryIceHarvesterUnlocked) return;
+    cometaryIceHarvester.toggle();
+}
+
+function unlockCometaryIceHarvester() {
+    isCometaryIceHarvesterUnlocked = true;
+    if (!unlockedActionCards.includes('cometary-ice-harvester-container')) {
+        unlockedActionCards.push('cometary-ice-harvester-container');
+    }
+    updateActionCards();
+}
+
+
+// ==========================================
+//            POTATO COLONIZER FUNCTIONS
+// ==========================================
+
+function unlockMartianPotatoColonizer() {
+    isMartianPotatoColonizerUnlocked = true;
+    colonizerCycle = 0;
+    if (!unlockedActionCards.includes('martian-potato-colonizer-container')) {
+        unlockedActionCards.push('martian-potato-colonizer-container');
+    }
+    updateActionCards();
+    initializeMartianPotatoColonizer();
+}
+
+function initializeMartianPotatoColonizer() {
+    const button = document.getElementById('martian-potato-colonizer-button');
+    if (button) {
+        // Remove any existing event listeners to prevent duplicates
+        button.removeEventListener('click', toggleMartianPotatoColonizer);
+        // Add the event listener
+        button.addEventListener('click', toggleMartianPotatoColonizer);
+    }
+    updateMartianPotatoColonizerUI(); // Update UI to reflect current state
+}
+
+function toggleMartianPotatoColonizer() {
+    if (isMartianPotatoColonizerActive) {
+        stopMartianPotatoColonizer();
+    } else {
+        startMartianPotatoColonizer();
+    }
+    updateMartianPotatoColonizerUI(); // Add this line to update UI immediately
+}
+
+function startMartianPotatoColonizer() {
+    if (colonizerCycle >= maxColonizerCycles) {
+        showToast("Colonizer Depleted", "The Martian Potato Colonizer has reached its maximum cycles.", 'warning');
+        return;
+    }
+    isMartianPotatoColonizerActive = true;
+    updateMartianPotatoColonizerUI();
+    runMartianPotatoColonizerCycle();
+}
+
+function stopMartianPotatoColonizer() {
+    isMartianPotatoColonizerActive = false;
+    updateMartianPotatoColonizerUI();
+    // Add this line to stop the current cycle
+    if (window.martianPotatoColonizerIntervalId) {
+        clearInterval(window.martianPotatoColonizerIntervalId);
+        window.martianPotatoColonizerIntervalId = null;
+    }
+}
+
+function runMartianPotatoColonizerCycle() {
+    if (!isMartianPotatoColonizerActive) return;
+
+    const cycleDuration = 60000; // 60 seconds
+    const ledCount = 10;
+    const ledUpdateInterval = cycleDuration / ledCount;
+
+    let currentLed = 0;
+    window.martianPotatoColonizerIntervalId = setInterval(() => {
+        if (!isMartianPotatoColonizerActive) {
+            clearInterval(window.martianPotatoColonizerIntervalId);
+            window.martianPotatoColonizerIntervalId = null;
+            return;
+        }
+
+        updateLEDProgress('martian-potato-colonizer-container', currentLed + 1);
+        currentLed++;
+
+        if (currentLed >= ledCount) {
+            clearInterval(window.martianPotatoColonizerIntervalId);
+            window.martianPotatoColonizerIntervalId = null;
+            martianPotatoColonizerEffect();
+            colonizerCycle++;
+            updateMartianPotatoColonizerUI();
+
+            if (colonizerCycle < maxColonizerCycles && isMartianPotatoColonizerActive) {
+                runMartianPotatoColonizerCycle();
+            } else {
+                stopMartianPotatoColonizer();
+            }
+        }
+    }, ledUpdateInterval);
+}
+
+function updateMartianPotatoColonizerUI() {
+    const button = document.getElementById('martian-potato-colonizer-button');
+    if (button) {
+        button.textContent = isMartianPotatoColonizerActive ? "Colonizing..." : "Colonize";
+        button.classList.toggle('active', isMartianPotatoColonizerActive);
+    }
+    updateLEDProgress('martian-potato-colonizer-container', 0);
+}
+
+function updateLEDProgress(containerId, progress) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const leds = container.querySelectorAll('.led-light');
+    leds.forEach((led, index) => {
+        led.classList.toggle('active', index < progress);
+    });
+}
+
+function martianPotatoColonizerEffect() {
+    let resourceAmount = Math.pow(4, colonizerCycle) * 100;
+
+    potatoCount += resourceAmount;
+    totalPotatoesHarvested += resourceAmount;
+    water += resourceAmount;
+    nutrients += resourceAmount;
+    ice += resourceAmount;
+
+    updateDisplay();
+    showToast("Resources Acquired", `Martian Potato Colonizer harvested ${resourceAmount} of each resource!`, 'achievement');
+
+    if (colonizerCycle >= maxColonizerCycles) {
+        areResourcesDepleted = true;
+        showToast("All Resources Depleted", "No resources left to exploit on Mars. You've harvested everything!", 'achievement');
+        onResourcesDepleted();
+    }
+
+    updateHarvestHistory();
+}
+
+// ==========================================
+//            QUANTUM SPUD SPAWNER FUNCTIONS
+// ==========================================
+
+function startQuantumSpudSpawner() {
+    if (!isQuantumSpudSpawnerActive) {
+        isQuantumSpudSpawnerActive = true;
+        quantumSpudSpawnerInterval = setInterval(() => {
+            for (let i = 0; i < potatoField.length; i++) {
+                if (potatoField[i] === null && consumeResources()) {
+                    // Plant a new potato with isQuantumSpawned set to true
+                    potatoField[i] = createPotato(true, true);
+                    updatePotatoFieldDisplay();
+                } else if (potatoField[i] && potatoField[i].growthStage >= 100) {
+                    // Harvest the potato
+                    harvestPotatoAtIndex(i, true);
+                }
+            }
+            updateDisplay();
+        }, 1000); // Run every second
+    }
+}
+
+function stopQuantumSpudSpawner() {
+    if (isQuantumSpudSpawnerActive) {
+        isQuantumSpudSpawnerActive = false;
+        clearInterval(quantumSpudSpawnerInterval);
+    }
+}
+
+// Modify the createPotato function to allow for instant growth
+function createPotato(instantGrowth = false, isQuantumSpawned = false) {
+    const currentTime = Date.now();
+    const scaleX = 0.95 + Math.random() * 0.1;
+    const scaleY = 0.95 + Math.random() * 0.1;
+    const borderRadius = `${45 + Math.random() * 10}% ${55 + Math.random() * 10}% ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% / ${50 + Math.random() * 10}% ${50 + Math.random() * 10}% ${55 + Math.random() * 10}% ${45 + Math.random() * 10}%`;
+    const textureClass = `potato-texture-${Math.floor(Math.random() * 8) + 1}`;
+    
+    return {
+        plantedAt: currentTime,
+        growthStage: instantGrowth ? 100 : 0,
+        scaleX,
+        scaleY,
+        borderRadius,
+        textureClass,
+        isQuantumSpawned
+    };
+}
+
+// Add this function to toggle the Quantum Spud Spawner
+function toggleQuantumSpudSpawner() {
+    if (isQuantumSpudSpawnerActive) {
+            stopQuantumSpudSpawner();
+    } else {
+        startQuantumSpudSpawner();
+    }
+    updateQuantumSpudSpawnerToggle();
+}
+
+// Add this function to update the Quantum Spud Spawner toggle button
+function updateQuantumSpudSpawnerToggle() {
+    const toggleElement = document.getElementById('quantum-spud-spawner-toggle');
+    if (toggleElement) {
+        toggleElement.checked = isQuantumSpudSpawnerActive;
+    }
+}
+
+// ==========================================
+//            NUCLEAR ICE MELTER FUNCTIONS
+// ==========================================
+
+function toggleNuclearIceMelter() {
+    if (!isNuclearIceMelterUnlocked) {
+        return;
+    }
+
+    const toggleSwitch = document.getElementById('nuclear-ice-melter-toggle');
+
+    if (!isNuclearIceMelterActive) {
+        if (potatoCount >= 100) {
+            potatoCount -= 100; 
+            isNuclearIceMelterActive = true;
+            startNuclearIceMelter();
+            if (toggleSwitch) toggleSwitch.checked = true;
+        } else {
+            showToast("Not Enough Potatoes", "You need 100 potatoes to activate the Nuclear Ice Melter!", 'setback');
+            if (toggleSwitch) toggleSwitch.checked = false;
+            return;
+        }
+    } else {
+        isNuclearIceMelterActive = false;
+        stopNuclearIceMelter();
+        if (toggleSwitch) toggleSwitch.checked = false;
+    }
+
+    updateDisplay();
+}
+
+
+// Unlock the Nuclear Ice Melter
+function unlockNuclearIceMelter() {
+    isNuclearIceMelterUnlocked = true;
+    if (!unlockedActionCards.includes('nuclear-ice-melter-container')) {
+        unlockedActionCards.push('nuclear-ice-melter-container');
+    }
+    updateActionCards();
+}
+
+// Start the Nuclear Ice Melter
+function startNuclearIceMelter() {
+    nuclearIceMelterInterval = setInterval(() => {
+        if (ice >= 5) {
+            ice -= 5;
+            water += 5;
+            updateDisplay();
+        } else {
+            showToast("Resource Shortage", "Not enough ice to run the Nuclear Ice Melter!", 'setback');
+            toggleNuclearIceMelter(); // Turn off if resources are insufficient
+        }
+    }, 1000); // Run every second
+}
+
+// Stop the Nuclear Ice Melter
+function stopNuclearIceMelter() {
+    clearInterval(nuclearIceMelterInterval);
+    nuclearIceMelterInterval = null;
+}
+
+// ==========================================
+//           Polar Cap Mining Functions
+// ==========================================
 
 function unlockPolarCapMining() {
     isPolarCapMiningUnlocked = true;
@@ -1549,6 +1519,10 @@ function startPolarCapMining() {
 function stopPolarCapMining() {
     clearInterval(polarCapMiningInterval);
 }
+
+// ==========================================
+//           Chart / Harvest History Functions
+// ==========================================
 
 // Function to get the playtime
 function getPlaytime() {
@@ -1672,4 +1646,93 @@ function getElapsedMartianTime() {
     const finalMartianSeconds = Math.floor(remainingSeconds % 61.6493);
     
     return `${martianHours.toString().padStart(2, '0')}:${martianMinutes.toString().padStart(2, '0')}:${finalMartianSeconds.toString().padStart(2, '0')} MTC`;
+}
+
+
+function updateHarvestHistory() {
+    harvestHistory.push({
+        timestamp: Date.now(),
+        totalPotatoes: totalPotatoesHarvested
+    });
+    aggregateHarvestHistory();  
+    updateHarvestChart(); 
+}
+
+
+// ==========================================
+//            MISCELLANEOUS
+// ==========================================
+
+// Toggle debug mode on/off
+function toggleDebugMode() {
+    debugMode = !debugMode;
+    const debugInfo = document.getElementById('debug-info');
+    if (debugInfo) {
+        debugInfo.style.display = debugMode ? 'block' : 'none';
+        if (debugMode) {
+            // Initialize debug info when first enabled
+            updateDebugInfo(performance.now(), 0);
+            // Add 1,000,000 potatoes when debug mode is enabled
+            potatoCount += 1000000;
+            updateDisplay();
+            showToast("Debug Mode Enabled", "Added 1,000,000 potatoes for testing. Press 'D' to toggle.", 'debug');
+        } else {
+            showToast("Debug Mode Disabled", "Press 'D' to re-enable debug mode.", 'debug');
+        }
+    }
+}
+
+// Update debug information display
+function updateDebugInfo(currentTime, updateTime) {
+    const debugInfoContainer = document.getElementById('debug-info');
+    if (!debugInfoContainer || debugInfoContainer.style.display === 'none') {
+        return; // Exit if debug info is not visible
+    }
+
+    try {
+        const fps = 1000 / (currentTime - lastDebugUpdateTime);
+        fpsValues.push(fps);
+        if (fpsValues.length > 60) fpsValues.shift();
+        const averageFps = fpsValues.reduce((a, b) => a + b, 0) / fpsValues.length;
+        
+        const memoryUsage = performance.memory ? (performance.memory.usedJSHeapSize / (1024 * 1024)).toFixed(2) : 'N/A';
+        const activePotatoes = potatoField.filter(potato => potato !== null).length;
+        
+        const resourceGeneration = {
+            water: ((water - lastResourceValues.water) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2),
+            nutrients: ((nutrients - lastResourceValues.nutrients) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2),
+            potatoes: ((potatoCount - lastResourceValues.potatoes) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2)
+        };
+        
+        const updateElement = (id, text) => {
+            const element = debugInfoContainer.querySelector(`#${id}`);
+            if (element) element.textContent = text;
+        };
+
+        updateElement('fps', `FPS: ${averageFps.toFixed(2)}`);
+        updateElement('update-time', `Last Update Time: ${updateTime.toFixed(2)}ms`);
+        updateElement('memory-usage', `Memory Usage: ${memoryUsage} MB`);
+        updateElement('potato-count-debug', `Potato Count: ${potatoCount.toFixed(2)}`);
+        updateElement('active-potatoes', `Active Potatoes: ${activePotatoes}`);
+        updateElement('resource-usage', `Resource Usage: Water (${water.toFixed(2)}), Nutrients (${nutrients.toFixed(2)}), Potatoes (${potatoCount.toFixed(2)})`);
+        updateElement('resource-generation', `Resource Generation: Water (${resourceGeneration.water}/s), Nutrients (${resourceGeneration.nutrients}/s), Potatoes (${resourceGeneration.potatoes}/s)`);
+        updateElement('last-action', `Last Action: ${lastAction}`);
+        updateElement('planting-delay', `Planting Delay: ${plantingDelay}ms`);
+        
+        const playtime = getPlaytime();
+        updateElement('playtime-debug', `Playtime: ${playtime}`);
+        
+        lastDebugUpdateTime = currentTime;
+        lastResourceValues = { water, nutrients, potatoes: potatoCount };
+    } catch (error) {
+        console.error('Error updating debug info:', error);
+    }
+}
+
+// Update the last action for debugging purposes
+function updateLastAction(action) {
+    lastAction = action;
+    if (debugMode) {
+        document.getElementById('last-action').textContent = `Last Action: ${lastAction}`;
+    }
 }

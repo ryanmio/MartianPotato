@@ -1673,36 +1673,3 @@ function getElapsedMartianTime() {
     
     return `${martianHours.toString().padStart(2, '0')}:${martianMinutes.toString().padStart(2, '0')}:${finalMartianSeconds.toString().padStart(2, '0')} MTC`;
 }
-
-// Add event listeners for the chart modal within the DOMContentLoaded event
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize the chart variables
-    let harvestChartInitialized = false;
-    
-    const chartButton = document.getElementById('chart-button');
-    const chartModal = document.getElementById('chart-modal');
-    const closeChartModal = document.querySelector('.close-chart-modal');
-    
-    if (chartButton && chartModal && closeChartModal) {
-        chartButton.addEventListener('click', () => {
-            chartModal.style.display = 'flex';
-            // Initialize the chart if necessary
-            if (!harvestChartInitialized) {
-                initializeHarvestChart();
-                harvestChartInitialized = true;
-            }
-            updateHarvestChart();
-        });
-        
-        closeChartModal.addEventListener('click', () => {
-            chartModal.style.display = 'none';
-        });
-        
-        // Close modal when clicking outside of modal-content
-        chartModal.addEventListener('click', (event) => {
-            if (event.target === chartModal) {
-                chartModal.style.display = 'none';
-            }
-        });
-    }
-});

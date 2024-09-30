@@ -691,13 +691,13 @@ function getUpgradeCost(upgrade) {
 
 // Display a modal with detailed information about an upgrade
 function showUpgradeModal(upgrade) {
-    const existingModal = document.querySelector('.modal');
+    const existingModal = document.querySelector('.upgrade-modal');
     if (existingModal) {
         existingModal.remove();
     }
 
     const modal = document.createElement('div');
-    modal.className = 'modal';
+    modal.className = 'modal upgrade-modal'; // Assign both classes
     
     const upgradeCost = getUpgradeCost(upgrade);
     const content = `

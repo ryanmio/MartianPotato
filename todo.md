@@ -43,12 +43,12 @@ TODO:
     - [x] Cometary Ice Harvester
     - [x] Martian Potato Colonizer
 - [x] add hide/show button for the potatoes over time graph
+- [x] Implement functionality for Quantum Spud Spawner
+- [x] Change the martian potato colonizer and commetary ice melter action card toggle switch to be a spinner countdown or something instead of a toggle
 --------------------------------------------------------------------------------------------
-- [ ] Implement functionality for Quantum Spud Spawner
 - [ ] Consider making nuclear ice melter melt 5% of available ice resource instead fo a fixed amount
     - [ ] Or even consider allowing the player to adjust the percentage
     - [ ] Consider adding a startup sequence for the reactor that shows the amount of potatoes that will be consumed on startup and the amount of ice that will be melted per second, making the action card double-width
-- [ ] Change the martian potato colonizer and commetary action card toggle switch to be a spinner countdown or something instead of a toggle
 - [ ] Style the toggle switches to match the specificresource generated
 - [ ] Write real meta messages and descriptions
 - [ ] Add production stats

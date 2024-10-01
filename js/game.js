@@ -103,6 +103,8 @@ let gameInitialized = false;
 function initGame() {
     if (!gameInitialized) {
         loadGame();
+        initializePotatoField();
+        createTechTree();
         requestAnimationFrame(gameLoop);
         gameInitialized = true;
         
@@ -994,45 +996,12 @@ function updatePotatoElement(slotElement, potato) {
 
 // Initialize the game when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
-    addEventListenerIfExists('plant-button', 'click', plantPotato);
 
     initializePotatoField();
-
-    addEventListenerIfExists('potato-field', 'click', (event) => {
-        const slotElement = event.target.closest('.potato-slot');
-        if (slotElement) {
-            const index = parseInt(slotElement.getAttribute('data-index'), 10);
-            if (potatoField[index] && potatoField[index].growthStage >= 100) {
-                harvestPotatoAtIndex(index);
-            }
-        }
-    });
 
     createTechTree(); // Create the tech tree
 
     requestAnimationFrame(gameLoop);
-
-    // Debug mode event listener for the 'D' key press
-    document.addEventListener('keydown', (event) => {
-        if (event.key.toLowerCase() === 'd') {
-            toggleDebugMode();
-        }
-    });
-
-    addEventListenerIfExists('minimize-debug', 'click', () => {
-        const debugInfo = document.getElementById('debug-info');
-        debugInfo.classList.toggle('minimized');
-        const minimizeDebugButton = document.getElementById('minimize-debug');
-        minimizeDebugButton.setAttribute('data-text', 
-            debugInfo.classList.contains('minimized') ? 'Maximize' : 'Minimize');
-    });
-
-    addEventListenerIfExists('exploration-container', 'click', () => {
-        const exploreCard = document.getElementById('exploration-container');
-        if (!exploreCard.hasAttribute('disabled')) {
-            exploreMarsSurface(); // Use the function from exploration.js
-        }
-    });
 
     addEventListenerIfExists('subsurface-aquifer-tapper-toggle', 'change', () => window['toggleSubsurfaceAquiferTapper']());
 
@@ -1050,10 +1019,6 @@ document.addEventListener('DOMContentLoaded', () => {
         nuclearIceMelterToggle.removeEventListener('click', handleNuclearIceMelterClick);
         nuclearIceMelterToggle.addEventListener('click', handleNuclearIceMelterClick);
     }
-
-    addEventListenerIfExists('save-button', 'click', saveGame);
-
-    addEventListenerIfExists('reset-button', 'click', resetGame);
 
     addEventListenerIfExists('polar-cap-mining-toggle', 'change', togglePolarCapMining);
 
@@ -1101,11 +1066,9 @@ function handleNuclearIceMelterClick(event) {
     toggleNuclearIceMelter();
 }
 
-
 // ==========================================
 //            MANUAL ACTION FUNCTIONS
 // ==========================================
-
 
 // Handle manual ice melting process
 function meltIce(event) {
@@ -1204,7 +1167,6 @@ function unlockCometaryIceHarvester() {
     updateActionCards();
 }
 
-
 function toggleCometaryIceHarvester() {
     if (!isCometaryIceHarvesterUnlocked) return;
     cometaryIceHarvester.toggle();
@@ -1217,7 +1179,6 @@ function unlockCometaryIceHarvester() {
     }
     updateActionCards();
 }
-
 
 // ==========================================
 //            POTATO COLONIZER FUNCTIONS
@@ -1348,7 +1309,7 @@ function martianPotatoColonizerEffect() {
 }
 
 // ==========================================
-//            QUANTUM SPUD SPAWNER FUNCTIONS
+//       QUANTUM SPUD SPAWNER FUNCTIONS
 // ==========================================
 
 function startQuantumSpudSpawner() {
@@ -1648,7 +1609,6 @@ function getElapsedMartianTime() {
     return `${martianHours.toString().padStart(2, '0')}:${martianMinutes.toString().padStart(2, '0')}:${finalMartianSeconds.toString().padStart(2, '0')} MTC`;
 }
 
-
 function updateHarvestHistory() {
     harvestHistory.push({
         timestamp: Date.now(),
@@ -1658,6 +1618,58 @@ function updateHarvestHistory() {
     updateHarvestChart(); 
 }
 
+// ==========================================
+//            EVENT LISTENERS
+// ==========================================
+
+function initializeEventListeners() {
+ // Core game controls
+ addEventListenerIfExists('plant-button', 'click', plantPotato);
+ addEventListenerIfExists('save-button', 'click', saveGame);
+ addEventListenerIfExists('reset-button', 'click', resetGame);
+
+ // Potato field interactions
+ document.getElementById('potato-field').addEventListener('click', handlePotatoFieldClick);
+
+ // Debug mode toggle
+ document.addEventListener('keydown', handleKeyPress);
+
+ // Debug info controls
+ addEventListenerIfExists('minimize-debug', 'click', toggleDebugInfoMinimize);
+
+ // Exploration interaction
+ addEventListenerIfExists('exploration-container', 'click', exploreMarsSurface);
+}
+
+function handlePotatoFieldClick(event) {
+    const slotElement = event.target.closest('.potato-slot');
+    if (slotElement) {
+        const index = parseInt(slotElement.getAttribute('data-index'), 10);
+        if (potatoField[index] && potatoField[index].growthStage >= 100) {
+            harvestPotatoAtIndex(index);
+        }
+    }
+}
+
+function handleKeyPress(event) {
+    if (event.key.toLowerCase() === 'd') {
+        toggleDebugMode();
+    }
+}
+
+function toggleDebugInfoMinimize() {
+    const debugInfo = document.getElementById('debug-info');
+    debugInfo.classList.toggle('minimized');
+    const minimizeDebugButton = document.getElementById('minimize-debug');
+    minimizeDebugButton.setAttribute('data-text', 
+        debugInfo.classList.contains('minimized') ? 'Maximize' : 'Minimize');
+}
+
+// Call this function when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initializeEventListeners();
+    initGame();
+});
 
 // ==========================================
 //            MISCELLANEOUS

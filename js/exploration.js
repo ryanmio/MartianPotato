@@ -9,6 +9,11 @@ window.exploreDelay = 10000; // 10 seconds initial delay between manual explorat
 window.waterExplorationMultiplier = 1;
 
 function exploreMarsSurface() {
+    const exploreCard = document.getElementById('exploration-container');
+    if (exploreCard.hasAttribute('disabled')) {
+        return;
+    }
+
     const currentTime = Date.now();
     // Check if enough time has passed since last exploration
     if (currentTime - window.lastExploreTime < window.exploreDelay) {

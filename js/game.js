@@ -95,9 +95,6 @@ let quantumSpudSpawnerInterval = null;
 //            CORE GAME FUNCTIONS
 // ==========================================
 
-// Call initGame when the window loads
-window.addEventListener('load', initGame);
-
 // Initialize the game
 let gameInitialized = false;
 function initGame() {
@@ -108,12 +105,6 @@ function initGame() {
         requestAnimationFrame(gameLoop);
         gameInitialized = true;
         
-        // Ensure action cards are updated after the DOM is fully loaded
-        if (document.readyState === 'complete') {
-            updateActionCards();
-        } else {
-            window.addEventListener('load', updateActionCards);
-        }
     }
 }
 

@@ -560,33 +560,28 @@ function loadGame() {
 
             // Corrected variable names here
             if (gameState.isMartianPotatoColonizerUnlocked) {
-                isMartianPotatoColonizerUnlocked = gameState.isMartianPotatoColonizerUnlocked;
+                isMartianPotatoColonizerUnlocked = true;
                 unlockedActionCards.push('martian-potato-colonizer-container');
-            }
+                initializeMartianPotatoColonizer();
 
-            if (gameState.colonizerCycle) {
-                colonizerCycle = gameState.colonizerCycle;
+                colonizerCycle = gameState.colonizerCycle || 0;
+                
+                if (gameState.isMartianPotatoColonizerActive && colonizerCycle < maxColonizerCycles) {
+                    isMartianPotatoColonizerActive = true;
+                    startMartianPotatoColonizer();
+                } else {
+                    isMartianPotatoColonizerActive = false;
+                    if (colonizerCycle >= maxColonizerCycles) {
+                        const toggleSwitch = document.getElementById('martian-potato-colonizer-toggle');
+                        if (toggleSwitch) {
+                            toggleSwitch.disabled = true;
+                        }
+                    }
+                }
             }
 
             if (gameState.areResourcesDepleted !== undefined) {
                 areResourcesDepleted = gameState.areResourcesDepleted;
-            }
-
-            if (isMartianPotatoColonizerUnlocked) {
-                initializeMartianPotatoColonizer();
-            }
-
-            if (gameState.isMartianPotatoColonizerActive && colonizerCycle < maxColonizerCycles) {
-                isMartianPotatoColonizerActive = gameState.isMartianPotatoColonizerActive;
-                startMartianPotatoColonizer();
-            } else {
-                isMartianPotatoColonizerActive = false;
-                if (colonizerCycle >= maxColonizerCycles) {
-                    const toggleSwitch = document.getElementById('martian-potato-colonizer-toggle');
-                    if (toggleSwitch) {
-                        toggleSwitch.disabled = true;
-                    }
-                }
             }
 
             // Remove duplicates
@@ -682,7 +677,7 @@ function updateActionCards() {
                 // For other action cards, ensure they are active unless individually depleted
                 updateDepletedActionCard(card.id, false);
             }
-
+            
         } else if (card.id !== 'exploration-container') {
             card.style.display = 'none';
         }

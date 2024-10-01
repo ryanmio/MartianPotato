@@ -1002,9 +1002,7 @@ document.addEventListener('DOMContentLoaded', () => {
     createTechTree(); // Create the tech tree
 
     requestAnimationFrame(gameLoop);
-
-    addEventListenerIfExists('bucket-wheel-excavator-toggle', 'change', () => window['toggleBucketWheelExcavator']());
-
+    
     addEventListenerIfExists('ice-melting-basin-container', 'click', () => {
         if (!document.getElementById('ice-melting-basin-container').hasAttribute('disabled')) {
             fillIceMeltingBasin();
@@ -1017,9 +1015,6 @@ document.addEventListener('DOMContentLoaded', () => {
         nuclearIceMelterToggle.removeEventListener('click', handleNuclearIceMelterClick);
         nuclearIceMelterToggle.addEventListener('click', handleNuclearIceMelterClick);
     }
-
-    addEventListenerIfExists('polar-cap-mining-toggle', 'change', togglePolarCapMining);
-
     // Add event listeners for the chart modal
     let harvestChartInitialized = false;
     
@@ -1048,12 +1043,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 chartModal.style.display = 'none';
             }
         });
-    }
-
-    // Add event listener for the Quantum Spud Spawner toggle
-    const quantumSpudSpawnerToggle = document.getElementById('quantum-spud-spawner-toggle');
-    if (quantumSpudSpawnerToggle) {
-        quantumSpudSpawnerToggle.addEventListener('change', toggleQuantumSpudSpawner);
     }
 });
 
@@ -1640,6 +1629,9 @@ function initializeEventListeners() {
 
  // Resource generation toggles
  addEventListenerIfExists('subsurface-aquifer-tapper-toggle', 'change', () => window['toggleSubsurfaceAquiferTapper']());
+ addEventListenerIfExists('bucket-wheel-excavator-toggle', 'change', () => window['toggleBucketWheelExcavator']());
+ addEventListenerIfExists('polar-cap-mining-toggle', 'change', togglePolarCapMining);
+ addEventListenerIfExists('quantum-spud-spawner-toggle', 'change', toggleQuantumSpudSpawner);
 }
 
 function handlePotatoFieldClick(event) {

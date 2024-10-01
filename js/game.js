@@ -1003,8 +1003,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     requestAnimationFrame(gameLoop);
 
-    addEventListenerIfExists('subsurface-aquifer-tapper-toggle', 'change', () => window['toggleSubsurfaceAquiferTapper']());
-
     addEventListenerIfExists('bucket-wheel-excavator-toggle', 'change', () => window['toggleBucketWheelExcavator']());
 
     addEventListenerIfExists('ice-melting-basin-container', 'click', () => {
@@ -1639,6 +1637,9 @@ function initializeEventListeners() {
 
  // Exploration interaction
  addEventListenerIfExists('exploration-container', 'click', exploreMarsSurface);
+
+ // Resource generation toggles
+ addEventListenerIfExists('subsurface-aquifer-tapper-toggle', 'change', () => window['toggleSubsurfaceAquiferTapper']());
 }
 
 function handlePotatoFieldClick(event) {

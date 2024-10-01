@@ -1551,31 +1551,6 @@ function updateHarvestHistory() {
 
 
 // ==========================================
-//            move these into the event listeners section one by one.
-// ==========================================
-
-
-// Initialize the game when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', () => {
-
-    initializePotatoField();
-
-    createTechTree(); // Create the tech tree
-
-    requestAnimationFrame(gameLoop);
-});
-
-// Function to handle the click event
-function handleNuclearIceMelterClick(event) {
-    event.preventDefault(); // Prevent the default toggle behavior
-    event.stopPropagation();
-    toggleNuclearIceMelter();
-}
-
-
-
-
-// ==========================================
 //            EVENT LISTENERS
 // ==========================================
 

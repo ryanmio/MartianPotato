@@ -1003,12 +1003,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     requestAnimationFrame(gameLoop);
     
-    addEventListenerIfExists('ice-melting-basin-container', 'click', () => {
-        if (!document.getElementById('ice-melting-basin-container').hasAttribute('disabled')) {
-            fillIceMeltingBasin();
-        }
-    });
-
     const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
     if (nuclearIceMelterToggle) {
         nuclearIceMelterToggle.removeEventListener('change', toggleNuclearIceMelter);
@@ -1114,16 +1108,19 @@ function unlockIceMeltingBasin() {
 
 // Handle filling the Ice Melting Basin
 function fillIceMeltingBasin() {
-    if (!isIceMeltingBasinUnlocked || iceMeltingBasinActive) return;
-    
-    if (ice >= 8) {
-        ice -= 8;
-        iceMeltingBasinActive = true;
-        iceMeltingBasinTimer = 8;
-        updateDisplay();
-        updateIceMeltingBasinButton();
-    } else {
-        showToast("Not Enough Ice", "You need at least 8 ice to fill the basin!", 'setback');
+    const container = document.getElementById('ice-melting-basin-container');
+    if (container && !container.hasAttribute('disabled')) {
+        if (!isIceMeltingBasinUnlocked || iceMeltingBasinActive) return;
+        
+        if (ice >= 8) {
+            ice -= 8;
+            iceMeltingBasinActive = true;
+            iceMeltingBasinTimer = 8;
+            updateDisplay();
+            updateIceMeltingBasinButton();
+        } else {
+            showToast("Not Enough Ice", "You need at least 8 ice to fill the basin!", 'setback');
+        }
     }
 }
 
@@ -1632,6 +1629,9 @@ function initializeEventListeners() {
  addEventListenerIfExists('bucket-wheel-excavator-toggle', 'change', () => window['toggleBucketWheelExcavator']());
  addEventListenerIfExists('polar-cap-mining-toggle', 'change', togglePolarCapMining);
  addEventListenerIfExists('quantum-spud-spawner-toggle', 'change', toggleQuantumSpudSpawner);
+
+    // Action card interactions
+    addEventListenerIfExists('ice-melting-basin-container', 'click', fillIceMeltingBasin);
 }
 
 function handlePotatoFieldClick(event) {

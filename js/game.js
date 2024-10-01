@@ -994,52 +994,6 @@ function updatePotatoElement(slotElement, potato) {
 }
 
 
-// Initialize the game when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', () => {
-
-    initializePotatoField();
-
-    createTechTree(); // Create the tech tree
-
-    requestAnimationFrame(gameLoop);
-    // Add event listeners for the chart modal
-    let harvestChartInitialized = false;
-    
-    const chartButton = document.getElementById('chart-button');
-    const chartModal = document.getElementById('chart-modal');
-    const closeChartModal = document.querySelector('.close-chart-modal');
-    
-    if (chartButton && chartModal && closeChartModal) {
-        chartButton.addEventListener('click', () => {
-            chartModal.style.display = 'flex';
-            // Initialize the chart if necessary
-            if (!harvestChartInitialized) {
-                initializeHarvestChart();
-                harvestChartInitialized = true;
-            }
-            updateHarvestChart();
-        });
- 
-        closeChartModal.addEventListener('click', () => {
-            chartModal.style.display = 'none';
-        });
- 
-        // Close modal when clicking outside of modal-content
-        chartModal.addEventListener('click', (event) => {
-            if (event.target === chartModal) {
-                chartModal.style.display = 'none';
-            }
-        });
-    }
-});
-
-// Function to handle the click event
-function handleNuclearIceMelterClick(event) {
-    event.preventDefault(); // Prevent the default toggle behavior
-    event.stopPropagation();
-    toggleNuclearIceMelter();
-}
-
 // ==========================================
 //            MANUAL ACTION FUNCTIONS
 // ==========================================
@@ -1595,6 +1549,32 @@ function updateHarvestHistory() {
     updateHarvestChart(); 
 }
 
+
+// ==========================================
+//            move these into the event listeners section one by one.
+// ==========================================
+
+
+// Initialize the game when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+
+    initializePotatoField();
+
+    createTechTree(); // Create the tech tree
+
+    requestAnimationFrame(gameLoop);
+});
+
+// Function to handle the click event
+function handleNuclearIceMelterClick(event) {
+    event.preventDefault(); // Prevent the default toggle behavior
+    event.stopPropagation();
+    toggleNuclearIceMelter();
+}
+
+
+
+
 // ==========================================
 //            EVENT LISTENERS
 // ==========================================
@@ -1633,6 +1613,9 @@ function initializeEventListeners() {
         nuclearIceMelterToggle.removeEventListener('click', handleNuclearIceMelterClick);
         nuclearIceMelterToggle.addEventListener('click', handleNuclearIceMelterClick);
     }
+
+    // Chart modal listeners
+    initializeChartModalListeners();
 }
 
 function handlePotatoFieldClick(event) {
@@ -1669,6 +1652,34 @@ function handleNuclearIceMelterClick(event) {
     event.preventDefault(); // Prevent the default toggle behavior
     event.stopPropagation();
     toggleNuclearIceMelter();
+}
+
+function initializeChartModalListeners() {
+    let harvestChartInitialized = false;
+    const chartButton = document.getElementById('chart-button');
+    const chartModal = document.getElementById('chart-modal');
+    const closeChartModal = document.querySelector('.close-chart-modal');
+    
+    if (chartButton && chartModal && closeChartModal) {
+        chartButton.addEventListener('click', () => {
+            chartModal.style.display = 'flex';
+            if (!harvestChartInitialized) {
+                initializeHarvestChart();
+                harvestChartInitialized = true;
+            }
+            updateHarvestChart();
+        });
+
+        closeChartModal.addEventListener('click', () => {
+            chartModal.style.display = 'none';
+        });
+
+        chartModal.addEventListener('click', (event) => {
+            if (event.target === chartModal) {
+                chartModal.style.display = 'none';
+            }
+        });
+    }
 }
 
 // ==========================================

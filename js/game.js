@@ -1002,13 +1002,6 @@ document.addEventListener('DOMContentLoaded', () => {
     createTechTree(); // Create the tech tree
 
     requestAnimationFrame(gameLoop);
-    
-    const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
-    if (nuclearIceMelterToggle) {
-        nuclearIceMelterToggle.removeEventListener('change', toggleNuclearIceMelter);
-        nuclearIceMelterToggle.removeEventListener('click', handleNuclearIceMelterClick);
-        nuclearIceMelterToggle.addEventListener('click', handleNuclearIceMelterClick);
-    }
     // Add event listeners for the chart modal
     let harvestChartInitialized = false;
     
@@ -1632,6 +1625,14 @@ function initializeEventListeners() {
 
     // Action card interactions
     addEventListenerIfExists('ice-melting-basin-container', 'click', fillIceMeltingBasin);
+
+    // Nuclear Ice Melter toggle
+    const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
+    if (nuclearIceMelterToggle) {
+        nuclearIceMelterToggle.removeEventListener('change', toggleNuclearIceMelter);
+        nuclearIceMelterToggle.removeEventListener('click', handleNuclearIceMelterClick);
+        nuclearIceMelterToggle.addEventListener('click', handleNuclearIceMelterClick);
+    }
 }
 
 function handlePotatoFieldClick(event) {
@@ -1663,6 +1664,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeEventListeners();
     initGame();
 });
+
+function handleNuclearIceMelterClick(event) {
+    event.preventDefault(); // Prevent the default toggle behavior
+    event.stopPropagation();
+    toggleNuclearIceMelter();
+}
 
 // ==========================================
 //            MISCELLANEOUS
@@ -1741,3 +1748,4 @@ function updateLastAction(action) {
         document.getElementById('last-action').textContent = `Last Action: ${lastAction}`;
     }
 }
+

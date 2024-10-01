@@ -558,7 +558,6 @@ function loadGame() {
                 unlockedActionCards.push('polar-cap-mining-container');
             }
 
-            // Corrected variable names here
             if (gameState.isMartianPotatoColonizerUnlocked) {
                 isMartianPotatoColonizerUnlocked = true;
                 unlockedActionCards.push('martian-potato-colonizer-container');
@@ -590,7 +589,7 @@ function loadGame() {
             // Reinitialize game elements
             initializePotatoField();
             createTechTree();
-        updateDisplay();
+            updateDisplay();
             updateIceMeltingProgress();
             updateIceMeltingBasinButton();
 

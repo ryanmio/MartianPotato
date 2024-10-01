@@ -1103,14 +1103,6 @@ function toggleCometaryIceHarvester() {
     cometaryIceHarvester.toggle();
 }
 
-function unlockCometaryIceHarvester() {
-    isCometaryIceHarvesterUnlocked = true;
-    if (!unlockedActionCards.includes('cometary-ice-harvester-container')) {
-        unlockedActionCards.push('cometary-ice-harvester-container');
-    }
-    updateActionCards();
-}
-
 // ==========================================
 //            POTATO COLONIZER FUNCTIONS
 // ==========================================
@@ -1548,7 +1540,6 @@ function updateHarvestHistory() {
     aggregateHarvestHistory();  
     updateHarvestChart(); 
 }
-
 
 // ==========================================
 //            EVENT LISTENERS

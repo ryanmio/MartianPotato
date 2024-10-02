@@ -67,6 +67,10 @@ let colonizerInterval = null;
 let colonizerCycle = 0;
 const maxColonizerCycles = 20; // 20 cycles
 
+let isSubsurfaceAquiferTapperUnlocked = false;
+let isBucketWheelExcavatorUnlocked = false;
+let isSubterraneanTuberTunnelerUnlocked = false;
+
 // Large Data Structures
 let potatoField = new Array(MAX_FIELD_SIZE).fill(null);
 
@@ -497,20 +501,31 @@ colonizerCycle,
         growthTimeMultiplier,
         totalPotatoesHarvested,
         harvestHistory,         
-        gameStartTime,          
+        gameStartTime,
+        isSubsurfaceAquiferTapperUnlocked,
+        isBucketWheelExcavatorUnlocked,
+        isSubterraneanTuberTunnelerUnlocked,          
     };
+    console.log('Saving game state. Unlock flags:', {
+        isSubsurfaceAquiferTapperUnlocked,
+        isBucketWheelExcavatorUnlocked,
+        isSubterraneanTuberTunnelerUnlocked
+    });
+    console.log('Saving unlockedActionCards:', unlockedActionCards);
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
 }
 
 // Function to load the game state
 function loadGame() {
-    try {
-        const savedState = localStorage.getItem('martianPotatoSave');
+    const savedState = localStorage.getItem('martianPotatoSave');
+    console.log('Attempting to load saved game state');
 
-        if (savedState) {
+    if (savedState) {
+        try {
             const gameState = JSON.parse(savedState);
-            
+            console.log('Successfully parsed saved game state');
+
             // Restore game variables with default values if not present
             gameStartTime = gameState.gameStartTime || Date.now();
             potatoCount = gameState.potatoCount || 0;
@@ -590,8 +605,42 @@ function loadGame() {
                 areResourcesDepleted = gameState.areResourcesDepleted;
             }
 
+            isSubsurfaceAquiferTapperUnlocked = gameState.isSubsurfaceAquiferTapperUnlocked || false;
+            isBucketWheelExcavatorUnlocked = gameState.isBucketWheelExcavatorUnlocked || false;
+            isSubterraneanTuberTunnelerUnlocked = gameState.isSubterraneanTuberTunnelerUnlocked || false;
+
+            console.log('Loaded unlock states:', {
+                isSubsurfaceAquiferTapperUnlocked,
+                isBucketWheelExcavatorUnlocked,
+                isSubterraneanTuberTunnelerUnlocked
+            });
+
+            // Update unlockedActionCards based on the unlock flags
+            if (isSubsurfaceAquiferTapperUnlocked) {
+                if (!unlockedActionCards.includes('subsurface-aquifer-tapper-container')) {
+                    unlockedActionCards.push('subsurface-aquifer-tapper-container');
+                    console.log('Added subsurface-aquifer-tapper-container to unlockedActionCards');
+                }
+            }
+
+            if (isBucketWheelExcavatorUnlocked) {
+                if (!unlockedActionCards.includes('bucket-wheel-excavator-container')) {
+                    unlockedActionCards.push('bucket-wheel-excavator-container');
+                    console.log('Added bucket-wheel-excavator-container to unlockedActionCards');
+                }
+            }
+
+            if (isSubterraneanTuberTunnelerUnlocked) {
+                if (!unlockedActionCards.includes('subterranean-tuber-tunneler-container')) {
+                    unlockedActionCards.push('subterranean-tuber-tunneler-container');
+                    console.log('Added subterranean-tuber-tunneler-container to unlockedActionCards');
+                }
+            }
+
             // Remove duplicates
             unlockedActionCards = [...new Set(unlockedActionCards)];
+
+            console.log('Updated unlockedActionCards after loading:', unlockedActionCards);
 
             // Reinitialize game elements
             initializePotatoField();
@@ -627,21 +676,13 @@ function loadGame() {
             updateHarvestChart();
 
             showToast('Game loaded successfully!', 'Your progress has been restored.', 'success');
-        } else {
-            // New game initialization
-            gameStartTime = Date.now();
-            hasSeenInitialGlow = false;
-            document.getElementById('plant-button').classList.add('glow');
-            unlockedActionCards = ['exploration-container'];
-            updateActionCards();
-            showToast('No saved game found', 'Starting a new game.', 'info');
+        } catch (error) {
+            console.error('Error parsing saved game state:', error);
+            showToast('Error loading game', 'There was an error loading your saved game. Starting a new game.', 'error');
         }
-    } catch (error) {
-        console.error('Error loading game:', error);
-        gameStartTime = Date.now();
-        unlockedActionCards = ['exploration-container'];
-        updateActionCards();
-        showToast('Error loading game', 'There was an error loading your saved game. Starting a new game.', 'error');
+    } else {
+        console.log('No saved game state found');
+        showToast('No saved game found', 'Starting a new game.', 'info');
     }
 }
 
@@ -666,8 +707,10 @@ function restoreUpgrades(savedUpgrades) {
 
 // Function to update the visibility of action cards
 function updateActionCards() {
+    console.log('Updating action cards. Current unlockedActionCards:', unlockedActionCards);
     const allActionCards = document.querySelectorAll('.action-card');
     allActionCards.forEach(card => {
+        console.log(`Checking card ${card.id}. Unlocked: ${unlockedActionCards.includes(card.id)}`);
         if (unlockedActionCards.includes(card.id)) {
             card.style.display = 'block';
 
@@ -821,6 +864,52 @@ const cometaryIceHarvester = createCyclicActionCard(
     "Harvesting...", // activeText
     "Harvest Comets" // inactiveText
 );
+
+function unlockSubsurfaceAquiferTapper() {
+    console.log('Unlocking Subsurface Aquifer Tapper');
+    isSubsurfaceAquiferTapperUnlocked = true;
+    const container = document.getElementById('subsurface-aquifer-tapper-container');
+    console.log('Subsurface Aquifer Tapper container:', container);
+    if (container) {
+        container.style.display = 'block';
+        console.log('Set Subsurface Aquifer Tapper container display to block');
+    }
+    if (!unlockedActionCards.includes('subsurface-aquifer-tapper-container')) {
+        unlockedActionCards.push('subsurface-aquifer-tapper-container');
+        console.log('Added subsurface-aquifer-tapper-container to unlockedActionCards');
+    }
+    console.log('Current unlockedActionCards:', unlockedActionCards);
+    console.log('isSubsurfaceAquiferTapperUnlocked:', isSubsurfaceAquiferTapperUnlocked);
+    updateActionCards();
+}
+
+function unlockBucketWheelExcavator() {
+    console.log('Unlocking Bucket Wheel Excavator');
+    isBucketWheelExcavatorUnlocked = true;
+    const container = document.getElementById('bucket-wheel-excavator-container');
+    if (container) {
+        container.style.display = 'block';
+    }
+    if (!unlockedActionCards.includes('bucket-wheel-excavator-container')) {
+        unlockedActionCards.push('bucket-wheel-excavator-container');
+    }
+    console.log('Current unlockedActionCards:', unlockedActionCards);
+    updateActionCards();
+}
+
+function unlockSubterraneanTuberTunneler() {
+    console.log('Unlocking Subterranean Tuber Tunneler');
+    isSubterraneanTuberTunnelerUnlocked = true;
+    const container = document.getElementById('subterranean-tuber-tunneler-container');
+    if (container) {
+        container.style.display = 'block';
+    }
+    if (!unlockedActionCards.includes('subterranean-tuber-tunneler-container')) {
+        unlockedActionCards.push('subterranean-tuber-tunneler-container');
+    }
+    console.log('Current unlockedActionCards:', unlockedActionCards);
+    updateActionCards();
+}
 
 // ==========================================
 //            ACHIEVEMENTS

@@ -11,6 +11,11 @@ let lastTechTreeUpdate = 0;
 let unlockedActionCards = [];
 let currentTier = 1; // Initialize current tier to 1
 
+
+// Near the top of the file, after variable declarations
+console.log('Initial unlockedActionCards:', unlockedActionCards);
+
+
 // Automation Arrays
 let autoplanters = [];
 let autoHarvesters = [];
@@ -178,8 +183,10 @@ const upgrades = [
     { 
         name: "Martian Bucket-Wheel Excavator", 
         cost: 750,
-        effect: () => { 
+        effect: () => {
+            console.log('Executing Bucket Wheel Excavator effect');
             unlockBucketWheelExcavator();
+            isBucketWheelExcavatorUnlocked = true;
         },
         icon: "⛏️",
         description: "A massive mobile strip-mining machine that consumes 1 potato per second to generate 2 nutrients and 2 ice.",
@@ -195,10 +202,12 @@ const upgrades = [
     { 
         name: "Subterranean Tuber Tunneler",
         cost: 2500,
-        effect: () => { 
+        effect: () => {
+            console.log('Executing Subterranean Tuber Tunneler effect');
             unlockSubterraneanTuberTunneler();
-            window.totalExplorationRate += 1; 
-            updateAutonomousExploration(); 
+            isSubterraneanTuberTunnelerUnlocked = true;
+            window.totalExplorationRate += 1;
+            updateAutonomousExploration();
         },
         icon: "🕳️",
         description: "Burrows beneath the Martian surface, uncovering hidden resource deposits.",
@@ -245,8 +254,10 @@ const upgrades = [
     {
         name: "Subsurface Aquifer Tapper",
         cost: 250,
-        effect: () => { 
+        effect: () => {
+            console.log('Executing Subsurface Aquifer Tapper effect');
             unlockSubsurfaceAquiferTapper();
+            isSubsurfaceAquiferTapperUnlocked = true; 
         },
         icon: "💧",
         description: "Accesses underground water reserves. Consumes 1 potato per second to produce 2 water per second when active.",
@@ -737,10 +748,18 @@ function buyUpgrade(upgrade) {
     if (potatoCount >= cost) {
         potatoCount -= cost;
         if (upgrade.effect) {
+            console.log(`Applying effect for upgrade: ${upgrade.name}`);
             upgrade.effect();
         }
         upgrade.count++;
+        console.log(`Upgrade ${upgrade.name} count: ${upgrade.count}`);
         updateDisplay();
+
+        // Add this block
+        if (!upgrade.repeatable) {
+            upgrade.purchased = true;
+            console.log(`Marked upgrade ${upgrade.name} as purchased`);
+        }
 
         const techCard = document.getElementById(getCardId(upgrade.name));
         if (techCard) {

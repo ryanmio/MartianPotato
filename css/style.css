@@ -1113,7 +1113,7 @@ button:hover, button:disabled {
 
 .button-container {
     margin-bottom: 5px;
-    display: flex;
+    display: flex !important;
     justify-content: center;
 }
 

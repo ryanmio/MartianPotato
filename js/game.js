@@ -102,6 +102,7 @@ function initGame() {
         loadGame();
         initializePotatoField();
         createTechTree();
+        updateActionCards(); // Add this line
         requestAnimationFrame(gameLoop);
         gameInitialized = true;
         
@@ -135,6 +136,7 @@ function gameLoop(currentTime) {
         updatePotatoGrowth();
         updateTechTree();
         updateExploreButton();
+        updateActionCards(); // Make sure this line is here
         
         // Auto-save every minute
         if (currentTime - lastSaveTime >= 60000) {
@@ -215,12 +217,20 @@ function updateDepletedActionCard(actionCardId, isDepleted, message) {
     const card = document.getElementById(actionCardId);
     if (card) {
         const toggleContainer = card.querySelector('.toggle-switch-container');
+        const buttonContainer = card.querySelector('.button-container');
+        const ledProgressBar = card.querySelector('.led-progress-bar');
         let depletedMessage = card.querySelector('.depleted-message');
 
         if (isDepleted) {
-            // Hide the toggle switch
+            // Hide the toggle switch or button
             if (toggleContainer) {
                 toggleContainer.style.display = 'none';
+            }
+            if (buttonContainer) {
+                buttonContainer.style.display = 'none';
+            }
+            if (ledProgressBar) {
+                ledProgressBar.style.visibility = 'hidden'; // Change to visibility
             }
             // Display the depleted message
             if (!depletedMessage) {
@@ -230,9 +240,15 @@ function updateDepletedActionCard(actionCardId, isDepleted, message) {
                 card.appendChild(depletedMessage);
             }
         } else {
-            // Show the toggle switch
+            // Show the toggle switch or button
             if (toggleContainer) {
                 toggleContainer.style.display = 'block';
+            }
+            if (buttonContainer) {
+                buttonContainer.style.display = 'block';
+            }
+            if (ledProgressBar) {
+                ledProgressBar.style.visibility = 'visible'; // Change to visibility
             }
             // Remove the depleted message
             if (depletedMessage) {
@@ -583,6 +599,7 @@ function loadGame() {
             updateDisplay();
             updateIceMeltingProgress();
             updateIceMeltingBasinButton();
+            updateActionCards();
 
             // Ensure DOM is ready before updating action cards
             if (document.readyState === 'complete') {
@@ -672,6 +689,16 @@ function updateActionCards() {
             card.style.display = 'none';
         }
     });
+}
+
+function onResourcesDepleted() {
+    areResourcesDepleted = true;
+    updateActionCards();
+    showToast("Resources Depleted", "All resources on Mars have been depleted!", 'warning');
+    
+    // Specifically handle the Martian Potato Colonizer
+    stopMartianPotatoColonizer();
+    updateDepletedActionCard('martian-potato-colonizer-container', true, "Resources Depleted");
 }
 
 // ==========================================
@@ -1134,11 +1161,14 @@ function startMartianPotatoColonizer() {
 
 function stopMartianPotatoColonizer() {
     isMartianPotatoColonizerActive = false;
-    updateMartianPotatoColonizerUI();
-    // Add this line to stop the current cycle
     if (window.martianPotatoColonizerIntervalId) {
         clearInterval(window.martianPotatoColonizerIntervalId);
         window.martianPotatoColonizerIntervalId = null;
+    }
+    if (areResourcesDepleted) {
+        updateDepletedActionCard('martian-potato-colonizer-container', true, "Resources Depleted");
+    } else {
+        updateMartianPotatoColonizerUI();
     }
 }
 
@@ -1164,7 +1194,6 @@ function runMartianPotatoColonizerCycle() {
             clearInterval(window.martianPotatoColonizerIntervalId);
             window.martianPotatoColonizerIntervalId = null;
             martianPotatoColonizerEffect();
-            colonizerCycle++;
             updateMartianPotatoColonizerUI();
 
             if (colonizerCycle < maxColonizerCycles && isMartianPotatoColonizerActive) {
@@ -1207,10 +1236,10 @@ function martianPotatoColonizerEffect() {
     updateDisplay();
     showToast("Resources Acquired", `Martian Potato Colonizer harvested ${resourceAmount} of each resource!`, 'achievement');
 
+    colonizerCycle++;
+
     if (colonizerCycle >= maxColonizerCycles) {
-        areResourcesDepleted = true;
-        showToast("All Resources Depleted", "No resources left to exploit on Mars. You've harvested everything!", 'achievement');
-        onResourcesDepleted();
+        onResourcesDepleted(); // Call this function when max cycles are reached
     }
 
     updateHarvestHistory();

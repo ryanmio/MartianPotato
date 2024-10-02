@@ -49,7 +49,7 @@ TODO:
 - [ ] Consider making nuclear ice melter melt 5% of available ice resource instead fo a fixed amount
     - [ ] Or even consider allowing the player to adjust the percentage
     - [ ] Consider adding a startup sequence for the reactor that shows the amount of potatoes that will be consumed on startup and the amount of ice that will be melted per second, making the action card double-width
-- [ ] Style the toggle switches to match the specificresource generated
+- [ ] Style the toggle switches to match the specific resource generated
 - [ ] Write real meta messages and descriptions
 - [ ] Add production stats
 - [ ] Add cumulative potato stats to graph modal
@@ -88,3 +88,8 @@ Bugs/Issues:
 - [x] The last milestone tech cards arent being removed
 --------------------------------------------------------------------------------------------
 - [ ] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.
+- [ ] Explortaion time doesnt seem to be persistent between loads
+- [ ] Exploration bonus doesnt seem to be increasing (or maybe its not persistent between loads)
+- [ ] Logic for removing graph datapoints when there are too many is bad
+- [ ] Subterrarean tunneler starts generating resources right away, even before it is turned on with the toggle switch
+- [ ] Some action cards disappear when the quantum spud spawner is unlocked

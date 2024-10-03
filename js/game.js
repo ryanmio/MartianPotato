@@ -70,6 +70,7 @@ const maxColonizerCycles = 20; // 20 cycles
 let isSubsurfaceAquiferTapperUnlocked = false;
 let isBucketWheelExcavatorUnlocked = false;
 let isSubterraneanTuberTunnelerUnlocked = false;
+let isSubterraneanTuberTunnelerActive = false;
 
 // Large Data Structures
 let potatoField = new Array(MAX_FIELD_SIZE).fill(null);
@@ -900,6 +901,7 @@ function unlockBucketWheelExcavator() {
 function unlockSubterraneanTuberTunneler() {
     console.log('Unlocking Subterranean Tuber Tunneler');
     isSubterraneanTuberTunnelerUnlocked = true;
+    isSubterraneanTuberTunnelerActive = false; // Ensure it starts inactive
     const container = document.getElementById('subterranean-tuber-tunneler-container');
     if (container) {
         container.style.display = 'block';
@@ -910,6 +912,39 @@ function unlockSubterraneanTuberTunneler() {
     console.log('Current unlockedActionCards:', unlockedActionCards);
     updateActionCards();
 }
+
+function toggleSubterraneanTuberTunneler() {
+    if (isSubterraneanTuberTunnelerUnlocked) {
+        isSubterraneanTuberTunnelerActive = !isSubterraneanTuberTunnelerActive;
+        const toggleSwitch = document.getElementById('subterranean-tuber-tunneler-toggle');
+        if (toggleSwitch) {
+            toggleSwitch.checked = isSubterraneanTuberTunnelerActive;
+        }
+        if (isSubterraneanTuberTunnelerActive) {
+            startSubterraneanTuberTunneler();
+        } else {
+            stopSubterraneanTuberTunneler();
+        }
+        console.log('Subterranean Tuber Tunneler active:', isSubterraneanTuberTunnelerActive);
+    }
+}
+
+function startSubterraneanTuberTunneler() {
+    console.log('Starting Subterranean Tuber Tunneler');
+    isSubterraneanTuberTunnelerActive = true;
+}
+
+function stopSubterraneanTuberTunneler() {
+    console.log('Stopping Subterranean Tuber Tunneler');
+    isSubterraneanTuberTunnelerActive = false;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleSwitch = document.getElementById('subterranean-tuber-tunneler-toggle');
+    if (toggleSwitch) {
+        toggleSwitch.addEventListener('change', toggleSubterraneanTuberTunneler);
+    }
+});
 
 // ==========================================
 //            ACHIEVEMENTS

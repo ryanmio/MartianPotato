@@ -206,8 +206,6 @@ const upgrades = [
             console.log('Executing Subterranean Tuber Tunneler effect');
             unlockSubterraneanTuberTunneler();
             isSubterraneanTuberTunnelerUnlocked = true;
-            window.totalExplorationRate += 1;
-            updateAutonomousExploration();
         },
         icon: "🕳️",
         description: "Burrows beneath the Martian surface, uncovering hidden resource deposits.",
@@ -1017,25 +1015,6 @@ function showNextAchievement() {
     });
 }
 
-// Pause the game
-function pauseGame() {
-    // Implement game pausing logic here
-    // For example, stop all intervals, disable buttons, etc.
-    clearInterval(window.autonomousExplorationInterval);
-    const buttons = document.querySelectorAll('button');
-    buttons.forEach(button => button.disabled = true);
-}
-
-// Resume the game
-function resumeGame() {
-    // Implement game resuming logic here
-    // For example, restart all intervals, enable buttons, etc.
-    updateAutonomousExploration();
-    const buttons = document.querySelectorAll('button');
-    buttons.forEach(button => button.disabled = false);
-}
-
-
 // ==========================================
 //            MANUAL ACTION FUNCTIONS
 // ==========================================
@@ -1155,7 +1134,6 @@ function createAutomationDevice(deviceConfig) {
 
     // Start the device
     window[startFunction] = function() {
-        // Check if resources are depleted
         if (areResourcesDepleted) {
             window[isActive] = false;
             const toggleSwitch = document.getElementById(toggleId);
@@ -1167,15 +1145,15 @@ function createAutomationDevice(deviceConfig) {
         }
 
         window[`${id}Interval`] = setInterval(() => {
-            if (resourceCheck()) {
+            if (resourceCheck()) {  // Use the resourceCheck function here
                 resourceConsume();
                 resourceProduce();
                 updateDisplay();
             } else {
-                showToast("Resource Shortage", `Not enough resources to run the ${id.replace(/([A-Z])/g, ' $1')}!`, 'setback');
-                window[`toggle${id}`](); // Turn off if resources are insufficient
+                // Don't automatically toggle off, just skip this cycle
+                console.log(`Skipping ${id} cycle due to insufficient resources`);
             }
-        }, intervalTime); // Run at specified interval
+        }, intervalTime);
     };
 
     // Stop the device
@@ -1232,7 +1210,7 @@ createAutomationDevice({
     unlockFunction: 'unlockSubterraneanTuberTunneler',
     startFunction: 'startSubterraneanTuberTunneler',
     stopFunction: 'stopSubterraneanTuberTunneler',
-    resourceCheck: () => potatoCount >= 2,
+    resourceCheck: () => window.isSubterraneanTuberTunnelerActive && potatoCount >= 2,
     resourceConsume: () => { potatoCount -= 2; },
     resourceProduce: () => { 
         nutrients += 1; 

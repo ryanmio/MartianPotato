@@ -2,7 +2,6 @@
 // It defines exploration mechanics, resource discovery, and autonomous exploration features
 
 // Global variables for exploration mechanics
-window.totalExplorationRate = 0;
 window.explorationResourceMultiplier = 1;
 window.lastExploreTime = 0;
 window.exploreDelay = 10000; // 10 seconds initial delay between manual explorations
@@ -59,37 +58,15 @@ function exploreMarsSurface() {
     checkAchievements();
 }
 
-// Function to handle autonomous exploration based on total exploration rate
-function autonomousExploration() {
-    if (window.totalExplorationRate > 0) {
-        // Calculate rewards for autonomous exploration
-        const waterReward = (Math.random() * 2.5 + 0.5) * window.totalExplorationRate * window.explorationResourceMultiplier * window.waterExplorationMultiplier;
-        const nutrientReward = (Math.random() * 5 + 1) * window.totalExplorationRate * window.explorationResourceMultiplier;
-        const iceReward = (Math.random() * 5 + 1) * window.totalExplorationRate * window.explorationResourceMultiplier;
-
-        // Add rewards to global resource counters
-        water += waterReward;
-        nutrients += nutrientReward;
-        ice += iceReward;
-
-        updateDisplay();
-    }
-}
-
-// Function to start or stop autonomous exploration based on total exploration rate
 function updateAutonomousExploration() {
-    clearInterval(window.autonomousExplorationInterval);
-    if (window.totalExplorationRate > 0) {
-        window.autonomousExplorationInterval = setInterval(autonomousExploration, 1000);
-    }
+    // ... (remove entire function)
 }
 
-// Event listener for manual exploration and initialize autonomous exploration
+// Remove this part from the DOMContentLoaded event listener
 document.addEventListener('DOMContentLoaded', () => {
     const exploreButton = document.getElementById('explore-button');
     if (exploreButton) {
         exploreButton.innerHTML = '👩‍🚀';
         exploreButton.addEventListener('click', exploreMarsSurface);
     }
-    updateAutonomousExploration();
 });

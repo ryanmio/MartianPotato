@@ -510,6 +510,7 @@ colonizerCycle,
         lastExploreTime: window.lastExploreTime,
         exploreDelay: window.exploreDelay,
         waterExplorationMultiplier: window.waterExplorationMultiplier,
+        growthUpgradesApplied,
     };
     console.log('Saving game state. Unlock flags:', {
         isSubsurfaceAquiferTapperUnlocked,
@@ -687,6 +688,13 @@ function loadGame() {
             window.lastExploreTime = gameState.lastExploreTime || 0;
             window.exploreDelay = gameState.exploreDelay || 10000;
             window.waterExplorationMultiplier = gameState.waterExplorationMultiplier || 1;
+
+            growthUpgradesApplied = gameState.growthUpgradesApplied || {
+                potatoCompost: false,
+                genomeModification: false,
+                soilBacteria: false,
+                gravitropismAccelerator: false
+            };
         } catch (error) {
             console.error('Error parsing saved game state:', error);
             showToast('Error loading game', 'There was an error loading your saved game. Starting a new game.', 'error');
@@ -708,8 +716,11 @@ function restoreUpgrades(savedUpgrades) {
                 const isMilestoneUpgrade = upgrade.unlocksNextTier || false;
 
                 if (!upgrade.repeatable && upgrade.purchased && upgrade.effect && !isMilestoneUpgrade) {
-                    // For non-repeatable upgrades, apply the effect once
+                    // For non-repeatable upgrades, apply the effect once without showing toasts
+                    const originalShowToast = window.showToast;
+                    window.showToast = () => {}; // Temporarily disable toasts
                     upgrade.effect();
+                    window.showToast = originalShowToast; // Restore toast functionality
                 }
             }
         });

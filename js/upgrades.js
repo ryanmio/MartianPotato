@@ -11,6 +11,13 @@ let lastTechTreeUpdate = 0;
 let unlockedActionCards = [];
 let currentTier = 1; // Initialize current tier to 1
 
+// Add this near the top of the file
+let growthUpgradesApplied = {
+    potatoCompost: false,
+    genomeModification: false,
+    soilBacteria: false,
+    gravitropismAccelerator: false
+};
 
 // Near the top of the file, after variable declarations
 console.log('Initial unlockedActionCards:', unlockedActionCards);
@@ -352,8 +359,11 @@ const upgrades = [
         name: "Potato Compost",
         cost: 50,
         effect: () => {
-            growthTimeMultiplier *= 0.5;
-            showToast("Upgrade Effect", "Potato growth time reduced by 50%!", 'achievement');
+            if (!growthUpgradesApplied.potatoCompost) {
+                growthTimeMultiplier *= 0.5;
+                growthUpgradesApplied.potatoCompost = true;
+                showToast("Upgrade Effect", "Potato growth time reduced by 50%!", 'achievement');
+            }
         },
         icon: "🌱",
         description: "Soil enrichment with potato compost to speed up potato growth by 50%.",
@@ -368,8 +378,11 @@ const upgrades = [
         name: "Potato Genome Modification",
         cost: 100, // Changed from 50 to 100
         effect: () => {
-            growthTimeMultiplier *= 0.5;
-            showToast("Upgrade Effect", "Potato growth time reduced by an additional 50%!", 'achievement');
+            if (!growthUpgradesApplied.genomeModification) {
+                growthTimeMultiplier *= 0.5;
+                growthUpgradesApplied.genomeModification = true;
+                showToast("Upgrade Effect", "Potato growth time reduced by an additional 50%!", 'achievement');
+            }
         },
         icon: "🧬",
         description: "Genetically modify potatoes to grow faster in Martian conditions.",
@@ -384,8 +397,11 @@ const upgrades = [
         name: "Martian Soil Bacteria Inoculant",
         cost: 175,
         effect: () => {
-            growthTimeMultiplier *= 0.5;
-            showToast("Upgrade Effect", "Potato growth time reduced by an additional 50%!", 'achievement');
+            if (!growthUpgradesApplied.soilBacteria) {
+                growthTimeMultiplier *= 0.5;
+                growthUpgradesApplied.soilBacteria = true;
+                showToast("Upgrade Effect", "Potato growth time reduced by an additional 50%!", 'achievement');
+            }
         },
         icon: "🦠",
         description: "Introduce beneficial Martian soil bacteria to enhance nutrient uptake and accelerate potato growth.",
@@ -400,8 +416,11 @@ const upgrades = [
         name: "Gravitropism Accelerator",
         cost: 250,
         effect: () => {
-            growthTimeMultiplier *= 0.5;
-            showToast("Upgrade Effect", "Potato growth time reduced by an additional 50%!", 'achievement');
+            if (!growthUpgradesApplied.gravitropismAccelerator) {
+                growthTimeMultiplier *= 0.5;
+                growthUpgradesApplied.gravitropismAccelerator = true;
+                showToast("Upgrade Effect", "Potato growth time reduced by an additional 50%!", 'achievement');
+            }
         },
         icon: "🌍",
         description: "Manipulate the gravity sensing mechanisms in potato roots to accelerate growth in Martian gravity.",

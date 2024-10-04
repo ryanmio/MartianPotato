@@ -981,12 +981,10 @@ function queueAchievement(title, message, metaMessage = '', imageName = '') {
 function showNextAchievement() {
     if (achievementQueue.length === 0) {
         isAchievementModalOpen = false;
-        resumeGame();
         return;
     }
 
     isAchievementModalOpen = true;
-    pauseGame();
 
     const achievement = achievementQueue.shift();
     const modal = document.createElement('div');

@@ -50,6 +50,9 @@ let isNuclearIceMelterUnlocked = false;
 let isNuclearIceMelterActive = false;
 let nuclearIceMelterInterval = null;
 
+// Variable to store the selected percentage
+let nuclearIceMelterPercentage = 3; // Default to 3%
+
 // Polar Cap Mining Variables
 let isPolarCapMiningUnlocked = false;
 let isPolarCapMiningActive = false;
@@ -1461,34 +1464,6 @@ function updateQuantumSpudSpawnerToggle() {
 //            NUCLEAR ICE MELTER FUNCTIONS
 // ==========================================
 
-function toggleNuclearIceMelter() {
-    if (!isNuclearIceMelterUnlocked) {
-        return;
-    }
-
-    const toggleSwitch = document.getElementById('nuclear-ice-melter-toggle');
-
-    if (!isNuclearIceMelterActive) {
-        if (potatoCount >= 100) {
-            potatoCount -= 100; 
-            isNuclearIceMelterActive = true;
-            startNuclearIceMelter();
-            if (toggleSwitch) toggleSwitch.checked = true;
-        } else {
-            showToast("Not Enough Potatoes", "You need 100 potatoes to activate the Nuclear Ice Melter!", 'setback');
-            if (toggleSwitch) toggleSwitch.checked = false;
-            return;
-        }
-    } else {
-        isNuclearIceMelterActive = false;
-        stopNuclearIceMelter();
-        if (toggleSwitch) toggleSwitch.checked = false;
-    }
-
-    updateDisplay();
-}
-
-
 // Unlock the Nuclear Ice Melter
 function unlockNuclearIceMelter() {
     isNuclearIceMelterUnlocked = true;
@@ -1496,26 +1471,71 @@ function unlockNuclearIceMelter() {
         unlockedActionCards.push('nuclear-ice-melter-container');
     }
     updateActionCards();
+    updateNuclearIceMelterPercentageLabel();
+}
+
+// Update the label next to the slider
+function updateNuclearIceMelterPercentageLabel() {
+    const label = document.getElementById('nuclear-ice-melter-percentage-label');
+    if (label) {
+        label.textContent = `${nuclearIceMelterPercentage}%`;
+    }
+}
+
+// Handle slider input
+function handleNuclearIceMelterSliderChange(value) {
+    nuclearIceMelterPercentage = parseInt(value);
+    updateNuclearIceMelterPercentageLabel();
 }
 
 // Start the Nuclear Ice Melter
 function startNuclearIceMelter() {
-    nuclearIceMelterInterval = setInterval(() => {
-        if (ice >= 5) {
-            ice -= 5;
-            water += 5;
-            updateDisplay();
-        } else {
-            showToast("Resource Shortage", "Not enough ice to run the Nuclear Ice Melter!", 'setback');
-            toggleNuclearIceMelter(); // Turn off if resources are insufficient
+    if (potatoCount >= 100) {
+        potatoCount -= 100;
+        updateDisplay();
+
+        nuclearIceMelterInterval = setInterval(() => {
+            // Adjusted calculation to ensure at least 1 ice is melted if ice >= 1
+            const iceToMelt = Math.max(1, Math.floor((ice * nuclearIceMelterPercentage) / 100));
+
+            if (ice >= iceToMelt) {
+                ice -= iceToMelt;
+                water += iceToMelt;
+                updateDisplay();
+            } else if (ice >= 1) {
+                // Melt remaining ice if less than iceToMelt but at least 1
+                water += ice;
+                ice = 0;
+                updateDisplay();
+            } else {
+                showToast("Resource Shortage", "Not enough ice to continue melting!", 'setback');
+                toggleNuclearIceMelter(); // Turn off if resources are insufficient
+            }
+        }, 1000); // Runs every second
+    } else {
+        showToast("Resource Shortage", "Not enough potatoes to start the Nuclear Ice Melter!", 'setback');
+        // Turn off the toggle switch
+        const toggle = document.getElementById('nuclear-ice-melter-toggle');
+        if (toggle) {
+            toggle.checked = false;
         }
-    }, 1000); // Run every second
+    }
 }
 
 // Stop the Nuclear Ice Melter
 function stopNuclearIceMelter() {
     clearInterval(nuclearIceMelterInterval);
-    nuclearIceMelterInterval = null;
+}
+
+// Toggle the Nuclear Ice Melter
+function toggleNuclearIceMelter() {
+    if (isNuclearIceMelterActive) {
+        isNuclearIceMelterActive = false;
+        stopNuclearIceMelter();
+    } else {
+        isNuclearIceMelterActive = true;
+        startNuclearIceMelter();
+    }
 }
 
 // ==========================================
@@ -1741,6 +1761,17 @@ function initializeEventListeners() {
 
     // Chart modal listeners
     initializeChartModalListeners();
+
+    // Initialize Nuclear Ice Melter Slider
+    const nuclearIceMelterSlider = document.getElementById('nuclear-ice-melter-percentage');
+    if (nuclearIceMelterSlider) {
+        nuclearIceMelterSlider.addEventListener('input', (event) => {
+            handleNuclearIceMelterSliderChange(event.target.value);
+        });
+    }
+
+    // Update the label on page load
+    updateNuclearIceMelterPercentageLabel();
 }
 
 function handlePotatoFieldClick(event) {

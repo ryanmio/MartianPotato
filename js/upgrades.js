@@ -325,11 +325,10 @@ const upgrades = [
         name: "Nuclear Ice Melter",
         cost: 1000,
         effect: () => { 
-            console.log("Nuclear Ice Melter upgrade purchased");
             unlockNuclearIceMelter();
         },
         icon: "☢️",
-        description: "A powerful nuclear-powered ice melter. Consumes 100 potatoes to activate, then melts 5 ice per second to produce 5 water per second.",
+        description: "A nuclear-powered ice melter. Consumes 100 potatoes to activate, then melts a chosen percentage of ice per second to produce water.",
         metaMessage: "High-energy solution. This upgrade introduces the concept of significant initial investment for continuous high output.",
         assetName: "nuclear_ice_melter.webp",
         weight: 12,
@@ -337,7 +336,7 @@ const upgrades = [
         tier: 3,
         count: 0,
         repeatable: false,
-        actionCardId: 'nuclear-ice-melter-container' // Added property
+        actionCardId: 'nuclear-ice-melter-container'
     },
     {
         name: "Field Expansion",

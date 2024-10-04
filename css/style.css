@@ -1156,3 +1156,65 @@ button:hover, button:disabled {
 .toggle-switch-container {
     margin-bottom: 5px;
 }
+
+
+/* Nuclear Ice Melter */
+.action-card.double-width {
+    width: 410px; /* Increase the width to accommodate the slider */
+}
+
+.slider-container {
+    width: 90%;
+    margin: 10px auto 0;
+    text-align: center;
+}
+
+.slider-container label {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.slider-container input[type="range"] {
+    width: 100%;
+    -webkit-appearance: none;
+    background: transparent;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.slider-container input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: 1px solid #000;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    margin-top: -5px; /* Align thumb with track */
+}
+
+.slider-container input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    background: #ddd;
+    border: 1px solid #000;
+    border-radius: 3px;
+}
+
+.slider-container input[type="range"]::-moz-range-thumb {
+    border: 1px solid #000;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+}
+
+.slider-container input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: 6px;
+    background: #ddd;
+    border: 1px solid #000;
+    border-radius: 3px;
+}

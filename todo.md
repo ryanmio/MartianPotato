@@ -88,8 +88,8 @@ Bugs/Issues:
 - [x] The last milestone tech cards arent being removed
 - [x] Subterrarean tunneler starts generating resources right away, even before it is turned on with the toggle switch
 - [x] Exploration bonus doesnt seem to be increasing (or maybe its not persistent between loads)
+- [x] Toasts about exploration rates changing are showing every load instead of just when the upgrade is purchased
 --------------------------------------------------------------------------------------------
 - [ ] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.
 - [ ] Logic for removing graph datapoints when there are too many is bad
 - [ ] Some action cards disappear when the quantum spud spawner is unlocked
-- [ ] Toasts about exploration rates changing are showing every load instead of just when the upgrade is purchased

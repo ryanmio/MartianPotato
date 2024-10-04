@@ -506,6 +506,10 @@ colonizerCycle,
         isSubsurfaceAquiferTapperUnlocked,
         isBucketWheelExcavatorUnlocked,
         isSubterraneanTuberTunnelerUnlocked,          
+        explorationResourceMultiplier: window.explorationResourceMultiplier,
+        lastExploreTime: window.lastExploreTime,
+        exploreDelay: window.exploreDelay,
+        waterExplorationMultiplier: window.waterExplorationMultiplier,
     };
     console.log('Saving game state. Unlock flags:', {
         isSubsurfaceAquiferTapperUnlocked,
@@ -677,6 +681,12 @@ function loadGame() {
             updateHarvestChart();
 
             showToast('Game loaded successfully!', 'Your progress has been restored.', 'success');
+
+            // Restore exploration variables
+            window.explorationResourceMultiplier = gameState.explorationResourceMultiplier || 1;
+            window.lastExploreTime = gameState.lastExploreTime || 0;
+            window.exploreDelay = gameState.exploreDelay || 10000;
+            window.waterExplorationMultiplier = gameState.waterExplorationMultiplier || 1;
         } catch (error) {
             console.error('Error parsing saved game state:', error);
             showToast('Error loading game', 'There was an error loading your saved game. Starting a new game.', 'error');

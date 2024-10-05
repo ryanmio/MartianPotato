@@ -293,3 +293,4 @@ At its core, the game employs a meta-awareness approach, explicitly revealing ho
 - Resource Exhaustion: Face the consequences of unchecked growth and resource depletion
 - Potato Sentience: Confront ethical questions as your crops develop consciousness
 - Earth Contact: Deal with the implications of reconnecting with Earth and potential conflicts of interest
+ 

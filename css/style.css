@@ -1160,61 +1160,40 @@ button:hover, button:disabled {
 
 /* Nuclear Ice Melter */
 .action-card.double-width {
-    width: 410px; /* Increase the width to accommodate the slider */
+    width: 468px;
+    height: 124px;
+    position: relative;
+    padding: 15px;
+    box-sizing: border-box;
 }
 
-.slider-container {
-    width: 90%;
-    margin: 10px auto 0;
-    text-align: center;
+.nuclear-ice-melter-controls {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 15px;
 }
 
-.slider-container label {
-    font-size: 14px;
-    display: block;
-    margin-bottom: 5px;
+#nuclear-ice-melter-knob {
+    position: absolute;
+    left: 66px;
+    top: 33%;
+    transform: translateY(-50%);
+    width: 85px;
+    height: 85px;
 }
 
-.slider-container input[type="range"] {
-    width: 100%;
-    -webkit-appearance: none;
-    background: transparent;
-    margin-top: 5px;
-    cursor: pointer;
+#nuclear-ice-melter-container .toggle-switch-container {
+    position: absolute;
+    right: 66px;
+    transform: translateY(-50%);
+    width: 100px;
+    height: 50px;
 }
 
-.slider-container input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    border: 1px solid #000;
-    height: 16px;
-    width: 16px;
-    border-radius: 50%;
-    background: #fff;
-    cursor: pointer;
-    margin-top: -5px; /* Align thumb with track */
-}
-
-.slider-container input[type="range"]::-webkit-slider-runnable-track {
-    width: 100%;
-    height: 6px;
-    background: #ddd;
-    border: 1px solid #000;
-    border-radius: 3px;
-}
-
-.slider-container input[type="range"]::-moz-range-thumb {
-    border: 1px solid #000;
-    height: 16px;
-    width: 16px;
-    border-radius: 50%;
-    background: #fff;
-    cursor: pointer;
-}
-
-.slider-container input[type="range"]::-moz-range-track {
-    width: 100%;
-    height: 6px;
-    background: #ddd;
-    border: 1px solid #000;
-    border-radius: 3px;
+/* Ensure the toggle switch doesn't expand beyond its container */
+#nuclear-ice-melter-container .toggle-switch {
+    max-width: 100%;
+    max-height: 100%;
 }

@@ -49,6 +49,7 @@ let iceMeltingBasinActive = false;
 let isNuclearIceMelterUnlocked = false;
 let isNuclearIceMelterActive = false;
 let nuclearIceMelterInterval = null;
+let iceMelterKnob;
 
 // Variable to store the selected percentage
 let nuclearIceMelterPercentage = 3; // Default to 3%
@@ -97,7 +98,6 @@ let lastAction = "None";
 let isQuantumSpudSpawnerUnlocked = false;
 let isQuantumSpudSpawnerActive = false;
 let quantumSpudSpawnerInterval = null;
-
 
 // ==========================================
 //            CORE GAME FUNCTIONS
@@ -1471,21 +1471,6 @@ function unlockNuclearIceMelter() {
         unlockedActionCards.push('nuclear-ice-melter-container');
     }
     updateActionCards();
-    updateNuclearIceMelterPercentageLabel();
-}
-
-// Update the label next to the slider
-function updateNuclearIceMelterPercentageLabel() {
-    const label = document.getElementById('nuclear-ice-melter-percentage-label');
-    if (label) {
-        label.textContent = `${nuclearIceMelterPercentage}%`;
-    }
-}
-
-// Handle slider input
-function handleNuclearIceMelterSliderChange(value) {
-    nuclearIceMelterPercentage = parseInt(value);
-    updateNuclearIceMelterPercentageLabel();
 }
 
 // Start the Nuclear Ice Melter
@@ -1495,7 +1480,7 @@ function startNuclearIceMelter() {
         updateDisplay();
 
         nuclearIceMelterInterval = setInterval(() => {
-            // Adjusted calculation to ensure at least 1 ice is melted if ice >= 1
+            // Calculate ice to melt based on the knob's percentage
             const iceToMelt = Math.max(1, Math.floor((ice * nuclearIceMelterPercentage) / 100));
 
             if (ice >= iceToMelt) {
@@ -1537,6 +1522,15 @@ function toggleNuclearIceMelter() {
         startNuclearIceMelter();
     }
 }
+
+// Define the global knobChanged handler
+window.knobChanged = function(id, val) {
+    if (id === 'nuclear-ice-melter-knob') {
+        nuclearIceMelterPercentage = parseInt(val);
+        console.log(`Nuclear Ice Melter percentage set to ${nuclearIceMelterPercentage}%`);
+        // Optionally, update UI or perform other actions here
+    }
+};
 
 // ==========================================
 //           Polar Cap Mining Functions
@@ -1762,16 +1756,44 @@ function initializeEventListeners() {
     // Chart modal listeners
     initializeChartModalListeners();
 
-    // Initialize Nuclear Ice Melter Slider
-    const nuclearIceMelterSlider = document.getElementById('nuclear-ice-melter-percentage');
-    if (nuclearIceMelterSlider) {
-        nuclearIceMelterSlider.addEventListener('input', (event) => {
-            handleNuclearIceMelterSliderChange(event.target.value);
-        });
-    }
+    // Initialize the Nuclear Ice Melter Knob
+const iceMelterKnob = new Knob({
+    id: 'nuclear-ice-melter-knob',
+    lowVal: 1,
+    highVal: 10,
+    value: 3,
+    sensitivity: 1,
+    type: 'FStyle',
+    size: 'large',
+    label: false
+});
 
-    // Update the label on page load
-    updateNuclearIceMelterPercentageLabel();
+// Set the initial melting percentage based on the knob's default value
+nuclearIceMelterPercentage = iceMelterKnob.getValue();
+
+// Define the global knobChanged handler
+window.knobChanged = function(id, val) {
+    if (id === 'nuclear-ice-melter-knob') {
+        nuclearIceMelterPercentage = parseInt(val);
+        console.log(`Nuclear Ice Melter percentage set to ${nuclearIceMelterPercentage}%`);
+        // Optionally, update UI elements or perform additional actions here
+    }
+};
+
+// Function to show the Nuclear Ice Melter container
+function showNuclearIceMelterContainer() {
+    const container = document.getElementById('nuclear-ice-melter-container');
+    if (container) {
+        container.style.display = 'block';
+        console.log('Nuclear Ice Melter container should now be visible');
+    } else {
+        console.error('Nuclear Ice Melter container not found');
+    }
+}
+
+// Call the function to show the container
+showNuclearIceMelterContainer();
+
 }
 
 function handlePotatoFieldClick(event) {

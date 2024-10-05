@@ -19,10 +19,6 @@ let growthUpgradesApplied = {
     gravitropismAccelerator: false
 };
 
-// Near the top of the file, after variable declarations
-console.log('Initial unlockedActionCards:', unlockedActionCards);
-
-
 // Automation Arrays
 let autoplanters = [];
 let autoHarvesters = [];
@@ -30,7 +26,6 @@ let autoHarvesters = [];
 // Achievement System Variables
 let achievementQueue = [];
 let isAchievementModalOpen = false;
-
 // Upgrade Definitions
 const upgrades = [
     { 
@@ -52,7 +47,6 @@ const upgrades = [
         name: "Manual Ice Melting", 
         cost: 3,
         effect: () => { 
-            console.log("Manual Ice Melting upgrade purchased");
             unlockManualIceMelting(); // Call the function from game.js
         },
         icon: "🧊",
@@ -191,7 +185,6 @@ const upgrades = [
         name: "Martian Bucket-Wheel Excavator", 
         cost: 750,
         effect: () => {
-            console.log('Executing Bucket Wheel Excavator effect');
             unlockBucketWheelExcavator();
             isBucketWheelExcavatorUnlocked = true;
         },
@@ -210,7 +203,6 @@ const upgrades = [
         name: "Subterranean Tuber Tunneler",
         cost: 2500,
         effect: () => {
-            console.log('Executing Subterranean Tuber Tunneler effect');
             unlockSubterraneanTuberTunneler();
             isSubterraneanTuberTunnelerUnlocked = true;
         },
@@ -1304,7 +1296,6 @@ function handleActionCardClick(actionName) {
 function initializeActionCards() {
     const clickableCards = document.querySelectorAll('.action-card.clickable');
     clickableCards.forEach(card => {
-        console.log(`Initializing click listener for action card: ${card.id}`);
         card.addEventListener('click', () => {
             if (!card.hasAttribute('disabled')) {
                 const actionName = card.id.replace('-container', '');

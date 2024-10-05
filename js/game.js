@@ -618,39 +618,28 @@ function loadGame() {
             isBucketWheelExcavatorUnlocked = gameState.isBucketWheelExcavatorUnlocked || false;
             isSubterraneanTuberTunnelerUnlocked = gameState.isSubterraneanTuberTunnelerUnlocked || false;
 
-            console.log('Loaded unlock states:', {
-                isSubsurfaceAquiferTapperUnlocked,
-                isBucketWheelExcavatorUnlocked,
-                isSubterraneanTuberTunnelerUnlocked
-            });
-
             // Update unlockedActionCards based on the unlock flags
             if (isSubsurfaceAquiferTapperUnlocked) {
                 if (!unlockedActionCards.includes('subsurface-aquifer-tapper-container')) {
                     unlockedActionCards.push('subsurface-aquifer-tapper-container');
-                    console.log('Added subsurface-aquifer-tapper-container to unlockedActionCards');
                 }
             }
 
             if (isBucketWheelExcavatorUnlocked) {
                 if (!unlockedActionCards.includes('bucket-wheel-excavator-container')) {
                     unlockedActionCards.push('bucket-wheel-excavator-container');
-                    console.log('Added bucket-wheel-excavator-container to unlockedActionCards');
                 }
             }
 
             if (isSubterraneanTuberTunnelerUnlocked) {
                 if (!unlockedActionCards.includes('subterranean-tuber-tunneler-container')) {
                     unlockedActionCards.push('subterranean-tuber-tunneler-container');
-                    console.log('Added subterranean-tuber-tunneler-container to unlockedActionCards');
                 }
             }
 
             // Remove duplicates
             unlockedActionCards = [...new Set(unlockedActionCards)];
-
-            console.log('Updated unlockedActionCards after loading:', unlockedActionCards);
-
+            
             // Reinitialize game elements
             initializePotatoField();
             createTechTree();
@@ -732,10 +721,8 @@ function restoreUpgrades(savedUpgrades) {
 
 // Function to update the visibility of action cards
 function updateActionCards() {
-    console.log('Updating action cards. Current unlockedActionCards:', unlockedActionCards);
     const allActionCards = document.querySelectorAll('.action-card');
     allActionCards.forEach(card => {
-        console.log(`Checking card ${card.id}. Unlocked: ${unlockedActionCards.includes(card.id)}`);
         if (unlockedActionCards.includes(card.id)) {
             card.style.display = 'block';
 

@@ -1177,8 +1177,8 @@ button:hover, button:disabled {
 
 #nuclear-ice-melter-knob {
     position: absolute;
-    left: 66px;
-    top: 33%;
+    left: 50px;
+    top: 30%;
     transform: translateY(-50%);
     width: 85px;
     height: 85px;
@@ -1196,4 +1196,47 @@ button:hover, button:disabled {
 #nuclear-ice-melter-container .toggle-switch {
     max-width: 100%;
     max-height: 100%;
+}
+
+
+/* Seven Segment Display */
+@font-face {
+    font-family: 'Seven Segment';
+    src: url('../fonts/Seven-Segment.ttf') format('truetype');
+}
+
+/* Seven Segment Display */
+.seven-segment-display {
+    font-family: 'Seven Segment', monospace; /* Add monospace as fallback */
+    font-size: 36px;
+    color: #ff0000;
+    background-color: #000;
+    padding: 5px 10px;
+    border-radius: 5px;
+    position: absolute;
+    right: 200px;
+    top: 31%;
+    height: 44px;
+    transform: translateY(-50%);
+    width: 90px; /* Fixed width instead of min-width */
+    text-align: right; /* Right-align the text */
+    display: flex;
+    justify-content: flex-end; /* Align content to the right */
+    align-items: center;
+    letter-spacing: 0.1em; /* Add slight spacing between characters */
+}
+
+/* Add styles for inactive segments */
+.seven-segment-display::before {
+    content: '888%';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: rgba(255, 0, 0, 0.1); /* Very faint red for inactive segments */
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 5px 10px;
 }

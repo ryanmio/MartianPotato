@@ -113,6 +113,7 @@ function initGame() {
         updateActionCards(); // Add this line
         requestAnimationFrame(gameLoop);
         gameInitialized = true;
+        initializeNuclearIceMelter();
         
     }
 }
@@ -1055,8 +1056,15 @@ function updateAutoPlantersInfo() {
 
 function updateNuclearIceMelterToggle() {
     const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
+    const nuclearIceMelterDisplay = document.getElementById('nuclear-ice-melter-display');
     if (nuclearIceMelterToggle) {
         nuclearIceMelterToggle.checked = isNuclearIceMelterActive;
+    }
+    if (nuclearIceMelterDisplay) {
+        const displayValue = (nuclearIceMelterPercentage * 10).toString();
+        // Pad with a single zero only if it's a one-digit number
+        const paddedValue = displayValue.length === 1 ? '0' + displayValue : displayValue;
+        nuclearIceMelterDisplay.textContent = `${paddedValue}%`;
     }
 }
 
@@ -1514,10 +1522,21 @@ function toggleNuclearIceMelter() {
 window.knobChanged = function(id, val) {
     if (id === 'nuclear-ice-melter-knob') {
         nuclearIceMelterPercentage = parseInt(val);
-        console.log(`Nuclear Ice Melter percentage set to ${nuclearIceMelterPercentage}%`);
-        // Optionally, update UI or perform other actions here
+        console.log(`Nuclear Ice Melter percentage set to ${nuclearIceMelterPercentage * 10}%`);
+        updateNuclearIceMelterToggle(); // Update the display
     }
 };
+
+// Add this to your initGame function or wherever you initialize the knob
+function initializeNuclearIceMelter() {
+    const knob = document.getElementById('nuclear-ice-melter-knob');
+    if (knob) {
+        // Initialize the knob with the default value of 5 (50%)
+        nuclearIceMelterPercentage = 5;
+        knob.setAttribute('data-value', nuclearIceMelterPercentage);
+        updateNuclearIceMelterToggle(); // Update the display
+    }
+}
 
 // ==========================================
 //           Polar Cap Mining Functions
@@ -1762,8 +1781,8 @@ nuclearIceMelterPercentage = iceMelterKnob.getValue();
 window.knobChanged = function(id, val) {
     if (id === 'nuclear-ice-melter-knob') {
         nuclearIceMelterPercentage = parseInt(val);
-        console.log(`Nuclear Ice Melter percentage set to ${nuclearIceMelterPercentage}%`);
-        // Optionally, update UI elements or perform additional actions here
+        console.log(`Nuclear Ice Melter percentage set to ${nuclearIceMelterPercentage * 10}%`);
+        updateNuclearIceMelterToggle(); // Update the display
     }
 };
 

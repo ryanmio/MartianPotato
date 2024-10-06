@@ -142,6 +142,7 @@ function addEventListenerIfExists(id, event, handler) {
 // Main game loop function
 function gameLoop(currentTime) {
     if (currentTime - lastFrameTime >= FRAME_DELAY) {
+        const startTime = performance.now(); // Add this line to define startTime
         updatePlantButton();
         if (updateResources(currentTime)) {
             updateDisplay();
@@ -150,7 +151,7 @@ function gameLoop(currentTime) {
         updatePotatoGrowth();
         updateTechTree();
         updateExploreButton();
-        updateActionCards(); // Make sure this line is here
+        updateActionCards();
         
         // Auto-save every minute
         if (currentTime - lastSaveTime >= 60000) {

@@ -48,13 +48,11 @@ TODO:
 - [x] Consider making nuclear ice melter melt 5% of available ice resource instead fo a fixed amount
     - [x] Or even consider allowing the player to adjust the percentage
 - [x] Style the toggle switches to match the specific resource generated
+- [x] Add cumulative potato stats to graph modal
+- [x] Add "running low" message for resources with help text on what to do about it like "explore mars surface to gather more resources"
 --------------------------------------------------------------------------------------------
-- [ ] Add a "are you sure?" before reseting
-- [ ] Change save and reset game button text to emojis?
-- [ ] Add "running low" message for resources with help text on what to do about it like "explore mars surface to gather more resources"
 - [ ] Write real meta messages and descriptions
 - [ ] Add production stats
-- [ ] Add cumulative potato stats to graph modal
 - [ ] Balance upgrade costs and effects
 - [ ] Add new achievements:
     - [ ] Upgrade Milestones:
@@ -93,10 +91,10 @@ Bugs/Issues:
 - [x] Subterrarean tunneler starts generating resources right away, even before it is turned on with the toggle switch
 - [x] Exploration bonus doesnt seem to be increasing (or maybe its not persistent between loads)
 - [x] Toasts about exploration rates changing are showing every load instead of just when the upgrade is purchased
+- [x] move potato colonizer to right of spud spawner
+- [x] make the spud spawner faster
 --------------------------------------------------------------------------------------------
 - [ ] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.
 - [ ] Logic for removing graph datapoints when there are too many is bad
 - [ ] Some action cards disappear when the quantum spud spawner is unlocked
 - [ ] I think 1 of the action cards disappeared at some point and came back when i loaded, investigate that
-- move potato colonizer to right of spud spawner
-- [ ] make the spud spawner faster

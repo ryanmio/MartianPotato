@@ -49,6 +49,7 @@ TODO:
 - [ ] Consider making nuclear ice melter melt 5% of available ice resource instead fo a fixed amount
     - [ ] Or even consider allowing the player to adjust the percentage
     - [ ] Consider adding a startup sequence for the reactor that shows the amount of potatoes that will be consumed on startup and the amount of ice that will be melted per second, making the action card double-width
+- [ ] Add "running low" message for resources with help text on what to do about it like "explore mars surface to gather more resources"
 - [ ] Style the toggle switches to match the specific resource generated
 - [ ] Write real meta messages and descriptions
 - [ ] Add production stats

@@ -515,6 +515,7 @@ colonizerCycle,
         exploreDelay: window.exploreDelay,
         waterExplorationMultiplier: window.waterExplorationMultiplier,
         growthUpgradesApplied,
+        nuclearIceMelterPercentage: nuclearIceMelterPercentage,
     };
     console.log('Saving game state. Unlock flags:', {
         isSubsurfaceAquiferTapperUnlocked,
@@ -688,6 +689,9 @@ function loadGame() {
                 soilBacteria: false,
                 gravitropismAccelerator: false
             };
+
+            nuclearIceMelterPercentage = gameState.nuclearIceMelterPercentage || 3; // Default to 3 if not found
+            initializeNuclearIceMelter();
         } catch (error) {
             console.error('Error parsing saved game state:', error);
             showToast('Error loading game', 'There was an error loading your saved game. Starting a new game.', 'error');
@@ -1518,23 +1522,45 @@ function toggleNuclearIceMelter() {
     }
 }
 
-// Define the global knobChanged handler
+// Update the initializeNuclearIceMelter function
+function initializeNuclearIceMelter() {
+    const knobElement = document.getElementById('nuclear-ice-melter-knob');
+    if (knobElement) {
+        if (!iceMelterKnob) {
+            // Create the knob if it doesn't exist
+            iceMelterKnob = new Knob({
+                id: 'nuclear-ice-melter-knob',
+                lowVal: 1,
+                highVal: 10,
+                value: nuclearIceMelterPercentage,
+                sensitivity: 1,
+                type: 'FStyle',
+                size: 'large',
+                label: false
+            });
+        } else {
+            // Update the existing knob
+            iceMelterKnob.setValue(nuclearIceMelterPercentage);
+        }
+        updateNuclearIceMelterDisplay();
+    }
+}
+
+// Update the knobChanged function
 window.knobChanged = function(id, val) {
     if (id === 'nuclear-ice-melter-knob') {
         nuclearIceMelterPercentage = parseInt(val);
         console.log(`Nuclear Ice Melter percentage set to ${nuclearIceMelterPercentage * 10}%`);
-        updateNuclearIceMelterToggle(); // Update the display
+        updateNuclearIceMelterDisplay();
     }
 };
 
-// Add this to your initGame function or wherever you initialize the knob
-function initializeNuclearIceMelter() {
-    const knob = document.getElementById('nuclear-ice-melter-knob');
-    if (knob) {
-        // Initialize the knob with the default value of 5 (50%)
-        nuclearIceMelterPercentage = 5;
-        knob.setAttribute('data-value', nuclearIceMelterPercentage);
-        updateNuclearIceMelterToggle(); // Update the display
+// Update the updateNuclearIceMelterDisplay function
+function updateNuclearIceMelterDisplay() {
+    const nuclearIceMelterDisplay = document.getElementById('nuclear-ice-melter-display');
+    if (nuclearIceMelterDisplay) {
+        const displayValue = (nuclearIceMelterPercentage * 10).toString();
+        nuclearIceMelterDisplay.textContent = `${displayValue}%`;
     }
 }
 
@@ -1762,27 +1788,12 @@ function initializeEventListeners() {
     // Chart modal listeners
     initializeChartModalListeners();
 
-    // Initialize the Nuclear Ice Melter Knob
-const iceMelterKnob = new Knob({
-    id: 'nuclear-ice-melter-knob',
-    lowVal: 1,
-    highVal: 10,
-    value: 3,
-    sensitivity: 1,
-    type: 'FStyle',
-    size: 'large',
-    label: false
-});
-
-// Set the initial melting percentage based on the knob's default value
-nuclearIceMelterPercentage = iceMelterKnob.getValue();
-
 // Define the global knobChanged handler
 window.knobChanged = function(id, val) {
     if (id === 'nuclear-ice-melter-knob') {
         nuclearIceMelterPercentage = parseInt(val);
         console.log(`Nuclear Ice Melter percentage set to ${nuclearIceMelterPercentage * 10}%`);
-        updateNuclearIceMelterToggle(); // Update the display
+        updateNuclearIceMelterDisplay(); // Update the display
     }
 };
 

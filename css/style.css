@@ -1254,7 +1254,7 @@ button:hover, button:disabled {
   
     --colonizer-primary: #FFD700;  /* Gold color for the colonizer */
     --colonizer-secondary: #FFA500;
-    --colonizer-text: #8B4513;
+    --colonizer-text: rgb(29, 1, 1);
     --colonizer-shadow: #704214;
   
     --quantum-primary: #9C27B0;  /* Purple color for quantum */
@@ -1289,15 +1289,6 @@ button:hover, button:disabled {
   .toggle-switch.multi-resource > div {
     background: linear-gradient(to right, var(--multi-secondary) 0%, var(--multi-primary) 53%, var(--multi-secondary) 56%, var(--multi-primary) 100%);
     box-shadow: 0 0 0 2px var(--multi-shadow); /* Thin line color */
-  }
-  
-  .toggle-switch.colonizer {
-    background: var(--colonizer-primary);
-    color: var(--colonizer-text);
-    box-shadow: 0 0 5px rgba(255,255,255,.4), 
-                0 2px 1px -1px rgba(255,255,255,.7) inset, 
-                8px 0 5px -5px var(--colonizer-shadow) inset,
-                -8px 0 5px -5px var(--colonizer-shadow) inset;
   }
   
   .toggle-switch.colonizer > div {
@@ -1349,18 +1340,35 @@ button:hover, button:disabled {
   
   /* Colonizer button styles */
   .action-button.colonizer {
-    background: var(--colonizer-primary);
-    color: var(--colonizer-text);
+    background-image: url('../images/caution.png');
+    background-size: 200px 200px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 215, 0, 0.7);
+    color: rgb(29, 1, 1);
+    font-weight: bold;
     box-shadow: 0 0 5px rgba(255,255,255,.4), 
                 0 2px 1px -1px rgba(255,255,255,.7) inset, 
                 8px 0 5px -5px var(--colonizer-shadow) inset,
                 -8px 0 5px -5px var(--colonizer-shadow) inset;
-  }
-  
-  .action-button.colonizer:active {
-    background: var(--colonizer-secondary);
-  }
-  
+    position: relative;
+}
+
+.action-button.colonizer::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 215, 0, 0.9);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.action-button.colonizer:active {
+    background-color: rgba(255, 165, 0, 0.9);
+}
+
   /* Quantum button styles */
   .action-button.quantum {
     background: var(--quantum-primary);

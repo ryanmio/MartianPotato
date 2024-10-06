@@ -99,6 +99,11 @@ let isQuantumSpudSpawnerUnlocked = false;
 let isQuantumSpudSpawnerActive = false;
 let quantumSpudSpawnerInterval = null;
 
+// Add these variables at the top of the file with other game state variables
+let lastResourceWarningTime = 0;
+const RESOURCE_WARNING_COOLDOWN = 60000; // 1 minute cooldown
+let resourceWarningActive = false;
+
 // ==========================================
 //            CORE GAME FUNCTIONS
 // ==========================================
@@ -192,6 +197,8 @@ function updateResources(currentTime) {
             updateIceMeltingBasinButton();
         }
 
+        checkResourceLevels(); // Add this line to check resource levels
+
         lastUpdateTime = currentTime;
         return true;
     }
@@ -270,6 +277,32 @@ function updateDepletedActionCard(actionCardId, isDepleted, message) {
                 depletedMessage.style.display = 'none';
             }
         }
+    }
+}
+
+// Add this function to check resource levels and display warnings
+function checkResourceLevels() {
+    const currentTime = Date.now();
+    if (currentTime - lastResourceWarningTime < RESOURCE_WARNING_COOLDOWN) return;
+
+    let warningMessage = '';
+
+    if (water < 10 && nutrients < 20) {
+        warningMessage = "Resources critically low! Explore Mars surface to gather more.";
+    } else if (water < 10) {
+        warningMessage = "Water supply running low. Consider melting some ice!";
+    } else if (ice < 10) {
+        warningMessage = "Ice reserves depleting. Time to explore Mars for more!";
+    } else if (nutrients < 10) {
+        warningMessage = "Nutrient levels are low. Explore Mars to replenish supplies.";
+    }
+
+    if (warningMessage && !resourceWarningActive) {
+        showToast("Resource Warning", warningMessage, 'warning');
+        lastResourceWarningTime = currentTime;
+        resourceWarningActive = true;
+    } else if (water > 50 && ice > 50 && nutrients > 50) {
+        resourceWarningActive = false;
     }
 }
 

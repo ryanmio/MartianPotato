@@ -45,12 +45,11 @@ TODO:
 - [x] add hide/show button for the potatoes over time graph
 - [x] Implement functionality for Quantum Spud Spawner
 - [x] Change the martian potato colonizer and commetary ice melter action card toggle switch to be a spinner countdown or something instead of a toggle
+- [x] Consider making nuclear ice melter melt 5% of available ice resource instead fo a fixed amount
+    - [x] Or even consider allowing the player to adjust the percentage
 --------------------------------------------------------------------------------------------
-- [ ] Consider making nuclear ice melter melt 5% of available ice resource instead fo a fixed amount
-    - [ ] Or even consider allowing the player to adjust the percentage
-    - [ ] Consider adding a startup sequence for the reactor that shows the amount of potatoes that will be consumed on startup and the amount of ice that will be melted per second, making the action card double-width
-- [ ] Add "running low" message for resources with help text on what to do about it like "explore mars surface to gather more resources"
 - [ ] Style the toggle switches to match the specific resource generated
+- [ ] Add "running low" message for resources with help text on what to do about it like "explore mars surface to gather more resources"
 - [ ] Write real meta messages and descriptions
 - [ ] Add production stats
 - [ ] Add cumulative potato stats to graph modal
@@ -94,3 +93,5 @@ Bugs/Issues:
 - [ ] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.
 - [ ] Logic for removing graph datapoints when there are too many is bad
 - [ ] Some action cards disappear when the quantum spud spawner is unlocked
+- [ ] I think 1 of the action cards disappeared at some point and came back when i loaded, investigate that
+- move potato colonizer to right of spud spawner

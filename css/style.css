@@ -1240,3 +1240,166 @@ button:hover, button:disabled {
     align-items: center;
     padding: 5px 10px;
 }
+
+:root {
+    --water-primary: #80DCE9;
+    --water-secondary: #33AFCE;
+    --water-text: #297597;
+    --water-shadow: #02425C;
+  
+    --multi-primary: #A1ACB3;
+    --multi-secondary: #8E979D;
+    --multi-text: #3A3E41;
+    --multi-shadow: #5A6165;
+  
+    --colonizer-primary: #FFD700;  /* Gold color for the colonizer */
+    --colonizer-secondary: #FFA500;
+    --colonizer-text: #8B4513;
+    --colonizer-shadow: #704214;
+  
+    --quantum-primary: #9C27B0;  /* Purple color for quantum */
+    --quantum-secondary: #7B1FA2;
+    --quantum-text: #E1BEE7;
+    --quantum-shadow: #4A148C;
+  }
+
+  .toggle-switch.water-ice {
+    background: var(--water-primary);
+    color: var(--water-text);
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px var(--water-shadow) inset,
+                -8px 0 5px -5px var(--water-shadow) inset;
+  }
+  
+  .toggle-switch.water-ice > div {
+    background: linear-gradient(to right, var(--water-secondary) 0%, var(--water-primary) 53%, var(--water-secondary) 56%, var(--water-primary) 100%);
+  }
+  
+  .toggle-switch.multi-resource {
+    background: var(--multi-primary);
+    color: var(--multi-text);
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px var(--multi-shadow) inset,
+                -8px 0 5px -5px var(--multi-shadow) inset;
+    border-color: var(--multi-shadow);
+  }
+  
+  .toggle-switch.multi-resource > div {
+    background: linear-gradient(to right, var(--multi-secondary) 0%, var(--multi-primary) 53%, var(--multi-secondary) 56%, var(--multi-primary) 100%);
+    box-shadow: 0 0 0 2px var(--multi-shadow); /* Thin line color */
+  }
+  
+  .toggle-switch.colonizer {
+    background: var(--colonizer-primary);
+    color: var(--colonizer-text);
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px var(--colonizer-shadow) inset,
+                -8px 0 5px -5px var(--colonizer-shadow) inset;
+  }
+  
+  .toggle-switch.colonizer > div {
+    background: linear-gradient(to right, var(--colonizer-secondary) 0%, var(--colonizer-primary) 53%, var(--colonizer-secondary) 56%, var(--colonizer-primary) 100%);
+  }
+  
+  .toggle-switch.quantum {
+    background: var(--quantum-primary);
+    color: var(--quantum-text);
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px var(--quantum-shadow) inset,
+                -8px 0 5px -5px var(--quantum-shadow) inset;
+    border-color: var(--quantum-shadow);
+  }
+  
+  .toggle-switch.quantum > div {
+    background: linear-gradient(to right, var(--quantum-secondary) 0%, var(--quantum-primary) 53%, var(--quantum-secondary) 56%, var(--quantum-primary) 100%);
+    box-shadow: 0 0 0 2px var(--quantum-shadow); /* Thin line color */
+  }
+
+  /* Existing water-ice button styles */
+.action-button.water-ice {
+    background: var(--water-primary);
+    color: var(--water-text);
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px var(--water-shadow) inset,
+                -8px 0 5px -5px var(--water-shadow) inset;
+  }
+  
+  .action-button.water-ice:active {
+    background: var(--water-secondary);
+  }
+  
+  /* Multi-resource button styles */
+  .action-button.multi-resource {
+    background: var(--multi-primary);
+    color: var(--multi-text);
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px var(--multi-shadow) inset,
+                -8px 0 5px -5px var(--multi-shadow) inset;
+  }
+  
+  .action-button.multi-resource:active {
+    background: var(--multi-secondary);
+  }
+  
+  /* Colonizer button styles */
+  .action-button.colonizer {
+    background: var(--colonizer-primary);
+    color: var(--colonizer-text);
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px var(--colonizer-shadow) inset,
+                -8px 0 5px -5px var(--colonizer-shadow) inset;
+  }
+  
+  .action-button.colonizer:active {
+    background: var(--colonizer-secondary);
+  }
+  
+  /* Quantum button styles */
+  .action-button.quantum {
+    background: var(--quantum-primary);
+    color: var(--quantum-text);
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px var(--quantum-shadow) inset,
+                -8px 0 5px -5px var(--quantum-shadow) inset;
+  }
+  
+  .action-button.quantum:active {
+    background: var(--quantum-secondary);
+  }
+
+/* Update the multi-resource styles */
+.toggle-switch.multi-resource {
+    background: var(--multi-primary);
+    color: var(--multi-text);
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px var(--multi-shadow) inset,
+                -8px 0 5px -5px var(--multi-shadow) inset;
+    border-color: var(--multi-shadow); /* Add this line */
+  }
+  
+  .toggle-switch.multi-resource > div {
+    background: linear-gradient(to right, var(--multi-secondary) 0%, var(--multi-primary) 53%, var(--multi-secondary) 56%, var(--multi-primary) 100%);
+  }
+
+
+.action-button.multi-resource {
+  background: var(--multi-primary);
+  color: var(--multi-text);
+  box-shadow: 0 0 5px rgba(255,255,255,.4), 
+              0 2px 1px -1px rgba(255,255,255,.7) inset, 
+              8px 0 5px -5px var(--multi-shadow) inset,
+              -8px 0 5px -5px var(--multi-shadow) inset;
+}
+
+.action-button.multi-resource:active {
+  background: var(--multi-secondary);
+}

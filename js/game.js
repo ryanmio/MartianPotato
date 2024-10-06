@@ -1431,7 +1431,7 @@ function startQuantumSpudSpawner() {
                 }
             }
             updateDisplay();
-        }, 1000); // Run every second
+        }, 600);
     }
 }
 

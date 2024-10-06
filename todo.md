@@ -47,8 +47,8 @@ TODO:
 - [x] Change the martian potato colonizer and commetary ice melter action card toggle switch to be a spinner countdown or something instead of a toggle
 - [x] Consider making nuclear ice melter melt 5% of available ice resource instead fo a fixed amount
     - [x] Or even consider allowing the player to adjust the percentage
+- [x] Style the toggle switches to match the specific resource generated
 --------------------------------------------------------------------------------------------
-- [ ] Style the toggle switches to match the specific resource generated
 - [ ] Add a "are you sure?" before reseting
 - [ ] Change save and reset game button text to emojis?
 - [ ] Add "running low" message for resources with help text on what to do about it like "explore mars surface to gather more resources"

@@ -1341,7 +1341,7 @@ button:hover, button:disabled {
   /* Colonizer button styles */
   .action-button.colonizer {
     background-image: url('../images/caution.png');
-    background-size: 200px 200px;
+    background-size: 350px 250px;
     background-position: center;
     background-repeat: no-repeat;
     background-color: rgba(255, 215, 0, 0.7);

@@ -19,10 +19,6 @@ let growthUpgradesApplied = {
     gravitropismAccelerator: false
 };
 
-// Near the top of the file, after variable declarations
-console.log('Initial unlockedActionCards:', unlockedActionCards);
-
-
 // Automation Arrays
 let autoplanters = [];
 let autoHarvesters = [];
@@ -30,7 +26,6 @@ let autoHarvesters = [];
 // Achievement System Variables
 let achievementQueue = [];
 let isAchievementModalOpen = false;
-
 // Upgrade Definitions
 const upgrades = [
     { 
@@ -52,7 +47,6 @@ const upgrades = [
         name: "Manual Ice Melting", 
         cost: 3,
         effect: () => { 
-            console.log("Manual Ice Melting upgrade purchased");
             unlockManualIceMelting(); // Call the function from game.js
         },
         icon: "🧊",
@@ -191,7 +185,6 @@ const upgrades = [
         name: "Martian Bucket-Wheel Excavator", 
         cost: 750,
         effect: () => {
-            console.log('Executing Bucket Wheel Excavator effect');
             unlockBucketWheelExcavator();
             isBucketWheelExcavatorUnlocked = true;
         },
@@ -210,7 +203,6 @@ const upgrades = [
         name: "Subterranean Tuber Tunneler",
         cost: 2500,
         effect: () => {
-            console.log('Executing Subterranean Tuber Tunneler effect');
             unlockSubterraneanTuberTunneler();
             isSubterraneanTuberTunnelerUnlocked = true;
         },
@@ -228,6 +220,7 @@ const upgrades = [
         name: "Martian Potato Colonizer", 
         cost: 50000,
         effect: () => {
+            console.log('Executing Martian Potato Colonizer upgrade effect');
             unlockMartianPotatoColonizer();
         },
         icon: "🚀",
@@ -325,11 +318,10 @@ const upgrades = [
         name: "Nuclear Ice Melter",
         cost: 1000,
         effect: () => { 
-            console.log("Nuclear Ice Melter upgrade purchased");
             unlockNuclearIceMelter();
         },
         icon: "☢️",
-        description: "A powerful nuclear-powered ice melter. Consumes 100 potatoes to activate, then melts 5 ice per second to produce 5 water per second.",
+        description: "A nuclear-powered ice melter. Consumes 100 potatoes to activate, then melts a chosen percentage of ice per second to produce water.",
         metaMessage: "High-energy solution. This upgrade introduces the concept of significant initial investment for continuous high output.",
         assetName: "nuclear_ice_melter.webp",
         weight: 12,
@@ -337,7 +329,7 @@ const upgrades = [
         tier: 3,
         count: 0,
         repeatable: false,
-        actionCardId: 'nuclear-ice-melter-container' // Added property
+        actionCardId: 'nuclear-ice-melter-container'
     },
     {
         name: "Field Expansion",
@@ -1305,7 +1297,6 @@ function handleActionCardClick(actionName) {
 function initializeActionCards() {
     const clickableCards = document.querySelectorAll('.action-card.clickable');
     clickableCards.forEach(card => {
-        console.log(`Initializing click listener for action card: ${card.id}`);
         card.addEventListener('click', () => {
             if (!card.hasAttribute('disabled')) {
                 const actionName = card.id.replace('-container', '');

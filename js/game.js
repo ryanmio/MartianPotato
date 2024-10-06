@@ -49,6 +49,10 @@ let iceMeltingBasinActive = false;
 let isNuclearIceMelterUnlocked = false;
 let isNuclearIceMelterActive = false;
 let nuclearIceMelterInterval = null;
+let iceMelterKnob;
+
+// Variable to store the selected percentage
+let nuclearIceMelterPercentage = 3; // Default to 3%
 
 // Polar Cap Mining Variables
 let isPolarCapMiningUnlocked = false;
@@ -95,6 +99,10 @@ let isQuantumSpudSpawnerUnlocked = false;
 let isQuantumSpudSpawnerActive = false;
 let quantumSpudSpawnerInterval = null;
 
+// Add these variables at the top of the file with other game state variables
+let lastResourceWarningTime = 0;
+const RESOURCE_WARNING_COOLDOWN = 60000; // 1 minute cooldown
+let resourceWarningActive = false;
 
 // ==========================================
 //            CORE GAME FUNCTIONS
@@ -110,6 +118,7 @@ function initGame() {
         updateActionCards(); // Add this line
         requestAnimationFrame(gameLoop);
         gameInitialized = true;
+        initializeNuclearIceMelter();
         
     }
 }
@@ -188,6 +197,8 @@ function updateResources(currentTime) {
             updateIceMeltingBasinButton();
         }
 
+        checkResourceLevels(); // Add this line to check resource levels
+
         lastUpdateTime = currentTime;
         return true;
     }
@@ -225,41 +236,73 @@ function updateDepletedActionCard(actionCardId, isDepleted, message) {
         const buttonContainer = card.querySelector('.button-container');
         const ledProgressBar = card.querySelector('.led-progress-bar');
         let depletedMessage = card.querySelector('.depleted-message');
+        const actionButton = buttonContainer ? buttonContainer.querySelector('.action-button') : null;
 
         if (isDepleted) {
             // Hide the toggle switch or button
             if (toggleContainer) {
                 toggleContainer.style.display = 'none';
             }
-            if (buttonContainer) {
-                buttonContainer.style.display = 'none';
+            if (actionButton) {
+                actionButton.style.display = 'none';
             }
             if (ledProgressBar) {
-                ledProgressBar.style.visibility = 'hidden'; // Change to visibility
+                ledProgressBar.style.visibility = 'hidden';
             }
             // Display the depleted message
             if (!depletedMessage) {
                 depletedMessage = document.createElement('p');
                 depletedMessage.classList.add('depleted-message');
-                depletedMessage.textContent = message;
-                card.appendChild(depletedMessage);
+                if (buttonContainer) {
+                    buttonContainer.appendChild(depletedMessage);
+                } else {
+                    card.appendChild(depletedMessage);
+                }
             }
+            depletedMessage.textContent = message;
+            depletedMessage.style.display = 'block';
         } else {
             // Show the toggle switch or button
             if (toggleContainer) {
                 toggleContainer.style.display = 'block';
             }
-            if (buttonContainer) {
-                buttonContainer.style.display = 'block';
+            if (actionButton) {
+                actionButton.style.display = 'block';
             }
             if (ledProgressBar) {
-                ledProgressBar.style.visibility = 'visible'; // Change to visibility
+                ledProgressBar.style.visibility = 'visible';
             }
-            // Remove the depleted message
+            // Hide the depleted message
             if (depletedMessage) {
-                depletedMessage.remove();
+                depletedMessage.style.display = 'none';
             }
         }
+    }
+}
+
+// Add this function to check resource levels and display warnings
+function checkResourceLevels() {
+    const currentTime = Date.now();
+    if (currentTime - lastResourceWarningTime < RESOURCE_WARNING_COOLDOWN) return;
+
+    let warningMessage = '';
+
+    if (water < 10 && nutrients < 20) {
+        warningMessage = "Resources critically low! Explore Mars surface to gather more.";
+    } else if (water < 10) {
+        warningMessage = "Water supply running low. Consider melting some ice!";
+    } else if (ice < 10) {
+        warningMessage = "Ice reserves depleting. Time to explore Mars for more!";
+    } else if (nutrients < 10) {
+        warningMessage = "Nutrient levels are low. Explore Mars to replenish supplies.";
+    }
+
+    if (warningMessage && !resourceWarningActive) {
+        showToast("Resource Warning", warningMessage, 'warning');
+        lastResourceWarningTime = currentTime;
+        resourceWarningActive = true;
+    } else if (water > 50 && ice > 50 && nutrients > 50) {
+        resourceWarningActive = false;
     }
 }
 
@@ -326,7 +369,6 @@ function harvestPotatoAtIndex(index, isAutomated = false) {
         const potatoElement = slotElement.querySelector('.potato');
 
         if (potatoElement && harvestedPotato.isQuantumSpawned) {
-            console.log('Triggering poof animation for quantum-spawned potato at index:', index);
 
             // Create the poof element
             const poofElement = document.createElement('div');
@@ -348,7 +390,6 @@ function harvestPotatoAtIndex(index, isAutomated = false) {
 
             // Remove the poof element after the animation
             poofElement.addEventListener('animationend', () => {
-                console.log('Poof animation ended for quantum-spawned potato at index:', index);
                 poofElement.remove();
 
                 // Now remove the potato and update the display
@@ -511,6 +552,7 @@ colonizerCycle,
         exploreDelay: window.exploreDelay,
         waterExplorationMultiplier: window.waterExplorationMultiplier,
         growthUpgradesApplied,
+        nuclearIceMelterPercentage: nuclearIceMelterPercentage,
     };
     console.log('Saving game state. Unlock flags:', {
         isSubsurfaceAquiferTapperUnlocked,
@@ -615,39 +657,28 @@ function loadGame() {
             isBucketWheelExcavatorUnlocked = gameState.isBucketWheelExcavatorUnlocked || false;
             isSubterraneanTuberTunnelerUnlocked = gameState.isSubterraneanTuberTunnelerUnlocked || false;
 
-            console.log('Loaded unlock states:', {
-                isSubsurfaceAquiferTapperUnlocked,
-                isBucketWheelExcavatorUnlocked,
-                isSubterraneanTuberTunnelerUnlocked
-            });
-
             // Update unlockedActionCards based on the unlock flags
             if (isSubsurfaceAquiferTapperUnlocked) {
                 if (!unlockedActionCards.includes('subsurface-aquifer-tapper-container')) {
                     unlockedActionCards.push('subsurface-aquifer-tapper-container');
-                    console.log('Added subsurface-aquifer-tapper-container to unlockedActionCards');
                 }
             }
 
             if (isBucketWheelExcavatorUnlocked) {
                 if (!unlockedActionCards.includes('bucket-wheel-excavator-container')) {
                     unlockedActionCards.push('bucket-wheel-excavator-container');
-                    console.log('Added bucket-wheel-excavator-container to unlockedActionCards');
                 }
             }
 
             if (isSubterraneanTuberTunnelerUnlocked) {
                 if (!unlockedActionCards.includes('subterranean-tuber-tunneler-container')) {
                     unlockedActionCards.push('subterranean-tuber-tunneler-container');
-                    console.log('Added subterranean-tuber-tunneler-container to unlockedActionCards');
                 }
             }
 
             // Remove duplicates
             unlockedActionCards = [...new Set(unlockedActionCards)];
-
-            console.log('Updated unlockedActionCards after loading:', unlockedActionCards);
-
+            
             // Reinitialize game elements
             initializePotatoField();
             createTechTree();
@@ -695,6 +726,9 @@ function loadGame() {
                 soilBacteria: false,
                 gravitropismAccelerator: false
             };
+
+            nuclearIceMelterPercentage = gameState.nuclearIceMelterPercentage || 3; // Default to 3 if not found
+            initializeNuclearIceMelter();
         } catch (error) {
             console.error('Error parsing saved game state:', error);
             showToast('Error loading game', 'There was an error loading your saved game. Starting a new game.', 'error');
@@ -729,10 +763,8 @@ function restoreUpgrades(savedUpgrades) {
 
 // Function to update the visibility of action cards
 function updateActionCards() {
-    console.log('Updating action cards. Current unlockedActionCards:', unlockedActionCards);
     const allActionCards = document.querySelectorAll('.action-card');
     allActionCards.forEach(card => {
-        console.log(`Checking card ${card.id}. Unlocked: ${unlockedActionCards.includes(card.id)}`);
         if (unlockedActionCards.includes(card.id)) {
             card.style.display = 'block';
 
@@ -1065,8 +1097,15 @@ function updateAutoPlantersInfo() {
 
 function updateNuclearIceMelterToggle() {
     const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
+    const nuclearIceMelterDisplay = document.getElementById('nuclear-ice-melter-display');
     if (nuclearIceMelterToggle) {
         nuclearIceMelterToggle.checked = isNuclearIceMelterActive;
+    }
+    if (nuclearIceMelterDisplay) {
+        const displayValue = (nuclearIceMelterPercentage * 10).toString();
+        // Pad with a single zero only if it's a one-digit number
+        const paddedValue = displayValue.length === 1 ? '0' + displayValue : displayValue;
+        nuclearIceMelterDisplay.textContent = `${paddedValue}%`;
     }
 }
 
@@ -1275,27 +1314,34 @@ function unlockMartianPotatoColonizer() {
 }
 
 function initializeMartianPotatoColonizer() {
-    const button = document.getElementById('martian-potato-colonizer-button');
+    console.log('Initializing Martian Potato Colonizer');
+    const button = document.querySelector('.action-button.colonizer');
     if (button) {
-        // Remove any existing event listeners to prevent duplicates
+        console.log('Martian Potato Colonizer button found');
         button.removeEventListener('click', toggleMartianPotatoColonizer);
-        // Add the event listener
         button.addEventListener('click', toggleMartianPotatoColonizer);
+    } else {
+        console.warn('Martian Potato Colonizer button not found');
     }
-    updateMartianPotatoColonizerUI(); // Update UI to reflect current state
+    updateMartianPotatoColonizerUI();
 }
 
 function toggleMartianPotatoColonizer() {
+    console.log('Toggling Martian Potato Colonizer');
+    console.log('Current state:', isMartianPotatoColonizerActive);
     if (isMartianPotatoColonizerActive) {
         stopMartianPotatoColonizer();
     } else {
         startMartianPotatoColonizer();
     }
-    updateMartianPotatoColonizerUI(); // Add this line to update UI immediately
+    updateMartianPotatoColonizerUI();
 }
 
 function startMartianPotatoColonizer() {
+    console.log('Starting Martian Potato Colonizer');
+    console.log('Current cycle:', colonizerCycle, 'Max cycles:', maxColonizerCycles);
     if (colonizerCycle >= maxColonizerCycles) {
+        console.log('Colonizer Depleted');
         showToast("Colonizer Depleted", "The Martian Potato Colonizer has reached its maximum cycles.", 'warning');
         return;
     }
@@ -1305,12 +1351,15 @@ function startMartianPotatoColonizer() {
 }
 
 function stopMartianPotatoColonizer() {
+    console.log('Stopping Martian Potato Colonizer');
     isMartianPotatoColonizerActive = false;
     if (window.martianPotatoColonizerIntervalId) {
         clearInterval(window.martianPotatoColonizerIntervalId);
         window.martianPotatoColonizerIntervalId = null;
+        console.log('Cleared Martian Potato Colonizer interval');
     }
     if (areResourcesDepleted) {
+        console.log('Resources Depleted');
         updateDepletedActionCard('martian-potato-colonizer-container', true, "Resources Depleted");
     } else {
         updateMartianPotatoColonizerUI();
@@ -1318,6 +1367,7 @@ function stopMartianPotatoColonizer() {
 }
 
 function runMartianPotatoColonizerCycle() {
+    console.log('Running Martian Potato Colonizer cycle');
     if (!isMartianPotatoColonizerActive) return;
 
     const cycleDuration = 60000; // 60 seconds
@@ -1351,10 +1401,15 @@ function runMartianPotatoColonizerCycle() {
 }
 
 function updateMartianPotatoColonizerUI() {
-    const button = document.getElementById('martian-potato-colonizer-button');
+    console.log('Updating Martian Potato Colonizer UI');
+    const button = document.querySelector('.action-button.colonizer');
     if (button) {
-        button.textContent = isMartianPotatoColonizerActive ? "Colonizing..." : "Colonize";
+        const newText = isMartianPotatoColonizerActive ? "Colonizing..." : "Colonize";
+        console.log('Button state:', newText);
+        button.textContent = newText;
         button.classList.toggle('active', isMartianPotatoColonizerActive);
+    } else {
+        console.warn('Martian Potato Colonizer button not found in updateMartianPotatoColonizerUI');
     }
     updateLEDProgress('martian-potato-colonizer-container', 0);
 }
@@ -1409,7 +1464,7 @@ function startQuantumSpudSpawner() {
                 }
             }
             updateDisplay();
-        }, 1000); // Run every second
+        }, 600);
     }
 }
 
@@ -1461,34 +1516,6 @@ function updateQuantumSpudSpawnerToggle() {
 //            NUCLEAR ICE MELTER FUNCTIONS
 // ==========================================
 
-function toggleNuclearIceMelter() {
-    if (!isNuclearIceMelterUnlocked) {
-        return;
-    }
-
-    const toggleSwitch = document.getElementById('nuclear-ice-melter-toggle');
-
-    if (!isNuclearIceMelterActive) {
-        if (potatoCount >= 100) {
-            potatoCount -= 100; 
-            isNuclearIceMelterActive = true;
-            startNuclearIceMelter();
-            if (toggleSwitch) toggleSwitch.checked = true;
-        } else {
-            showToast("Not Enough Potatoes", "You need 100 potatoes to activate the Nuclear Ice Melter!", 'setback');
-            if (toggleSwitch) toggleSwitch.checked = false;
-            return;
-        }
-    } else {
-        isNuclearIceMelterActive = false;
-        stopNuclearIceMelter();
-        if (toggleSwitch) toggleSwitch.checked = false;
-    }
-
-    updateDisplay();
-}
-
-
 // Unlock the Nuclear Ice Melter
 function unlockNuclearIceMelter() {
     isNuclearIceMelterUnlocked = true;
@@ -1500,22 +1527,94 @@ function unlockNuclearIceMelter() {
 
 // Start the Nuclear Ice Melter
 function startNuclearIceMelter() {
-    nuclearIceMelterInterval = setInterval(() => {
-        if (ice >= 5) {
-            ice -= 5;
-            water += 5;
-            updateDisplay();
-        } else {
-            showToast("Resource Shortage", "Not enough ice to run the Nuclear Ice Melter!", 'setback');
-            toggleNuclearIceMelter(); // Turn off if resources are insufficient
+    if (potatoCount >= 100) {
+        potatoCount -= 100;
+        updateDisplay();
+
+        nuclearIceMelterInterval = setInterval(() => {
+            // Calculate ice to melt based on the knob's percentage
+            const iceToMelt = Math.max(1, Math.floor((ice * nuclearIceMelterPercentage) / 100));
+
+            if (ice >= iceToMelt) {
+                ice -= iceToMelt;
+                water += iceToMelt;
+                updateDisplay();
+            } else if (ice >= 1) {
+                // Melt remaining ice if less than iceToMelt but at least 1
+                water += ice;
+                ice = 0;
+                updateDisplay();
+            } else {
+                showToast("Resource Shortage", "Not enough ice to continue melting!", 'setback');
+                toggleNuclearIceMelter(); // Turn off if resources are insufficient
+            }
+        }, 1000); // Runs every second
+    } else {
+        showToast("Resource Shortage", "Not enough potatoes to start the Nuclear Ice Melter!", 'setback');
+        // Turn off the toggle switch
+        const toggle = document.getElementById('nuclear-ice-melter-toggle');
+        if (toggle) {
+            toggle.checked = false;
         }
-    }, 1000); // Run every second
+    }
 }
 
 // Stop the Nuclear Ice Melter
 function stopNuclearIceMelter() {
     clearInterval(nuclearIceMelterInterval);
-    nuclearIceMelterInterval = null;
+}
+
+// Toggle the Nuclear Ice Melter
+function toggleNuclearIceMelter() {
+    if (isNuclearIceMelterActive) {
+        isNuclearIceMelterActive = false;
+        stopNuclearIceMelter();
+    } else {
+        isNuclearIceMelterActive = true;
+        startNuclearIceMelter();
+    }
+}
+
+// Update the initializeNuclearIceMelter function
+function initializeNuclearIceMelter() {
+    const knobElement = document.getElementById('nuclear-ice-melter-knob');
+    if (knobElement) {
+        if (!iceMelterKnob) {
+            // Create the knob if it doesn't exist
+            iceMelterKnob = new Knob({
+                id: 'nuclear-ice-melter-knob',
+                lowVal: 1,
+                highVal: 10,
+                value: nuclearIceMelterPercentage,
+                sensitivity: 1,
+                type: 'FStyle',
+                size: 'large',
+                label: false
+            });
+        } else {
+            // Update the existing knob
+            iceMelterKnob.setValue(nuclearIceMelterPercentage);
+        }
+        updateNuclearIceMelterDisplay();
+    }
+}
+
+// Update the knobChanged function
+window.knobChanged = function(id, val) {
+    if (id === 'nuclear-ice-melter-knob') {
+        nuclearIceMelterPercentage = parseInt(val);
+        console.log(`Nuclear Ice Melter percentage set to ${nuclearIceMelterPercentage * 10}%`);
+        updateNuclearIceMelterDisplay();
+    }
+};
+
+// Update the updateNuclearIceMelterDisplay function
+function updateNuclearIceMelterDisplay() {
+    const nuclearIceMelterDisplay = document.getElementById('nuclear-ice-melter-display');
+    if (nuclearIceMelterDisplay) {
+        const displayValue = (nuclearIceMelterPercentage * 10).toString();
+        nuclearIceMelterDisplay.textContent = `${displayValue}%`;
+    }
 }
 
 // ==========================================
@@ -1741,6 +1840,30 @@ function initializeEventListeners() {
 
     // Chart modal listeners
     initializeChartModalListeners();
+
+// Define the global knobChanged handler
+window.knobChanged = function(id, val) {
+    if (id === 'nuclear-ice-melter-knob') {
+        nuclearIceMelterPercentage = parseInt(val);
+        console.log(`Nuclear Ice Melter percentage set to ${nuclearIceMelterPercentage * 10}%`);
+        updateNuclearIceMelterDisplay(); // Update the display
+    }
+};
+
+// Function to show the Nuclear Ice Melter container
+function showNuclearIceMelterContainer() {
+    const container = document.getElementById('nuclear-ice-melter-container');
+    if (container) {
+        container.style.display = 'block';
+        console.log('Nuclear Ice Melter container should now be visible');
+    } else {
+        console.error('Nuclear Ice Melter container not found');
+    }
+}
+
+// Call the function to show the container
+showNuclearIceMelterContainer();
+
 }
 
 function handlePotatoFieldClick(event) {

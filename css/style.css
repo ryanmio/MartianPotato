@@ -1156,3 +1156,287 @@ button:hover, button:disabled {
 .toggle-switch-container {
     margin-bottom: 5px;
 }
+
+
+/* Nuclear Ice Melter */
+.action-card.double-width {
+    width: 468px;
+    height: 124px;
+    position: relative;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.nuclear-ice-melter-controls {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 15px;
+}
+
+#nuclear-ice-melter-knob {
+    position: absolute;
+    left: 50px;
+    top: 30%;
+    transform: translateY(-50%);
+    width: 85px;
+    height: 85px;
+}
+
+#nuclear-ice-melter-container .toggle-switch-container {
+    position: absolute;
+    right: 66px;
+    transform: translateY(-50%);
+    width: 100px;
+    height: 50px;
+}
+
+/* Ensure the toggle switch doesn't expand beyond its container */
+#nuclear-ice-melter-container .toggle-switch {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+
+/* Seven Segment Display */
+@font-face {
+    font-family: 'Seven Segment';
+    src: url('../fonts/Seven-Segment.ttf') format('truetype');
+}
+
+/* Seven Segment Display */
+.seven-segment-display {
+    font-family: 'Seven Segment', monospace; /* Add monospace as fallback */
+    font-size: 36px;
+    color: #ff0000;
+    background-color: #000;
+    padding: 5px 10px;
+    border-radius: 5px;
+    position: absolute;
+    right: 200px;
+    top: 31%;
+    height: 44px;
+    transform: translateY(-50%);
+    width: 90px; /* Fixed width instead of min-width */
+    text-align: right; /* Right-align the text */
+    display: flex;
+    justify-content: flex-end; /* Align content to the right */
+    align-items: center;
+    letter-spacing: 0.1em; /* Add slight spacing between characters */
+}
+
+/* Add styles for inactive segments */
+.seven-segment-display::before {
+    content: '888%';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: rgba(255, 0, 0, 0.1); /* Very faint red for inactive segments */
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 5px 10px;
+}
+
+:root {
+    --water-primary: #80DCE9;
+    --water-secondary: #33AFCE;
+    --water-text: #297597;
+    --water-shadow: #02425C;
+  
+    --multi-primary: #A1ACB3;
+    --multi-secondary: #8E979D;
+    --multi-text: #3A3E41;
+    --multi-shadow: #5A6165;
+  
+    --colonizer-primary: #FFD700;  /* Gold color for the colonizer */
+    --colonizer-secondary: #FFA500;
+    --colonizer-text: rgb(29, 1, 1);
+    --colonizer-shadow: #704214;
+  
+    --quantum-primary: #9C27B0;  /* Purple color for quantum */
+    --quantum-secondary: #7B1FA2;
+    --quantum-text: #E1BEE7;
+    --quantum-shadow: #4A148C;
+  }
+
+  .toggle-switch.water-ice {
+    background: var(--water-primary);
+    color: var(--water-text);
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px var(--water-shadow) inset,
+                -8px 0 5px -5px var(--water-shadow) inset;
+  }
+  
+  .toggle-switch.water-ice > div {
+    background: linear-gradient(to right, var(--water-secondary) 0%, var(--water-primary) 53%, var(--water-secondary) 56%, var(--water-primary) 100%);
+  }
+  
+  .toggle-switch.multi-resource {
+    background: var(--multi-primary);
+    color: var(--multi-text);
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px var(--multi-shadow) inset,
+                -8px 0 5px -5px var(--multi-shadow) inset;
+    border-color: var(--multi-shadow);
+  }
+  
+  .toggle-switch.multi-resource > div {
+    background: linear-gradient(to right, var(--multi-secondary) 0%, var(--multi-primary) 53%, var(--multi-secondary) 56%, var(--multi-primary) 100%);
+    box-shadow: 0 0 0 2px var(--multi-shadow); /* Thin line color */
+  }
+  
+  .toggle-switch.colonizer > div {
+    background: linear-gradient(to right, var(--colonizer-secondary) 0%, var(--colonizer-primary) 53%, var(--colonizer-secondary) 56%, var(--colonizer-primary) 100%);
+  }
+  
+  .toggle-switch.quantum {
+    background: var(--quantum-primary);
+    color: var(--quantum-text);
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px var(--quantum-shadow) inset,
+                -8px 0 5px -5px var(--quantum-shadow) inset;
+    border-color: var(--quantum-shadow);
+  }
+  
+  .toggle-switch.quantum > div {
+    background: linear-gradient(to right, var(--quantum-secondary) 0%, var(--quantum-primary) 53%, var(--quantum-secondary) 56%, var(--quantum-primary) 100%);
+    box-shadow: 0 0 0 2px var(--quantum-shadow); /* Thin line color */
+  }
+
+  /* Existing water-ice button styles */
+.action-button.water-ice {
+    background: var(--water-primary);
+    color: var(--water-text);
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px var(--water-shadow) inset,
+                -8px 0 5px -5px var(--water-shadow) inset;
+  }
+  
+  .action-button.water-ice:active {
+    background: var(--water-secondary);
+  }
+  
+  /* Multi-resource button styles */
+  .action-button.multi-resource {
+    background: var(--multi-primary);
+    color: var(--multi-text);
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px var(--multi-shadow) inset,
+                -8px 0 5px -5px var(--multi-shadow) inset;
+  }
+  
+  .action-button.multi-resource:active {
+    background: var(--multi-secondary);
+  }
+  
+  /* Colonizer button styles */
+  .action-button.colonizer {
+    background-image: url('../images/caution.png');
+    background-size: 350px 250px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 215, 0, 0.7);
+    color: rgb(29, 1, 1);
+    font-weight: bold;
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px var(--colonizer-shadow) inset,
+                -8px 0 5px -5px var(--colonizer-shadow) inset;
+    position: relative;
+}
+
+.action-button.colonizer::after {
+    content: '';  /* Remove content from pseudo-element */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 215, 0, 0.7);
+    border-radius: 4px;
+    z-index: -1;  /* Place behind the text */
+}
+
+.action-button.colonizer {
+    position: relative;
+    z-index: 1;  /* Ensure text is above the background */
+}
+
+  /* Quantum button styles */
+  .action-button.quantum {
+    background: var(--quantum-primary);
+    color: var(--quantum-text);
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px var(--quantum-shadow) inset,
+                -8px 0 5px -5px var(--quantum-shadow) inset;
+  }
+  
+  .action-button.quantum:active {
+    background: var(--quantum-secondary);
+  }
+
+/* Update the multi-resource styles */
+.toggle-switch.multi-resource {
+    background: var(--multi-primary);
+    color: var(--multi-text);
+    box-shadow: 0 0 5px rgba(255,255,255,.4), 
+                0 2px 1px -1px rgba(255,255,255,.7) inset, 
+                8px 0 5px -5px var(--multi-shadow) inset,
+                -8px 0 5px -5px var(--multi-shadow) inset;
+    border-color: var(--multi-shadow); /* Add this line */
+  }
+  
+  .toggle-switch.multi-resource > div {
+    background: linear-gradient(to right, var(--multi-secondary) 0%, var(--multi-primary) 53%, var(--multi-secondary) 56%, var(--multi-primary) 100%);
+  }
+
+
+.action-button.multi-resource {
+  background: var(--multi-primary);
+  color: var(--multi-text);
+  box-shadow: 0 0 5px rgba(255,255,255,.4), 
+              0 2px 1px -1px rgba(255,255,255,.7) inset, 
+              8px 0 5px -5px var(--multi-shadow) inset,
+              -8px 0 5px -5px var(--multi-shadow) inset;
+}
+
+.action-button.multi-resource:active {
+  background: var(--multi-secondary);
+}
+
+
+
+
+.button-container {
+    margin-bottom: 5px;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.depleted-message {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #ff0000;
+    font-weight: bold;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+#martian-potato-colonizer-container .depleted-message {
+    margin-top: 30px;
+}

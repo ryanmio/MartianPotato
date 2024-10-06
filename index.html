@@ -52,7 +52,7 @@
             <div id="subsurface-aquifer-tapper-container" class="action-card toggle-action-card" style="display: none;">
                 <h3>Subsurface Aquifer Tapper</h3>
                 <div class="toggle-switch-container">
-                    <label class="toggle-switch">
+                    <label class="toggle-switch water-ice">
                         <input type="checkbox" id="subsurface-aquifer-tapper-toggle">
                         <div>ΟΙ</div><b></b>
                         <span class="indicator"></span>
@@ -62,7 +62,7 @@
             <div id="bucket-wheel-excavator-container" class="action-card toggle-action-card" style="display: none;">
                 <h3>Bucket-Wheel Excavator</h3>
                 <div class="toggle-switch-container">
-                    <label class="toggle-switch bucket-wheel">
+                    <label class="toggle-switch multi-resource">
                         <input type="checkbox" id="bucket-wheel-excavator-toggle">
                         <div>ΟΙ</div><b></b>
                         <span class="indicator"></span>
@@ -72,21 +72,25 @@
             <div id="subterranean-tuber-tunneler-container" class="action-card toggle-action-card" style="display: none;">
                 <h3>Subterranean Tuber Tunneler</h3>
                 <div class="toggle-switch-container">
-                    <label class="toggle-switch">
+                    <label class="toggle-switch multi-resource">
                         <input type="checkbox" id="subterranean-tuber-tunneler-toggle" onchange="toggleSubterraneanTuberTunneler()">
                         <div>ΟΙ</div><b></b>
                         <span class="indicator"></span>
                     </label>
                 </div>
             </div>
-            <div id="nuclear-ice-melter-container" class="action-card toggle-action-card" style="display: none;">
+            <div id="nuclear-ice-melter-container" class="action-card double-width">
                 <h3>Nuclear Ice Melter</h3>
-                <div class="toggle-switch-container">
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="nuclear-ice-melter-toggle">
-                        <div>ΟΙ</div><b></b>
-                        <span class="indicator"></span>
-                    </label>
+                <div class="nuclear-ice-melter-controls">
+                    <div id="nuclear-ice-melter-knob" class="knob"></div>
+                    <div id="nuclear-ice-melter-display" class="seven-segment-display">00</div>
+                    <div class="toggle-switch-container">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="nuclear-ice-melter-toggle">
+                            <div>ΟΙ</div><b></b>
+                            <span class="indicator"></span>
+                        </label>
+                    </div>
                 </div>
             </div>
             <div id="polar-cap-mining-container" class="action-card toggle-action-card" style="display: none;">
@@ -102,7 +106,7 @@
             <div id="cometary-ice-harvester-container" class="action-card toggle-action-card" style="display: none;">
                 <h3>Cometary Ice Harvester</h3>
                 <div class="button-container">
-                    <button id="cometary-ice-harvester-button" class="action-button">Launch</button>
+                    <button id="cometary-ice-harvester-button" class="action-button water-ice">Launch</button>
                 </div>
                 <div class="led-progress-bar">
                     <div class="led-light"></div>
@@ -120,7 +124,8 @@
             <div id="martian-potato-colonizer-container" class="action-card toggle-action-card" style="display: none;">
                 <h3>Martian Potato Colonizer</h3>
                 <div class="button-container">
-                    <button id="martian-potato-colonizer-button" class="action-button">Colonize</button>
+                    <button class="action-button colonizer">Colonize</button>
+                    <p class="depleted-message" style="display: none;">Resources Depleted</p>
                 </div>
                 <div class="led-progress-bar">
                     <div class="led-light"></div>
@@ -139,7 +144,7 @@
             <div id="quantum-spud-spawner-container" class="action-card toggle-action-card" style="display: none;">
                 <h3>Quantum Spud Spawner</h3>
                 <div class="toggle-switch-container">
-                    <label class="toggle-switch">
+                    <label class="toggle-switch quantum">
                         <input type="checkbox" id="quantum-spud-spawner-toggle">
                         <div>ΟΙ</div><b></b>
                         <span class="indicator"></span>
@@ -174,19 +179,19 @@
             </div>
         </div>
     </div>
-    <!-- Include Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Include date-fns -->
-    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/dist/date-fns.min.js"></script>
-
-    <!-- Include the Chart.js date-fns adapter (updated to version 3.0.0) -->
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-
-    <!-- Your game script -->
-    <script src="js/game.js"></script>
+    <!-- Include the knobs.js script BEFORE the game scripts -->
+    
+    <!-- Your game scripts -->
+    <script src="js/knobs.js"></script>
     <script src="js/upgrades.js"></script>
     <script src="js/exploration.js"></script>
+    <script src="js/game.js"></script>
+
+    <!-- Include external libraries AFTER game scripts if they aren't dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/dist/date-fns.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
     <!-- Add the chart modal at the end of the body -->
     <!-- Chart Modal -->
     <div id="chart-modal" class="modal" style="display: none;">

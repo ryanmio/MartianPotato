@@ -1355,18 +1355,20 @@ button:hover, button:disabled {
 }
 
 .action-button.colonizer::after {
-    content: attr(data-text);
+    content: '';  /* Remove content from pseudo-element */
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(255, 215, 0, 0.9);
-    padding: 2px 6px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 215, 0, 0.7);
     border-radius: 4px;
+    z-index: -1;  /* Place behind the text */
 }
 
-.action-button.colonizer:active {
-    background-color: rgba(255, 165, 0, 0.9);
+.action-button.colonizer {
+    position: relative;
+    z-index: 1;  /* Ensure text is above the background */
 }
 
   /* Quantum button styles */
@@ -1410,4 +1412,31 @@ button:hover, button:disabled {
 
 .action-button.multi-resource:active {
   background: var(--multi-secondary);
+}
+
+
+
+
+.button-container {
+    margin-bottom: 5px;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.depleted-message {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #ff0000;
+    font-weight: bold;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+#martian-potato-colonizer-container .depleted-message {
+    margin-top: 30px;
 }

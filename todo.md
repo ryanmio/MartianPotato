@@ -49,6 +49,8 @@ TODO:
     - [x] Or even consider allowing the player to adjust the percentage
 --------------------------------------------------------------------------------------------
 - [ ] Style the toggle switches to match the specific resource generated
+- [ ] Add a "are you sure?" before reseting
+- [ ] Change save and reset game button text to emojis?
 - [ ] Add "running low" message for resources with help text on what to do about it like "explore mars surface to gather more resources"
 - [ ] Write real meta messages and descriptions
 - [ ] Add production stats
@@ -70,6 +72,8 @@ TODO:
         - [ ] "Potato Empire": Have 1000 potatoes, 1000 water, 1000 soil nutrients, and 1000 oxygen simultaneously
             - Asset: potato_empire.webp
             - Prompt: "A grand Martian citadel made entirely of interconnected potato-shaped domes. Each dome represents a resource: potatoes, water, nutrients, and oxygen. Holographic '1000' floats above each dome. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
+
+
 
 Bugs/Issues:
 - [x] The blur on the tech tree is reappearing on load even after a level 10 upgrade is purchased
@@ -95,3 +99,4 @@ Bugs/Issues:
 - [ ] Some action cards disappear when the quantum spud spawner is unlocked
 - [ ] I think 1 of the action cards disappeared at some point and came back when i loaded, investigate that
 - move potato colonizer to right of spud spawner
+- [ ] make the spud spawner faster

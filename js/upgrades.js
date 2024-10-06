@@ -220,6 +220,7 @@ const upgrades = [
         name: "Martian Potato Colonizer", 
         cost: 50000,
         effect: () => {
+            console.log('Executing Martian Potato Colonizer upgrade effect');
             unlockMartianPotatoColonizer();
         },
         icon: "🚀",

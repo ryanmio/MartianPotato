@@ -229,39 +229,45 @@ function updateDepletedActionCard(actionCardId, isDepleted, message) {
         const buttonContainer = card.querySelector('.button-container');
         const ledProgressBar = card.querySelector('.led-progress-bar');
         let depletedMessage = card.querySelector('.depleted-message');
+        const actionButton = buttonContainer ? buttonContainer.querySelector('.action-button') : null;
 
         if (isDepleted) {
             // Hide the toggle switch or button
             if (toggleContainer) {
                 toggleContainer.style.display = 'none';
             }
-            if (buttonContainer) {
-                buttonContainer.style.display = 'none';
+            if (actionButton) {
+                actionButton.style.display = 'none';
             }
             if (ledProgressBar) {
-                ledProgressBar.style.visibility = 'hidden'; // Change to visibility
+                ledProgressBar.style.visibility = 'hidden';
             }
             // Display the depleted message
             if (!depletedMessage) {
                 depletedMessage = document.createElement('p');
                 depletedMessage.classList.add('depleted-message');
-                depletedMessage.textContent = message;
-                card.appendChild(depletedMessage);
+                if (buttonContainer) {
+                    buttonContainer.appendChild(depletedMessage);
+                } else {
+                    card.appendChild(depletedMessage);
+                }
             }
+            depletedMessage.textContent = message;
+            depletedMessage.style.display = 'block';
         } else {
             // Show the toggle switch or button
             if (toggleContainer) {
                 toggleContainer.style.display = 'block';
             }
-            if (buttonContainer) {
-                buttonContainer.style.display = 'block';
+            if (actionButton) {
+                actionButton.style.display = 'block';
             }
             if (ledProgressBar) {
-                ledProgressBar.style.visibility = 'visible'; // Change to visibility
+                ledProgressBar.style.visibility = 'visible';
             }
-            // Remove the depleted message
+            // Hide the depleted message
             if (depletedMessage) {
-                depletedMessage.remove();
+                depletedMessage.style.display = 'none';
             }
         }
     }
@@ -330,7 +336,6 @@ function harvestPotatoAtIndex(index, isAutomated = false) {
         const potatoElement = slotElement.querySelector('.potato');
 
         if (potatoElement && harvestedPotato.isQuantumSpawned) {
-            console.log('Triggering poof animation for quantum-spawned potato at index:', index);
 
             // Create the poof element
             const poofElement = document.createElement('div');
@@ -352,7 +357,6 @@ function harvestPotatoAtIndex(index, isAutomated = false) {
 
             // Remove the poof element after the animation
             poofElement.addEventListener('animationend', () => {
-                console.log('Poof animation ended for quantum-spawned potato at index:', index);
                 poofElement.remove();
 
                 // Now remove the potato and update the display
@@ -1277,27 +1281,34 @@ function unlockMartianPotatoColonizer() {
 }
 
 function initializeMartianPotatoColonizer() {
-    const button = document.getElementById('martian-potato-colonizer-button');
+    console.log('Initializing Martian Potato Colonizer');
+    const button = document.querySelector('.action-button.colonizer');
     if (button) {
-        // Remove any existing event listeners to prevent duplicates
+        console.log('Martian Potato Colonizer button found');
         button.removeEventListener('click', toggleMartianPotatoColonizer);
-        // Add the event listener
         button.addEventListener('click', toggleMartianPotatoColonizer);
+    } else {
+        console.warn('Martian Potato Colonizer button not found');
     }
-    updateMartianPotatoColonizerUI(); // Update UI to reflect current state
+    updateMartianPotatoColonizerUI();
 }
 
 function toggleMartianPotatoColonizer() {
+    console.log('Toggling Martian Potato Colonizer');
+    console.log('Current state:', isMartianPotatoColonizerActive);
     if (isMartianPotatoColonizerActive) {
         stopMartianPotatoColonizer();
     } else {
         startMartianPotatoColonizer();
     }
-    updateMartianPotatoColonizerUI(); // Add this line to update UI immediately
+    updateMartianPotatoColonizerUI();
 }
 
 function startMartianPotatoColonizer() {
+    console.log('Starting Martian Potato Colonizer');
+    console.log('Current cycle:', colonizerCycle, 'Max cycles:', maxColonizerCycles);
     if (colonizerCycle >= maxColonizerCycles) {
+        console.log('Colonizer Depleted');
         showToast("Colonizer Depleted", "The Martian Potato Colonizer has reached its maximum cycles.", 'warning');
         return;
     }
@@ -1307,12 +1318,15 @@ function startMartianPotatoColonizer() {
 }
 
 function stopMartianPotatoColonizer() {
+    console.log('Stopping Martian Potato Colonizer');
     isMartianPotatoColonizerActive = false;
     if (window.martianPotatoColonizerIntervalId) {
         clearInterval(window.martianPotatoColonizerIntervalId);
         window.martianPotatoColonizerIntervalId = null;
+        console.log('Cleared Martian Potato Colonizer interval');
     }
     if (areResourcesDepleted) {
+        console.log('Resources Depleted');
         updateDepletedActionCard('martian-potato-colonizer-container', true, "Resources Depleted");
     } else {
         updateMartianPotatoColonizerUI();
@@ -1320,6 +1334,7 @@ function stopMartianPotatoColonizer() {
 }
 
 function runMartianPotatoColonizerCycle() {
+    console.log('Running Martian Potato Colonizer cycle');
     if (!isMartianPotatoColonizerActive) return;
 
     const cycleDuration = 60000; // 60 seconds
@@ -1353,10 +1368,15 @@ function runMartianPotatoColonizerCycle() {
 }
 
 function updateMartianPotatoColonizerUI() {
-    const button = document.getElementById('martian-potato-colonizer-button');
+    console.log('Updating Martian Potato Colonizer UI');
+    const button = document.querySelector('.action-button.colonizer');
     if (button) {
-        button.textContent = isMartianPotatoColonizerActive ? "Colonizing..." : "Colonize";
+        const newText = isMartianPotatoColonizerActive ? "Colonizing..." : "Colonize";
+        console.log('Button state:', newText);
+        button.textContent = newText;
         button.classList.toggle('active', isMartianPotatoColonizerActive);
+    } else {
+        console.warn('Martian Potato Colonizer button not found in updateMartianPotatoColonizerUI');
     }
     updateLEDProgress('martian-potato-colonizer-container', 0);
 }

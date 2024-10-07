@@ -403,7 +403,7 @@ function harvestPotatoAtIndex(index, isAutomated = false) {
                     timestamp: Date.now(),
                     totalPotatoes: totalPotatoesHarvested
                 });
-                aggregateHarvestHistory();
+                updateHarvestHistory();
                 updateHarvestChart();
 
                 checkAchievements();
@@ -419,7 +419,7 @@ function harvestPotatoAtIndex(index, isAutomated = false) {
                 timestamp: Date.now(),
                 totalPotatoes: totalPotatoesHarvested
             });
-            aggregateHarvestHistory();
+            updateHarvestHistory();
             updateHarvestChart();
 
             checkAchievements();
@@ -1676,22 +1676,79 @@ function getPlaytime() {
     return `${playtimeHours}h ${playtimeMinutes}m ${playtimeSeconds}s`;
 }
 
-// Function to aggregate harvest history data
-function aggregateHarvestHistory() {
-    const maxDataPoints = 200;
-    if (harvestHistory.length > maxDataPoints) {
-        const aggregatedHistory = [];
-        for (let i = 0; i < harvestHistory.length; i += 2) {
-            const first = harvestHistory[i];
-            const second = harvestHistory[i + 1];
-            const aggregatedEntry = {
-                timestamp: second ? Math.floor((first.timestamp + second.timestamp) / 2) : first.timestamp,
-                totalPotatoes: second ? Math.floor((first.totalPotatoes + second.totalPotatoes) / 2) : first.totalPotatoes
-            };
-            aggregatedHistory.push(aggregatedEntry);
+// Function to update harvest history with time-based aggregation
+function updateHarvestHistory() {
+    const now = Date.now();
+
+    // Define binning intervals
+    const recentInterval = 60 * 1000; // 1 minute
+    const oldInterval = 5 * 60 * 1000; // 5 minutes
+
+    // Threshold between recent and old data (e.g., last 30 minutes)
+    const recentThreshold = now - (30 * 60 * 1000); // Last 30 minutes
+
+    // Add new data point
+    harvestHistory.push({
+        timestamp: now,
+        totalPotatoes: totalPotatoesHarvested
+    });
+
+    // Function to aggregate data into bins
+    function aggregateData(data, interval) {
+        const aggregatedData = [];
+        let bucketStartTime = data[0].timestamp;
+        let bucketEndTime = bucketStartTime + interval;
+        let bucketTotal = 0;
+        let bucketCount = 0;
+
+        data.forEach(entry => {
+            while (entry.timestamp >= bucketEndTime) {
+                if (bucketCount > 0) {
+                    aggregatedData.push({
+                        timestamp: bucketStartTime + interval / 2,
+                        totalPotatoes: bucketTotal / bucketCount
+                    });
+                }
+                bucketStartTime = bucketEndTime;
+                bucketEndTime += interval;
+                bucketTotal = 0;
+                bucketCount = 0;
+            }
+            bucketTotal += entry.totalPotatoes;
+            bucketCount += 1;
+        });
+
+        // Add the last bucket
+        if (bucketCount > 0) {
+            aggregatedData.push({
+                timestamp: bucketStartTime + interval / 2,
+                totalPotatoes: bucketTotal / bucketCount
+            });
         }
-        harvestHistory = aggregatedHistory;
+
+        return aggregatedData;
     }
+
+    // Separate recent and old data
+    const recentData = harvestHistory.filter(entry => entry.timestamp >= recentThreshold);
+    const oldData = harvestHistory.filter(entry => entry.timestamp < recentThreshold);
+
+    // Aggregate old data
+    const aggregatedOldData = oldData.length > 0 ? aggregateData(oldData, oldInterval) : [];
+
+    // Keep recent data as is or aggregate if desired
+    const processedRecentData = recentData.length > 0 ? aggregateData(recentData, recentInterval) : [];
+
+    // Combine aggregated old data with recent data
+    harvestHistory = aggregatedOldData.concat(processedRecentData);
+
+    // Limit the size of the harvestHistory array
+    const maxHistoryEntries = 1000; // Adjust as needed
+    if (harvestHistory.length > maxHistoryEntries) {
+        harvestHistory = harvestHistory.slice(harvestHistory.length - maxHistoryEntries);
+    }
+
+    updateHarvestChart();
 }
 
 // Initialize the harvest chart
@@ -1709,7 +1766,7 @@ function initializeHarvestChart() {
             datasets: [{
                 label: 'Total Potatoes Harvested',
                 data: [],
-                borderColor: '#C2A378', // Potato color
+                borderColor: '#C2A378',
                 borderWidth: 2,
                 fill: false,
                 tension: 0.1
@@ -1739,7 +1796,7 @@ function initializeHarvestChart() {
             },
             plugins: {
                 legend: {
-                    display: false // Remove the legend
+                    display: false
                 },
                 tooltip: {
                     callbacks: {
@@ -1747,10 +1804,52 @@ function initializeHarvestChart() {
                             return `Total Potatoes: ${context.parsed.y}`;
                         }
                     }
+                },
+                decimation: {
+                    enabled: true,
+                    algorithm: 'min-max',
+                    samples: 200
                 }
             }
         }
     });
+}
+
+// Update the harvest chart data
+function updateHarvestChart() {
+    if (!harvestChart) return;
+
+    // Map harvestHistory to chart data
+    const timestamps = harvestHistory.map(entry => new Date(entry.timestamp));
+    const totals = harvestHistory.map(entry => entry.totalPotatoes);
+
+    harvestChart.data.labels = timestamps;
+    harvestChart.data.datasets[0].data = totals;
+    harvestChart.update();
+
+    // Update UI elements
+    const totalPotatoesCount = document.getElementById('total-potatoes-count');
+    if (totalPotatoesCount) {
+        totalPotatoesCount.textContent = totalPotatoesHarvested;
+    }
+
+    const missionTimeValue = document.getElementById('mission-time-value');
+    if (missionTimeValue) {
+        missionTimeValue.textContent = getElapsedMartianTime();
+    }
+}
+
+function getElapsedMartianTime() {
+    const elapsedMillis = Date.now() - gameStartTime;
+    const elapsedEarthSeconds = elapsedMillis / 1000;
+    const martianSeconds = elapsedEarthSeconds / 1.02749;
+
+    const martianHours = Math.floor(martianSeconds / 3698.958);
+    const remainingSeconds = martianSeconds % 3698.958;
+    const martianMinutes = Math.floor(remainingSeconds / 61.6493);
+    const finalMartianSeconds = Math.floor(remainingSeconds % 61.6493);
+
+    return `${martianHours.toString().padStart(2, '0')}:${martianMinutes.toString().padStart(2, '0')}:${finalMartianSeconds.toString().padStart(2, '0')} MTC`;
 }
 
 // Update the harvest chart data
@@ -1789,15 +1888,6 @@ function getElapsedMartianTime() {
     const finalMartianSeconds = Math.floor(remainingSeconds % 61.6493);
     
     return `${martianHours.toString().padStart(2, '0')}:${martianMinutes.toString().padStart(2, '0')}:${finalMartianSeconds.toString().padStart(2, '0')} MTC`;
-}
-
-function updateHarvestHistory() {
-    harvestHistory.push({
-        timestamp: Date.now(),
-        totalPotatoes: totalPotatoesHarvested
-    });
-    aggregateHarvestHistory();  
-    updateHarvestChart(); 
 }
 
 // ==========================================

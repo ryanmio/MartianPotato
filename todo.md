@@ -50,10 +50,10 @@ TODO:
 - [x] Style the toggle switches to match the specific resource generated
 - [x] Add cumulative potato stats to graph modal
 - [x] Add "running low" message for resources with help text on what to do about it like "explore mars surface to gather more resources"
+- [x] colonizer cooldown should decrease by 50% each "cycle" so that the end game is faster
 --------------------------------------------------------------------------------------------
 - [ ] Write real meta messages and descriptions
 - [ ] Add production stats
-- [ ] colonizer cooldown should decrease by 50% each "cycle" so that the end game is faster
 - [ ] Balance upgrade costs and effects
 - [ ] Add new achievements:
     - [ ] Upgrade Milestones:
@@ -96,6 +96,6 @@ Bugs/Issues:
 - [x] make the spud spawner faster
 --------------------------------------------------------------------------------------------
 - [ ] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.
-- [ ] Logic for removing graph datapoints when there are too many is bad
+- [ ] Logic for removing graph datapoints when there are too many is broken
 - [ ] Some action cards disappear when the quantum spud spawner is unlocked
 - [ ] I think 1 of the action cards disappeared at some point and came back when i loaded, investigate that

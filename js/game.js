@@ -1693,6 +1693,12 @@ function getPlaytime() {
 function updateHarvestHistory() {
     const now = Date.now();
 
+    // Add new data point
+    harvestHistory.push({
+        timestamp: now,
+        totalPotatoes: totalPotatoesHarvested
+    });
+
     // Define binning intervals
     const recentInterval = 60 * 1000; // 1 minute
     const oldInterval = 5 * 60 * 1000; // 5 minutes
@@ -1700,15 +1706,11 @@ function updateHarvestHistory() {
     // Threshold between recent and old data (e.g., last 30 minutes)
     const recentThreshold = now - (30 * 60 * 1000); // Last 30 minutes
 
-    // Add new data point
-    harvestHistory.push({
-        timestamp: now,
-        totalPotatoes: totalPotatoesHarvested
-    });
-
     // Function to aggregate data into bins
     function aggregateData(data, interval) {
         const aggregatedData = [];
+        if (data.length === 0) return aggregatedData;
+
         let bucketStartTime = data[0].timestamp;
         let bucketEndTime = bucketStartTime + interval;
         let bucketTotal = 0;
@@ -1747,10 +1749,10 @@ function updateHarvestHistory() {
     const oldData = harvestHistory.filter(entry => entry.timestamp < recentThreshold);
 
     // Aggregate old data
-    const aggregatedOldData = oldData.length > 0 ? aggregateData(oldData, oldInterval) : [];
+    const aggregatedOldData = aggregateData(oldData, oldInterval);
 
-    // Keep recent data as is or aggregate if desired
-    const processedRecentData = recentData.length > 0 ? aggregateData(recentData, recentInterval) : [];
+    // Keep recent data as is
+    const processedRecentData = recentData;
 
     // Combine aggregated old data with recent data
     harvestHistory = aggregatedOldData.concat(processedRecentData);
@@ -1758,7 +1760,7 @@ function updateHarvestHistory() {
     // Limit the size of the harvestHistory array
     const maxHistoryEntries = 1000; // Adjust as needed
     if (harvestHistory.length > maxHistoryEntries) {
-        harvestHistory = harvestHistory.slice(harvestHistory.length - maxHistoryEntries);
+        harvestHistory = harvestHistory.slice(-maxHistoryEntries);
     }
 
     updateHarvestChart();

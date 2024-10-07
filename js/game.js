@@ -577,12 +577,15 @@ function loadGame() {
             const gameState = JSON.parse(savedState);
             console.log('Successfully parsed saved game state');
 
-            // Restore game variables with default values if not present
+            // Restore game variables, respecting saved values even if they're zero
             gameStartTime = gameState.gameStartTime || Date.now();
-            potatoCount = gameState.potatoCount || 0;
-            water = gameState.water || 100;
-            nutrients = gameState.nutrients || 100;
-            ice = gameState.ice || 100;
+            potatoCount = gameState.potatoCount !== undefined ? gameState.potatoCount : 0;
+            water = gameState.water !== undefined ? gameState.water : 100;
+            nutrients = gameState.nutrients !== undefined ? gameState.nutrients : 100;
+            ice = gameState.ice !== undefined ? gameState.ice : 100;
+            areResourcesDepleted = gameState.areResourcesDepleted || false;
+
+            // Restore game variables with default values if not present
             plantingDelay = gameState.plantingDelay || 5000;
             lastPlantTime = gameState.lastPlantTime || 0;
             potatoesPerClick = gameState.potatoesPerClick || 1;
@@ -650,10 +653,6 @@ function loadGame() {
                         }
                     }
                 }
-            }
-
-            if (gameState.areResourcesDepleted !== undefined) {
-                areResourcesDepleted = gameState.areResourcesDepleted;
             }
 
             isSubsurfaceAquiferTapperUnlocked = gameState.isSubsurfaceAquiferTapperUnlocked || false;

@@ -1706,7 +1706,7 @@ function updateHarvestHistory() {
                 if (bucketCount > 0) {
                     aggregatedData.push({
                         timestamp: bucketStartTime + interval / 2,
-                        totalPotatoes: bucketTotal / bucketCount
+                        totalPotatoes: Math.round(bucketTotal / bucketCount) // Round to nearest whole number
                     });
                 }
                 bucketStartTime = bucketEndTime;
@@ -1722,7 +1722,7 @@ function updateHarvestHistory() {
         if (bucketCount > 0) {
             aggregatedData.push({
                 timestamp: bucketStartTime + interval / 2,
-                totalPotatoes: bucketTotal / bucketCount
+                totalPotatoes: Math.round(bucketTotal / bucketCount) // Round to nearest whole number
             });
         }
 
@@ -1849,44 +1849,6 @@ function getElapsedMartianTime() {
     const martianMinutes = Math.floor(remainingSeconds / 61.6493);
     const finalMartianSeconds = Math.floor(remainingSeconds % 61.6493);
 
-    return `${martianHours.toString().padStart(2, '0')}:${martianMinutes.toString().padStart(2, '0')}:${finalMartianSeconds.toString().padStart(2, '0')} MTC`;
-}
-
-// Update the harvest chart data
-function updateHarvestChart() {
-    if (!harvestChart) return;
-
-    // Map harvestHistory to chart data
-    const timestamps = harvestHistory.map(entry => new Date(entry.timestamp));
-    const totals = harvestHistory.map(entry => entry.totalPotatoes);
-
-    harvestChart.data.labels = timestamps;
-    harvestChart.data.datasets[0].data = totals;
-    harvestChart.update();
-
-    // Update the total potatoes count in the subtitle
-    const totalPotatoesCount = document.getElementById('total-potatoes-count');
-    if (totalPotatoesCount) {
-        totalPotatoesCount.textContent = totalPotatoesHarvested;
-    }
-
-    // Update the elapsed mission time using Martian time
-    const missionTimeValue = document.getElementById('mission-time-value');
-    if (missionTimeValue) {
-        missionTimeValue.textContent = getElapsedMartianTime();
-    }
-}
-
-function getElapsedMartianTime() {
-    const elapsedMillis = Date.now() - gameStartTime;
-    const elapsedEarthSeconds = elapsedMillis / 1000;
-    const martianSeconds = elapsedEarthSeconds / 1.02749;
-    
-    const martianHours = Math.floor(martianSeconds / 3698.958);
-    const remainingSeconds = martianSeconds % 3698.958;
-    const martianMinutes = Math.floor(remainingSeconds / 61.6493);
-    const finalMartianSeconds = Math.floor(remainingSeconds % 61.6493);
-    
     return `${martianHours.toString().padStart(2, '0')}:${martianMinutes.toString().padStart(2, '0')}:${finalMartianSeconds.toString().padStart(2, '0')} MTC`;
 }
 

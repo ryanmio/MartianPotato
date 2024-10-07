@@ -226,9 +226,9 @@ const upgrades = [
         icon: "🚀",
         description: "Deploys potato colonies across Mars, harvesting exponentially increasing resources over time.",
         metaMessage: "Full automation and colonization. You've transformed Mars into a thriving potato planet.",
-        weight: 16,
+        weight: 21,
         category: "exploration",
-        tier: 4,
+        tier: 5,
         count: 0,
         repeatable: false,
         actionCardId: 'martian-potato-colonizer-container' // Added property

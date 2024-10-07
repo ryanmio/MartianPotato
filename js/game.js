@@ -70,6 +70,8 @@ let isMartianPotatoColonizerActive = false;
 let colonizerInterval = null;
 let colonizerCycle = 0;
 const maxColonizerCycles = 20; // 20 cycles
+const INITIAL_COLONIZER_CYCLE_DURATION = 60000; // 60 seconds
+const MIN_COLONIZER_CYCLE_DURATION = 1000; // 1 second minimum duration
 
 let isSubsurfaceAquiferTapperUnlocked = false;
 let isBucketWheelExcavatorUnlocked = false;
@@ -1371,7 +1373,13 @@ function runMartianPotatoColonizerCycle() {
     console.log('Running Martian Potato Colonizer cycle');
     if (!isMartianPotatoColonizerActive) return;
 
-    const cycleDuration = 60000; // 60 seconds
+    // Calculate the current cycle duration based on the cycle number
+    const cycleDuration = Math.max(
+        INITIAL_COLONIZER_CYCLE_DURATION * Math.pow(0.7, colonizerCycle),
+        MIN_COLONIZER_CYCLE_DURATION
+    );
+    console.log(`Current cycle duration: ${cycleDuration}ms`);
+
     const ledCount = 10;
     const ledUpdateInterval = cycleDuration / ledCount;
 
@@ -1435,7 +1443,12 @@ function martianPotatoColonizerEffect() {
     ice += resourceAmount;
 
     updateDisplay();
-    showToast("Resources Acquired", `Martian Potato Colonizer harvested ${resourceAmount} of each resource!`, 'achievement');
+    
+    const nextCycleDuration = Math.max(
+        INITIAL_COLONIZER_CYCLE_DURATION * Math.pow(0.7, colonizerCycle + 1),
+        MIN_COLONIZER_CYCLE_DURATION
+    );
+    showToast("Resources Acquired", `Martian Potato Colonizer harvested ${resourceAmount} of each resource! Next cycle in ${(nextCycleDuration / 1000).toFixed(1)}s`, 'achievement');
 
     colonizerCycle++;
 

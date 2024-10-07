@@ -1426,7 +1426,7 @@ function updateLEDProgress(containerId, progress) {
 }
 
 function martianPotatoColonizerEffect() {
-    let resourceAmount = Math.pow(4, colonizerCycle) * 100;
+    let resourceAmount = Math.pow(2, colonizerCycle) * 100;
 
     potatoCount += resourceAmount;
     totalPotatoesHarvested += resourceAmount;

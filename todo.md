@@ -53,6 +53,7 @@ TODO:
 --------------------------------------------------------------------------------------------
 - [ ] Write real meta messages and descriptions
 - [ ] Add production stats
+- [ ] colonizer cooldown should decrease by 50% each "cycle" so that the end game is faster
 - [ ] Balance upgrade costs and effects
 - [ ] Add new achievements:
     - [ ] Upgrade Milestones:

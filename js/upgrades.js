@@ -1282,11 +1282,11 @@ function initializeActionCards() {
     const clickableCards = document.querySelectorAll('.action-card.clickable');
     clickableCards.forEach(card => {
         card.addEventListener('click', () => {
-            if (!card.hasAttribute('disabled')) {
+            if (!card.hasAttribute('disabled') && card.style.display !== 'none') {
                 const actionName = card.id.replace('-container', '');
                 handleActionCardClick(actionName);
             } else {
-                console.log(`Action card ${card.id} is disabled`);
+                console.log(`Action card ${card.id} is disabled or hidden`);
             }
         });
     });

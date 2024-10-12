@@ -695,6 +695,7 @@ function getUpgradeCost(upgrade) {
 
 // Display a modal with detailed information about an upgrade
 function showUpgradeModal(upgrade) {
+    console.log("Showing upgrade modal for:", upgrade.name);
     const existingModal = document.querySelector('.upgrade-modal');
     if (existingModal) {
         existingModal.remove();
@@ -744,15 +745,13 @@ function buyUpgrade(upgrade) {
             console.log(`Applying effect for upgrade: ${upgrade.name}`);
             upgrade.effect();
         }
-        upgrade.count++;
+        if (upgrade.count !== undefined) {
+            upgrade.count++;
+        } else {
+            upgrade.purchased = true;
+        }
         console.log(`Upgrade ${upgrade.name} count: ${upgrade.count}`);
         updateDisplay();
-
-        // Add this block
-        if (!upgrade.repeatable) {
-            upgrade.purchased = true;
-            console.log(`Marked upgrade ${upgrade.name} as purchased`);
-        }
 
         const techCard = document.getElementById(getCardId(upgrade.name));
         if (techCard) {
@@ -776,6 +775,15 @@ function buyUpgrade(upgrade) {
 
         // Update the tech tree to reflect changes
         updateTechTree();
+
+        // Queue the achievement modal with the correct information
+        queueAchievement(
+            `Technology Unlocked: ${upgrade.name}`,
+            upgrade.description,
+            upgrade.metaMessage,
+            upgrade.name.replace(/\s+/g, '_').toLowerCase() + '.webp' // Generate image name based on upgrade name
+        );
+
     } else {
         showToast("Not Enough Potatoes", "You don't have enough potatoes to purchase this upgrade.", 'setback');
     }

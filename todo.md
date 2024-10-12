@@ -53,8 +53,8 @@ TODO:
 - [x] colonizer cooldown should decrease by 50% each "cycle" so that the end game is faster
 - [x] remove thermal drill or make it more interesting
 - [x] start with 20 resources of each type
+- [x] reduce cost of spudnik satellite
 --------------------------------------------------------------------------------------------
-- [ ] reduce cost of spudnik satellite
 - [ ] Write real meta messages and descriptions
 - [ ] Add production stats
 - [ ] Balance upgrade costs and effects

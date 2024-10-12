@@ -167,7 +167,7 @@ const upgrades = [
     },
     { 
         name: "Spudnik Satellite", 
-        cost: 300,
+        cost: 200,
         effect: () => { 
             window.explorationResourceMultiplier = 1.5; 
             showToast("Upgrade Effect", "Spudnik Satellite now increases resource yields from exploration by 50%!", 'achievement');

@@ -234,22 +234,6 @@ const upgrades = [
         actionCardId: 'martian-potato-colonizer-container' // Added property
     },
     {
-        name: "Thermal Drill",
-        cost: 75,
-        effect: () => { 
-            window.waterExplorationMultiplier = (window.waterExplorationMultiplier || 1) * 1.5;
-            updateAutonomousExploration();
-        },
-        icon: "🔥",
-        description: "A specialized drill that uses heat to extract water from ice deposits more effectively.",
-        metaMessage: "Efficiency through technology. This upgrade introduces the concept of specialized tools, showing how targeted innovations can significantly boost resource gathering.",
-        weight: 10, // Changed from 5 to 10
-        category: "exploration",
-        tier: 1,
-        count: 0,
-        repeatable: false
-    },
-    {
         name: "Subsurface Aquifer Tapper",
         cost: 250,
         effect: () => {

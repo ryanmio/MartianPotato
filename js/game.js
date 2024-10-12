@@ -18,10 +18,10 @@ let hasSeenInitialGlow = false;
 let gameStartTime = Date.now();
 
 // Resource Variables
-let potatoCount = 0;
-let water = 100;
-let nutrients = 100;
-let ice = 100;
+let potatoCount = 20;
+let water = 20;
+let nutrients = 20;
+let ice = 20;
 let waterEfficiency = 1;
 let soilEfficiency = 1;
 let iceEfficiency = 1;

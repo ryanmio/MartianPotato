@@ -51,10 +51,10 @@ TODO:
 - [x] Add cumulative potato stats to graph modal
 - [x] Add "running low" message for resources with help text on what to do about it like "explore mars surface to gather more resources"
 - [x] colonizer cooldown should decrease by 50% each "cycle" so that the end game is faster
-- [ ] remove thermal drill or make it more interesting
-- [ ] start with 20 resources of each type
-- [ ] reduce cost of spudnik satellite
+- [x] remove thermal drill or make it more interesting
+- [x] start with 20 resources of each type
 --------------------------------------------------------------------------------------------
+- [ ] reduce cost of spudnik satellite
 - [ ] Write real meta messages and descriptions
 - [ ] Add production stats
 - [ ] Balance upgrade costs and effects

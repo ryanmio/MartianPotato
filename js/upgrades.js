@@ -58,7 +58,7 @@ const upgrades = [
         tier: 1,
         count: 0,
         repeatable: false,
-        actionCardId: 'ice-melting-container' // Added property
+        actionCardId: 'ice-melting-container'
     },
     { 
         name: "Watering Can", 
@@ -103,7 +103,7 @@ const upgrades = [
     },
     { 
         name: "Quantum Spud Spawner", 
-        cost: 1000000, // Define an appropriate cost
+        cost: 10000,
         effect: function() { 
             unlockQuantumSpudSpawner(); 
         },
@@ -115,7 +115,7 @@ const upgrades = [
         tier: 5,
         count: 0,
         repeatable: false,
-        actionCardId: 'quantum-spud-spawner-container' // Added property for UI integration
+        actionCardId: 'quantum-spud-spawner-container'
     },
     { 
         name: "Martian Map", 
@@ -197,7 +197,7 @@ const upgrades = [
         tier: 3,
         count: 0,
         repeatable: false,
-        actionCardId: 'bucket-wheel-excavator-container' // Added property
+        actionCardId: 'bucket-wheel-excavator-container' 
     },
     { 
         name: "Subterranean Tuber Tunneler",
@@ -214,7 +214,7 @@ const upgrades = [
         tier: 3,
         count: 0,
         repeatable: false,
-        actionCardId: 'subterranean-tuber-tunneler-container' // Added property
+        actionCardId: 'subterranean-tuber-tunneler-container' 
     },
     { 
         name: "Martian Potato Colonizer", 
@@ -231,7 +231,7 @@ const upgrades = [
         tier: 5,
         count: 0,
         repeatable: false,
-        actionCardId: 'martian-potato-colonizer-container' // Added property
+        actionCardId: 'martian-potato-colonizer-container'
     },
     {
         name: "Subsurface Aquifer Tapper",
@@ -249,7 +249,7 @@ const upgrades = [
         tier: 2,
         count: 0,
         repeatable: false,
-        actionCardId: 'subsurface-aquifer-tapper-container' // Added property
+        actionCardId: 'subsurface-aquifer-tapper-container' 
     },
     {
         name: "Polar Cap Mining",
@@ -265,7 +265,7 @@ const upgrades = [
         tier: 3,
         count: 0,
         repeatable: false,
-        actionCardId: 'polar-cap-mining-container' // Added property
+        actionCardId: 'polar-cap-mining-container'
     },
     {
         name: "Cometary Ice Harvester",
@@ -281,7 +281,7 @@ const upgrades = [
         tier: 3,
         count: 0,
         repeatable: false,
-        actionCardId: 'cometary-ice-harvester-container' // Added property
+        actionCardId: 'cometary-ice-harvester-container' 
     },
     {
         name: "Ice Melting Basin",
@@ -296,7 +296,7 @@ const upgrades = [
         tier: 1,
         count: 0,
         repeatable: false,
-        actionCardId: 'ice-melting-basin-container' // Added property
+        actionCardId: 'ice-melting-basin-container' 
     },
     {
         name: "Nuclear Ice Melter",
@@ -352,7 +352,7 @@ const upgrades = [
     },
     {
         name: "Potato Genome Modification",
-        cost: 100, // Changed from 50 to 100
+        cost: 100,
         effect: () => {
             if (!growthUpgradesApplied.genomeModification) {
                 growthTimeMultiplier *= 0.5;
@@ -426,7 +426,7 @@ const upgrades = [
         repeatable: false
     },
     {
-        name: "Potato Computer Chip",
+        name: "Potato Chip",
         cost: 500,
         effect: () => {
             unlockNextTier(); // Unlock tier 3
@@ -625,7 +625,7 @@ function createCard(upgrade) {
     card.className = 'tech-card';
     card.dataset.upgradeName = upgrade.name;
     card.dataset.weight = upgrade.weight;
-    card.dataset.tier = upgrade.tier; // Add tier data attribute
+    card.dataset.tier = upgrade.tier;
 
     const iconElement = document.createElement('div');
     iconElement.className = 'tech-card-icon';

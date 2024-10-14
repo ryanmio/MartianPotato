@@ -97,8 +97,6 @@ Bugs/Issues:
 - [x] Toasts about exploration rates changing are showing every load instead of just when the upgrade is purchased
 - [x] move potato colonizer to right of spud spawner
 - [x] make the spud spawner faster
+- [x] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.
 --------------------------------------------------------------------------------------------
-- [ ] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.
 - [ ] Logic for removing graph datapoints when there are too many is broken
-- [ ] Some action cards disappear when the quantum spud spawner is unlocked
-- [ ] I think 1 of the action cards disappeared at some point and came back when i loaded, investigate that

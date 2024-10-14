@@ -10,8 +10,6 @@ At its core, the game employs a meta-awareness approach, explicitly revealing ho
 
 ### 1. Basic Gameplay
 - Click to plant and harvest potatoes
-- Each harvest yields Martian Spuds (MS) - the main currency
-- Use MS to progress through the tech tree and unlock new features
 
 ### 2. Resource Management
 - Balance water, soil nutrients, and oxygen levels

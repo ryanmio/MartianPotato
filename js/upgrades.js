@@ -576,7 +576,6 @@ function updateCarouselArrows() {
     }
 }
 
-
 // Also, call updateCarouselArrows when the window is resized or when the tech tree is scrolled
 window.addEventListener('resize', updateCarouselArrows);
 document.getElementById('tech-tree').addEventListener('scroll', updateCarouselArrows);
@@ -596,7 +595,6 @@ function gameLoop(currentTime) {
     requestAnimationFrame(gameLoop);
 }
 
-// Update the createTechTree function
 function createTechTree() {
     const techTree = document.getElementById('tech-tree');
     techTree.innerHTML = ''; // Clear existing content
@@ -765,17 +763,11 @@ function buyUpgrade(upgrade) {
         }
 
         showToast("Upgrade Unlocked", `You have unlocked the ${upgrade.name} upgrade!`, 'achievement');
+        
+        unlockActionCardForUpgrade(upgrade.name); // Unlock the corresponding action card if applicable
+        saveGame(); // Save the game after purchasing an upgrade
+        updateTechTree(); // Update the tech tree to reflect changes
 
-        // Unlock the corresponding action card if applicable
-        unlockActionCardForUpgrade(upgrade.name);
-
-        // Save the game after purchasing an upgrade
-        saveGame();
-
-        // Update the tech tree to reflect changes
-        updateTechTree();
-
-        // Queue the achievement modal with the correct information
         queueAchievement(
             `Technology Unlocked: ${upgrade.name}`,
             upgrade.description,
@@ -1211,10 +1203,10 @@ createAutomationDevice({
     startFunction: 'startSubterraneanTuberTunneler',
     stopFunction: 'stopSubterraneanTuberTunneler',
     resourceCheck: () => window.isSubterraneanTuberTunnelerActive && potatoCount >= 2,
-    resourceConsume: () => { potatoCount -= 2; },
+    resourceConsume: () => { potatoCount -= 1; },
     resourceProduce: () => { 
-        nutrients += 1; 
-        ice += 1; 
+        nutrients += 2; 
+        ice += 2; 
     },
     intervalTime: 2000 // Runs every 2 seconds
 });

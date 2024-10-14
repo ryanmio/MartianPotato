@@ -54,8 +54,8 @@ TODO:
 - [x] remove thermal drill or make it more interesting
 - [x] start with 20 resources of each type
 - [x] reduce cost of spudnik satellite
+- [x] Write real meta messages and descriptions
 --------------------------------------------------------------------------------------------
-- [ ] Write real meta messages and descriptions
 - [ ] Add production stats
 - [ ] Balance upgrade costs and effects
 - [ ] Add new achievements:

@@ -556,6 +556,8 @@ colonizerCycle,
         waterExplorationMultiplier: window.waterExplorationMultiplier,
         growthUpgradesApplied,
         nuclearIceMelterPercentage: nuclearIceMelterPercentage,
+        isSubsurfaceAquiferTapperUnlocked,
+        isSubsurfaceAquiferTapperActive,
     };
     console.log('Saving game state. Unlock flags:', {
         isSubsurfaceAquiferTapperUnlocked,
@@ -731,6 +733,18 @@ function loadGame() {
 
             nuclearIceMelterPercentage = gameState.nuclearIceMelterPercentage || 3; // Default to 3 if not found
             initializeNuclearIceMelter();
+
+            // Inside the loadGame function
+            isSubsurfaceAquiferTapperUnlocked = gameState.isSubsurfaceAquiferTapperUnlocked || false;
+            isSubsurfaceAquiferTapperActive = gameState.isSubsurfaceAquiferTapperActive || false; // Add this line
+
+            // After restoring the state
+            if (isSubsurfaceAquiferTapperUnlocked) {
+                unlockSubsurfaceAquiferTapper();
+                if (isSubsurfaceAquiferTapperActive) {
+                    startSubsurfaceAquiferTapper();
+                }
+            }
         } catch (error) {
             console.error('Error parsing saved game state:', error);
             showToast('Error loading game', 'There was an error loading your saved game. Starting a new game.', 'error');
@@ -925,18 +939,20 @@ function unlockSubsurfaceAquiferTapper() {
     console.log('Unlocking Subsurface Aquifer Tapper');
     isSubsurfaceAquiferTapperUnlocked = true;
     const container = document.getElementById('subsurface-aquifer-tapper-container');
-    console.log('Subsurface Aquifer Tapper container:', container);
     if (container) {
         container.style.display = 'block';
-        console.log('Set Subsurface Aquifer Tapper container display to block');
     }
     if (!unlockedActionCards.includes('subsurface-aquifer-tapper-container')) {
         unlockedActionCards.push('subsurface-aquifer-tapper-container');
-        console.log('Added subsurface-aquifer-tapper-container to unlockedActionCards');
     }
-    console.log('Current unlockedActionCards:', unlockedActionCards);
-    console.log('isSubsurfaceAquiferTapperUnlocked:', isSubsurfaceAquiferTapperUnlocked);
     updateActionCards();
+    
+    // Initialize the toggle switch
+    const toggleSwitch = document.getElementById('subsurface-aquifer-tapper-toggle');
+    if (toggleSwitch) {
+        toggleSwitch.checked = isSubsurfaceAquiferTapperActive;
+        toggleSwitch.addEventListener('change', toggleSubsurfaceAquiferTapper);
+    }
 }
 
 function unlockBucketWheelExcavator() {

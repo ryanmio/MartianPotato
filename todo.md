@@ -100,3 +100,4 @@ Bugs/Issues:
 - [x] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.
 --------------------------------------------------------------------------------------------
 - [ ] Logic for removing graph datapoints when there are too many is broken
+- [ ] Subsurface Aquifer Tapper is not working after loading from save

@@ -189,7 +189,7 @@ const upgrades = [
             isBucketWheelExcavatorUnlocked = true;
         },
         icon: "⛏️",
-        description: "A massive mobile strip-mining machine that consumes 1 potato per second to generate 2 nutrients and 2 ice.",
+        description: "A massive mobile strip-mining machine that consumes 1 potato per second to generate 4 nutrients and 2 ice.",
         metaMessage: "Scaling operations. Introducing large-scale machinery makes previous efforts seem trivial, compelling you to adapt to increasing complexity.", // shifting the game's scale
         assetName: "bucket_wheel_excavator.webp",
         weight: 12,
@@ -242,7 +242,7 @@ const upgrades = [
             isSubsurfaceAquiferTapperUnlocked = true; 
         },
         icon: "💧",
-        description: "Accesses underground water reserves. Consumes 1 potato per second to produce 2 water per second when active.",
+        description: "Accesses underground water reserves. Consumes 1 potato per second to produce 3 water per second when active.",
         metaMessage: "Resource exploitation. Tapping hidden reserves normalizes the extraction of scarce resources for short-term gains, deepening your dependency.",
         weight: 6,
         category: "exploration",
@@ -1172,7 +1172,7 @@ createAutomationDevice({
     stopFunction: 'stopSubsurfaceAquiferTapper',
     resourceCheck: () => potatoCount >= 1,
     resourceConsume: () => { potatoCount -= 1; },
-    resourceProduce: () => { water += 2; },
+    resourceProduce: () => { water += 3; },
     intervalTime: 1000
 });
 
@@ -1188,7 +1188,7 @@ createAutomationDevice({
     stopFunction: 'stopBucketWheelExcavator',
     resourceCheck: () => potatoCount >= 1,
     resourceConsume: () => { potatoCount -= 1; },
-    resourceProduce: () => { nutrients += 2; ice += 2; },
+    resourceProduce: () => { nutrients += 4; ice += 2; },
     intervalTime: 1000
 });
 

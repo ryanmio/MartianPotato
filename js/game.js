@@ -1734,6 +1734,19 @@ function initializeHarvestChart() {
     if (harvestChart) {
         harvestChart.destroy();
     }
+    
+    const formatMissionTime = (timestamp) => {
+        const elapsed = timestamp - gameStartTime;
+        const minutes = Math.floor(elapsed / 60000);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        
+        if (days > 0) return `T+${days}d`;
+        if (hours > 0) return `T+${hours}h`;
+        if (minutes > 0) return `T+${minutes}m`;
+        return 'T+0';
+    };
+
     const ctx = document.getElementById('harvestChart').getContext('2d');
     harvestChart = new Chart(ctx, {
         type: 'line',
@@ -1755,11 +1768,18 @@ function initializeHarvestChart() {
                     type: 'time',
                     time: {
                         unit: 'minute',
-                        tooltipFormat: 'MMM d, h:mm:ss a'
+                    },
+                    ticks: {
+                        maxTicksLimit: 8,
+                        maxRotation: 0,
+                        autoSkip: true,
+                        callback: function(value) {
+                            return formatMissionTime(value);
+                        }
                     },
                     title: {
                         display: true,
-                        text: 'Time'
+                        text: 'Mission Time'
                     }
                 },
                 y: {
@@ -1776,6 +1796,9 @@ function initializeHarvestChart() {
                 },
                 tooltip: {
                     callbacks: {
+                        title: function(context) {
+                            return formatMissionTime(context[0].parsed.x);
+                        },
                         label: function(context) {
                             return `Total Potatoes: ${context.parsed.y}`;
                         }

@@ -8,7 +8,6 @@ const BASE_HARVEST_DELAY = 1000; // 1 second in milliseconds
 // Upgrade System Variables
 let currentPlantingUpgrade = 0;
 let lastTechTreeUpdate = 0;
-let unlockedActionCards = [];
 let currentTier = 1; // Initialize current tier to 1
 
 // Add this near the top of the file
@@ -1289,7 +1288,6 @@ function initializeActionCards() {
     });
 }
 
-// Modify the unlockActionCardForUpgrade function to include the Quantum Spud Spawner
 function unlockActionCardForUpgrade(upgradeName) {
     const actionCardIdMap = {
         "Manual Ice Melting": 'ice-melting-container',
@@ -1298,12 +1296,14 @@ function unlockActionCardForUpgrade(upgradeName) {
         "Cometary Ice Harvester": 'cometary-ice-harvester-container',
         "Martian Potato Colonizer": 'martian-potato-colonizer-container',
         "Quantum Spud Spawner": 'quantum-spud-spawner-container',
+        "Subterranean Tuber Tunneler": 'subterranean-tuber-tunneler-container',
+        "Bucket Wheel Excavator": 'bucket-wheel-excavator-container',
         // ... add new mappings here as they are created
     };
 
     const actionCardId = actionCardIdMap[upgradeName];
-    if (actionCardId && !unlockedActionCards.includes(actionCardId)) {
-        unlockedActionCards.push(actionCardId);
+    if (actionCardId && !window.unlockedActionCards.includes(actionCardId)) {
+        window.unlockedActionCards.push(actionCardId);
         const actionCard = document.getElementById(actionCardId);
         if (actionCard) {
             actionCard.style.display = 'block';

@@ -8,6 +8,9 @@ const FRAME_RATE = 30; // 30 fps
 const FRAME_DELAY = 1000 / FRAME_RATE;
 const CLICKS_PER_WATER = 5;
 
+// Global State
+window.unlockedActionCards = [];
+
 // System Variables
 let lastUpdateTime = 0;
 let lastFrameTime = 0;
@@ -541,14 +544,14 @@ function saveGame() {
         isNuclearIceMelterUnlocked,
         isNuclearIceMelterActive,
         isMartianPotatoColonizerUnlocked,
-isMartianPotatoColonizerActive,
+        isMartianPotatoColonizerActive,
 colonizerCycle,
         potatoField,
         achievements,
         autoplanters,
         autoHarvesters,
         MAX_FIELD_SIZE,
-        unlockedActionCards,
+        unlockedActionCards: window.unlockedActionCards,
         currentTier, // Save the currentTier
         upgrades: upgrades.map(upgrade => ({
             name: upgrade.name,
@@ -626,10 +629,9 @@ function loadGame() {
 
             restoreUpgrades(gameState.upgrades);
 
-            // Restore unlocked action cards
-            if (gameState.unlockedActionCards) {
-                unlockedActionCards = [...new Set([...unlockedActionCards, ...gameState.unlockedActionCards])];
-            }
+            // Restore unlockedActionCards
+            window.unlockedActionCards = gameState.unlockedActionCards || [];
+        
 
             // Ensure all unlocked features have their cards added
             if (isManualIceMeltingUnlocked) {

@@ -93,3 +93,10 @@ Bugs/Issues:
 --------------------------------------------------------------------------------------------
 - [ ] Auto Harvester should be relabeled Automated Harvester
 - [ ] Potato spots can appear over the growth indicator percentage
+- [ ] Martian map reduces exploration time by too much
+- [ ] Reduce weight of ice melting basin to make it more visible in the tech tree
+- [ ] Buttons dont have convincing click effects because they move a bit
+- [ ] Unlocking all tech doesn't show the achievement
+- [ ] Unlocking the nuclear ice melter hides other action cards... which appear again on refresh
+- [ ] Bucket wheel excavator and subterranean tunneler do not generate resources after refreshing the game / loading the game from a save
+- [ ] Refreshing the page / loading the game from a save changes the order of the technology upgrades. I noticed ice melting basin goes from like 4th to 12th or something, higher that some of the much higher tier upgrades. It should be sorted by tier though... so this should not be happening.

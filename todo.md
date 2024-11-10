@@ -92,3 +92,4 @@ Bugs/Issues:
 - [x] Logic for removing graph datapoints when there are too many is broken
 --------------------------------------------------------------------------------------------
 - [ ] Auto Harvester should be relabeled Automated Harvester
+- [ ] Potato spots can appear over the growth indicator percentage

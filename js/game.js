@@ -93,6 +93,10 @@ let potatoField = new Array(MAX_FIELD_SIZE).fill(null);
 const defaultAchievements = {
     firstPotato: false,
     potatoCentury: false,
+    techSavvy: false,
+    martianEngineer: false,
+    oneSolWonder: false,
+    potatoEmpire: false,  // Add the new achievement flag
     // Add other achievements here
 };
 let achievements = { ...defaultAchievements };
@@ -111,6 +115,9 @@ let quantumSpudSpawnerInterval = null;
 
 // Add these variables to your game constants
 let lastHarvestUpdateTime = 0;
+
+// Add this constant for Martian day length in milliseconds
+const MARTIAN_SOL_LENGTH = 88620 * 1000; // 24h 37m in milliseconds
 
 
 
@@ -1059,7 +1066,7 @@ function checkAchievements() {
             "First Potato",
             "You've harvested your first Martian potato!",
             "This marks the beginning of your journey to colonize Mars with potatoes.",
-            "🥔" // Use the potato emoji instead of an image file
+            "🥔"
         );
     }
     if (totalPotatoesHarvested >= 100 && !achievements.potatoCentury) {
@@ -1071,7 +1078,61 @@ function checkAchievements() {
             "potato_century.webp"
         );
     }
+
+    // Tech Savvy achievement check
+    const purchasedUpgrades = upgrades.filter(upgrade => upgrade.purchased).length;
+    if (purchasedUpgrades >= 5 && !achievements.techSavvy) {
+        achievements.techSavvy = true;
+        queueAchievement(
+            "Tech Savvy",
+            "Purchase your first 5 upgrades",
+            "Your technological prowess is growing! Keep advancing your Martian farming capabilities.",
+            "tech_savvy.webp"
+        );
+    }
+
+    // Martian Engineer achievement check
+    const totalUpgrades = upgrades.length;
+    const allUpgradesPurchased = upgrades.every(upgrade => upgrade.purchased);
+    if (allUpgradesPurchased && !achievements.martianEngineer) {
+        achievements.martianEngineer = true;
+        queueAchievement(
+            "Martian Engineer",
+            "Unlock all upgrades",
+            "You've mastered every technological advancement available. Mars trembles before your engineering prowess!",
+            "martian_engineer.webp"
+        );
+    }
     // Add more achievement checks here as needed
+
+    // One Sol Wonder achievement check
+    const currentTime = Date.now();
+    const playTime = currentTime - gameStartTime;
+    
+    if (playTime >= MARTIAN_SOL_LENGTH && !achievements.oneSolWonder) {
+        achievements.oneSolWonder = true;
+        queueAchievement(
+            "One Sol Wonder",
+            "Play for One Martian Day",
+            "You've survived a full Martian day (24 hours and 37 minutes) of potato farming. Your dedication to Mars is impressive!",
+            "one_sol_wonder.webp"
+        );
+    }
+
+    // Potato Empire achievement check
+    if (!achievements.potatoEmpire && 
+        potatoCount >= 1000 && 
+        water >= 1000 && 
+        nutrients >= 1000 && 
+        ice >= 1000) {
+        achievements.potatoEmpire = true;
+        queueAchievement(
+            "Potato Empire",
+            "Resource Mastery",
+            "Your Martian colony has reached unprecedented prosperity with massive stockpiles of all resources!",
+            "potato_empire.webp"
+        );
+    }
 }
 
 // ==========================================
@@ -1741,6 +1802,10 @@ function initializeHarvestChart() {
         const hours = Math.floor(minutes / 60);
         const days = Math.floor(hours / 24);
         
+        // Calculate Martian Sols (1 sol = 24h 37m = 88620 seconds)
+        const sols = Math.floor(elapsed / MARTIAN_SOL_LENGTH);
+        
+        if (sols > 0) return `T+${sols} ${sols === 1 ? 'Sol' : 'Sols'}`;
         if (days > 0) return `T+${days}d`;
         if (hours > 0) return `T+${hours}h`;
         if (minutes > 0) return `T+${minutes}m`;
@@ -2053,6 +2118,17 @@ function updateDebugInfo(currentTime, updateTime) {
         
         lastDebugUpdateTime = currentTime;
         lastResourceValues = { water, nutrients, potatoes: potatoCount };
+
+        if (debugMode && !achievements.potatoEmpire) {
+            const progress = getPotatoEmpireProgress();
+            updateElement('empire-progress', 
+                `Potato Empire Progress: 
+                Potatoes: ${progress.potatoes.toFixed(1)}%, 
+                Water: ${progress.water.toFixed(1)}%, 
+                Nutrients: ${progress.nutrients.toFixed(1)}%, 
+                Ice: ${progress.ice.toFixed(1)}%`
+            );
+        }
     } catch (error) {
         console.error('Error updating debug info:', error);
     }

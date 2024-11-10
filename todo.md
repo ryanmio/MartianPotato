@@ -56,25 +56,14 @@ TODO:
 - [x] reduce cost of spudnik satellite
 - [x] Write real meta messages and descriptions
 - [x] Command+S should save the game
+- [x] Add new achievements:
+    - [x] "Tech Savvy": Purchase your first 5 upgrades
+    - [x] "Martian Engineer": Unlock all upgrades
+    - [x] "One Sol Wonder": Play the game continuously for 1 Martian day (24 hours and 37 minutes)
+    - [x] "Potato Empire": Have 1000 potatoes, 1000 water, 1000 soil nutrients, and 1000 oxygen simultaneously
 --------------------------------------------------------------------------------------------
 - [ ] Add production stats
 - [ ] Balance upgrade costs and effects
-- [ ] Add new achievements:
-    - [ ] Upgrade Milestones:
-        - [ ] "Tech Savvy": Purchase your first 5 upgrades
-            - Asset: tech_savvy.webp
-            - Prompt: "A Martian control room with holographic displays showing various potato farming technologies. An astronaut's hand activates the 5th upgrade, causing the room to glow with achievement. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
-        - [ ] "Martian Engineer": Unlock all upgrades
-            - Asset: martian_engineer.webp
-            - Prompt: "An astronaut wearing an augmented reality headset, surrounded by floating holograms of potato farming equipment and upgrades. All holograms in one category are lit up, indicating completion. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
-    - [ ] Time-based Achievements:
-        - [ ] "One Sol Wonder": Play the game continuously for 1 Martian day (24 hours and 37 minutes)
-            - Asset: one_sol_wonder.webp
-            - Prompt: "A split-screen showing a Martian day cycle: one half in daylight, the other in Martian night. A potato plant grows progressively across the image. A clock face overlaid shows 24:37. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
-    - [ ] Other Achievements:
-        - [ ] "Potato Empire": Have 1000 potatoes, 1000 water, 1000 soil nutrients, and 1000 oxygen simultaneously
-            - Asset: potato_empire.webp
-            - Prompt: "A grand Martian citadel made entirely of interconnected potato-shaped domes. Each dome represents a resource: potatoes, water, nutrients, and oxygen. Holographic '1000' floats above each dome. Hyper-realistic rendering, low-poly. --ar 1:1 --v 6 --q 4"
 
 
 

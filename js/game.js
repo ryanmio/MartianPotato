@@ -17,6 +17,12 @@ let MAX_TIER = 5;
 let hasSeenInitialGlow = false;
 let gameStartTime = Date.now();
 
+// Harvest Chart Update Intervals
+const HARVEST_UPDATE_INTERVAL = 60000; // Update chart at most once per minute
+const EARLY_GAME_UPDATE_INTERVAL = 500; // Update every half-second for early game
+const REGULAR_UPDATE_INTERVAL = 60000;    // Every minute once established
+const EARLY_GAME_THRESHOLD = 100;  
+
 // Resource Variables
 let potatoCount = 0;
 let water = 20;
@@ -102,6 +108,9 @@ let lastAction = "None";
 let isQuantumSpudSpawnerUnlocked = false;
 let isQuantumSpudSpawnerActive = false;
 let quantumSpudSpawnerInterval = null;
+
+// Add these variables to your game constants
+let lastHarvestUpdateTime = 0;
 
 
 
@@ -422,13 +431,7 @@ function harvestPotatoAtIndex(index, isAutomated = false) {
             updatePotatoFieldDisplay();
             updateDisplay();
 
-            // Record the harvest event and update the chart
-            harvestHistory.push({
-                timestamp: Date.now(),
-                totalPotatoes: totalPotatoesHarvested
-            });
             updateHarvestHistory();
-            updateHarvestChart();
 
             checkAchievements();
         }
@@ -554,6 +557,7 @@ colonizerCycle,
         harvestHistory,         
         gameStartTime,
         isSubsurfaceAquiferTapperUnlocked,
+        isSubsurfaceAquiferTapperActive,
         isBucketWheelExcavatorUnlocked,
         isSubterraneanTuberTunnelerUnlocked,          
         explorationResourceMultiplier: window.explorationResourceMultiplier,
@@ -562,8 +566,6 @@ colonizerCycle,
         waterExplorationMultiplier: window.waterExplorationMultiplier,
         growthUpgradesApplied,
         nuclearIceMelterPercentage: nuclearIceMelterPercentage,
-        isSubsurfaceAquiferTapperUnlocked,
-        isSubsurfaceAquiferTapperActive,
     };
     console.log('Saving game state. Unlock flags:', {
         isSubsurfaceAquiferTapperUnlocked,
@@ -747,9 +749,6 @@ function loadGame() {
             // After restoring the state
             if (isSubsurfaceAquiferTapperUnlocked) {
                 unlockSubsurfaceAquiferTapper();
-                if (isSubsurfaceAquiferTapperActive) {
-                    startSubsurfaceAquiferTapper();
-                }
             }
         } catch (error) {
             console.error('Error parsing saved game state:', error);
@@ -1713,78 +1712,19 @@ function getPlaytime() {
 // Function to update harvest history with time-based aggregation
 function updateHarvestHistory() {
     const now = Date.now();
-
-    // Add new data point
-    harvestHistory.push({
-        timestamp: now,
-        totalPotatoes: totalPotatoesHarvested
-    });
-
-    // Define binning intervals
-    const recentInterval = 60 * 1000; // 1 minute
-    const oldInterval = 5 * 60 * 1000; // 5 minutes
-
-    // Threshold between recent and old data (e.g., last 30 minutes)
-    const recentThreshold = now - (30 * 60 * 1000); // Last 30 minutes
-
-    // Function to aggregate data into bins
-    function aggregateData(data, interval) {
-        const aggregatedData = [];
-        if (data.length === 0) return aggregatedData;
-
-        let bucketStartTime = data[0].timestamp;
-        let bucketEndTime = bucketStartTime + interval;
-        let bucketTotal = 0;
-        let bucketCount = 0;
-
-        data.forEach(entry => {
-            while (entry.timestamp >= bucketEndTime) {
-                if (bucketCount > 0) {
-                    aggregatedData.push({
-                        timestamp: bucketStartTime + interval / 2,
-                        totalPotatoes: Math.round(bucketTotal / bucketCount) // Round to nearest whole number
-                    });
-                }
-                bucketStartTime = bucketEndTime;
-                bucketEndTime += interval;
-                bucketTotal = 0;
-                bucketCount = 0;
-            }
-            bucketTotal += entry.totalPotatoes;
-            bucketCount += 1;
+    const updateInterval = harvestHistory.length < EARLY_GAME_THRESHOLD ? 
+        EARLY_GAME_UPDATE_INTERVAL : 
+        REGULAR_UPDATE_INTERVAL;
+    
+    // Only update if enough time has passed or if it's the first entry
+    if (harvestHistory.length === 0 || now - lastHarvestUpdateTime >= updateInterval) {
+        harvestHistory.push({
+            timestamp: now,
+            totalPotatoes: totalPotatoesHarvested
         });
-
-        // Add the last bucket
-        if (bucketCount > 0) {
-            aggregatedData.push({
-                timestamp: bucketStartTime + interval / 2,
-                totalPotatoes: Math.round(bucketTotal / bucketCount) // Round to nearest whole number
-            });
-        }
-
-        return aggregatedData;
+        lastHarvestUpdateTime = now;
+        updateHarvestChart();
     }
-
-    // Separate recent and old data
-    const recentData = harvestHistory.filter(entry => entry.timestamp >= recentThreshold);
-    const oldData = harvestHistory.filter(entry => entry.timestamp < recentThreshold);
-
-    // Aggregate old data
-    const aggregatedOldData = aggregateData(oldData, oldInterval);
-
-    // Keep recent data as is
-    const processedRecentData = recentData;
-
-    // Combine aggregated old data with recent data
-    harvestHistory = aggregatedOldData.concat(processedRecentData);
-
-    // Limit the size of the harvestHistory array
-    const maxHistoryEntries = 1000; // Adjust as needed
-    if (harvestHistory.length > maxHistoryEntries) {
-        harvestHistory = harvestHistory.slice(-maxHistoryEntries);
-    }
-
-    updateHarvestChart();
 }
 
 // Initialize the harvest chart
@@ -1944,9 +1884,6 @@ function showNuclearIceMelterContainer() {
     const container = document.getElementById('nuclear-ice-melter-container');
     if (container) {
         container.style.display = 'block';
-        console.log('Nuclear Ice Melter container should now be visible');
-    } else {
-        console.error('Nuclear Ice Melter container not found');
     }
 }
 

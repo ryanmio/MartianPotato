@@ -58,6 +58,7 @@ TODO:
 --------------------------------------------------------------------------------------------
 - [ ] Add production stats
 - [ ] Balance upgrade costs and effects
+- [ ] Command+S should save the game
 - [ ] Add new achievements:
     - [ ] Upgrade Milestones:
         - [ ] "Tech Savvy": Purchase your first 5 upgrades
@@ -98,6 +99,6 @@ Bugs/Issues:
 - [x] move potato colonizer to right of spud spawner
 - [x] make the spud spawner faster
 - [x] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.
+- [x] Subsurface Aquifer Tapper is not working after loading from save
+- [x] Logic for removing graph datapoints when there are too many is broken
 --------------------------------------------------------------------------------------------
-- [ ] Logic for removing graph datapoints when there are too many is broken
-- [ ] Subsurface Aquifer Tapper is not working after loading from save

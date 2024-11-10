@@ -1284,8 +1284,6 @@ function initializeActionCards() {
             if (!card.hasAttribute('disabled') && card.style.display !== 'none') {
                 const actionName = card.id.replace('-container', '');
                 handleActionCardClick(actionName);
-            } else {
-                console.log(`Action card ${card.id} is disabled or hidden`);
             }
         });
     });

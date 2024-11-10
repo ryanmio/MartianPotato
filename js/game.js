@@ -1844,6 +1844,15 @@ function initializeEventListeners() {
  // Debug mode toggle
  document.addEventListener('keydown', handleKeyPress);
 
+ // Add save shortcut listener
+ document.addEventListener('keydown', function(event) {
+     // Check for Command+S (Mac) or Ctrl+S (Windows/Linux)
+     if ((event.metaKey || event.ctrlKey) && event.key === 's') {
+         event.preventDefault(); // Prevent the browser's save dialog
+         saveGame();
+     }
+ });
+
  // Debug info controls
  addEventListenerIfExists('minimize-debug', 'click', toggleDebugInfoMinimize);
 

@@ -55,10 +55,10 @@ TODO:
 - [x] start with 20 resources of each type
 - [x] reduce cost of spudnik satellite
 - [x] Write real meta messages and descriptions
+- [x] Command+S should save the game
 --------------------------------------------------------------------------------------------
 - [ ] Add production stats
 - [ ] Balance upgrade costs and effects
-- [ ] Command+S should save the game
 - [ ] Add new achievements:
     - [ ] Upgrade Milestones:
         - [ ] "Tech Savvy": Purchase your first 5 upgrades
@@ -102,3 +102,4 @@ Bugs/Issues:
 - [x] Subsurface Aquifer Tapper is not working after loading from save
 - [x] Logic for removing graph datapoints when there are too many is broken
 --------------------------------------------------------------------------------------------
+- [ ] Auto Harvester should be relabeled Automated Harvester

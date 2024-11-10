@@ -26,6 +26,9 @@ let waterEfficiency = 1;
 let soilEfficiency = 1;
 let iceEfficiency = 1;
 let areResourcesDepleted = false;
+let lastResourceWarningTime = 0;
+const RESOURCE_WARNING_COOLDOWN = 60000; // 1 minute cooldown
+let resourceWarningActive = false;
 
 // Planting Variables
 let plantingDelay = 3000;
@@ -50,8 +53,6 @@ let isNuclearIceMelterUnlocked = false;
 let isNuclearIceMelterActive = false;
 let nuclearIceMelterInterval = null;
 let iceMelterKnob;
-
-// Variable to store the selected percentage
 let nuclearIceMelterPercentage = 3; // Default to 3%
 
 // Polar Cap Mining Variables
@@ -74,6 +75,7 @@ const INITIAL_COLONIZER_CYCLE_DURATION = 60000; // 60 seconds
 const MIN_COLONIZER_CYCLE_DURATION = 1000; // 1 second minimum duration
 
 let isSubsurfaceAquiferTapperUnlocked = false;
+let isSubsurfaceAquiferTapperActive = false;
 let isBucketWheelExcavatorUnlocked = false;
 let isSubterraneanTuberTunnelerUnlocked = false;
 let isSubterraneanTuberTunnelerActive = false;
@@ -101,10 +103,7 @@ let isQuantumSpudSpawnerUnlocked = false;
 let isQuantumSpudSpawnerActive = false;
 let quantumSpudSpawnerInterval = null;
 
-// Add these variables at the top of the file with other game state variables
-let lastResourceWarningTime = 0;
-const RESOURCE_WARNING_COOLDOWN = 60000; // 1 minute cooldown
-let resourceWarningActive = false;
+
 
 // ==========================================
 //            CORE GAME FUNCTIONS
@@ -117,11 +116,17 @@ function initGame() {
         loadGame();
         initializePotatoField();
         createTechTree();
-        updateActionCards(); // Add this line
+        updateActionCards();
+        
+        // Add glow for new games
+        const plantButton = document.getElementById('plant-button');
+        if (!hasSeenInitialGlow && plantButton) {
+            plantButton.classList.add('glow');
+        }
+        
         requestAnimationFrame(gameLoop);
         gameInitialized = true;
         initializeNuclearIceMelter();
-        
     }
 }
 
@@ -129,6 +134,7 @@ function initGame() {
 function resetGame() {
     if (confirm('Are you sure you want to reset the game? This will erase all your progress.')) {
         localStorage.removeItem('martianPotatoSave');
+        hasSeenInitialGlow = false;
         location.reload();
     }
 }

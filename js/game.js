@@ -574,12 +574,6 @@ colonizerCycle,
         growthUpgradesApplied,
         nuclearIceMelterPercentage: nuclearIceMelterPercentage,
     };
-    console.log('Saving game state. Unlock flags:', {
-        isSubsurfaceAquiferTapperUnlocked,
-        isBucketWheelExcavatorUnlocked,
-        isSubterraneanTuberTunnelerUnlocked
-    });
-    console.log('Saving unlockedActionCards:', unlockedActionCards);
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
 }
@@ -1971,7 +1965,6 @@ function initializeEventListeners() {
 window.knobChanged = function(id, val) {
     if (id === 'nuclear-ice-melter-knob') {
         nuclearIceMelterPercentage = parseInt(val);
-        console.log(`Nuclear Ice Melter percentage set to ${nuclearIceMelterPercentage * 10}%`);
         updateNuclearIceMelterDisplay(); // Update the display
     }
 };
@@ -2118,17 +2111,6 @@ function updateDebugInfo(currentTime, updateTime) {
         
         lastDebugUpdateTime = currentTime;
         lastResourceValues = { water, nutrients, potatoes: potatoCount };
-
-        if (debugMode && !achievements.potatoEmpire) {
-            const progress = getPotatoEmpireProgress();
-            updateElement('empire-progress', 
-                `Potato Empire Progress: 
-                Potatoes: ${progress.potatoes.toFixed(1)}%, 
-                Water: ${progress.water.toFixed(1)}%, 
-                Nutrients: ${progress.nutrients.toFixed(1)}%, 
-                Ice: ${progress.ice.toFixed(1)}%`
-            );
-        }
     } catch (error) {
         console.error('Error updating debug info:', error);
     }

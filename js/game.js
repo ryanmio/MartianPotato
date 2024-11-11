@@ -7,6 +7,7 @@ const UPDATE_INTERVAL = 1000; // Update every second
 const FRAME_RATE = 30; // 30 fps
 const FRAME_DELAY = 1000 / FRAME_RATE;
 const CLICKS_PER_WATER = 5;
+const MARTIAN_SOL_LENGTH = 88620 * 1000; // 24h 37m in milliseconds
 
 // Global State
 window.unlockedActionCards = [];
@@ -19,12 +20,13 @@ let lastSaveTime = 0;
 let MAX_TIER = 5;
 let hasSeenInitialGlow = false;
 let gameStartTime = Date.now();
+let lastHarvestUpdateTime = 0; 
 
 // Harvest Chart Update Intervals
 const HARVEST_UPDATE_INTERVAL = 60000; // Update chart at most once per minute
 const EARLY_GAME_UPDATE_INTERVAL = 500; // Update every half-second for early game
 const REGULAR_UPDATE_INTERVAL = 60000;    // Every minute once established
-const EARLY_GAME_THRESHOLD = 100;  
+const EARLY_GAME_THRESHOLD = 100; 
 
 // Resource Variables
 let potatoCount = 0;
@@ -83,11 +85,21 @@ const maxColonizerCycles = 20; // 20 cycles
 const INITIAL_COLONIZER_CYCLE_DURATION = 60000; // 60 seconds
 const MIN_COLONIZER_CYCLE_DURATION = 1000; // 1 second minimum duration
 
+// Subsurface Aquifer Tapper Variables
 let isSubsurfaceAquiferTapperUnlocked = false;
 let isSubsurfaceAquiferTapperActive = false;
+
+// Bucket Wheel Excavator Variables
 let isBucketWheelExcavatorUnlocked = false;
+
+// Subterranean Tuber Tunneler Variables
 let isSubterraneanTuberTunnelerUnlocked = false;
 let isSubterraneanTuberTunnelerActive = false;
+
+// Quantum Spud Spawner Variables
+let isQuantumSpudSpawnerUnlocked = false;
+let isQuantumSpudSpawnerActive = false;
+let quantumSpudSpawnerInterval = null;
 
 // Large Data Structures
 let potatoField = new Array(MAX_FIELD_SIZE).fill(null);
@@ -110,18 +122,6 @@ let fpsValues = [];
 let lastDebugUpdateTime = 0;
 let lastResourceValues = { water: 0, nutrients: 0, ice: 0 };
 let lastAction = "None";
-
-// Quantum Spud Spawner Variables
-let isQuantumSpudSpawnerUnlocked = false;
-let isQuantumSpudSpawnerActive = false;
-let quantumSpudSpawnerInterval = null;
-
-// Add these variables to your game constants
-let lastHarvestUpdateTime = 0;
-
-// Add this constant for Martian day length in milliseconds
-const MARTIAN_SOL_LENGTH = 88620 * 1000; // 24h 37m in milliseconds
-
 
 
 // ==========================================
@@ -224,9 +224,7 @@ function updateResources(currentTime) {
             }
             updateIceMeltingBasinButton();
         }
-
-        checkResourceLevels(); // Add this line to check resource levels
-
+        checkResourceLevels();
         lastUpdateTime = currentTime;
         return true;
     }
@@ -308,7 +306,7 @@ function updateDepletedActionCard(actionCardId, isDepleted, message) {
     }
 }
 
-// Add this function to check resource levels and display warnings
+// function to check resource levels and display warnings
 function checkResourceLevels() {
     const currentTime = Date.now();
     if (currentTime - lastResourceWarningTime < RESOURCE_WARNING_COOLDOWN) return;
@@ -561,7 +559,7 @@ function saveGame() {
         isNuclearIceMelterActive,
         isMartianPotatoColonizerUnlocked,
         isMartianPotatoColonizerActive,
-colonizerCycle,
+        colonizerCycle,
         potatoField,
         achievements,
         autoplanters,
@@ -651,7 +649,6 @@ function loadGame() {
             // Restore unlockedActionCards
             window.unlockedActionCards = gameState.unlockedActionCards || [];
         
-
             // Ensure all unlocked features have their cards added
             if (isManualIceMeltingUnlocked) {
                 unlockedActionCards.push('ice-melting-container');
@@ -1609,7 +1606,6 @@ function stopQuantumSpudSpawner() {
     }
 }
 
-// Modify the createPotato function to allow for instant growth
 function createPotato(instantGrowth = false, isQuantumSpawned = false) {
     const currentTime = Date.now();
     const scaleX = 0.95 + Math.random() * 0.1;
@@ -1628,7 +1624,7 @@ function createPotato(instantGrowth = false, isQuantumSpawned = false) {
     };
 }
 
-// Add this function to toggle the Quantum Spud Spawner
+// function to toggle the Quantum Spud Spawner
 function toggleQuantumSpudSpawner() {
     if (isQuantumSpudSpawnerActive) {
             stopQuantumSpudSpawner();
@@ -1638,7 +1634,7 @@ function toggleQuantumSpudSpawner() {
     updateQuantumSpudSpawnerToggle();
 }
 
-// Add this function to update the Quantum Spud Spawner toggle button
+// function to update the Quantum Spud Spawner toggle button
 function updateQuantumSpudSpawnerToggle() {
     const toggleElement = document.getElementById('quantum-spud-spawner-toggle');
     if (toggleElement) {

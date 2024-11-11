@@ -62,7 +62,7 @@ TODO:
     - [x] "One Sol Wonder": Play the game continuously for 1 Martian day (24 hours and 37 minutes)
     - [x] "Potato Empire": Have 1000 potatoes, 1000 water, 1000 soil nutrients, and 1000 oxygen simultaneously
 --------------------------------------------------------------------------------------------
-- [ ] Add production stats
+- [ ] Add more/better production stats
 - [ ] Balance upgrade costs and effects
 - [ ] Mobile styling
 - [ ] Add potato sentience upgrade effect

@@ -1204,13 +1204,13 @@ function updateDisplay() {
 }
 
 function updateAutoHarvestersInfo() {
-    updateElementIfChanged('auto-harvesters', `Auto Harvesters: ${autoHarvesters.length}`);
+    updateElementIfChanged('auto-harvesters', `Harvesting Rovers: ${autoHarvesters.length}`);
 }
 
 function updateAutoPlantersInfo() {
     const autoplantersElement = document.getElementById('automated-planters');
     if (autoplantersElement) {
-        const newText = `Automated Planters: ${autoplanters.length}`;
+        const newText = `Planting Rovers: ${autoplanters.length}`;
         if (autoplantersElement.textContent !== newText) {
             autoplantersElement.textContent = newText;
             autoplantersElement.style.display = autoplanters.length > 0 ? 'block' : 'none';

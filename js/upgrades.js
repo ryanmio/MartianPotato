@@ -75,7 +75,7 @@ const upgrades = [
         repeatable: false
     },
     { 
-        name: "Automated Planter", 
+        name: "Autonomous Planting Rover",  
         cost: 25,
         effect: () => { addAutoplanter(); }, 
         icon: "🤖",
@@ -88,7 +88,7 @@ const upgrades = [
         repeatable: true
     },
     { 
-        name: "Auto Harvester", 
+        name: "Autonomous Harvesting Rover", 
         cost: 50,
         effect: () => { addAutoHarvester(); }, 
         icon: "🤖",
@@ -826,7 +826,7 @@ function unlockQuantumSpudSpawner() {
 function addAutoplanter() {
     const autoplanter = {
         interval: null,
-        cost: Math.floor(20 * Math.pow(1.15, upgrades.find(u => u.name === "Automated Planter").count))
+        cost: Math.floor(20 * Math.pow(1.15, upgrades.find(u => u.name === "Autonomous Planting Rover").count))
     };
     autoplanters.push(autoplanter);
     startAutoplanter(autoplanter);
@@ -870,7 +870,7 @@ function checkAndRestartAutoplanters() {
 function addAutoHarvester() {
     const autoHarvester = {
         interval: null,
-        cost: Math.floor(100 * Math.pow(1.15, upgrades.find(u => u.name === "Auto Harvester").count))
+        cost: Math.floor(100 * Math.pow(1.15, upgrades.find(u => u.name === "Autonomous Harvesting Rover").count))
     };
     autoHarvesters.push(autoHarvester);
     startAutoHarvester(autoHarvester);

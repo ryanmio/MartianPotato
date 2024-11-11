@@ -120,12 +120,12 @@ const upgrades = [
         name: "Martian Map", 
         cost: 5,
         effect: () => { 
-            window.exploreDelay = Math.max(1000, window.exploreDelay - 5000);
+            window.exploreDelay = Math.max(1000, window.exploreDelay - 3000);
             updateExploreButton();
         },
         icon: "🗺️",
-        description: "Reduces exploration time by 5 seconds.",
-        metaMessage: "Accelerating progress. By significantly cutting down wait times, the game enhances your sense of accomplishment, keeping you motivated.", // the big reduction in exploration time helps the user feel like they are making progress and means fewer clicks to acquire the same resources
+        description: "Reduces exploration time by 3 seconds.",
+        metaMessage: "Early dopamine hit. This low-cost, high-reward upgrade provides an instant sense of progress by significantly cutting down wait times, training you to crave more upgrades and keeping you hooked.", // By providing a major boost to exploration speed early on, the game gives the user a taste of the rewards they can expect, encouraging them to continue playing and upgrading
         weight: 2,
         category: "exploration",
         tier: 1,

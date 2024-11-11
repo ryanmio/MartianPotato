@@ -8,6 +8,9 @@ const FRAME_RATE = 30; // 30 fps
 const FRAME_DELAY = 1000 / FRAME_RATE;
 const CLICKS_PER_WATER = 5;
 
+// Global State
+window.unlockedActionCards = [];
+
 // System Variables
 let lastUpdateTime = 0;
 let lastFrameTime = 0;
@@ -541,14 +544,14 @@ function saveGame() {
         isNuclearIceMelterUnlocked,
         isNuclearIceMelterActive,
         isMartianPotatoColonizerUnlocked,
-isMartianPotatoColonizerActive,
+        isMartianPotatoColonizerActive,
 colonizerCycle,
         potatoField,
         achievements,
         autoplanters,
         autoHarvesters,
         MAX_FIELD_SIZE,
-        unlockedActionCards,
+        unlockedActionCards: window.unlockedActionCards,
         currentTier, // Save the currentTier
         upgrades: upgrades.map(upgrade => ({
             name: upgrade.name,
@@ -573,13 +576,10 @@ colonizerCycle,
         waterExplorationMultiplier: window.waterExplorationMultiplier,
         growthUpgradesApplied,
         nuclearIceMelterPercentage: nuclearIceMelterPercentage,
+        isSubsurfaceAquiferTapperActive: window.isSubsurfaceAquiferTapperActive,
+        isBucketWheelExcavatorActive: window.isBucketWheelExcavatorActive,
+        isSubterraneanTuberTunnelerActive: window.isSubterraneanTuberTunnelerActive,
     };
-    console.log('Saving game state. Unlock flags:', {
-        isSubsurfaceAquiferTapperUnlocked,
-        isBucketWheelExcavatorUnlocked,
-        isSubterraneanTuberTunnelerUnlocked
-    });
-    console.log('Saving unlockedActionCards:', unlockedActionCards);
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
 }
@@ -632,10 +632,9 @@ function loadGame() {
 
             restoreUpgrades(gameState.upgrades);
 
-            // Restore unlocked action cards
-            if (gameState.unlockedActionCards) {
-                unlockedActionCards = [...new Set([...unlockedActionCards, ...gameState.unlockedActionCards])];
-            }
+            // Restore unlockedActionCards
+            window.unlockedActionCards = gameState.unlockedActionCards || [];
+        
 
             // Ensure all unlocked features have their cards added
             if (isManualIceMeltingUnlocked) {
@@ -756,6 +755,30 @@ function loadGame() {
             // After restoring the state
             if (isSubsurfaceAquiferTapperUnlocked) {
                 unlockSubsurfaceAquiferTapper();
+            }
+
+            if (isBucketWheelExcavatorUnlocked) {
+                unlockBucketWheelExcavator();
+                if (gameState.isBucketWheelExcavatorActive) {
+                    window.isBucketWheelExcavatorActive = true;
+                    const toggle = document.getElementById('bucket-wheel-excavator-toggle');
+                    if (toggle) {
+                        toggle.checked = true;
+                        startBucketWheelExcavator();
+                    }
+                }
+            }
+
+            if (isSubterraneanTuberTunnelerUnlocked) {
+                unlockSubterraneanTuberTunneler();
+                if (gameState.isSubterraneanTuberTunnelerActive) {
+                    window.isSubterraneanTuberTunnelerActive = true;
+                    const toggle = document.getElementById('subterranean-tuber-tunneler-toggle');
+                    if (toggle) {
+                        toggle.checked = true;
+                        startSubterraneanTuberTunneler();
+                    }
+                }
             }
         } catch (error) {
             console.error('Error parsing saved game state:', error);
@@ -1092,9 +1115,10 @@ function checkAchievements() {
     }
 
     // Martian Engineer achievement check
-    const totalUpgrades = upgrades.length;
-    const allUpgradesPurchased = upgrades.every(upgrade => upgrade.purchased);
-    if (allUpgradesPurchased && !achievements.martianEngineer) {
+    const nonRepeatableUpgrades = upgrades.filter(upgrade => !upgrade.repeatable);
+    const allNonRepeatablePurchased = nonRepeatableUpgrades.every(upgrade => upgrade.count > 0);
+    
+    if (allNonRepeatablePurchased && !achievements.martianEngineer) {
         achievements.martianEngineer = true;
         queueAchievement(
             "Martian Engineer",
@@ -1971,7 +1995,6 @@ function initializeEventListeners() {
 window.knobChanged = function(id, val) {
     if (id === 'nuclear-ice-melter-knob') {
         nuclearIceMelterPercentage = parseInt(val);
-        console.log(`Nuclear Ice Melter percentage set to ${nuclearIceMelterPercentage * 10}%`);
         updateNuclearIceMelterDisplay(); // Update the display
     }
 };
@@ -2118,17 +2141,6 @@ function updateDebugInfo(currentTime, updateTime) {
         
         lastDebugUpdateTime = currentTime;
         lastResourceValues = { water, nutrients, potatoes: potatoCount };
-
-        if (debugMode && !achievements.potatoEmpire) {
-            const progress = getPotatoEmpireProgress();
-            updateElement('empire-progress', 
-                `Potato Empire Progress: 
-                Potatoes: ${progress.potatoes.toFixed(1)}%, 
-                Water: ${progress.water.toFixed(1)}%, 
-                Nutrients: ${progress.nutrients.toFixed(1)}%, 
-                Ice: ${progress.ice.toFixed(1)}%`
-            );
-        }
     } catch (error) {
         console.error('Error updating debug info:', error);
     }

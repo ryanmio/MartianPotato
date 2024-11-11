@@ -8,7 +8,6 @@ const BASE_HARVEST_DELAY = 1000; // 1 second in milliseconds
 // Upgrade System Variables
 let currentPlantingUpgrade = 0;
 let lastTechTreeUpdate = 0;
-let unlockedActionCards = [];
 let currentTier = 1; // Initialize current tier to 1
 
 // Add this near the top of the file
@@ -505,21 +504,59 @@ function getCardId(upgradeName) {
     return `upgrade-${upgradeName.replace(/\s+/g, '-').toLowerCase()}`;
 }
 
-// Update the tech tree UI, throttled to run at most once per second
+// Add this helper function
+function sortUpgrades(upgradesArray) {
+    return [...upgradesArray].sort((a, b) => {
+        // First sort by weight
+        if (a.weight !== b.weight) {
+            return a.weight - b.weight;
+        }
+        // If weights are equal, sort by cost
+        return a.cost - b.cost;
+    });
+}
+
+// Update createTechTree function
+function createTechTree() {
+    const techTree = document.getElementById('tech-tree');
+    techTree.innerHTML = ''; // Clear existing content
+
+    // Sort upgrades before displaying
+    const sortedUpgrades = sortUpgrades(upgrades);
+    
+    sortedUpgrades.forEach((upgrade) => {
+        let shouldDisplayCard = false;
+        if (upgrade.tier <= currentTier) {
+            if (upgrade.repeatable || upgrade.count === 0) {
+                shouldDisplayCard = true;
+            }
+        }
+
+        if (shouldDisplayCard) {
+            const card = createCard(upgrade);
+            techTree.appendChild(card);
+        }
+    });
+}
+
+// Update updateTechTree function
 function updateTechTree() {
     const currentTime = Date.now();
     if (currentTime - lastTechTreeUpdate < TECH_TREE_UPDATE_INTERVAL) {
-        return; // Exit if not enough time has passed since the last update
+        return;
     }
     lastTechTreeUpdate = currentTime;
 
     const techTree = document.getElementById('tech-tree');
     const existingCards = new Set(Array.from(techTree.children).map(card => card.id));
 
-    upgrades.forEach((upgrade) => {
+    // Sort upgrades before updating
+    const sortedUpgrades = sortUpgrades(upgrades);
+    
+    sortedUpgrades.forEach((upgrade) => {
         let shouldDisplayCard = false;
         if (upgrade.tier <= currentTier) {
-            if (upgrade.repeatable || upgrade.count === 0) { // Display if repeatable or not yet purchased
+            if (upgrade.repeatable || upgrade.count === 0) {
                 shouldDisplayCard = true;
             }
         }
@@ -593,25 +630,6 @@ function gameLoop(currentTime) {
         lastFrameTime = currentTime;
     }
     requestAnimationFrame(gameLoop);
-}
-
-function createTechTree() {
-    const techTree = document.getElementById('tech-tree');
-    techTree.innerHTML = ''; // Clear existing content
-
-    upgrades.forEach((upgrade) => {
-        let shouldDisplayCard = false;
-        if (upgrade.tier <= currentTier) {
-            if (upgrade.repeatable || upgrade.count === 0) { // Display if repeatable or not yet purchased
-                shouldDisplayCard = true;
-            }
-        }
-
-        if (shouldDisplayCard) {
-            const card = createCard(upgrade);
-            techTree.appendChild(card);
-        }
-    });
 }
 
 // Create a single tech card for the given upgrade
@@ -1097,12 +1115,20 @@ function createAutomationDevice(deviceConfig) {
         intervalTime 
     } = deviceConfig;
 
+    let interval = null; // Track interval locally
+
     // Unlock the device
     window[unlockFunction] = function() {
         window[isUnlocked] = true;
         const container = document.getElementById(containerId);
         if (container) {
             container.style.display = 'block';
+        }
+        // Restore active state if it was running before
+        const toggleSwitch = document.getElementById(toggleId);
+        if (toggleSwitch && window[isActive]) {
+            toggleSwitch.checked = true;
+            window[startFunction]();
         }
     };
 
@@ -1136,22 +1162,26 @@ function createAutomationDevice(deviceConfig) {
             return;
         }
 
-        window[`${id}Interval`] = setInterval(() => {
-            if (resourceCheck()) {  // Use the resourceCheck function here
+        // Clear any existing interval
+        if (interval) {
+            clearInterval(interval);
+        }
+
+        interval = setInterval(() => {
+            if (resourceCheck()) {
                 resourceConsume();
                 resourceProduce();
                 updateDisplay();
-            } else {
-                // Don't automatically toggle off, just skip this cycle
-                console.log(`Skipping ${id} cycle due to insufficient resources`);
             }
         }, intervalTime);
     };
 
     // Stop the device
     window[stopFunction] = function() {
-        clearInterval(window[`${id}Interval`]);
-        window[`${id}Interval`] = null; // Ensure the interval is cleared
+        if (interval) {
+            clearInterval(interval);
+            interval = null;
+        }
         window[isActive] = false;
         const toggleSwitch = document.getElementById(toggleId);
         if (toggleSwitch) {
@@ -1289,7 +1319,6 @@ function initializeActionCards() {
     });
 }
 
-// Modify the unlockActionCardForUpgrade function to include the Quantum Spud Spawner
 function unlockActionCardForUpgrade(upgradeName) {
     const actionCardIdMap = {
         "Manual Ice Melting": 'ice-melting-container',
@@ -1298,18 +1327,19 @@ function unlockActionCardForUpgrade(upgradeName) {
         "Cometary Ice Harvester": 'cometary-ice-harvester-container',
         "Martian Potato Colonizer": 'martian-potato-colonizer-container',
         "Quantum Spud Spawner": 'quantum-spud-spawner-container',
-        // ... add new mappings here as they are created
+        "Subterranean Tuber Tunneler": 'subterranean-tuber-tunneler-container',
+        "Bucket Wheel Excavator": 'bucket-wheel-excavator-container',
+        "Subsurface Aquifer Tapper": 'subsurface-aquifer-tapper-container',
+        "Polar Cap Mining": 'polar-cap-mining-container',
     };
 
     const actionCardId = actionCardIdMap[upgradeName];
-    if (actionCardId && !unlockedActionCards.includes(actionCardId)) {
-        unlockedActionCards.push(actionCardId);
+    if (actionCardId && !window.unlockedActionCards.includes(actionCardId)) {
+        window.unlockedActionCards.push(actionCardId);
         const actionCard = document.getElementById(actionCardId);
         if (actionCard) {
             actionCard.style.display = 'block';
-            console.log(`Unlocked action card: ${actionCardId}`);
-        } else {
-            console.warn(`Action card element not found: ${actionCardId}`);
         }
     }
 }
+

@@ -64,6 +64,7 @@ TODO:
 --------------------------------------------------------------------------------------------
 - [ ] Add production stats
 - [ ] Balance upgrade costs and effects
+- [ ] Mobile styling
 
 
 
@@ -90,6 +91,16 @@ Bugs/Issues:
 - [x] Currently the fully upgraded game consumes more than one potato to produce one potato, we need to make it positive so that the game is sustainable. Unlocked tech should consume different resources if possible, not always just potatoes, and we should reward more of each resource.
 - [x] Subsurface Aquifer Tapper is not working after loading from save
 - [x] Logic for removing graph datapoints when there are too many is broken
+- [x] Bucket wheel excavator and subterranean tunneler do not generate resources after refreshing the game / loading the game from a save
+- [x] Unlocking the nuclear ice melter hides the Subsurface aquifer tapper and polar cap mining action cards... which appear again on refresh
+- [x] Refreshing the page / loading the game from a save changes the order of the technology upgrades. I noticed ice melting basin goes from like 4th to 12th or something, higher that some of the much higher tier upgrades. It should be sorted by tier though... so this should not be happening.
+- [x] Unlocking all tech doesn't show the achievement
 --------------------------------------------------------------------------------------------
-- [ ] Auto Harvester should be relabeled Automated Harvester
+- [ ] Auto Harvester should be relabeled Autonomous Harvesting Rover, Automated Planter should be relabeled Autonomous Planting Rover. In production stats it should be abbreviated as Planting Rovers and Harvesting Rovers.
 - [ ] Potato spots can appear over the growth indicator percentage
+- [ ] Martian map reduces exploration time by too much
+- [ ] Reduce weight of ice melting basin to make it more visible in the tech tree
+- [ ] Buttons dont have convincing click effects because they move a bit
+- [ ] Polar cap mining should consume only 1 potato not 2, and should generate 4 ice not 2
+- [ ] Gravitropism upgrade cost increase from 250 to 1000
+

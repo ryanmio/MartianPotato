@@ -1781,9 +1781,9 @@ function togglePolarCapMining() {
 
 function startPolarCapMining() {
     polarCapMiningInterval = setInterval(() => {
-        if (potatoCount >= 2) {
-            potatoCount -= 2;
-            ice += 2;
+        if (potatoCount >= 1) {  
+            potatoCount -= 1;    
+            ice += 4;             
             updateDisplay();
         } else {
             showToast("Resource Shortage", "Not enough potatoes to run Polar Cap Mining!", 'setback');

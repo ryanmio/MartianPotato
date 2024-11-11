@@ -485,6 +485,21 @@ function updatePotatoFieldDisplay() {
             if (!potatoElement) {
                 potatoElement = document.createElement('div');
                 potatoElement.className = 'potato';
+                
+                // Create a container for the growth indicator and text
+                const growthContainer = document.createElement('div');
+                growthContainer.className = 'growth-text-container';
+                
+                const growthIndicator = document.createElement('div');
+                growthIndicator.className = 'growth-indicator';
+                
+                const growthText = document.createElement('div');
+                growthText.className = 'growth-text';
+                
+                // Append in the correct order
+                growthContainer.appendChild(growthText);
+                potatoElement.appendChild(growthIndicator);
+                potatoElement.appendChild(growthContainer);
                 slotElement.appendChild(potatoElement);
             }
 
@@ -492,15 +507,16 @@ function updatePotatoFieldDisplay() {
             potatoElement.style.borderRadius = potato.borderRadius;
             potatoElement.className = `potato ${potato.textureClass}`;
 
-            const growthIndicator = potatoElement.querySelector('.growth-indicator') || document.createElement('div');
-            growthIndicator.className = 'growth-indicator';
-            growthIndicator.style.height = `${potato.growthStage}%`;
-            potatoElement.appendChild(growthIndicator);
+            // Update existing elements
+            const growthIndicator = potatoElement.querySelector('.growth-indicator');
+            if (growthIndicator) {
+                growthIndicator.style.height = `${potato.growthStage}%`;
+            }
 
-            const growthText = potatoElement.querySelector('.growth-text') || document.createElement('div');
-            growthText.className = 'growth-text';
-            growthText.textContent = `${Math.floor(potato.growthStage)}%`;
-            potatoElement.appendChild(growthText);
+            const growthText = potatoElement.querySelector('.growth-text');
+            if (growthText) {
+                growthText.textContent = `${Math.floor(potato.growthStage)}%`;
+            }
 
             if (potato.growthStage >= 100) {
                 potatoElement.classList.add('harvestable');
@@ -1115,10 +1131,9 @@ function checkAchievements() {
     }
 
     // Martian Engineer achievement check
-    const nonRepeatableUpgrades = upgrades.filter(upgrade => !upgrade.repeatable);
-    const allNonRepeatablePurchased = nonRepeatableUpgrades.every(upgrade => upgrade.count > 0);
-    
-    if (allNonRepeatablePurchased && !achievements.martianEngineer) {
+    const totalUpgrades = upgrades.length;
+    const allUpgradesPurchased = upgrades.every(upgrade => upgrade.purchased);
+    if (allUpgradesPurchased && !achievements.martianEngineer) {
         achievements.martianEngineer = true;
         queueAchievement(
             "Martian Engineer",
@@ -1275,8 +1290,8 @@ function updatePotatoElement(slotElement, potato) {
                 <span class="growth-text"></span>
             </div>
         `;
-        slotElement.appendChild(potatoElement);
-    }
+                slotElement.appendChild(potatoElement);
+            }
 
     const growthStage = potato.growthStage;
     const harvestableClass = growthStage >= 100 ? 'harvestable' : '';
@@ -1286,10 +1301,10 @@ function updatePotatoElement(slotElement, potato) {
                         'rgba(56, 142, 60, 0.4)';
 
     potatoElement.className = `potato ${harvestableClass} ${quantumClass} ${potato.textureClass}`;
-    potatoElement.style.transform = `scale(${potato.scaleX}, ${potato.scaleY})`;
-    potatoElement.style.borderRadius = potato.borderRadius;
-    
-    const growthIndicator = potatoElement.querySelector('.growth-indicator');
+            potatoElement.style.transform = `scale(${potato.scaleX}, ${potato.scaleY})`;
+            potatoElement.style.borderRadius = potato.borderRadius;
+
+            const growthIndicator = potatoElement.querySelector('.growth-indicator');
     growthIndicator.style.height = `${growthStage}%`;
     growthIndicator.style.backgroundColor = growthColor;
     

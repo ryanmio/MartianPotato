@@ -120,7 +120,6 @@ let harvestHistory = [];
 // Debug Variables
 let fpsValues = [];
 let lastDebugUpdateTime = 0;
-let lastResourceValues = { water: 0, nutrients: 0, ice: 0 };
 
 
 // ==========================================
@@ -2119,12 +2118,6 @@ function updateDebugInfo(currentTime, updateTime) {
         const memoryUsage = performance.memory ? (performance.memory.usedJSHeapSize / (1024 * 1024)).toFixed(2) : 'N/A';
         const activePotatoes = potatoField.filter(potato => potato !== null).length;
         
-        const resourceGeneration = {
-            water: ((water - lastResourceValues.water) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2),
-            nutrients: ((nutrients - lastResourceValues.nutrients) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2),
-            potatoes: ((potatoCount - lastResourceValues.potatoes) * 1000 / (currentTime - lastDebugUpdateTime)).toFixed(2)
-        };
-        
         const updateElement = (id, text) => {
             const element = debugInfoContainer.querySelector(`#${id}`);
             if (element) element.textContent = text;
@@ -2135,15 +2128,12 @@ function updateDebugInfo(currentTime, updateTime) {
         updateElement('memory-usage', `Memory Usage: ${memoryUsage} MB`);
         updateElement('potato-count-debug', `Potato Count: ${potatoCount.toFixed(2)}`);
         updateElement('active-potatoes', `Active Potatoes: ${activePotatoes}`);
-        updateElement('resource-usage', `Resource Usage: Water (${water.toFixed(2)}), Nutrients (${nutrients.toFixed(2)}), Potatoes (${potatoCount.toFixed(2)})`);
-        updateElement('resource-generation', `Resource Generation: Water (${resourceGeneration.water}/s), Nutrients (${resourceGeneration.nutrients}/s), Potatoes (${resourceGeneration.potatoes}/s)`);
         updateElement('planting-delay', `Planting Delay: ${plantingDelay}ms`);
         
         const playtime = getPlaytime();
         updateElement('playtime-debug', `Playtime: ${playtime}`);
         
         lastDebugUpdateTime = currentTime;
-        lastResourceValues = { water, nutrients, potatoes: potatoCount };
     } catch (error) {
         console.error('Error updating debug info:', error);
     }

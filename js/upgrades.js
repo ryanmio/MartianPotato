@@ -290,7 +290,7 @@ const upgrades = [
         description: "A large basin that can melt ice more efficiently. Consumes 8 ice to produce 1 water per second for 8 seconds.",
         metaMessage: "Introducing efficiency. Processing resources in batches teaches you to think long-term, subtly encouraging investment in optimizing processes.",
         assetName: "ice_melting_basin.webp",
-        weight: 4,
+        weight: 3,
         category: "harvesting",
         tier: 1,
         count: 0,

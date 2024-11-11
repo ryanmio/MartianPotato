@@ -121,7 +121,6 @@ let harvestHistory = [];
 let fpsValues = [];
 let lastDebugUpdateTime = 0;
 let lastResourceValues = { water: 0, nutrients: 0, ice: 0 };
-let lastAction = "None";
 
 
 // ==========================================
@@ -360,7 +359,6 @@ function plantPotato() {
         lastPlantTime = currentTime;
         updatePotatoFieldDisplay();
         updateDisplay();
-        updateLastAction("Planted Potato");
     } else {
         showToast("Not Enough Resources", "Not enough resources to plant a potato! Explore Mars to find more resources.", 'setback');
     }
@@ -442,10 +440,6 @@ function harvestPotatoAtIndex(index, isAutomated = false) {
             updateHarvestHistory();
 
             checkAchievements();
-        }
-
-        if (!isAutomated) {
-            updateLastAction(`Harvested potato at index ${index}`);
         }
     }
 }
@@ -1335,7 +1329,6 @@ function meltIce(event) {
             showToast("Water Collected", "You've melted ice and collected 1 unit of water!", 'achievement');
         }
         updateDisplay();
-        updateLastAction("Melted ice");
     } else {
         showToast("Not Enough Ice", "You need at least 1 ice to melt!", 'setback');
     }
@@ -2144,7 +2137,6 @@ function updateDebugInfo(currentTime, updateTime) {
         updateElement('active-potatoes', `Active Potatoes: ${activePotatoes}`);
         updateElement('resource-usage', `Resource Usage: Water (${water.toFixed(2)}), Nutrients (${nutrients.toFixed(2)}), Potatoes (${potatoCount.toFixed(2)})`);
         updateElement('resource-generation', `Resource Generation: Water (${resourceGeneration.water}/s), Nutrients (${resourceGeneration.nutrients}/s), Potatoes (${resourceGeneration.potatoes}/s)`);
-        updateElement('last-action', `Last Action: ${lastAction}`);
         updateElement('planting-delay', `Planting Delay: ${plantingDelay}ms`);
         
         const playtime = getPlaytime();
@@ -2154,14 +2146,6 @@ function updateDebugInfo(currentTime, updateTime) {
         lastResourceValues = { water, nutrients, potatoes: potatoCount };
     } catch (error) {
         console.error('Error updating debug info:', error);
-    }
-}
-
-// Update the last action for debugging purposes
-function updateLastAction(action) {
-    lastAction = action;
-    if (debugMode) {
-        document.getElementById('last-action').textContent = `Last Action: ${lastAction}`;
     }
 }
 

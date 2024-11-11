@@ -1310,7 +1310,8 @@ function unlockActionCardForUpgrade(upgradeName) {
         "Quantum Spud Spawner": 'quantum-spud-spawner-container',
         "Subterranean Tuber Tunneler": 'subterranean-tuber-tunneler-container',
         "Bucket Wheel Excavator": 'bucket-wheel-excavator-container',
-        // ... add new mappings here as they are created
+        "Subsurface Aquifer Tapper": 'subsurface-aquifer-tapper-container',
+        "Polar Cap Mining": 'polar-cap-mining-container',
     };
 
     const actionCardId = actionCardIdMap[upgradeName];
@@ -1319,9 +1320,7 @@ function unlockActionCardForUpgrade(upgradeName) {
         const actionCard = document.getElementById(actionCardId);
         if (actionCard) {
             actionCard.style.display = 'block';
-            console.log(`Unlocked action card: ${actionCardId}`);
-        } else {
-            console.warn(`Action card element not found: ${actionCardId}`);
         }
     }
 }
+

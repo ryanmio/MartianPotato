@@ -504,21 +504,59 @@ function getCardId(upgradeName) {
     return `upgrade-${upgradeName.replace(/\s+/g, '-').toLowerCase()}`;
 }
 
-// Update the tech tree UI, throttled to run at most once per second
+// Add this helper function
+function sortUpgrades(upgradesArray) {
+    return [...upgradesArray].sort((a, b) => {
+        // First sort by weight
+        if (a.weight !== b.weight) {
+            return a.weight - b.weight;
+        }
+        // If weights are equal, sort by cost
+        return a.cost - b.cost;
+    });
+}
+
+// Update createTechTree function
+function createTechTree() {
+    const techTree = document.getElementById('tech-tree');
+    techTree.innerHTML = ''; // Clear existing content
+
+    // Sort upgrades before displaying
+    const sortedUpgrades = sortUpgrades(upgrades);
+    
+    sortedUpgrades.forEach((upgrade) => {
+        let shouldDisplayCard = false;
+        if (upgrade.tier <= currentTier) {
+            if (upgrade.repeatable || upgrade.count === 0) {
+                shouldDisplayCard = true;
+            }
+        }
+
+        if (shouldDisplayCard) {
+            const card = createCard(upgrade);
+            techTree.appendChild(card);
+        }
+    });
+}
+
+// Update updateTechTree function
 function updateTechTree() {
     const currentTime = Date.now();
     if (currentTime - lastTechTreeUpdate < TECH_TREE_UPDATE_INTERVAL) {
-        return; // Exit if not enough time has passed since the last update
+        return;
     }
     lastTechTreeUpdate = currentTime;
 
     const techTree = document.getElementById('tech-tree');
     const existingCards = new Set(Array.from(techTree.children).map(card => card.id));
 
-    upgrades.forEach((upgrade) => {
+    // Sort upgrades before updating
+    const sortedUpgrades = sortUpgrades(upgrades);
+    
+    sortedUpgrades.forEach((upgrade) => {
         let shouldDisplayCard = false;
         if (upgrade.tier <= currentTier) {
-            if (upgrade.repeatable || upgrade.count === 0) { // Display if repeatable or not yet purchased
+            if (upgrade.repeatable || upgrade.count === 0) {
                 shouldDisplayCard = true;
             }
         }
@@ -592,25 +630,6 @@ function gameLoop(currentTime) {
         lastFrameTime = currentTime;
     }
     requestAnimationFrame(gameLoop);
-}
-
-function createTechTree() {
-    const techTree = document.getElementById('tech-tree');
-    techTree.innerHTML = ''; // Clear existing content
-
-    upgrades.forEach((upgrade) => {
-        let shouldDisplayCard = false;
-        if (upgrade.tier <= currentTier) {
-            if (upgrade.repeatable || upgrade.count === 0) { // Display if repeatable or not yet purchased
-                shouldDisplayCard = true;
-            }
-        }
-
-        if (shouldDisplayCard) {
-            const card = createCard(upgrade);
-            techTree.appendChild(card);
-        }
-    });
 }
 
 // Create a single tech card for the given upgrade

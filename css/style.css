@@ -280,7 +280,7 @@ button:hover, button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: translateY(0);
-    box-shadow: none;
+    box-shadow: 0 4px 0 #333;
 }
 
 #debug-container {
@@ -559,7 +559,8 @@ button:hover, button:disabled {
 
 .action-card.clickable {
     cursor: pointer;
-    transition: all 0.1s ease;
+    transition: background-color 0.1s ease;
+    transform: translateY(0);
 }
 
 .action-card.clickable:hover {
@@ -567,15 +568,16 @@ button:hover, button:disabled {
 }
 
 .action-card.clickable:active {
-    top: 4px;
+    transform: translateY(4px);
     box-shadow: 0 0 0 #333;
 }
 
 .action-card.clickable[disabled] {
     opacity: 0.6;
     cursor: not-allowed;
-    box-shadow: none;
-    pointer-events: none; /* This prevents any click effects */
+    transform: translateY(0);
+    box-shadow: 0 4px 0 #333;
+    pointer-events: none;
 }
 
 .action-card h3 {

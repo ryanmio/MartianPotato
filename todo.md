@@ -97,7 +97,7 @@ Bugs/Issues:
 - [x] Unlocking all tech doesn't show the achievement
 - [x] Potato spots can appear over the growth indicator percentage
 --------------------------------------------------------------------------------------------
-- [ ] Buttons dont have convincing click effects because they move a bit
+- [x] Buttons dont have convincing click effects because they move a bit
 - [ ] Auto Harvester should be relabeled Autonomous Harvesting Rover, Automated Planter should be relabeled Autonomous Planting Rover. In production stats it should be abbreviated as Planting Rovers and Harvesting Rovers.
 - [ ] Martian map reduces exploration time by too much
 - [ ] Reduce weight of ice melting basin to make it more visible in the tech tree

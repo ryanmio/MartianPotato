@@ -65,6 +65,7 @@ TODO:
 - [ ] Add production stats
 - [ ] Balance upgrade costs and effects
 - [ ] Mobile styling
+- [ ] Add potato sentience upgrade effect
 
 
 
@@ -101,6 +102,6 @@ Bugs/Issues:
 - [x] Martian map reduces exploration time by too much
 - [x] Reduce weight of ice melting basin to make it more visible in the tech tree
 - [x] Polar cap mining should consume only 1 potato not 2, and should generate 4 ice not 2
+- [x] Gravitropism upgrade cost increase from 250 to 1000
 --------------------------------------------------------------------------------------------
-- [ ] Gravitropism upgrade cost increase from 250 to 1000
 

@@ -389,7 +389,7 @@ const upgrades = [
     },
     {
         name: "Gravitropism Accelerator",
-        cost: 250,
+        cost: 1000,
         effect: () => {
             if (!growthUpgradesApplied.gravitropismAccelerator) {
                 growthTimeMultiplier *= 0.5;

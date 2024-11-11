@@ -1115,9 +1115,10 @@ function checkAchievements() {
     }
 
     // Martian Engineer achievement check
-    const totalUpgrades = upgrades.length;
-    const allUpgradesPurchased = upgrades.every(upgrade => upgrade.purchased);
-    if (allUpgradesPurchased && !achievements.martianEngineer) {
+    const nonRepeatableUpgrades = upgrades.filter(upgrade => !upgrade.repeatable);
+    const allNonRepeatablePurchased = nonRepeatableUpgrades.every(upgrade => upgrade.count > 0);
+    
+    if (allNonRepeatablePurchased && !achievements.martianEngineer) {
         achievements.martianEngineer = true;
         queueAchievement(
             "Martian Engineer",

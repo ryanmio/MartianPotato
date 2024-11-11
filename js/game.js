@@ -576,6 +576,9 @@ colonizerCycle,
         waterExplorationMultiplier: window.waterExplorationMultiplier,
         growthUpgradesApplied,
         nuclearIceMelterPercentage: nuclearIceMelterPercentage,
+        isSubsurfaceAquiferTapperActive: window.isSubsurfaceAquiferTapperActive,
+        isBucketWheelExcavatorActive: window.isBucketWheelExcavatorActive,
+        isSubterraneanTuberTunnelerActive: window.isSubterraneanTuberTunnelerActive,
     };
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
@@ -752,6 +755,30 @@ function loadGame() {
             // After restoring the state
             if (isSubsurfaceAquiferTapperUnlocked) {
                 unlockSubsurfaceAquiferTapper();
+            }
+
+            if (isBucketWheelExcavatorUnlocked) {
+                unlockBucketWheelExcavator();
+                if (gameState.isBucketWheelExcavatorActive) {
+                    window.isBucketWheelExcavatorActive = true;
+                    const toggle = document.getElementById('bucket-wheel-excavator-toggle');
+                    if (toggle) {
+                        toggle.checked = true;
+                        startBucketWheelExcavator();
+                    }
+                }
+            }
+
+            if (isSubterraneanTuberTunnelerUnlocked) {
+                unlockSubterraneanTuberTunneler();
+                if (gameState.isSubterraneanTuberTunnelerActive) {
+                    window.isSubterraneanTuberTunnelerActive = true;
+                    const toggle = document.getElementById('subterranean-tuber-tunneler-toggle');
+                    if (toggle) {
+                        toggle.checked = true;
+                        startSubterraneanTuberTunneler();
+                    }
+                }
             }
         } catch (error) {
             console.error('Error parsing saved game state:', error);

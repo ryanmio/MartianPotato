@@ -1096,12 +1096,20 @@ function createAutomationDevice(deviceConfig) {
         intervalTime 
     } = deviceConfig;
 
+    let interval = null; // Track interval locally
+
     // Unlock the device
     window[unlockFunction] = function() {
         window[isUnlocked] = true;
         const container = document.getElementById(containerId);
         if (container) {
             container.style.display = 'block';
+        }
+        // Restore active state if it was running before
+        const toggleSwitch = document.getElementById(toggleId);
+        if (toggleSwitch && window[isActive]) {
+            toggleSwitch.checked = true;
+            window[startFunction]();
         }
     };
 
@@ -1135,22 +1143,26 @@ function createAutomationDevice(deviceConfig) {
             return;
         }
 
-        window[`${id}Interval`] = setInterval(() => {
-            if (resourceCheck()) {  // Use the resourceCheck function here
+        // Clear any existing interval
+        if (interval) {
+            clearInterval(interval);
+        }
+
+        interval = setInterval(() => {
+            if (resourceCheck()) {
                 resourceConsume();
                 resourceProduce();
                 updateDisplay();
-            } else {
-                // Don't automatically toggle off, just skip this cycle
-                console.log(`Skipping ${id} cycle due to insufficient resources`);
             }
         }, intervalTime);
     };
 
     // Stop the device
     window[stopFunction] = function() {
-        clearInterval(window[`${id}Interval`]);
-        window[`${id}Interval`] = null; // Ensure the interval is cleared
+        if (interval) {
+            clearInterval(interval);
+            interval = null;
+        }
         window[isActive] = false;
         const toggleSwitch = document.getElementById(toggleId);
         if (toggleSwitch) {

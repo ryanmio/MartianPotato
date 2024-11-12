@@ -23,7 +23,6 @@ let gameStartTime = Date.now();
 let lastHarvestUpdateTime = 0; 
 
 // Harvest Chart Update Intervals
-const HARVEST_UPDATE_INTERVAL = 60000; // Update chart at most once per minute
 const EARLY_GAME_UPDATE_INTERVAL = 500; // Update every half-second for early game
 const REGULAR_UPDATE_INTERVAL = 60000;    // Every minute once established
 const EARLY_GAME_THRESHOLD = 100; 
@@ -111,7 +110,7 @@ const defaultAchievements = {
     techSavvy: false,
     martianEngineer: false,
     oneSolWonder: false,
-    potatoEmpire: false,  // Add the new achievement flag
+    potatoEmpire: false,
     // Add other achievements here
 };
 let achievements = { ...defaultAchievements };
@@ -120,8 +119,6 @@ let harvestHistory = [];
 // Debug Variables
 let fpsValues = [];
 let lastDebugUpdateTime = 0;
-
-// Add this with your other global variables
 let debugUpdateInterval = null;
 
 // ==========================================
@@ -302,7 +299,7 @@ function updateDepletedActionCard(actionCardId, isDepleted, message) {
     }
 }
 
-// function to check resource levels and display warnings
+// Function to check resource levels and display warnings
 function checkResourceLevels() {
     const currentTime = Date.now();
     if (currentTime - lastResourceWarningTime < RESOURCE_WARNING_COOLDOWN) return;
@@ -469,13 +466,14 @@ function updatePotatoFieldDisplay() {
         const existingPoof = slotElement.querySelector('.poof-animation-red');
         if (existingPoof) return;
 
+        let potatoElement = slotElement.querySelector('.potato');
+        
         if (potato) {
-            let potatoElement = slotElement.querySelector('.potato');
             if (!potatoElement) {
+                // Only create new elements if they don't exist
                 potatoElement = document.createElement('div');
                 potatoElement.className = 'potato';
                 
-                // Create a container for the growth indicator and text
                 const growthContainer = document.createElement('div');
                 growthContainer.className = 'growth-text-container';
                 
@@ -485,39 +483,33 @@ function updatePotatoFieldDisplay() {
                 const growthText = document.createElement('div');
                 growthText.className = 'growth-text';
                 
-                // Append in the correct order
                 growthContainer.appendChild(growthText);
                 potatoElement.appendChild(growthIndicator);
                 potatoElement.appendChild(growthContainer);
                 slotElement.appendChild(potatoElement);
             }
 
+            // Update existing potato element
             potatoElement.style.transform = `scale(${potato.scaleX}, ${potato.scaleY})`;
             potatoElement.style.borderRadius = potato.borderRadius;
             potatoElement.className = `potato ${potato.textureClass}`;
 
-            // Update existing elements
+            // Update growth indicator and text using existing elements
             const growthIndicator = potatoElement.querySelector('.growth-indicator');
+            const growthText = potatoElement.querySelector('.growth-text');
+            
             if (growthIndicator) {
                 growthIndicator.style.height = `${potato.growthStage}%`;
             }
-
-            const growthText = potatoElement.querySelector('.growth-text');
+            
             if (growthText) {
                 growthText.textContent = `${Math.floor(potato.growthStage)}%`;
             }
 
-            if (potato.growthStage >= 100) {
-                potatoElement.classList.add('harvestable');
-            } else {
-                potatoElement.classList.remove('harvestable');
-            }
-        } else {
-            // Only clear potato-related elements, not the poof animation
-            const potatoElement = slotElement.querySelector('.potato');
-            if (potatoElement) {
-                potatoElement.remove();
-            }
+            potatoElement.classList.toggle('harvestable', potato.growthStage >= 100);
+        } else if (potatoElement) {
+            // Only remove the potato element if it exists and there's no potato
+            potatoElement.remove();
         }
     });
 }

@@ -1228,13 +1228,21 @@ function updateExploreButton() {
 
     const currentTime = Date.now();
     const timeLeft = Math.max(0, window.exploreDelay - (currentTime - window.lastExploreTime));
+    const isDisabled = timeLeft > 0;
     
-    if (timeLeft > 0) {
-        exploreCard.setAttribute('disabled', 'true');
-        cooldownElement.textContent = `(${(timeLeft / 1000).toFixed(1)}s)`;
-    } else {
-        exploreCard.removeAttribute('disabled');
-        cooldownElement.textContent = 'Ready';
+    // Only update disabled state if it changed
+    if (isDisabled !== exploreCard.hasAttribute('disabled')) {
+        if (isDisabled) {
+            exploreCard.setAttribute('disabled', 'true');
+        } else {
+            exploreCard.removeAttribute('disabled');
+        }
+    }
+    
+    // Only update cooldown text if it changed
+    const newText = isDisabled ? `(${(timeLeft / 1000).toFixed(1)}s)` : 'Ready';
+    if (cooldownElement.textContent !== newText) {
+        cooldownElement.textContent = newText;
     }
 }
 

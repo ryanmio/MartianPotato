@@ -121,6 +121,8 @@ let harvestHistory = [];
 let fpsValues = [];
 let lastDebugUpdateTime = 0;
 
+// Add this with your other global variables
+let debugUpdateInterval = null;
 
 // ==========================================
 //            CORE GAME FUNCTIONS
@@ -167,7 +169,7 @@ function addEventListenerIfExists(id, event, handler) {
 // Main game loop function
 function gameLoop(currentTime) {
     if (currentTime - lastFrameTime >= FRAME_DELAY) {
-        const startTime = performance.now(); // Add this line to define startTime
+        // Do all game updates
         updatePlantButton();
         if (updateResources(currentTime)) {
             updateDisplay();
@@ -178,19 +180,15 @@ function gameLoop(currentTime) {
         updateExploreButton();
         updateActionCards();
         
-        // Auto-save every minute
+        // Auto-save check
         if (currentTime - lastSaveTime >= 60000) {
             saveGame();
             lastSaveTime = currentTime;
         }
         
-        if (debugMode) {
-            const updateTime = performance.now() - startTime;
-            updateDebugInfo(currentTime, updateTime);
-        }
-        
         lastFrameTime = currentTime;
     }
+    
     requestAnimationFrame(gameLoop);
 }
 
@@ -2080,60 +2078,56 @@ function initializeChartModalListeners() {
 }
 
 // ==========================================
-//            MISCELLANEOUS
+//            DEBUGGING FUNCTIONS
 // ==========================================
 
 // Toggle debug mode on/off
 function toggleDebugMode() {
     debugMode = !debugMode;
+    console.log('Debug mode toggled:', debugMode);
     const debugInfo = document.getElementById('debug-info');
+    
     if (debugInfo) {
         debugInfo.style.display = debugMode ? 'block' : 'none';
+        
         if (debugMode) {
-            // Initialize debug info when first enabled
-            updateDebugInfo(performance.now(), 0);
-            // Add 1,000,000 potatoes when debug mode is enabled
+            // Start debug updates every second
+            debugUpdateInterval = setInterval(() => {
+                updateDebugInfo(performance.now());
+            }, 1000);
+            
             potatoCount += 1000000;
             updateDisplay();
             showToast("Debug Mode Enabled", "Added 1,000,000 potatoes for testing. Press 'D' to toggle.", 'debug');
         } else {
+            // Clear the interval when debug mode is disabled
+            if (debugUpdateInterval) {
+                clearInterval(debugUpdateInterval);
+                debugUpdateInterval = null;
+            }
             showToast("Debug Mode Disabled", "Press 'D' to re-enable debug mode.", 'debug');
         }
     }
 }
 
 // Update debug information display
-function updateDebugInfo(currentTime, updateTime) {
+function updateDebugInfo(currentTime) {
     const debugInfoContainer = document.getElementById('debug-info');
     if (!debugInfoContainer || debugInfoContainer.style.display === 'none') {
-        return; // Exit if debug info is not visible
+        return;
     }
 
     try {
-        const fps = 1000 / (currentTime - lastDebugUpdateTime);
-        fpsValues.push(fps);
-        if (fpsValues.length > 60) fpsValues.shift();
-        const averageFps = fpsValues.reduce((a, b) => a + b, 0) / fpsValues.length;
-        
-        const memoryUsage = performance.memory ? (performance.memory.usedJSHeapSize / (1024 * 1024)).toFixed(2) : 'N/A';
-        const activePotatoes = potatoField.filter(potato => potato !== null).length;
-        
         const updateElement = (id, text) => {
             const element = debugInfoContainer.querySelector(`#${id}`);
             if (element) element.textContent = text;
         };
 
-        updateElement('fps', `FPS: ${averageFps.toFixed(2)}`);
-        updateElement('update-time', `Last Update Time: ${updateTime.toFixed(2)}ms`);
-        updateElement('memory-usage', `Memory Usage: ${memoryUsage} MB`);
+        updateElement('memory-usage', `Memory Usage: ${performance.memory ? (performance.memory.usedJSHeapSize / (1024 * 1024)).toFixed(2) : 'N/A'} MB`);
         updateElement('potato-count-debug', `Potato Count: ${potatoCount.toFixed(2)}`);
-        updateElement('active-potatoes', `Active Potatoes: ${activePotatoes}`);
+        updateElement('active-potatoes', `Active Potatoes: ${potatoField.filter(potato => potato !== null).length}`);
         updateElement('planting-delay', `Planting Delay: ${plantingDelay}ms`);
-        
-        const playtime = getPlaytime();
-        updateElement('playtime-debug', `Playtime: ${playtime}`);
-        
-        lastDebugUpdateTime = currentTime;
+        updateElement('playtime-debug', `Playtime: ${getPlaytime()}`);
     } catch (error) {
         console.error('Error updating debug info:', error);
     }

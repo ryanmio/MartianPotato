@@ -809,26 +809,28 @@ function restoreUpgrades(savedUpgrades) {
 // Function to update the visibility of action cards
 function updateActionCards() {
     const allActionCards = document.querySelectorAll('.action-card');
+    const depletableCards = [
+        'martian-potato-colonizer-container',
+        'subsurface-aquifer-tapper-container',
+        'bucket-wheel-excavator-container',
+        'subterranean-tuber-tunneler-container',
+        'polar-cap-mining-container'
+    ];
+    
     allActionCards.forEach(card => {
-        if (unlockedActionCards.includes(card.id)) {
-            card.style.display = 'block';
+        const cardId = card.id;
+        const isUnlocked = unlockedActionCards.includes(cardId);
+        const currentDisplay = card.style.display;
+        const shouldBeVisible = isUnlocked || cardId === 'exploration-container';
+        
+        // Only update display if it needs to change
+        if ((shouldBeVisible && currentDisplay === 'none') || (!shouldBeVisible && currentDisplay === 'block')) {
+            card.style.display = shouldBeVisible ? 'block' : 'none';
+        }
 
-            // Handle depletions using the reusable function
-            if (areResourcesDepleted && [
-                'martian-potato-colonizer-container',
-                'subsurface-aquifer-tapper-container',
-                'bucket-wheel-excavator-container',
-                'subterranean-tuber-tunneler-container',
-                'polar-cap-mining-container'
-            ].includes(card.id)) {
-                updateDepletedActionCard(card.id, true, "Resources Depleted");
-            } else {
-                // For other action cards, ensure they are active unless individually depleted
-                updateDepletedActionCard(card.id, false);
-            }
-            
-        } else if (card.id !== 'exploration-container') {
-            card.style.display = 'none';
+        // Only check depletion status for visible, depletable cards
+        if (shouldBeVisible && depletableCards.includes(cardId)) {
+            updateDepletedActionCard(cardId, areResourcesDepleted, "Resources Depleted");
         }
     });
 }

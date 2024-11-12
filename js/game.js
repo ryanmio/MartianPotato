@@ -458,8 +458,11 @@ function updatePotatoFieldDisplay() {
     const fieldContainer = document.getElementById('potato-field');
     if (!fieldContainer) return;
 
+    // Cache the slot elements to avoid repeated queries
+    const slotElements = Array.from(fieldContainer.children);
+    
     potatoField.forEach((potato, index) => {
-        const slotElement = fieldContainer.children[index];
+        const slotElement = slotElements[index];
         if (!slotElement) return;
 
         // Don't remove existing poof animations
@@ -470,22 +473,17 @@ function updatePotatoFieldDisplay() {
         
         if (potato) {
             if (!potatoElement) {
-                // Only create new elements if they don't exist
-                potatoElement = document.createElement('div');
-                potatoElement.className = 'potato';
-                
-                const growthContainer = document.createElement('div');
-                growthContainer.className = 'growth-text-container';
-                
-                const growthIndicator = document.createElement('div');
-                growthIndicator.className = 'growth-indicator';
-                
-                const growthText = document.createElement('div');
-                growthText.className = 'growth-text';
-                
-                growthContainer.appendChild(growthText);
-                potatoElement.appendChild(growthIndicator);
-                potatoElement.appendChild(growthContainer);
+                // Create all elements at once using template
+                const template = document.createElement('div');
+                template.innerHTML = `
+                    <div class="potato">
+                        <div class="growth-indicator"></div>
+                        <div class="growth-text-container">
+                            <div class="growth-text"></div>
+                        </div>
+                    </div>
+                `;
+                potatoElement = template.firstElementChild;
                 slotElement.appendChild(potatoElement);
             }
 
@@ -513,7 +511,6 @@ function updatePotatoFieldDisplay() {
         }
     });
 }
-
 
 // ==========================================
 //           SAVE AND LOAD

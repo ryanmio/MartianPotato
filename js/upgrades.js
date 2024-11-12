@@ -702,10 +702,13 @@ function createCard(upgrade) {
 
 // Calculate the cost of an upgrade, considering potential count-based scaling
 function getUpgradeCost(upgrade) {
-    if (upgrade.count !== undefined) {
-        return Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count));
+    // Early return for non-repeatable upgrades or first purchase
+    if (!upgrade.repeatable || upgrade.count === 0) {
+        return upgrade.cost;
     }
-    return upgrade.cost;
+    
+    // Only calculate scaling cost for repeatable upgrades with previous purchases
+    return Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count));
 }
 
 // Display a modal with detailed information about an upgrade

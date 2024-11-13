@@ -27,6 +27,22 @@ let autoHarvesters = [];
 let achievementQueue = [];
 let isAchievementModalOpen = false;
 
+// Utility Functions
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Add before the updateTechTree function
+const debouncedUpdateTechTree = debounce(updateTechTree, 100);
+
 // Upgrade Definitions
 const upgrades = [
     { 
@@ -496,7 +512,7 @@ function unlockNextTier(fromLoad = false) {
         currentTier += 1;
         if (!fromLoad) {
             showToast("New Technology Tier Unlocked!", `Tier ${currentTier} technologies are now available.`, 'upgrade');
-            updateTechTree();
+            debouncedUpdateTechTree();
         }
     }
 }
@@ -803,7 +819,7 @@ function buyUpgrade(upgrade) {
         
         unlockActionCardForUpgrade(upgrade.name); // Unlock the corresponding action card if applicable
         saveGame(); // Save the game after purchasing an upgrade
-        updateTechTree(); // Update the tech tree to reflect changes
+        debouncedUpdateTechTree(); // Update the tech tree to reflect changes
 
         queueAchievement(
             `Technology Unlocked: ${upgrade.name}`,

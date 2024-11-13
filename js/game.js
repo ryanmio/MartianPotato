@@ -195,6 +195,7 @@ function gameLoop(currentTime) {
         updateTechTree();
         updateExploreButton();
         updateActionCards();
+        displayExplorationUpgrades(); // Just include it directly
         
         // Auto-save check
         if (currentTime - lastSaveTime >= 60000) {
@@ -242,13 +243,6 @@ function updateResources(currentTime) {
         return true;
     }
     return false;
-}
-
-// Update non-critical elements during idle time
-function updateNonCriticalElements() {
-    requestIdleCallback(() => {
-        displayExplorationUpgrades();
-    });
 }
 
 // Consume resources for potato growth, applying efficiency multipliers

@@ -7,6 +7,10 @@ window.lastExploreTime = 0;
 window.exploreDelay = 10000; // 10 seconds initial delay between manual explorations
 window.waterExplorationMultiplier = 1;
 
+function calculateRandomReward(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function exploreMarsSurface() {
     const exploreCard = document.getElementById('exploration-container');
     if (exploreCard.hasAttribute('disabled')) {
@@ -28,8 +32,8 @@ function exploreMarsSurface() {
     const iceMax = 10;
 
     // Calculate rewards for manual exploration with independent randomness
-    const nutrientReward = Math.floor(Math.random() * (nutrientMax - nutrientMin + 1)) + nutrientMin;
-    const iceReward = Math.floor(Math.random() * (iceMax - iceMin + 1)) + iceMin;
+    const nutrientReward = calculateRandomReward(nutrientMin, nutrientMax);
+    const iceReward = calculateRandomReward(iceMin, iceMax);
 
     // Apply multipliers
     const scaledNutrientReward = nutrientReward * window.explorationResourceMultiplier;
@@ -58,15 +62,12 @@ function exploreMarsSurface() {
     checkAchievements();
 }
 
-function updateAutonomousExploration() {
-    // ... (remove entire function)
-}
-
-// Remove this part from the DOMContentLoaded event listener
-document.addEventListener('DOMContentLoaded', () => {
+function initializeExploration() {
     const exploreButton = document.getElementById('explore-button');
     if (exploreButton) {
         exploreButton.innerHTML = '👩‍🚀';
-        exploreButton.addEventListener('click', exploreMarsSurface);
+        exploreButton.addEventListener('click', exploreMarsSurface, { passive: true });
     }
-});
+}
+
+document.addEventListener('DOMContentLoaded', initializeExploration);

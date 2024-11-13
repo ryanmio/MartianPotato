@@ -127,23 +127,42 @@ let debugUpdateInterval = null;
 
 // Initialize the game
 let gameInitialized = false;
-function initGame() {
-    if (!gameInitialized) {
-        loadGame();
-        initializePotatoField();
-        createTechTree();
-        updateActionCards();
-        
-        // Add glow for new games
-        const plantButton = document.getElementById('plant-button');
-        if (!hasSeenInitialGlow && plantButton) {
-            plantButton.classList.add('glow');
-        }
-        
-        requestAnimationFrame(gameLoop);
-        gameInitialized = true;
-        initializeNuclearIceMelter();
+function initializeGame() {
+    if (gameInitialized) return;
+    
+    // Load saved game state first
+    loadGame();
+    
+    // Initialize core game systems
+    initializePotatoField();
+    createTechTree();
+    
+    // Initialize UI elements after DOM is ready
+    if (document.readyState === 'complete') {
+        initializeUI();
+    } else {
+        window.addEventListener('load', initializeUI, { once: true });
     }
+    
+    // Start game loop
+    requestAnimationFrame(gameLoop);
+    gameInitialized = true;
+}
+
+// New function to handle all UI initialization
+function initializeUI() {
+    // Initialize action cards first
+    initializeActionCards();
+    updateActionCards();
+    
+    // Add glow for new games
+    const plantButton = document.getElementById('plant-button');
+    if (!hasSeenInitialGlow && plantButton) {
+        plantButton.classList.add('glow');
+    }
+    
+    initializeNuclearIceMelter();
+    initializeChartModalListeners();
 }
 
 // Function to reset the game state
@@ -2037,10 +2056,10 @@ function toggleDebugInfoMinimize() {
         debugInfo.classList.contains('minimized') ? 'Maximize' : 'Minimize');
 }
 
-// Call this function when the DOM is fully loaded
+// Update the DOMContentLoaded handler
 document.addEventListener('DOMContentLoaded', () => {
     initializeEventListeners();
-    initGame();
+    initializeGame();
 });
 
 function handleNuclearIceMelterClick(event) {

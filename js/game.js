@@ -1965,42 +1965,49 @@ function getElapsedMartianTime() {
 // ==========================================
 
 function initializeEventListeners() {
- // Core game controls
- addEventListenerIfExists('plant-button', 'click', plantPotato);
- addEventListenerIfExists('save-button', 'click', saveGame);
- addEventListenerIfExists('reset-button', 'click', resetGame);
+    // Core Game Controls
+    addEventListenerIfExists('plant-button', 'click', plantPotato);
+    addEventListenerIfExists('save-button', 'click', saveGame);
+    addEventListenerIfExists('reset-button', 'click', resetGame);
 
- // Potato field interactions
- document.getElementById('potato-field').addEventListener('click', handlePotatoFieldClick);
+    // Save game shortcut (Ctrl/Cmd + S)
+    document.addEventListener('keydown', function(event) {
+        if ((event.metaKey || event.ctrlKey) && event.key === 's') {
+            event.preventDefault();
+            saveGame();
+        }
+    });
+    
+    // Game Field Interactions
+    document.getElementById('potato-field').addEventListener('click', handlePotatoFieldClick);
 
- // Debug mode toggle
- document.addEventListener('keydown', handleKeyPress);
+    // Debug Controls
+    document.addEventListener('keydown', handleKeyPress);  // 'D' key toggle
+    addEventListenerIfExists('minimize-debug', 'click', toggleDebugInfoMinimize);
 
- // Add save shortcut listener
- document.addEventListener('keydown', function(event) {
-     // Check for Command+S (Mac) or Ctrl+S (Windows/Linux)
-     if ((event.metaKey || event.ctrlKey) && event.key === 's') {
-         event.preventDefault(); // Prevent the browser's save dialog
-         saveGame();
-     }
- });
+    // Toggle Switches
+    addEventListenerIfExists('subsurface-aquifer-tapper-toggle', 'change', 
+        () => window['toggleSubsurfaceAquiferTapper']());
+    addEventListenerIfExists('bucket-wheel-excavator-toggle', 'change', 
+        () => window['toggleBucketWheelExcavator']());
+    addEventListenerIfExists('polar-cap-mining-toggle', 'change', togglePolarCapMining);
+    addEventListenerIfExists('quantum-spud-spawner-toggle', 'change', toggleQuantumSpudSpawner);
 
- // Debug info controls
- addEventListenerIfExists('minimize-debug', 'click', toggleDebugInfoMinimize);
-
- // Exploration interaction
- addEventListenerIfExists('exploration-container', 'click', exploreMarsSurface);
-
- // Resource generation toggles
- addEventListenerIfExists('subsurface-aquifer-tapper-toggle', 'change', () => window['toggleSubsurfaceAquiferTapper']());
- addEventListenerIfExists('bucket-wheel-excavator-toggle', 'change', () => window['toggleBucketWheelExcavator']());
- addEventListenerIfExists('polar-cap-mining-toggle', 'change', togglePolarCapMining);
- addEventListenerIfExists('quantum-spud-spawner-toggle', 'change', toggleQuantumSpudSpawner);
-
-    // Action card interactions
+    // Action Cards
+    addEventListenerIfExists('exploration-container', 'click', exploreMarsSurface);
     addEventListenerIfExists('ice-melting-basin-container', 'click', fillIceMeltingBasin);
 
-    // Nuclear Ice Melter toggle
+    // Nuclear Ice Melter Controls
+    initializeNuclearIceMelterControls();
+
+    // Chart Modal Controls
+    initializeChartModalListeners();
+}
+
+// Control Initialization Functions
+
+function initializeNuclearIceMelterControls() {
+    // Nuclear Ice Melter Toggle
     const nuclearIceMelterToggle = document.getElementById('nuclear-ice-melter-toggle');
     if (nuclearIceMelterToggle) {
         nuclearIceMelterToggle.removeEventListener('change', toggleNuclearIceMelter);
@@ -2008,29 +2015,18 @@ function initializeEventListeners() {
         nuclearIceMelterToggle.addEventListener('click', handleNuclearIceMelterClick);
     }
 
-    // Chart modal listeners
-    initializeChartModalListeners();
-
-// Define the global knobChanged handler
-window.knobChanged = function(id, val) {
-    if (id === 'nuclear-ice-melter-knob') {
-        nuclearIceMelterPercentage = parseInt(val);
-        updateNuclearIceMelterDisplay(); // Update the display
-    }
-};
-
-// Function to show the Nuclear Ice Melter container
-function showNuclearIceMelterContainer() {
-    const container = document.getElementById('nuclear-ice-melter-container');
-    if (container) {
-        container.style.display = 'block';
-    }
+    // Nuclear Ice Melter Knob Handler
+    window.knobChanged = function(id, val) {
+        if (id === 'nuclear-ice-melter-knob') {
+            nuclearIceMelterPercentage = parseInt(val);
+            updateNuclearIceMelterDisplay();
+        }
+    };
 }
 
-// Call the function to show the container
-showNuclearIceMelterContainer();
-
-}
+// ---------------
+// Event Handler Functions
+// ---------------
 
 function handlePotatoFieldClick(event) {
     const slotElement = event.target.closest('.potato-slot');
@@ -2048,24 +2044,18 @@ function handleKeyPress(event) {
     }
 }
 
+function handleNuclearIceMelterClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    toggleNuclearIceMelter();
+}
+
 function toggleDebugInfoMinimize() {
     const debugInfo = document.getElementById('debug-info');
     debugInfo.classList.toggle('minimized');
     const minimizeDebugButton = document.getElementById('minimize-debug');
     minimizeDebugButton.setAttribute('data-text', 
         debugInfo.classList.contains('minimized') ? 'Maximize' : 'Minimize');
-}
-
-// Update the DOMContentLoaded handler
-document.addEventListener('DOMContentLoaded', () => {
-    initializeEventListeners();
-    initializeGame();
-});
-
-function handleNuclearIceMelterClick(event) {
-    event.preventDefault(); // Prevent the default toggle behavior
-    event.stopPropagation();
-    toggleNuclearIceMelter();
 }
 
 function initializeChartModalListeners() {
@@ -2075,6 +2065,7 @@ function initializeChartModalListeners() {
     const closeChartModal = document.querySelector('.close-chart-modal');
     
     if (chartButton && chartModal && closeChartModal) {
+        // Open chart modal
         chartButton.addEventListener('click', () => {
             chartModal.style.display = 'flex';
             if (!harvestChartInitialized) {
@@ -2084,10 +2075,12 @@ function initializeChartModalListeners() {
             updateHarvestChart();
         });
 
+        // Close chart modal
         closeChartModal.addEventListener('click', () => {
             chartModal.style.display = 'none';
         });
 
+        // Close on outside click
         chartModal.addEventListener('click', (event) => {
             if (event.target === chartModal) {
                 chartModal.style.display = 'none';
@@ -2095,6 +2088,12 @@ function initializeChartModalListeners() {
         });
     }
 }
+
+// Initialize everything when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    initializeEventListeners();
+    initializeGame();
+});
 
 // ==========================================
 //            DEBUGGING FUNCTIONS

@@ -66,6 +66,10 @@ TODO:
 - [ ] Balance upgrade costs and effects
 - [ ] Mobile styling
 - [ ] Add potato sentience upgrade effect
+- [ ] Refactor action card toggles to use a standardized template system
+      - Create reusable toggle card component
+      - Reduce HTML duplication
+      - Centralize toggle creation logic
 
 
 
@@ -98,7 +102,7 @@ Bugs/Issues:
 - [x] Unlocking all tech doesn't show the achievement
 - [x] Potato spots can appear over the growth indicator percentage
 - [x] Buttons dont have convincing click effects because they move a bit
-- [x] Auto Harvester should be relabeled Autonomous Harvesting Rover, Automated Planter should be relabeled Autonomous Planting Rover. In production stats it should be abbreviated as Planting Rovers and Harvesting Rovers.
+- [x] Auto Harvester should be relabeled Autonomous Harvesting Rover, Automated Planter should be relabeled Autonomous Planting Rover. In production stats it sh ould be abbreviated as Planting Rovers and Harvesting Rovers.
 - [x] Martian map reduces exploration time by too much
 - [x] Reduce weight of ice melting basin to make it more visible in the tech tree
 - [x] Polar cap mining should consume only 1 potato not 2, and should generate 4 ice not 2

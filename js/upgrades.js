@@ -9,6 +9,7 @@ const BASE_HARVEST_DELAY = 1000; // 1 second in milliseconds
 let currentPlantingUpgrade = 0;
 let lastTechTreeUpdate = 0;
 let currentTier = 1; // Initialize current tier to 1
+const UPGRADE_COST_SCALING_FACTOR = 1.15;
 
 // Add this near the top of the file
 let growthUpgradesApplied = {
@@ -708,7 +709,7 @@ function getUpgradeCost(upgrade) {
     }
     
     // Only calculate scaling cost for repeatable upgrades with previous purchases
-    return Math.floor(upgrade.cost * Math.pow(1.15, upgrade.count));
+    return Math.floor(upgrade.cost * Math.pow(UPGRADE_COST_SCALING_FACTOR, upgrade.count));
 }
 
 // Display a modal with detailed information about an upgrade

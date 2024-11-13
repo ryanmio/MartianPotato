@@ -1708,7 +1708,7 @@ function toggleNuclearIceMelter() {
     }
 }
 
-// Update the initializeNuclearIceMelter function
+// Initialize the Nuclear Ice Melter
 function initializeNuclearIceMelter() {
     const knobElement = document.getElementById('nuclear-ice-melter-knob');
     if (knobElement) {
@@ -1732,7 +1732,7 @@ function initializeNuclearIceMelter() {
     }
 }
 
-// Update the knobChanged function
+// Knob Change Handler
 window.knobChanged = function(id, val) {
     if (id === 'nuclear-ice-melter-knob') {
         nuclearIceMelterPercentage = parseInt(val);
@@ -1741,7 +1741,7 @@ window.knobChanged = function(id, val) {
     }
 };
 
-// Update the updateNuclearIceMelterDisplay function
+// Update the Nuclear Ice Melter Display
 function updateNuclearIceMelterDisplay() {
     const nuclearIceMelterDisplay = document.getElementById('nuclear-ice-melter-display');
     if (nuclearIceMelterDisplay) {

@@ -1262,13 +1262,15 @@ function updateExploreButton() {
 // Update the visual representation of the potato field
 function updatePotatoField() {
     const fieldContainer = document.getElementById('potato-field');
+    const fragment = document.createDocumentFragment(); // Use document fragment
+    
     potatoField.forEach((potato, index) => {
         let slotElement = fieldContainer.querySelector(`.potato-slot[data-index="${index}"]`);
         if (!slotElement) {
             slotElement = document.createElement('div');
             slotElement.className = 'potato-slot';
             slotElement.setAttribute('data-index', index);
-            fieldContainer.appendChild(slotElement);
+            fragment.appendChild(slotElement);
         }
 
         if (potato === null) {
@@ -1277,6 +1279,10 @@ function updatePotatoField() {
             updatePotatoElement(slotElement, potato);
         }
     });
+
+    if (fragment.children.length > 0) {
+        fieldContainer.appendChild(fragment); // Batch DOM updates
+    }
 }
 
 // Update the visual representation of a single potato

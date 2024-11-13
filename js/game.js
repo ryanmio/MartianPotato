@@ -2151,3 +2151,6 @@ function updateDebugInfo(currentTime) {
     }
 }
 
+// Add passive event listeners for better scroll performance
+document.getElementById('tech-tree').addEventListener('scroll', updateCarouselArrows, { passive: true });
+window.addEventListener('resize', updateCarouselArrows, { passive: true });

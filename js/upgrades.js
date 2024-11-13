@@ -2,8 +2,8 @@
 // It defines available upgrades, manages the tech tree UI, and handles upgrade purchases
 
 // Game Constants
-const TECH_TREE_UPDATE_INTERVAL = 1000; // Update every second
-const BASE_HARVEST_DELAY = 1000; // 1 second in milliseconds
+const TECH_TREE_UPDATE_INTERVAL = 1000; // Throttles tech tree UI updates to once per second to improve performance
+const BASE_HARVEST_DELAY = 1000; // Base time between harvest checks, affects auto-harvester efficiency
 
 // Upgrade System Variables
 let currentPlantingUpgrade = 0;
@@ -26,6 +26,7 @@ let autoHarvesters = [];
 // Achievement System Variables
 let achievementQueue = [];
 let isAchievementModalOpen = false;
+
 // Upgrade Definitions
 const upgrades = [
     { 
@@ -548,12 +549,26 @@ function updateTechTree() {
     }
     lastTechTreeUpdate = currentTime;
 
+    // Quick check if any updates are needed
     const techTree = document.getElementById('tech-tree');
     const existingCards = new Set(Array.from(techTree.children).map(card => card.id));
-
-    // Sort upgrades before updating
     const sortedUpgrades = sortUpgrades(upgrades);
     
+    // Check if any cards need to be added or removed
+    const needsUpdate = sortedUpgrades.some(upgrade => {
+        const cardId = getCardId(upgrade.name);
+        const shouldDisplayCard = upgrade.tier <= currentTier && (upgrade.repeatable || upgrade.count === 0);
+        
+        // Update needed if card should exist but doesn't, or shouldn't exist but does
+        return (shouldDisplayCard && !existingCards.has(cardId)) || 
+               (!shouldDisplayCard && existingCards.has(cardId));
+    });
+
+    if (!needsUpdate) {
+        return; // Skip DOM updates if no changes needed
+    }
+
+    // Proceed with existing update logic
     sortedUpgrades.forEach((upgrade) => {
         let shouldDisplayCard = false;
         if (upgrade.tier <= currentTier) {

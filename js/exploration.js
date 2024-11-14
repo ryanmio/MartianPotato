@@ -1,6 +1,12 @@
 // This file implements the exploration system for the Martian Potato game
 // It defines exploration mechanics, resource discovery, and autonomous exploration features
 
+// Game Constants
+const REWARD_RANGES = {
+    nutrients: { min: 1, max: 10 },
+    ice: { min: 1, max: 10 }
+};
+
 // Global variables for exploration mechanics
 window.explorationResourceMultiplier = 1;
 window.lastExploreTime = 0;
@@ -25,15 +31,9 @@ function exploreMarsSurface() {
         return;
     }
 
-    // Define reward ranges
-    const nutrientMin = 1;
-    const nutrientMax = 10;
-    const iceMin = 1;
-    const iceMax = 10;
-
     // Calculate rewards for manual exploration with independent randomness
-    const nutrientReward = calculateRandomReward(nutrientMin, nutrientMax);
-    const iceReward = calculateRandomReward(iceMin, iceMax);
+    const nutrientReward = calculateRandomReward(REWARD_RANGES.nutrients.min, REWARD_RANGES.nutrients.max);
+    const iceReward = calculateRandomReward(REWARD_RANGES.ice.min, REWARD_RANGES.ice.max);
 
     // Apply multipliers
     const scaledNutrientReward = nutrientReward * window.explorationResourceMultiplier;

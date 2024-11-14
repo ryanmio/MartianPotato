@@ -121,6 +121,17 @@ let fpsValues = [];
 let lastDebugUpdateTime = 0;
 let debugUpdateInterval = null;
 
+// Cached template element for potato display
+const potatoTemplate = document.createElement('template');
+potatoTemplate.innerHTML = `
+    <div class="potato">
+        <div class="growth-indicator"></div>
+        <div class="growth-text-container">
+            <div class="growth-text"></div>
+        </div>
+    </div>
+`;
+
 // ==========================================
 //            CORE GAME FUNCTIONS
 // ==========================================
@@ -493,40 +504,26 @@ function updatePotatoFieldDisplay() {
         
         if (potato) {
             if (!potatoElement) {
-                // Create all elements at once using template
-                const template = document.createElement('div');
-                template.innerHTML = `
-                    <div class="potato">
-                        <div class="growth-indicator"></div>
-                        <div class="growth-text-container">
-                            <div class="growth-text"></div>
-                        </div>
-                    </div>
-                `;
-                potatoElement = template.firstElementChild;
+                // Clone from cached template
+                potatoElement = potatoTemplate.content.firstElementChild.cloneNode(true);
                 slotElement.appendChild(potatoElement);
             }
 
-            // Update existing potato element
-            potatoElement.style.transform = `scale(${potato.scaleX}, ${potato.scaleY})`;
-            potatoElement.style.borderRadius = potato.borderRadius;
-            potatoElement.className = `potato ${potato.textureClass}`;
+            // Update existing potato element using direct properties instead of style
+            potatoElement.style.cssText = `
+                transform: scale(${potato.scaleX}, ${potato.scaleY});
+                border-radius: ${potato.borderRadius};
+            `;
+            potatoElement.className = `potato ${potato.textureClass}${potato.growthStage >= 100 ? ' harvestable' : ''}`;
 
-            // Update growth indicator and text using existing elements
-            const growthIndicator = potatoElement.querySelector('.growth-indicator');
-            const growthText = potatoElement.querySelector('.growth-text');
+            // Update growth indicator and text using cached references
+            const growthIndicator = potatoElement.firstElementChild;
+            const growthText = potatoElement.lastElementChild.firstElementChild;
             
-            if (growthIndicator) {
-                growthIndicator.style.height = `${potato.growthStage}%`;
-            }
-            
-            if (growthText) {
-                growthText.textContent = `${Math.floor(potato.growthStage)}%`;
-            }
+            growthIndicator.style.height = `${potato.growthStage}%`;
+            growthText.textContent = `${Math.floor(potato.growthStage)}%`;
 
-            potatoElement.classList.toggle('harvestable', potato.growthStage >= 100);
         } else if (potatoElement) {
-            // Only remove the potato element if it exists and there's no potato
             potatoElement.remove();
         }
     });
@@ -2160,3 +2157,4 @@ function updateDebugInfo(currentTime) {
 // Add passive event listeners for better scroll performance
 document.getElementById('tech-tree').addEventListener('scroll', updateCarouselArrows, { passive: true });
 window.addEventListener('resize', updateCarouselArrows, { passive: true });
+

@@ -1,5 +1,7 @@
 # Game Mechanics
 
+*NOTE: THIS IS OUTDATED - WAS JUST TO GET STARTED*
+
 ## 1. Planting and Harvesting
 - Manual planting and harvesting using clicks
 - Each plot has a growth timer based on potato type and upgrades

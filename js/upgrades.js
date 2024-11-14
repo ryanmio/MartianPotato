@@ -1,5 +1,16 @@
-// This file implements the upgrade system for the Martian Potato game
-// It defines available upgrades, manages the tech tree UI, and handles upgrade purchases
+/**
+ * Upgrade System
+ * 
+ * Manages the technology progression and upgrade mechanics:
+ * - Defines available upgrades and their effects
+ * - Manages tech tree UI and card interactions
+ * - Handles upgrade purchases and cost scaling
+ * - Controls automation devices (rovers, harvesters)
+ * - Manages achievement system for unlocks
+ * - Integrates with action card system
+ * - Handles tier progression and unlocks
+ */
+
 
 // Game Constants
 const TECH_TREE_UPDATE_INTERVAL = 1000; // Throttles tech tree UI updates to once per second to improve performance

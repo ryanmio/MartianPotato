@@ -1,5 +1,19 @@
-// This file contains the core game logic for the Martian Potato game
-// It manages game state, resource handling, potato planting and harvesting, and UI updates
+/**
+ * Core Game System
+ * 
+ * Primary game engine and state management for Martian Potato:
+ * - Manages core game loop and state updates
+ * - Handles resource systems (water, nutrients, ice)
+ * - Controls potato planting, growth, and harvesting
+ * - Manages automation systems and devices
+ * - Handles save/load functionality
+ * - Controls UI updates and display management
+ * - Manages achievement tracking and rewards
+ * - Handles debug systems and performance monitoring
+ * - Coordinates between subsystems (upgrades, exploration)
+ * - Manages game initialization and configuration
+ */
+
 
 // Game Constants
 let MAX_FIELD_SIZE = 8;

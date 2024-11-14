@@ -1,3 +1,17 @@
+/**
+ * Knob Control System
+ * 
+ * Implements rotary knob controls for game interfaces:
+ * - Handles knob creation and initialization
+ * - Manages mouse/touch interaction and drag events
+ * - Controls value scaling and sensitivity
+ * - Handles visual feedback and rotation
+ * - Manages label display and updates
+ * - Provides customizable styling options
+ * - Implements event handling system
+ * - Controls sprite-based knob animations
+ */
+
 let madeGlobalEventHandlers = false; //checked during each Knob class instantiation. Only the first instantiation creates the event handlers.
 
 let knobInUse = {

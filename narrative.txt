@@ -1,3 +1,5 @@
+*NOTE: THIS IS OUTDATED - WAS JUST TO GET STARTED*
+
 # Martian Potato: A Meta-Aware Resource Management Adventure
 
 ## Narrative Arc

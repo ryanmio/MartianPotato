@@ -501,20 +501,28 @@ const upgrades = [
         repeatable: false
     },
     {
-        name: "Potato Sentience",
+        name: "Potato Neural Network",
         cost: 1000000,
-        effect: () => {
-            // Add sentience effect here
+        effect: () => { 
+            // Call into our new neural-network.js system
+            initializeNeuralNetwork();
+            
+            // Show first achievement
+            queueAchievement(
+                "Neural Network Online",
+                "You've created a sophisticated AI system powered by potatoes. Training beginning...",
+                "The boundary between organic and digital intelligence grows thinner.",
+                "neural_network.webp"
+            );
         },
-        unlocksNextTier: true,
         icon: "🧠",
-        description: "Unknown effect...",
-        metaMessage: "We were so preoccupied with whether we could, we didn't stop to think if we should.",
+        description: "Implement a sophisticated neural network to optimize potato farming... what could go wrong?",
+        metaMessage: "The line between code and consciousness is more potato-shaped than we thought.",
         weight: 25,
         category: "technology",
         tier: 5,
         count: 0,
-        repeatable: false
+        repeatable: false,
     }
 ];
 

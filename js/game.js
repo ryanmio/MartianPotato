@@ -146,6 +146,9 @@ potatoTemplate.innerHTML = `
     </div>
 `;
 
+// Add to the game state variables section at top
+let neuralNetworkActive = false;
+
 // ==========================================
 //            CORE GAME FUNCTIONS
 // ==========================================
@@ -193,6 +196,7 @@ function initializeUI() {
 // Function to reset the game state
 function resetGame() {
     if (confirm('Are you sure you want to reset the game? This will erase all your progress.')) {
+        neuralNetworkActive = false;
         localStorage.removeItem('martianPotatoSave');
         hasSeenInitialGlow = false;
         location.reload();
@@ -604,6 +608,8 @@ function saveGame() {
         isSubsurfaceAquiferTapperActive: window.isSubsurfaceAquiferTapperActive,
         isBucketWheelExcavatorActive: window.isBucketWheelExcavatorActive,
         isSubterraneanTuberTunnelerActive: window.isSubterraneanTuberTunnelerActive,
+        neuralNetworkActive,
+        neuralNetworkState: getNeuralNetworkState(), // Get state from neural-network.js
     };
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
@@ -803,6 +809,11 @@ function loadGame() {
                         startSubterraneanTuberTunneler();
                     }
                 }
+            }
+
+            neuralNetworkActive = gameState.neuralNetworkActive || false;
+            if (neuralNetworkActive) {
+                loadNeuralNetworkState(gameState.neuralNetworkState);
             }
         } catch (error) {
             console.error('Error parsing saved game state:', error);
@@ -1211,6 +1222,9 @@ function updateDisplay() {
     updateTechTree();
     updateIceMeltingProgress();
     updateIceMeltingBasinButton();
+    if (neuralNetworkActive) {
+        updateTerminalDisplay(); // Update neural network terminal
+    }
 }
 
 function updateAutoHarvestersInfo() {

@@ -224,23 +224,29 @@ function updateFieldSize(newSize) {
 // Update game resources and ensure they don't go below zero
 function updateResources(currentTime) {
     if (currentTime - lastUpdateTime >= UPDATE_INTERVAL) {
-        // Only check resources that might have changed
-        if (water < 0) water = 0;
-        if (nutrients < 0) nutrients = 0;
-        if (ice < 0) ice = 0;
-        if (potatoCount % 1 !== 0) potatoCount = Math.floor(potatoCount);
+        try {
+            // Ensure resources don't go below zero
+            water = Math.max(0, water);
+            nutrients = Math.max(0, nutrients);
+            ice = Math.max(0, ice);
+            potatoCount = Math.floor(potatoCount);
 
-        if (iceMeltingBasinActive) {
-            water++;
-            iceMeltingBasinTimer--;
-            if (iceMeltingBasinTimer <= 0) {
-                iceMeltingBasinActive = false;
+            if (iceMeltingBasinActive) {
+                water++;
+                iceMeltingBasinTimer--;
+                if (iceMeltingBasinTimer <= 0) {
+                    iceMeltingBasinActive = false;
+                }
+                updateIceMeltingBasinButton();
             }
-            updateIceMeltingBasinButton();
+            checkResourceLevels();
+            lastUpdateTime = currentTime;
+            return true;
+        } catch (error) {
+            console.error('Error updating resources:', error);
+            showToast('Resource Error', 'There was an error updating resources. Please refresh the game.', 'error');
+            return false;
         }
-        checkResourceLevels();
-        lastUpdateTime = currentTime;
-        return true;
     }
     return false;
 }

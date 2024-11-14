@@ -1,5 +1,13 @@
-// This file implements the exploration system for the Martian Potato game
-// It defines exploration mechanics, resource discovery, and autonomous exploration features
+/**
+ * Exploration System
+ * 
+ * Manages manual resource discovery through Mars surface exploration:
+ * - Basic exploration mechanics (cooldowns, triggers)
+ * - Resource rewards (nutrients, ice) with multipliers
+ * - Integration with game.js resource system
+ * - UI state management for exploration button
+ */
+
 
 // Game Constants
 const REWARD_RANGES = {

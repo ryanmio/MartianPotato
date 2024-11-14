@@ -2167,8 +2167,3 @@ function updateDebugInfo(currentTime) {
         console.error('Error updating debug info:', error);
     }
 }
-
-// Add passive event listeners for better scroll performance
-document.getElementById('tech-tree').addEventListener('scroll', updateCarouselArrows, { passive: true });
-window.addEventListener('resize', updateCarouselArrows, { passive: true });
-

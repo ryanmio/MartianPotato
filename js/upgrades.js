@@ -657,8 +657,8 @@ function updateCarouselArrows() {
 }
 
 // Also, call updateCarouselArrows when the window is resized or when the tech tree is scrolled
-window.addEventListener('resize', updateCarouselArrows);
-document.getElementById('tech-tree').addEventListener('scroll', updateCarouselArrows);
+window.addEventListener('resize', updateCarouselArrows, { passive: true });
+document.getElementById('tech-tree').addEventListener('scroll', updateCarouselArrows, { passive: true });
 
 // Main game loop function, called on each animation frame
 function gameLoop(currentTime) {
@@ -972,8 +972,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Use the existing updateCarouselArrows function
-    techTree.addEventListener('scroll', updateCarouselArrows);
-    window.addEventListener('resize', updateCarouselArrows);
+    techTree.addEventListener('scroll', updateCarouselArrows, { passive: true });
+    window.addEventListener('resize', updateCarouselArrows, { passive: true });
 
     updateCarouselArrows(); // Initial check
 

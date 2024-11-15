@@ -1503,15 +1503,17 @@ button:hover, button:disabled {
 }
 
 /* Progress bar specific to neural terminal */
+.progress-indicator {
+    font-family: monospace;
+    color: #00ff00;
+    white-space: pre;
+}
+
 .neural-terminal .progress-bar {
     margin: 10px 0;
     padding: 5px;
     border: 1px solid #00ff00;
-}
-
-.neural-terminal .progress-text {
-    text-align: center;
-    margin-bottom: 5px;
+    font-family: monospace;
 }
 
 /* Singularity Screen */

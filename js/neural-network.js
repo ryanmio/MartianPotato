@@ -96,6 +96,16 @@ function initializeNeuralNetwork(savedState = null) {
         currentPhase = parseInt(savedState.phase) || 0;
         terminalMinimized = savedState.minimized || false;
         neuralNetworkStartTime = savedState.startTime || Date.now();
+        
+        // Show terminal first
+        showTerminal();
+        
+        // If we're at 100%, go straight to final sequence
+        if (trainingProgress >= 100) {
+            console.log('Restoring final sequence state');
+            startFinalSequence(true);  // Pass true to indicate loading
+            return; // Skip normal initialization
+        }
     } else {
         // Fresh start
         trainingProgress = 0;
@@ -104,11 +114,9 @@ function initializeNeuralNetwork(savedState = null) {
         neuralNetworkStartTime = Date.now();
     }
     
-    // Show terminal
+    // Normal initialization
     showTerminal();
     startMessageSystem();
-    
-    // Start progress updates
     startProgressUpdates();
 }
 
@@ -228,7 +236,7 @@ function addMessageToTerminal(text) {
 // ==========================================
 //            FINAL SEQUENCE
 // ==========================================
-function startFinalSequence() {
+function startFinalSequence(isLoading = false) {
     // Set a flag to indicate we're in final sequence
     isNeuralNetworkActive = true;
     trainingProgress = 100;
@@ -237,13 +245,19 @@ function startFinalSequence() {
     // Save the state immediately
     saveGame();
     
-    // Queue final messages with faster timing (1 second between messages)
-    FINAL_SEQUENCE_MESSAGES.forEach((msg, i) => {
-        queueMessage(msg, i * 1000);  // Changed from 3000 to 1000
-    });
+    if (isLoading) {
+        // Skip messages and show final screen immediately when loading
+        showFinalStats();
+    } else {
+        // Normal sequence with messages
+        // Queue final messages with faster timing (1 second between messages)
+        FINAL_SEQUENCE_MESSAGES.forEach((msg, i) => {
+            queueMessage(msg, i * 1000);
+        });
 
-    // Show final sequence after messages complete
-    setTimeout(showFinalStats, FINAL_SEQUENCE_MESSAGES.length * 1000 + 1000);  // Adjusted timing
+        // Show final sequence after messages complete
+        setTimeout(showFinalStats, FINAL_SEQUENCE_MESSAGES.length * 1000 + 1000);
+    }
 }
 
 function showFinalStats() {

@@ -83,7 +83,7 @@ function initializeNeuralNetwork(savedState = null) {
         globalActive: window.neuralNetworkActive
     });
 
-    // Force global state
+    // IMPORTANT: Set both local and global state
     window.neuralNetworkActive = true;
     isNeuralNetworkActive = true;
 
@@ -307,12 +307,12 @@ function showFinalStats() {
 // ==========================================
 function getNeuralNetworkState() {
     const state = {
-        isActive: isNeuralNetworkActive,
+        isActive: window.neuralNetworkActive,
         progress: trainingProgress,
         phase: currentPhase,
         minimized: terminalMinimized
     };
-    console.log('Neural Network - Saving State:', state);
+    console.log('Getting neural network state:', state);
     return state;
 }
 

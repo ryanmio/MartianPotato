@@ -76,38 +76,111 @@ const FINAL_SEQUENCE_MESSAGES = [
 // ==========================================
 //            CORE FUNCTIONS
 // ==========================================
-function initializeNeuralNetwork() {
+function initializeNeuralNetwork(savedState = null) {
+    console.log('4. Neural Network Init:', {
+        savedState,
+        isNewInit: !savedState,
+        globalActive: window.neuralNetworkActive
+    });
+
+    // Force global state
+    window.neuralNetworkActive = true;
     isNeuralNetworkActive = true;
-    trainingProgress = 0;
-    currentPhase = 0;
-    messageQueue = [];
-    
-    // Show terminal
+
+    if (savedState) {
+        trainingProgress = savedState.progress;
+        currentPhase = savedState.phase;
+        terminalMinimized = savedState.minimized;
+    } else {
+        trainingProgress = 0;
+        currentPhase = 0;
+        terminalMinimized = false;
+    }
+
+    console.log('5. Showing terminal...');
     const terminal = document.getElementById('neural-terminal');
+    console.log('5a. Terminal element:', terminal);
+    
+    if (terminal) {
+        console.log('5b. Setting terminal display');
+        terminal.style.display = 'block';
+        terminal.classList.toggle('minimized', terminalMinimized);
+        console.log('5c. Terminal display set to:', terminal.style.display);
+    } else {
+        console.error('Terminal element not found!');
+    }
+
+    // IMPORTANT: Show terminal immediately
+    showTerminal();
+    
+    // Start systems
+    startMessageSystem();
+    startTrainingProgress();
+    
+    console.log('Neural network initialization complete:', {
+        active: isNeuralNetworkActive,
+        progress: trainingProgress,
+        phase: currentPhase,
+        minimized: terminalMinimized,
+        terminalVisible: document.getElementById('neural-terminal').style.display === 'block'
+    });
+}
+
+// New helper functions for cleaner initialization
+function showTerminal() {
+    const terminal = document.getElementById('neural-terminal');
+    if (!terminal) {
+        console.error('Neural terminal element not found');
+        return;
+    }
+    
+    // Force display block
     terminal.style.display = 'block';
     
-    // Queue initial messages
-    queueMessage(PHASE_ONE_MESSAGES[0], 0);
-    queueMessage(PHASE_ONE_MESSAGES[1], 2000);
+    // Set minimized state if needed
+    terminal.classList.toggle('minimized', terminalMinimized);
     
-    // Start message processing
+    // Update display
+    updateTerminalDisplay();
+}
+
+function startMessageSystem() {
+    // Clear existing queue
+    messageQueue = [];
+    
+    // Queue appropriate messages
+    const messages = getPhaseMessages();
+    messages.forEach((msg, i) => queueMessage(msg, i * 2000));
+    
+    // Start processing
     processMessageQueue();
-    
-    // Start progress updates
+}
+
+function startTrainingProgress() {
+    // Start progress updates in game loop
     updateTrainingProgress();
 }
 
+// Add to game loop check
 function updateTrainingProgress() {
     if (!isNeuralNetworkActive) return;
-
-    // Calculate progress based on total potatoes
-    // We'll use log scale to make progress slower as it goes
-    const progress = Math.min(100, Math.log10(totalPotatoesHarvested + 1) * 10);
+    
+    // Base speed: complete in 60 seconds
+    const baseProgress = (Date.now() - gameStartTime) / 600;
+    const potatoBonus = Math.min(50, (totalPotatoesHarvested / 4000));
+    const progress = Math.min(100, baseProgress * (1 + (potatoBonus / 100)));
     
     if (progress !== trainingProgress) {
         trainingProgress = progress;
         updatePhase();
         updateTerminalDisplay();
+        
+        // IMPORTANT: Ensure terminal is visible
+        const terminal = document.getElementById('neural-terminal');
+        if (terminal && terminal.style.display !== 'block') {
+            console.log('Forcing terminal display');
+            showTerminal();
+        }
     }
 }
 
@@ -233,27 +306,50 @@ function showFinalStats() {
 //            SAVE/LOAD
 // ==========================================
 function getNeuralNetworkState() {
-    return {
+    const state = {
         isActive: isNeuralNetworkActive,
         progress: trainingProgress,
         phase: currentPhase,
         minimized: terminalMinimized
     };
+    console.log('Neural Network - Saving State:', state);
+    return state;
 }
 
 function loadNeuralNetworkState(state) {
-    if (!state) return;
+    console.log('Neural Network - Loading State:', state);
+    if (!state) {
+        console.log('Neural Network - No state to load');
+        return;
+    }
     
     isNeuralNetworkActive = state.isActive;
     trainingProgress = state.progress;
     currentPhase = state.phase;
     terminalMinimized = state.minimized;
     
+    console.log('Neural Network - Active:', isNeuralNetworkActive);
+    
     if (isNeuralNetworkActive) {
+        console.log('Neural Network - Reinitializing terminal');
+        // Reinitialize the terminal
         const terminal = document.getElementById('neural-terminal');
+        if (!terminal) {
+            console.error('Neural Network - Terminal element not found');
+            return;
+        }
         terminal.style.display = 'block';
         terminal.classList.toggle('minimized', terminalMinimized);
+        
+        // Restart message processing
+        processMessageQueue();
+        
+        // Update display
         updateTerminalDisplay();
+        
+        // Queue messages for current phase
+        const messages = getPhaseMessages();
+        messages.forEach((msg, i) => queueMessage(msg, i * 2000));
     }
 }
 

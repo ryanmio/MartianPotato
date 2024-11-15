@@ -232,13 +232,8 @@ function gameLoop(currentTime) {
             lastSaveTime = currentTime;
         }
         
-        if (neuralNetworkActive) {
-            // Ensure terminal stays visible
-            const terminal = document.getElementById('neural-terminal');
-            if (terminal && terminal.style.display !== 'block') {
-                console.log('Forcing terminal display');
-                terminal.style.display = 'block';
-            }
+        // Update neural network if active
+        if (window.neuralNetworkActive) {
             updateTrainingProgress();
         }
         
@@ -618,13 +613,10 @@ function saveGame() {
         isSubsurfaceAquiferTapperActive: window.isSubsurfaceAquiferTapperActive,
         isBucketWheelExcavatorActive: window.isBucketWheelExcavatorActive,
         isSubterraneanTuberTunnelerActive: window.isSubterraneanTuberTunnelerActive,
-        neuralNetworkActive: window.neuralNetworkActive, // Use window.neuralNetworkActive
+        neuralNetworkActive: window.neuralNetworkActive,
         neuralNetworkState: getNeuralNetworkState()
     };
-    console.log('Saving game state:', {
-        neuralNetworkActive: gameState.neuralNetworkActive,
-        neuralNetworkState: gameState.neuralNetworkState
-    });
+    console.log('Saving game with neural network:', gameState.neuralNetworkState);
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
 }

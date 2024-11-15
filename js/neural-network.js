@@ -178,9 +178,17 @@ function processMessageQueue() {
     if (!isNeuralNetworkActive) return;
 
     const now = Date.now();
-    if (messageQueue.length > 0 && messageQueue[0].time <= now) {
+    const currentMessage = messageQueue[0];
+    
+    if (currentMessage && currentMessage.time <= now) {
+        // Only process one message at a time
         const { message } = messageQueue.shift();
         addMessageToTerminal(message);
+        
+        // Add a slight delay before processing next message
+        if (messageQueue.length > 0) {
+            messageQueue[0].time = now + 2000; // 2 second delay between messages
+        }
     }
 
     requestAnimationFrame(processMessageQueue);
@@ -190,25 +198,29 @@ function addMessageToTerminal(text) {
     const terminal = document.getElementById('terminal-messages');
     if (!terminal) return;
 
+    // Create new message element
     const message = document.createElement('div');
     message.className = 'terminal-message';
+    
+    // Insert at the bottom
     terminal.appendChild(message);
 
+    // Typewriter effect
     let index = 0;
     function typeWriter() {
         if (index < text.length) {
             message.textContent += text.charAt(index);
             index++;
             setTimeout(typeWriter, 50);
+            
+            // Scroll to bottom as we type
+            terminal.scrollTop = terminal.scrollHeight;
         }
     }
     typeWriter();
 
-    // Scroll to bottom
-    terminal.scrollTop = terminal.scrollHeight;
-
-    // Keep only last 10 messages
-    while (terminal.children.length > 10) {
+    // Keep only last 8 messages
+    while (terminal.children.length > 8) {
         terminal.removeChild(terminal.firstChild);
     }
 }
@@ -217,13 +229,21 @@ function addMessageToTerminal(text) {
 //            FINAL SEQUENCE
 // ==========================================
 function startFinalSequence() {
-    // Queue final messages
+    // Set a flag to indicate we're in final sequence
+    isNeuralNetworkActive = true;
+    trainingProgress = 100;
+    currentPhase = 4; // New phase for final sequence
+    
+    // Save the state immediately
+    saveGame();
+    
+    // Queue final messages with faster timing (1 second between messages)
     FINAL_SEQUENCE_MESSAGES.forEach((msg, i) => {
-        queueMessage(msg, i * 3000);
+        queueMessage(msg, i * 1000);  // Changed from 3000 to 1000
     });
 
     // Show final sequence after messages complete
-    setTimeout(showFinalStats, FINAL_SEQUENCE_MESSAGES.length * 3000 + 2000);
+    setTimeout(showFinalStats, FINAL_SEQUENCE_MESSAGES.length * 1000 + 1000);  // Adjusted timing
 }
 
 function showFinalStats() {
@@ -282,10 +302,13 @@ function loadNeuralNetworkState(state) {
     
     if (isNeuralNetworkActive) {
         showTerminal();
-        startMessageSystem();
         
-        // Only restart progress updates if not complete
-        if (trainingProgress < 100) {
+        if (trainingProgress >= 100) {
+            // We're in final sequence, restart it
+            startFinalSequence();
+        } else {
+            // Normal operation
+            startMessageSystem();
             startProgressUpdates();
         }
     }
@@ -332,8 +355,12 @@ function showTerminal() {
 
 // Add this to start the message system
 function startMessageSystem() {
-    // Clear existing queue
+    // Clear existing queue AND terminal messages
     messageQueue = [];
+    const terminal = document.getElementById('terminal-messages');
+    if (terminal) {
+        terminal.innerHTML = '';
+    }
     
     // Queue appropriate messages
     const messages = getPhaseMessages();

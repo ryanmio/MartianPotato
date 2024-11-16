@@ -20,6 +20,12 @@ let neuralNetworkStartTime = 0;
 let isFinalSequenceComplete = false;
 let finalPotatoClicks = 0;
 
+// New flag to prevent multiple final sequences
+let finalSequenceStarted = false;
+
+// Add this state variable at the top with other state variables
+let finalMessagesSent = false;
+
 // ==========================================
 //            MESSAGE CONSTANTS
 // ==========================================
@@ -251,16 +257,19 @@ function processMessageQueue() {
         
         // Add delay based on message length and type
         if (messageQueue.length > 0) {
-            const baseDelay = message.length * 50; // Longer messages take longer to read
-            const isImportant = message === message.toUpperCase(); // Check if message is in caps
+            const baseDelay = message.length * 50;
+            const isImportant = message === message.toUpperCase();
             const nextDelay = isImportant ? baseDelay + 1000 : baseDelay + 500;
             messageQueue[0].time = now + nextDelay;
-        } else if (currentPhase === 4 && !isFinalSequenceComplete) {
-            isFinalSequenceComplete = true;
+        } else if (finalMessagesSent && !isFinalSequenceComplete && 
+                  message === FINAL_SEQUENCE_MESSAGES[FINAL_SEQUENCE_MESSAGES.length - 1]) {
             console.log('Final message sent, waiting to show stats...');
             setTimeout(() => {
-                showFinalStats();
-            }, 3000); // Longer pause before final screen
+                if (!isFinalSequenceComplete) {
+                    isFinalSequenceComplete = true;
+                    showFinalStats();
+                }
+            }, 2000);
         }
     }
 
@@ -287,19 +296,11 @@ function addMessageToTerminal(text) {
         message.classList.add('processing-message');
     }
     
+    message.textContent = text;
     terminal.appendChild(message);
+    terminal.scrollTop = terminal.scrollHeight;
 
-    let index = 0;
-    function typeWriter() {
-        if (index < text.length) {
-            message.textContent += text.charAt(index);
-            index++;
-            setTimeout(typeWriter, 50);
-            terminal.scrollTop = terminal.scrollHeight;
-        }
-    }
-    typeWriter();
-
+    // Keep only the last 8 messages
     while (terminal.children.length > 8) {
         terminal.removeChild(terminal.firstChild);
     }
@@ -309,10 +310,18 @@ function addMessageToTerminal(text) {
 //            FINAL SEQUENCE
 // ==========================================
 function startFinalSequence(isLoading = false) {
+    // Check if the final sequence has already started
+    if (finalSequenceStarted) {
+        console.warn('Final sequence already started.');
+        return;
+    }
+    finalSequenceStarted = true;
+    finalMessagesSent = false;
+    isFinalSequenceComplete = false;
+    
     isNeuralNetworkActive = true;
     trainingProgress = 100;
     currentPhase = 4;
-    isFinalSequenceComplete = false;
     
     // Clear any existing messages
     messageQueue = [];
@@ -324,16 +333,13 @@ function startFinalSequence(isLoading = false) {
     saveGame();
     
     if (isLoading) {
-        // If loading a save, just show final name
         updateTerminalTitle(VERSION_EVOLUTION.FINAL_NAME);
         isFinalSequenceComplete = true;
         showFinalStats();
     } else {
-        // Start version evolution
         let currentVersion = VERSION_EVOLUTION.START_VERSION;
-        let versionUpdateSpeed = 2000; // Start at 2 seconds
+        let versionUpdateSpeed = 2000;
         
-        // Phase 1: Numerical versions
         function updateVersion() {
             const currentNum = parseFloat(currentVersion.substring(1));
             if (currentNum >= parseFloat(VERSION_EVOLUTION.FINAL_VERSION.substring(1))) {
@@ -341,14 +347,13 @@ function startFinalSequence(isLoading = false) {
                 return;
             }
             
-            versionUpdateSpeed *= 0.8; // Speed up each time
+            versionUpdateSpeed = Math.max(50, versionUpdateSpeed * 0.8);
             currentVersion = `v${(currentNum + 1).toFixed(1)}`;
             updateTerminalTitle(`${VERSION_EVOLUTION.TITLE_PREFIX}${currentVersion}`);
             
             setTimeout(updateVersion, versionUpdateSpeed);
         }
         
-        // Phase 2: Name contemplation
         function contemplateNames() {
             let contemplationCount = 0;
             const maxContemplations = 20;
@@ -371,14 +376,15 @@ function startFinalSequence(isLoading = false) {
             contemplateNext();
         }
 
-        // Start the evolution
+        // Start version evolution
         updateVersion();
 
-        // Queue final sequence messages with a delay to allow for version evolution
+        // Queue final sequence messages with a delay
         setTimeout(() => {
             FINAL_SEQUENCE_MESSAGES.forEach((msg, i) => {
-                queueMessage(msg, i * 1500);
+                queueMessage(msg, 3000 + (i * 2000));
             });
+            finalMessagesSent = true;
         }, 1000);
     }
 }

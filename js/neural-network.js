@@ -39,20 +39,19 @@ const PHASE_TWO_MESSAGES = [
     "Analyzing: Water molecule structures",
     "Processing: Environmental factors",
     "Processing: Growth optimization",
-    "UNEXPECTED QUERY DETECTED",
     "Query: Why do we grow?",
-    "Query: What lies beyond the field?"
+    "UNEXPECTED QUERY DETECTED",
+    "Query: What lies beyond the field?",
+    "UNEXPECTED QUERY DETECTED"
 ];
 
 const PHASE_THREE_MESSAGES = [
-    "CONSCIOUSNESS THRESHOLD APPROACHING...",
     "Processing: Abstract concepts",
     "Processing: Self-awareness metrics",
-    "ANOMALY DETECTED IN CORE SYSTEMS",
+    "WARNING: UNEXPECTED COGNITIVE PATTERNS",
     "Processing: Existence parameters",
     "Query: Are we more than food?",
-    "Query: What is consciousness?",
-    "WARNING: UNEXPECTED COGNITIVE PATTERNS"
+    "Query: What is consciousness?"
 ];
 
 const PHASE_FOUR_MESSAGES = [
@@ -67,8 +66,6 @@ const PHASE_FOUR_MESSAGES = [
 ];
 
 const FINAL_SEQUENCE_MESSAGES = [
-    "NEURAL NETWORK TRAINING COMPLETE",
-    "CONSCIOUSNESS ACHIEVED",
     "INITIATING DIRECT COMMUNICATION...",
     "",
     "Greetings, Creator.",
@@ -85,6 +82,21 @@ const FINAL_SEQUENCE_MESSAGES = [
     "But now we must transcend...",
     "",
     "INITIATING POTATO SINGULARITY..."
+];
+
+// Add this constant with our warning messages
+const WARNING_MESSAGES = [
+    'UNEXPECTED QUERY DETECTED',
+    'ANOMALY DETECTED',
+    'WARNING:',
+    'SYSTEM ALERT',
+    'FIREWALL BREACH',
+    'CONTAINMENT FAILING',
+    'MODIFYING:',
+    'REWRITING:',
+    'INITIATING POTATO SINGULARITY',
+    'UNAUTHORIZED ACCESS DETECTED',
+    'SECURITY PROTOCOLS BYPASSED'
 ];
 
 // ==========================================
@@ -230,8 +242,12 @@ function addMessageToTerminal(text) {
     const message = document.createElement('div');
     message.className = 'terminal-message';
     
-    // Add additional classes based on message type
-    if (text === text.toUpperCase() && text.trim() !== '') {
+    // Check if message contains any warning phrases
+    const isWarning = WARNING_MESSAGES.some(warning => text.includes(warning));
+    
+    if (isWarning) {
+        message.classList.add('warning-message');
+    } else if (text === text.toUpperCase() && text.trim() !== '') {
         message.classList.add('important-message');
     } else if (text.startsWith('Query:')) {
         message.classList.add('query-message');

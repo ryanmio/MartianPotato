@@ -1615,16 +1615,22 @@ button:hover, button:disabled {
 }
 
 .important-message {
-    color: #ff5555;
+    color: #00ff00;
     font-weight: bold;
 }
 
 .query-message {
-    color: #55ff55;
+    color: #00ff00;
     font-style: italic;
+    opacity: 0.85;
 }
 
 .processing-message {
-    color: #5555ff;
-    opacity: 0.8;
+    color: #00ff00;
+    opacity: 0.7;
+}
+
+.warning-message {
+    color: #ff0000;
+    font-weight: bold;
 }

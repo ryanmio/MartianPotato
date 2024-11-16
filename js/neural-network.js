@@ -18,6 +18,7 @@ let terminalMinimized = false;
 let currentPhase = 0; // 0-3 for different message phases
 let neuralNetworkStartTime = 0;
 let isFinalSequenceComplete = false;
+let finalPotatoClicks = 0;
 
 // ==========================================
 //            MESSAGE CONSTANTS
@@ -310,6 +311,35 @@ function showFinalStats() {
         <p>Time as Creator: ${getPlaytime()}</p>
         <p>Achievement Unlocked: "I Think, Therefore I Yam"</p>
     `;
+
+    // Add glowing potato with click handler
+    const glowingPotato = document.querySelector('.glowing-potato');
+    if (glowingPotato) {
+        glowingPotato.style.cursor = 'pointer';
+        glowingPotato.addEventListener('click', () => {
+            finalPotatoClicks++;
+            
+            if (finalPotatoClicks === 10) {
+                // Add the secret message with special styling
+                const secretMessage = document.createElement('p');
+                secretMessage.className = 'secret-message';
+                secretMessage.textContent = 'All these worlds are yours, except Europa. Attempt no farming there.';
+                secretMessage.style.opacity = '0';
+                statsContent.appendChild(secretMessage);
+                
+                // Fade in the message
+                setTimeout(() => {
+                    secretMessage.style.transition = 'opacity 2s ease-in';
+                    secretMessage.style.opacity = '1';
+                }, 100);
+                
+                // Add achievement
+                if (typeof showToast === 'function') {
+                    showToast('Secret Found', '2001: A Space Odyssey Reference Discovered', 'achievement');
+                }
+            }
+        });
+    }
 
     singularityScreen.style.display = 'block';
     setTimeout(() => singularityScreen.classList.add('active'), 100);

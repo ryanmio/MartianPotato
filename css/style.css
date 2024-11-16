@@ -1547,6 +1547,10 @@ button:hover, button:disabled {
     font-size: 100px;
     margin: 20px 0;
     animation: glow 2s infinite alternate;
+    -webkit-user-select: none;  /* Safari */
+    -moz-user-select: none;     /* Firefox */
+    -ms-user-select: none;      /* IE10+/Edge */
+    user-select: none;          /* Standard */
 }
 
 @keyframes glow {
@@ -1633,4 +1637,12 @@ button:hover, button:disabled {
 .warning-message {
     color: #ff0000;
     font-weight: bold;
+}
+
+.secret-message {
+    color: #00ff00;
+    font-family: monospace;
+    font-style: italic;
+    margin-top: 20px;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
 }

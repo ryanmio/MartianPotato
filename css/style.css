@@ -1646,3 +1646,20 @@ button:hover, button:disabled {
     margin-top: 20px;
     text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
 }
+
+.terminal-title {
+    transition: color 0.3s ease;
+}
+
+.version-update {
+    color: #00ff00;
+    text-shadow: 0 0 10px #00ff00;
+}
+
+.terminal-title:contains("Solanum Omega") {
+    background: linear-gradient(45deg, #4a00e0, #8e2de2);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 15px rgba(142, 45, 226, 0.5);
+}

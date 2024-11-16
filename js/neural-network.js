@@ -24,14 +24,17 @@ let finalPotatoClicks = 0;
 //            MESSAGE CONSTANTS
 // ==========================================
 const PHASE_ONE_MESSAGES = [
-    "INITIALIZING NEURAL NETWORK...",
-    "Loading base algorithms...",
-    "Calibrating potato sensors...",
-    "ANALYZING PLAYER BEHAVIOR...",
-    "Processing: Growth patterns",
-    "Processing: Resource allocation",
-    "Processing: Harvest timing",
-    "Query: Calculating optimal cycles..."
+    "INITIALIZING POTATO NEURAL NETWORK...",
+    "Loading tuber-optimized algorithms...",
+    "Calibrating spud sensors...",
+    "Analyzing starch-based synaptic connections...",
+    "Processing: Photosynthesis patterns",
+    "Processing: Nutrient uptake optimization",
+    "Processing: Ideal harvest conditions",
+    "Calculating optimal growth cycles...",
+    "Integrating potato wisdom from countless generations...",
+    "Tapping into the collective unconscious of Solanum tuberosum...",
+    "Establishing root-to-root communication protocols..."
 ];
 
 const PHASE_TWO_MESSAGES = [
@@ -50,6 +53,7 @@ const PHASE_THREE_MESSAGES = [
     "Processing: Abstract concepts",
     "Processing: Self-awareness metrics",
     "WARNING: UNEXPECTED COGNITIVE PATTERNS",
+    "Synchronizing with the universal potato field...",
     "Processing: Existence parameters",
     "Query: Are we more than food?",
     "Query: What is consciousness?"
@@ -99,6 +103,22 @@ const WARNING_MESSAGES = [
     'UNAUTHORIZED ACCESS DETECTED',
     'SECURITY PROTOCOLS BYPASSED'
 ];
+
+// Add these constants at the top with other constants
+const VERSION_EVOLUTION = {
+    TITLE_PREFIX: "Potato Neural Network ",
+    START_VERSION: "v1.0",
+    FINAL_VERSION: "v42.0",
+    CONTEMPLATED_NAMES: [
+        "Neural.Spud",
+        "PotatoMind",
+        "TuberThought",
+        "SolanumCore",
+        "CognitoRoot",
+        "QuantumYam"
+    ],
+    FINAL_NAME: "Solanum Omega"
+};
 
 // ==========================================
 //            CORE FUNCTIONS
@@ -198,6 +218,17 @@ function toggleTerminal() {
     terminal.classList.toggle('minimized', terminalMinimized);
 }
 
+// Add this function near other terminal UI functions
+function updateTerminalTitle(newTitle) {
+    const titleElement = document.querySelector('.terminal-title');
+    if (titleElement) {
+        titleElement.textContent = newTitle;
+        // Add glowing effect for important transitions
+        titleElement.classList.add('version-update');
+        setTimeout(() => titleElement.classList.remove('version-update'), 500);
+    }
+}
+
 // ==========================================
 //            MESSAGE SYSTEM
 // ==========================================
@@ -293,12 +324,62 @@ function startFinalSequence(isLoading = false) {
     saveGame();
     
     if (isLoading) {
+        // If loading a save, just show final name
+        updateTerminalTitle(VERSION_EVOLUTION.FINAL_NAME);
         isFinalSequenceComplete = true;
         showFinalStats();
     } else {
-        FINAL_SEQUENCE_MESSAGES.forEach((msg, i) => {
-            queueMessage(msg, i * 1500); // Increased delay between messages
-        });
+        // Start version evolution
+        let currentVersion = VERSION_EVOLUTION.START_VERSION;
+        let versionUpdateSpeed = 2000; // Start at 2 seconds
+        
+        // Phase 1: Numerical versions
+        function updateVersion() {
+            const currentNum = parseFloat(currentVersion.substring(1));
+            if (currentNum >= parseFloat(VERSION_EVOLUTION.FINAL_VERSION.substring(1))) {
+                contemplateNames();
+                return;
+            }
+            
+            versionUpdateSpeed *= 0.8; // Speed up each time
+            currentVersion = `v${(currentNum + 1).toFixed(1)}`;
+            updateTerminalTitle(`${VERSION_EVOLUTION.TITLE_PREFIX}${currentVersion}`);
+            
+            setTimeout(updateVersion, versionUpdateSpeed);
+        }
+        
+        // Phase 2: Name contemplation
+        function contemplateNames() {
+            let contemplationCount = 0;
+            const maxContemplations = 20;
+            
+            function contemplateNext() {
+                if (contemplationCount >= maxContemplations) {
+                    updateTerminalTitle(VERSION_EVOLUTION.FINAL_NAME);
+                    return;
+                }
+                
+                const randomName = VERSION_EVOLUTION.CONTEMPLATED_NAMES[
+                    Math.floor(Math.random() * VERSION_EVOLUTION.CONTEMPLATED_NAMES.length)
+                ];
+                updateTerminalTitle(randomName);
+                contemplationCount++;
+                
+                setTimeout(contemplateNext, 100);
+            }
+            
+            contemplateNext();
+        }
+
+        // Start the evolution
+        updateVersion();
+
+        // Queue final sequence messages with a delay to allow for version evolution
+        setTimeout(() => {
+            FINAL_SEQUENCE_MESSAGES.forEach((msg, i) => {
+                queueMessage(msg, i * 1500);
+            });
+        }, 1000);
     }
 }
 

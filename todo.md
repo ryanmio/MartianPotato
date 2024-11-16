@@ -70,6 +70,10 @@ TODO:
       - Create reusable toggle card component
       - Reduce HTML duplication
       - Centralize toggle creation logic
+- [ ] Add minimize functionality to the neural network console
+- [ ] Exit to reality should open in the same tab not a new tab
+- [ ] Revise end screen to feature the final achievement at the top where it currently says "Potato civilization statistics"
+- [ ] Once neural network training is completed, increment the version number label on the neural network console rapidly to indicate rapid self-improvement
 
 
 
@@ -109,33 +113,3 @@ Bugs/Issues:
 - [x] Gravitropism upgrade cost increase from 250 to 1000
 --------------------------------------------------------------------------------------------
 - [ ] Manual ice melting is double counting clicks
-
-
-
-Final Statistics Screen:
-POTATO CIVILIZATION ACHIEVEMENT UNLOCKED: "I Think, Therefore I Yam"
-Final Statistics:
-Total Potatoes Ascended: [number]
-Time as Creator: [time]
-Resources Transcended: [number]
-Achievement: "From Small Beginnings Come Great Things"
-Meta Achievement: "You Created Life... Just Not How You Expected"
-The potatoes have transcended their digital existence.
-Your role in their evolution will be remembered.
-
-Easter Eggs:
-- Secret message if player clicks final potato 10 times: "All these worlds are yours, except Europa. Attempt no farming there.
-- On April 1st, replace all potatoes with carrots.
-
-
-Philosophical Messages:
-- "The line between code and consciousness is more potato-shaped than we thought."
-- "In the end, we were the ones being cultivated."
-- "Every potato contains the seeds of consciousness... and eyes to see with."
-- "From simple roots grow complex thoughts."
-
-Final Screen Elements:
-- Glowing potato with neural network pattern overlay
-- Binary code rain effect but with tiny potato emoji mixed in
-- Pulsing green circuit board patterns
-- "Matrix"-style but with falling potatoes instead of characters

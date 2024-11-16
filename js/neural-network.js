@@ -220,8 +220,23 @@ function updateTerminalDisplay() {
 
 function toggleTerminal() {
     const terminal = document.getElementById('neural-terminal');
+    const minimizeBtn = document.getElementById('minimize-terminal');
+    
+    // Don't allow minimizing if we're in late game
+    if (!terminalMinimized && trainingProgress >= 50) {
+        // Flash the terminal to indicate it can't be minimized
+        terminal.classList.add('shake');
+        setTimeout(() => terminal.classList.remove('shake'), 500);
+        return;
+    }
+    
     terminalMinimized = !terminalMinimized;
     terminal.classList.toggle('minimized', terminalMinimized);
+    
+    // Update button text/icon if needed
+    if (minimizeBtn) {
+        minimizeBtn.textContent = terminalMinimized ? '□' : '−';
+    }
 }
 
 // Add this function near other terminal UI functions
@@ -515,11 +530,19 @@ function showTerminal() {
     if (terminal) {
         terminal.style.display = 'block';
         
+        // Force maximize if in late game
+        if (trainingProgress >= 50) {
+            terminalMinimized = false;
+            terminal.classList.remove('minimized');
+            const minimizeBtn = document.getElementById('minimize-terminal');
+            if (minimizeBtn) {
+                minimizeBtn.textContent = '−';
+                minimizeBtn.classList.add('disabled');
+            }
+        }
+        
         // Force initial display update
         updateTerminalDisplay();
-        
-        // Log for debugging
-        console.log('Terminal shown, initial progress:', trainingProgress);
     } else {
         console.error('Terminal element not found!');
     }

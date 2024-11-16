@@ -1663,3 +1663,24 @@ button:hover, button:disabled {
     color: transparent;
     text-shadow: 0 0 15px rgba(142, 45, 226, 0.5);
 }
+
+.terminal-header .minimize-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.neural-terminal.minimized {
+    height: 40px; /* Just show the header when minimized */
+    overflow: hidden;
+}
+
+/* Optional: Add a shake animation for when trying to minimize in late game */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.shake {
+    animation: shake 0.3s ease-in-out;
+}

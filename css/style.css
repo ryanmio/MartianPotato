@@ -1613,3 +1613,18 @@ button:hover, button:disabled {
 @keyframes blink {
     50% { opacity: 0; }
 }
+
+.important-message {
+    color: #ff5555;
+    font-weight: bold;
+}
+
+.query-message {
+    color: #55ff55;
+    font-style: italic;
+}
+
+.processing-message {
+    color: #5555ff;
+    opacity: 0.8;
+}

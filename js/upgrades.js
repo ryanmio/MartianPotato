@@ -506,14 +506,6 @@ const upgrades = [
         effect: () => { 
             // Call into our new neural-network.js system
             initializeNeuralNetwork();
-            
-            // Show first achievement
-            queueAchievement(
-                "Neural Network Online",
-                "You've created a sophisticated AI system powered by potatoes. Training beginning...",
-                "The boundary between organic and digital intelligence grows thinner.",
-                "neural_network.webp"
-            );
         },
         icon: "🧠",
         description: "Implement a sophisticated neural network to optimize potato farming... what could go wrong?",

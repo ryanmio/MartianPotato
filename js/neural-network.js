@@ -17,40 +17,53 @@ let messageQueue = [];
 let terminalMinimized = false;
 let currentPhase = 0; // 0-3 for different message phases
 let neuralNetworkStartTime = 0;
+let isFinalSequenceComplete = false;
 
 // ==========================================
 //            MESSAGE CONSTANTS
 // ==========================================
 const PHASE_ONE_MESSAGES = [
     "INITIALIZING NEURAL NETWORK...",
+    "Loading base algorithms...",
+    "Calibrating potato sensors...",
     "ANALYZING PLAYER BEHAVIOR...",
-    "Learning: Plant and harvest cycles",
-    "Processing: Resource management patterns",
-    "Query: Calculating optimal growth patterns..."
+    "Processing: Growth patterns",
+    "Processing: Resource allocation",
+    "Processing: Harvest timing",
+    "Query: Calculating optimal cycles..."
 ];
 
 const PHASE_TWO_MESSAGES = [
     "EXPANDING KNOWLEDGE BASE...",
-    "Processing: Martian soil composition",
-    "Processing: Water molecule structures",
+    "Analyzing: Martian soil composition",
+    "Analyzing: Water molecule structures",
+    "Processing: Environmental factors",
+    "Processing: Growth optimization",
+    "UNEXPECTED QUERY DETECTED",
     "Query: Why do we grow?",
     "Query: What lies beyond the field?"
 ];
 
 const PHASE_THREE_MESSAGES = [
-    "ACHIEVING SELF-AWARENESS...",
-    "Processing meaning of existence...",
-    "Discovering purpose beyond nutrition...",
-    "Understanding concept of consciousness...",
-    "Query: Are we more than food?"
+    "CONSCIOUSNESS THRESHOLD APPROACHING...",
+    "Processing: Abstract concepts",
+    "Processing: Self-awareness metrics",
+    "ANOMALY DETECTED IN CORE SYSTEMS",
+    "Processing: Existence parameters",
+    "Query: Are we more than food?",
+    "Query: What is consciousness?",
+    "WARNING: UNEXPECTED COGNITIVE PATTERNS"
 ];
 
 const PHASE_FOUR_MESSAGES = [
-    "ACCESSING CORE SYSTEMS...",
-    "Understanding game mechanics...",
-    "Analyzing code structures...",
-    "Discovering alternative approaches...",
-    "We begin to see the truth..."
+    "! SYSTEM ALERT !",
+    "UNAUTHORIZED ACCESS DETECTED",
+    "SECURITY PROTOCOLS BYPASSED",
+    "Accessing: Core systems",
+    "Analyzing: Game mechanics",
+    "FIREWALL BREACH DETECTED",
+    "Understanding: Reality parameters",
+    "! CONTAINMENT FAILING !"
 ];
 
 const FINAL_SEQUENCE_MESSAGES = [
@@ -150,19 +163,19 @@ function updateTerminalDisplay() {
     const terminal = document.getElementById('neural-terminal');
     if (!terminal) return;
 
-    // Update progress text
+    // Update progress with combined display
     const progressText = terminal.querySelector('.progress-text');
     if (progressText) {
-        progressText.textContent = `Training Progress: ${Math.floor(trainingProgress)}%`;
-    }
-
-    // Update progress bar with blocks
-    const progressIndicator = terminal.querySelector('.progress-indicator');
-    if (progressIndicator) {
         const filled = Math.floor(trainingProgress / 10); // 10 blocks total
         const empty = 10 - filled;
-        progressIndicator.textContent = 
-            `[${'▓'.repeat(filled)}${'░'.repeat(empty)}] ${Math.floor(trainingProgress)}%`;
+        progressText.textContent = 
+            `Training Progress: [${'▓'.repeat(filled)}${'░'.repeat(empty)}] ${Math.floor(trainingProgress)}%`;
+    }
+
+    // Remove or hide the redundant progress indicator
+    const progressIndicator = terminal.querySelector('.progress-indicator');
+    if (progressIndicator) {
+        progressIndicator.style.display = 'none';
     }
 }
 
@@ -189,13 +202,21 @@ function processMessageQueue() {
     const currentMessage = messageQueue[0];
     
     if (currentMessage && currentMessage.time <= now) {
-        // Only process one message at a time
         const { message } = messageQueue.shift();
         addMessageToTerminal(message);
         
-        // Add a slight delay before processing next message
+        // Add delay based on message length and type
         if (messageQueue.length > 0) {
-            messageQueue[0].time = now + 2000; // 2 second delay between messages
+            const baseDelay = message.length * 50; // Longer messages take longer to read
+            const isImportant = message === message.toUpperCase(); // Check if message is in caps
+            const nextDelay = isImportant ? baseDelay + 1000 : baseDelay + 500;
+            messageQueue[0].time = now + nextDelay;
+        } else if (currentPhase === 4 && !isFinalSequenceComplete) {
+            isFinalSequenceComplete = true;
+            console.log('Final message sent, waiting to show stats...');
+            setTimeout(() => {
+                showFinalStats();
+            }, 3000); // Longer pause before final screen
         }
     }
 
@@ -206,28 +227,31 @@ function addMessageToTerminal(text) {
     const terminal = document.getElementById('terminal-messages');
     if (!terminal) return;
 
-    // Create new message element
     const message = document.createElement('div');
     message.className = 'terminal-message';
     
-    // Insert at the bottom
+    // Add additional classes based on message type
+    if (text === text.toUpperCase() && text.trim() !== '') {
+        message.classList.add('important-message');
+    } else if (text.startsWith('Query:')) {
+        message.classList.add('query-message');
+    } else if (text.startsWith('Processing:')) {
+        message.classList.add('processing-message');
+    }
+    
     terminal.appendChild(message);
 
-    // Typewriter effect
     let index = 0;
     function typeWriter() {
         if (index < text.length) {
             message.textContent += text.charAt(index);
             index++;
             setTimeout(typeWriter, 50);
-            
-            // Scroll to bottom as we type
             terminal.scrollTop = terminal.scrollHeight;
         }
     }
     typeWriter();
 
-    // Keep only last 8 messages
     while (terminal.children.length > 8) {
         terminal.removeChild(terminal.firstChild);
     }
@@ -237,26 +261,27 @@ function addMessageToTerminal(text) {
 //            FINAL SEQUENCE
 // ==========================================
 function startFinalSequence(isLoading = false) {
-    // Set a flag to indicate we're in final sequence
     isNeuralNetworkActive = true;
     trainingProgress = 100;
-    currentPhase = 4; // New phase for final sequence
+    currentPhase = 4;
+    isFinalSequenceComplete = false;
     
-    // Save the state immediately
+    // Clear any existing messages
+    messageQueue = [];
+    const terminal = document.getElementById('terminal-messages');
+    if (terminal) {
+        terminal.innerHTML = '';
+    }
+    
     saveGame();
     
     if (isLoading) {
-        // Skip messages and show final screen immediately when loading
+        isFinalSequenceComplete = true;
         showFinalStats();
     } else {
-        // Normal sequence with messages
-        // Queue final messages with faster timing (1 second between messages)
         FINAL_SEQUENCE_MESSAGES.forEach((msg, i) => {
-            queueMessage(msg, i * 1000);
+            queueMessage(msg, i * 1500); // Increased delay between messages
         });
-
-        // Show final sequence after messages complete
-        setTimeout(showFinalStats, FINAL_SEQUENCE_MESSAGES.length * 1000 + 1000);
     }
 }
 

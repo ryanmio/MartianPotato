@@ -409,9 +409,21 @@ function showFinalStats() {
     const statsContent = document.getElementById('final-stats-content');
     
     statsContent.innerHTML = `
-        <p>Total Potatoes Ascended: ${totalPotatoesHarvested.toLocaleString()}</p>
-        <p>Time as Creator: ${getPlaytime()}</p>
-        <p>Achievement Unlocked: "I Think, Therefore I Yam"</p>
+        <h1 class="singularity-title">Potato Singularity Achieved</h1>
+        <div class="glowing-potato">🥔</div>
+        <div class="achievement-banner">
+            Achievement Unlocked: "I Think, Therefore I Yam"
+        </div>
+        <div class="final-stats">
+            <p>
+                <span class="stat-label">Total Potatoes Ascended:</span>
+                <span class="stat-value">${totalPotatoesHarvested.toLocaleString()}</span>
+            </p>
+            <p>
+                <span class="stat-label">Time as Creator:</span>
+                <span class="stat-value">${getPlaytime()}</span>
+            </p>
+        </div>
     `;
 
     // Add glowing potato with click handler
@@ -422,20 +434,16 @@ function showFinalStats() {
             finalPotatoClicks++;
             
             if (finalPotatoClicks === 10) {
-                // Add the secret message with special styling
-                const secretMessage = document.createElement('p');
+                const secretMessage = document.createElement('div');
                 secretMessage.className = 'secret-message';
                 secretMessage.textContent = 'All these worlds are yours, except Europa. Attempt no farming there.';
-                secretMessage.style.opacity = '0';
                 statsContent.appendChild(secretMessage);
                 
                 // Fade in the message
                 setTimeout(() => {
-                    secretMessage.style.transition = 'opacity 2s ease-in';
                     secretMessage.style.opacity = '1';
                 }, 100);
                 
-                // Add achievement
                 if (typeof showToast === 'function') {
                     showToast('Secret Found', '2001: A Space Odyssey Reference Discovered', 'achievement');
                 }
@@ -443,7 +451,7 @@ function showFinalStats() {
         });
     }
 
-    singularityScreen.style.display = 'block';
+    singularityScreen.style.display = 'flex';
     setTimeout(() => singularityScreen.classList.add('active'), 100);
 
     // Set up final buttons
@@ -455,8 +463,7 @@ function showFinalStats() {
             'https://en.wikipedia.org/wiki/Brain_in_a_vat',
             'https://en.wikipedia.org/wiki/Philosophical_zombie'
         ];
-        const url = urls[Math.floor(Math.random() * urls.length)];
-        window.open(url, '_blank');
+        window.open(urls[Math.floor(Math.random() * urls.length)], '_blank');
     };
 }
 

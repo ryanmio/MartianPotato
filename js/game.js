@@ -146,6 +146,9 @@ potatoTemplate.innerHTML = `
     </div>
 `;
 
+// Add to the game state variables section at top
+let neuralNetworkActive = false;
+
 // ==========================================
 //            CORE GAME FUNCTIONS
 // ==========================================
@@ -193,6 +196,7 @@ function initializeUI() {
 // Function to reset the game state
 function resetGame() {
     if (confirm('Are you sure you want to reset the game? This will erase all your progress.')) {
+        neuralNetworkActive = false;
         localStorage.removeItem('martianPotatoSave');
         hasSeenInitialGlow = false;
         location.reload();
@@ -226,6 +230,11 @@ function gameLoop(currentTime) {
         if (currentTime - lastSaveTime >= 60000) {
             saveGame();
             lastSaveTime = currentTime;
+        }
+        
+        // Update neural network if active
+        if (window.neuralNetworkActive) {
+            updateTrainingProgress();
         }
         
         lastFrameTime = currentTime;
@@ -604,7 +613,10 @@ function saveGame() {
         isSubsurfaceAquiferTapperActive: window.isSubsurfaceAquiferTapperActive,
         isBucketWheelExcavatorActive: window.isBucketWheelExcavatorActive,
         isSubterraneanTuberTunnelerActive: window.isSubterraneanTuberTunnelerActive,
+        neuralNetworkActive: window.neuralNetworkActive,
+        neuralNetworkState: getNeuralNetworkState()
     };
+    console.log('Saving game with neural network:', gameState.neuralNetworkState);
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
 }
@@ -612,12 +624,24 @@ function saveGame() {
 // Function to load the game state
 function loadGame() {
     const savedState = localStorage.getItem('martianPotatoSave');
-    console.log('Attempting to load saved game state');
+    console.log('1. Load sequence started');
 
     if (savedState) {
         try {
             const gameState = JSON.parse(savedState);
-            console.log('Successfully parsed saved game state');
+            console.log('2. Parsed state:', {
+                neuralNetworkActive: gameState.neuralNetworkActive,
+                neuralNetworkState: gameState.neuralNetworkState
+            });
+
+            // IMPORTANT: Load neural network first, before other state
+            if (gameState.neuralNetworkActive || (gameState.neuralNetworkState && gameState.neuralNetworkState.isActive)) {
+                console.log('3. Neural network was active in save, initializing...');
+                window.neuralNetworkActive = true; // Make sure it's global
+                initializeNeuralNetwork(gameState.neuralNetworkState);
+            } else {
+                console.log('3. Neural network was not active in save');
+            }
 
             // Restore game variables, respecting saved values even if they're zero
             gameStartTime = gameState.gameStartTime || Date.now();
@@ -803,6 +827,18 @@ function loadGame() {
                         startSubterraneanTuberTunneler();
                     }
                 }
+            }
+
+            // Neural Network Loading
+            console.log('Loading neural network state:', gameState.neuralNetworkActive, gameState.neuralNetworkState);
+            
+            // IMPORTANT: Set the global state
+            neuralNetworkActive = gameState.neuralNetworkActive;
+            
+            // If it was active, we MUST reinitialize it
+            if (neuralNetworkActive) {
+                console.log('Neural network was active, reinitializing...');
+                initializeNeuralNetwork(gameState.neuralNetworkState);
             }
         } catch (error) {
             console.error('Error parsing saved game state:', error);
@@ -1211,6 +1247,9 @@ function updateDisplay() {
     updateTechTree();
     updateIceMeltingProgress();
     updateIceMeltingBasinButton();
+    if (neuralNetworkActive) {
+        updateTerminalDisplay(); // Update neural network terminal
+    }
 }
 
 function updateAutoHarvestersInfo() {
@@ -2168,7 +2207,14 @@ function updateDebugInfo(currentTime) {
     }
 }
 
-// Add passive event listeners for better scroll performance
-document.getElementById('tech-tree').addEventListener('scroll', updateCarouselArrows, { passive: true });
-window.addEventListener('resize', updateCarouselArrows, { passive: true });
-
+function getNeuralNetworkState() {
+    const state = {
+        isActive: isNeuralNetworkActive,
+        progress: trainingProgress,
+        phase: currentPhase,
+        minimized: terminalMinimized,
+        // Add any other state we need to persist
+    };
+    console.log('Getting neural network state:', state);
+    return state;
+}

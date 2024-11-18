@@ -61,15 +61,14 @@ TODO:
     - [x] "Martian Engineer": Unlock all upgrades
     - [x] "One Sol Wonder": Play the game continuously for 1 Martian day (24 hours and 37 minutes)
     - [x] "Potato Empire": Have 1000 potatoes, 1000 water, 1000 soil nutrients, and 1000 oxygen simultaneously
+- [x] Revise end screen to feature the final achievement at the top where it currently says "Potato civilization statistics"
+- [x] Once neural network training is completed, increment the version number label on the neural network console rapidly to indicate rapid self-improvement
+- [x] Add minimize functionality to the neural network console
+- [x] Add potato sentience upgrade effect
 --------------------------------------------------------------------------------------------
 - [ ] Add more/better production stats
 - [ ] Balance upgrade costs and effects
 - [ ] Mobile styling
-- [ ] Add potato sentience upgrade effect
-- [ ] Refactor action card toggles to use a standardized template system
-      - Create reusable toggle card component
-      - Reduce HTML duplication
-      - Centralize toggle creation logic
 
 
 
@@ -109,4 +108,4 @@ Bugs/Issues:
 - [x] Gravitropism upgrade cost increase from 250 to 1000
 --------------------------------------------------------------------------------------------
 - [ ] Manual ice melting is double counting clicks
-
+- [ ] Exit to reality should open in the same tab not a new tab

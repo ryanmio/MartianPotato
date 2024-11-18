@@ -501,20 +501,20 @@ const upgrades = [
         repeatable: false
     },
     {
-        name: "Potato Sentience",
+        name: "Potato Neural Network",
         cost: 1000000,
-        effect: () => {
-            // Add sentience effect here
+        effect: () => { 
+            // Call into our new neural-network.js system
+            initializeNeuralNetwork();
         },
-        unlocksNextTier: true,
         icon: "🧠",
-        description: "Unknown effect...",
-        metaMessage: "We were so preoccupied with whether we could, we didn't stop to think if we should.",
+        description: "Implement a sophisticated neural network to optimize potato farming... what could go wrong?",
+        metaMessage: "The line between code and consciousness is more potato-shaped than we thought.",
         weight: 25,
         category: "technology",
         tier: 5,
         count: 0,
-        repeatable: false
+        repeatable: false,
     }
 ];
 
@@ -657,8 +657,8 @@ function updateCarouselArrows() {
 }
 
 // Also, call updateCarouselArrows when the window is resized or when the tech tree is scrolled
-window.addEventListener('resize', updateCarouselArrows);
-document.getElementById('tech-tree').addEventListener('scroll', updateCarouselArrows);
+window.addEventListener('resize', updateCarouselArrows, { passive: true });
+document.getElementById('tech-tree').addEventListener('scroll', updateCarouselArrows, { passive: true });
 
 // Main game loop function, called on each animation frame
 function gameLoop(currentTime) {
@@ -972,8 +972,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Use the existing updateCarouselArrows function
-    techTree.addEventListener('scroll', updateCarouselArrows);
-    window.addEventListener('resize', updateCarouselArrows);
+    techTree.addEventListener('scroll', updateCarouselArrows, { passive: true });
+    window.addEventListener('resize', updateCarouselArrows, { passive: true });
 
     updateCarouselArrows(); // Initial check
 

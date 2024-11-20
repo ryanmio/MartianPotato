@@ -993,13 +993,15 @@ button:hover, button:disabled {
     }
 
     #stats-container {
-        flex-direction: column;
+        flex-direction: row;
+        gap: 20px;
+        margin: 0 10px;
     }
 
     #resources, #production {
-        width: 100%;
+        width: calc(50% - 10px);
         margin-right: 0;
-        margin-bottom: 15px;
+        margin-bottom: 0;
     }
 
     #potato-field {
@@ -1078,6 +1080,12 @@ button:hover, button:disabled {
         height: 250px;
         left: 2.5%;
         right: 2.5%;
+    }
+
+    /* Adjust text size if needed */
+    #resources p, #production p {
+        font-size: 14px;
+        line-height: 1.3;
     }
 }
 

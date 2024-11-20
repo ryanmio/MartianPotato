@@ -976,6 +976,11 @@ button:hover, button:disabled {
         text-align: center;
         z-index: 100;
         box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+
+    #game-header.hidden {
+        transform: translateY(-100%);
     }
 
     #game-header h1 {

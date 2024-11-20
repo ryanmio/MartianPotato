@@ -191,6 +191,7 @@ function initializeUI() {
     
     initializeNuclearIceMelter();
     initializeChartModalListeners();
+    initializeHeaderScroll();
 }
 
 // Function to reset the game state
@@ -2217,4 +2218,31 @@ function getNeuralNetworkState() {
     };
     console.log('Getting neural network state:', state);
     return state;
+}
+
+// Initialize header scroll behavior
+function initializeHeaderScroll() {
+    let lastScrollTop = 0;
+    const header = document.getElementById('game-header');
+    const scrollThreshold = 10;
+
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Show header when scrolling to top
+        if (scrollTop <= 0) {
+            header.classList.remove('hidden');
+            return;
+        }
+        
+        // Hide header when scrolling down, show when scrolling up
+        if (Math.abs(scrollTop - lastScrollTop) > scrollThreshold) {
+            if (scrollTop > lastScrollTop) {
+                header.classList.add('hidden');
+            } else {
+                header.classList.remove('hidden');
+            }
+            lastScrollTop = scrollTop;
+        }
+    });
 }

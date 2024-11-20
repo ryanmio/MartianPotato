@@ -958,7 +958,158 @@ button:hover, button:disabled {
 }
 
 /* 6. Media Queries */
-/* Add any responsive styles here if needed */
+
+/* Base mobile styles (up to 767px) */
+@media screen and (max-width: 767px) {
+    #game-container {
+        padding: 10px;
+        padding-top: 140px; /* Increased to accommodate header */
+    }
+
+    #game-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 10px;
+        text-align: center;
+        z-index: 100;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    #game-header h1 {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    .game-buttons {
+        justify-content: center;
+    }
+
+    #stats-container {
+        flex-direction: column;
+    }
+
+    #resources, #production {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    #potato-field {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for mobile */
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .potato-slot {
+        width: 60px;
+        height: 60px;
+    }
+
+    .potato {
+        width: 50px;
+        height: 50px;
+    }
+
+    #action-cards-container {
+        gap: 10px;
+    }
+
+    .action-card {
+        width: calc(50% - 5px); /* 2 cards per row with gap */
+        height: 90px;
+        padding: 8px;
+    }
+
+    .action-card h3 {
+        font-size: 13px;
+    }
+
+    /* Handle double-width cards */
+    .action-card.double-width {
+        width: 100%;
+        height: auto;
+        padding: 10px;
+    }
+
+    .nuclear-ice-melter-controls {
+        position: relative;
+        top: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    #nuclear-ice-melter-knob {
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none;
+        width: 60px;
+        height: 60px;
+    }
+
+    #nuclear-ice-melter-display {
+        position: relative;
+        right: auto;
+        top: auto;
+        transform: none;
+        width: 80px;
+    }
+
+    /* Modal adjustments */
+    .modal-content {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .chart-modal-content {
+        width: 95%;
+    }
+
+    /* Neural terminal adjustments */
+    .neural-terminal {
+        width: 95%;
+        height: 250px;
+        left: 2.5%;
+        right: 2.5%;
+    }
+}
+
+/* Tablet styles (768px to 1023px) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    #game-container {
+        padding: 15px;
+        padding-top: 80px;
+    }
+
+    #potato-field {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns for tablet */
+    }
+
+    .action-card {
+        width: calc(33.33% - 14px); /* 3 cards per row */
+    }
+
+    .action-card.double-width {
+        width: calc(66.66% - 7px); /* 2 columns width */
+    }
+}
+
+/* Larger screens (1024px and up) */
+@media screen and (min-width: 1024px) {
+    #game-container {
+        max-width: 1200px;
+    }
+
+    #potato-field {
+        grid-template-columns: repeat(4, 1fr); /* 4 columns for desktop */
+    }
+}
 
 
 /* 7. Achievements */

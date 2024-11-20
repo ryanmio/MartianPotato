@@ -19,6 +19,7 @@ body {
     padding: 20px;
     padding-top: 60px; 
     position: relative; 
+    padding-bottom: 40px;
 }
 
 #stats-container {
@@ -963,7 +964,8 @@ button:hover, button:disabled {
 @media screen and (max-width: 767px) {
     #game-container {
         padding: 10px;
-        padding-top: 100px; 
+        padding-top: 100px;
+        padding-bottom: 40px;
     }
 
     #game-header {
@@ -1023,7 +1025,6 @@ button:hover, button:disabled {
     #action-cards-container {
         max-width: 600px;
         margin: 0 auto;
-        padding: 0 10px;
         gap: 10px;
     }
 

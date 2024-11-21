@@ -19,6 +19,7 @@ body {
     padding: 20px;
     padding-top: 60px; 
     position: relative; 
+    padding-bottom: 40px;
 }
 
 #stats-container {
@@ -958,7 +959,200 @@ button:hover, button:disabled {
 }
 
 /* 6. Media Queries */
-/* Add any responsive styles here if needed */
+
+/* Base mobile styles (up to 767px) */
+@media screen and (max-width: 767px) {
+    #game-container {
+        padding: 10px;
+        padding-top: 100px;
+        padding-bottom: 40px;
+    }
+
+    #game-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 10px;
+        text-align: center;
+        z-index: 100;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+
+    #game-header.hidden {
+        transform: translateY(-100%);
+    }
+
+    #game-header h1 {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    .game-buttons {
+        justify-content: center;
+    }
+
+    #stats-container {
+        flex-direction: row;
+        gap: 20px;
+        margin: 0 10px;
+    }
+
+    #resources, #production {
+        width: calc(50% - 10px);
+        margin-right: 0;
+        margin-bottom: 0;
+    }
+
+    #potato-field {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for mobile */
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .potato-slot {
+        width: 60px;
+        height: 60px;
+    }
+
+    .potato {
+        width: 50px;
+        height: 50px;
+    }
+
+    #action-cards-container {
+        max-width: 600px;
+        margin: 0 auto;
+        gap: 10px;
+    }
+
+    .action-card {
+        width: 100%;
+        margin: 0 0 10px 0;
+        padding: 10px;
+    }
+
+    .action-card h3 {
+        font-size: 13px;
+    }
+
+    /* Handle double-width cards */
+    .action-card.double-width {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .nuclear-ice-melter-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Center the remaining elements */
+        padding: 0 20px;
+        margin-top: 10px;
+    }
+
+    #nuclear-ice-melter-knob {
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none;
+        width: 60px;
+        height: 60px;
+    }
+
+    /* Modal adjustments */
+    .modal-content {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .chart-modal-content {
+        width: 95%;
+    }
+
+    /* Neural terminal adjustments */
+    .neural-terminal {
+        width: 95%;
+        height: 250px;
+        left: 2.5%;
+        right: 2.5%;
+    }
+
+    /* Adjust text size if needed */
+    #resources p, #production p {
+        font-size: 14px;
+        line-height: 1.3;
+    }
+}
+
+/* Tablet styles (768px to 1023px) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    #game-container {
+        padding: 15px;
+        padding-top: 80px;
+    }
+
+    #action-cards-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    /* Adjust nuclear ice melter layout */
+    .nuclear-ice-melter-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 5px;
+        padding: 0 5px;
+    }
+
+    /* Make nuclear ice melter card same width as others */
+    .action-card.double-width {
+        grid-column: span 2;
+        padding: 10px;
+        width: 100%;
+    }
+
+    #nuclear-ice-melter-knob {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+/* Larger screens (1024px and up) */
+@media screen and (min-width: 1024px) {
+    #game-container {
+        max-width: 720px;
+    }
+
+    #potato-field {
+        grid-template-columns: repeat(4, 1fr); /* 4 columns for desktop */
+    }
+
+    .action-card.double-width {
+        width: 468px;
+    }
+}
+
+/* Hide nuclear ice melter display on screens below 550px */
+@media screen and (max-width: 549px) {
+    #nuclear-ice-melter-display {
+        display: none;
+    }
+}
+
+/* Show nuclear ice melter display on screens 550px and above */
+@media screen and (min-width: 550px) {
+    #nuclear-ice-melter-display {
+        display: block;
+    }
+}
+
 
 
 /* 7. Achievements */
@@ -1157,7 +1351,6 @@ button:hover, button:disabled {
 
 /* Nuclear Ice Melter */
 .action-card.double-width {
-    width: 468px;
     height: 124px;
     position: relative;
     padding: 15px;

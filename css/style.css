@@ -1061,10 +1061,6 @@ button:hover, button:disabled {
         height: 60px;
     }
 
-    #nuclear-ice-melter-display {
-        display: none; /* Hide the percentage display on mobile */
-    }
-
     /* Modal adjustments */
     .modal-content {
         width: 95%;
@@ -1097,16 +1093,34 @@ button:hover, button:disabled {
         padding-top: 80px;
     }
 
-    #potato-field {
-        grid-template-columns: repeat(3, 1fr); /* 3 columns for tablet */
+    #action-cards-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 15px;
     }
 
-    .action-card {
-        width: calc(33.33% - 14px); /* 3 cards per row */
+    /* Adjust nuclear ice melter layout */
+    .nuclear-ice-melter-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 5px;
+        padding: 0 5px;
     }
 
+    /* Make nuclear ice melter card same width as others */
     .action-card.double-width {
-        width: calc(66.66% - 7px); /* 2 columns width */
+        grid-column: span 2;
+        padding: 10px;
+        width: 100%;
+    }
+
+    #nuclear-ice-melter-knob {
+        width: 45px;
+        height: 45px;
     }
 }
 
@@ -1119,7 +1133,26 @@ button:hover, button:disabled {
     #potato-field {
         grid-template-columns: repeat(4, 1fr); /* 4 columns for desktop */
     }
+
+    .action-card.double-width {
+        width: 468px;
+    }
 }
+
+/* Hide nuclear ice melter display on screens below 550px */
+@media screen and (max-width: 549px) {
+    #nuclear-ice-melter-display {
+        display: none;
+    }
+}
+
+/* Show nuclear ice melter display on screens 550px and above */
+@media screen and (min-width: 550px) {
+    #nuclear-ice-melter-display {
+        display: block;
+    }
+}
+
 
 
 /* 7. Achievements */
@@ -1318,7 +1351,6 @@ button:hover, button:disabled {
 
 /* Nuclear Ice Melter */
 .action-card.double-width {
-    width: 468px;
     height: 124px;
     position: relative;
     padding: 15px;

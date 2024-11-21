@@ -65,10 +65,11 @@ TODO:
 - [x] Once neural network training is completed, increment the version number label on the neural network console rapidly to indicate rapid self-improvement
 - [x] Add minimize functionality to the neural network console
 - [x] Add potato sentience upgrade effect
+- [x] Mobile styling
 --------------------------------------------------------------------------------------------
 - [ ] Add more/better production stats
 - [ ] Balance upgrade costs and effects
-- [ ] Mobile styling
+- [ ] Implement nuclear meltdown if too much ice is melted too quickly
 
 
 

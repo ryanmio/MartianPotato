@@ -625,23 +625,14 @@ function saveGame() {
 // Function to load the game state
 function loadGame() {
     const savedState = localStorage.getItem('martianPotatoSave');
-    console.log('1. Load sequence started');
 
     if (savedState) {
         try {
             const gameState = JSON.parse(savedState);
-            console.log('2. Parsed state:', {
-                neuralNetworkActive: gameState.neuralNetworkActive,
-                neuralNetworkState: gameState.neuralNetworkState
-            });
-
             // IMPORTANT: Load neural network first, before other state
             if (gameState.neuralNetworkActive || (gameState.neuralNetworkState && gameState.neuralNetworkState.isActive)) {
-                console.log('3. Neural network was active in save, initializing...');
                 window.neuralNetworkActive = true; // Make sure it's global
                 initializeNeuralNetwork(gameState.neuralNetworkState);
-            } else {
-                console.log('3. Neural network was not active in save');
             }
 
             // Restore game variables, respecting saved values even if they're zero
@@ -831,14 +822,10 @@ function loadGame() {
             }
 
             // Neural Network Loading
-            console.log('Loading neural network state:', gameState.neuralNetworkActive, gameState.neuralNetworkState);
-            
-            // IMPORTANT: Set the global state
             neuralNetworkActive = gameState.neuralNetworkActive;
             
             // If it was active, we MUST reinitialize it
             if (neuralNetworkActive) {
-                console.log('Neural network was active, reinitializing...');
                 initializeNeuralNetwork(gameState.neuralNetworkState);
             }
         } catch (error) {
@@ -1382,21 +1369,23 @@ function updatePotatoElement(slotElement, potato) {
 // ==========================================
 
 // Handle manual ice melting process
-function meltIce(event) {
-    if (event && event.stopPropagation) {
-        event.stopPropagation(); // Prevent event bubbling only if event exists
+function meltIce(event) {   
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
     }
     
     if (!isManualIceMeltingUnlocked) {
+        console.log('Ice melting not unlocked');
         return;
     }
     
-    if (ice >= 1) {  // Check if there's enough ice
+    if (ice >= 1) {
         waterMeltingClicks++;
         updateIceMeltingProgress();
         
         if (waterMeltingClicks >= CLICKS_PER_WATER) {
-            ice--;  // Consume 1 ice
+            ice--;
             water++;
             waterMeltingClicks = 0;
             showToast("Water Collected", "You've melted ice and collected 1 unit of water!", 'achievement');
@@ -1409,11 +1398,15 @@ function meltIce(event) {
 
 // Unlock the manual ice melting feature
 function unlockManualIceMelting() {
+    console.log('Unlocking manual ice melting');
     isManualIceMeltingUnlocked = true;
     
     const iceMeltingContainer = document.getElementById('ice-melting-container');
     if (iceMeltingContainer) {
+        console.log('Setting up ice melting container display');
         iceMeltingContainer.style.display = 'block';
+        // Check if we're accidentally adding another event listener here
+        console.log('Current click listeners on container:', iceMeltingContainer.onclick);
     }
 }
 
@@ -2052,8 +2045,7 @@ function initializeEventListeners() {
 
     // Action Cards
     addEventListenerIfExists('exploration-container', 'click', exploreMarsSurface);
-    addEventListenerIfExists('ice-melting-basin-container', 'click', fillIceMeltingBasin);
-
+    
     // Nuclear Ice Melter Controls
     initializeNuclearIceMelterControls();
 

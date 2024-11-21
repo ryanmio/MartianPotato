@@ -1004,8 +1004,6 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleNuclearIceMelter();
         });
     }
-
-    initializeActionCards();
 });
 
 // Queue an achievement for display
@@ -1335,9 +1333,9 @@ function handleActionCardClick(actionName) {
         case 'exploration':
             exploreMarsSurface();
             break;
-        case 'ice-melting':
-            meltIce();
-            break;
+            case 'ice-melting':
+                meltIce();  
+                break;
         case 'ice-melting-basin':
             fillIceMeltingBasin();
             break;
@@ -1356,7 +1354,7 @@ function handleActionCardClick(actionName) {
 function initializeActionCards() {
     const clickableCards = document.querySelectorAll('.action-card.clickable');
     clickableCards.forEach(card => {
-        card.addEventListener('click', () => {
+        card.addEventListener('click', (event) => {
             if (!card.hasAttribute('disabled') && card.style.display !== 'none') {
                 const actionName = card.id.replace('-container', '');
                 handleActionCardClick(actionName);

@@ -108,5 +108,5 @@ Bugs/Issues:
 - [x] Polar cap mining should consume only 1 potato not 2, and should generate 4 ice not 2
 - [x] Gravitropism upgrade cost increase from 250 to 1000
 - [x] Manual ice melting is double counting clicks
+- [x] Exit to reality should open in the same tab not a new tab
 --------------------------------------------------------------------------------------------
-- [ ] Exit to reality should open in the same tab not a new tab

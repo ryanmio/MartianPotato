@@ -800,6 +800,20 @@ function buyUpgrade(upgrade) {
     const cost = getUpgradeCost(upgrade);
     if (potatoCount >= cost) {
         potatoCount -= cost;
+        
+        // Track the upgrade purchase
+        trackEvent('upgrade_unlocked', {
+            upgrade_name: upgrade.name,
+            upgrade_cost: cost,
+            upgrade_category: upgrade.category,
+            upgrade_tier: upgrade.tier,
+            times_purchased: (upgrade.count || 0) + 1,
+            total_potatoes: Math.floor(potatoCount),
+            playtime_seconds: Math.floor((Date.now() - gameStartTime) / 1000),
+            is_repeatable: upgrade.repeatable,
+            unlocks_next_tier: upgrade.unlocksNextTier || false
+        });
+
         if (upgrade.effect) {
             console.log(`Applying effect for upgrade: ${upgrade.name}`);
             upgrade.effect();
@@ -826,18 +840,26 @@ function buyUpgrade(upgrade) {
 
         showToast("Upgrade Unlocked", `You have unlocked the ${upgrade.name} upgrade!`, 'achievement');
         
-        unlockActionCardForUpgrade(upgrade.name); // Unlock the corresponding action card if applicable
-        saveGame(); // Save the game after purchasing an upgrade
-        debouncedUpdateTechTree(); // Update the tech tree to reflect changes
+        unlockActionCardForUpgrade(upgrade.name);
+        saveGame();
+        debouncedUpdateTechTree();
 
         queueAchievement(
             `Technology Unlocked: ${upgrade.name}`,
             upgrade.description,
             upgrade.metaMessage,
-            upgrade.name.replace(/\s+/g, '_').toLowerCase() + '.webp' // Generate image name based on upgrade name
+            upgrade.name.replace(/\s+/g, '_').toLowerCase() + '.webp'
         );
 
     } else {
+        // Track failed purchase attempt
+        trackEvent('upgrade_purchase_failed', {
+            upgrade_name: upgrade.name,
+            upgrade_cost: cost,
+            current_potatoes: Math.floor(potatoCount),
+            potatoes_short: Math.floor(cost - potatoCount)
+        });
+        
         showToast("Not Enough Potatoes", "You don't have enough potatoes to purchase this upgrade.", 'setback');
     }
 }

@@ -325,12 +325,16 @@ function addMessageToTerminal(text) {
 //            FINAL SEQUENCE
 // ==========================================
 function startFinalSequence(isLoading = false) {
-    // Check if the final sequence has already started
-    if (finalSequenceStarted) {
-        console.warn('Final sequence already started.');
-        return;
-    }
+    if (finalSequenceStarted) return;
     finalSequenceStarted = true;
+    
+    // Track the start of final sequence
+    trackEvent('final_sequence_started', {
+        total_playtime_seconds: Math.floor((Date.now() - gameStartTime) / 1000),
+        total_potatoes_harvested: totalPotatoesHarvested,
+        is_loading_save: isLoading
+    });
+    
     finalMessagesSent = false;
     isFinalSequenceComplete = false;
     
@@ -405,6 +409,15 @@ function startFinalSequence(isLoading = false) {
 }
 
 function showFinalStats() {
+    // Track game completion
+    trackEvent('game_completed', {
+        total_playtime_seconds: Math.floor((Date.now() - gameStartTime) / 1000),
+        total_potatoes_harvested: totalPotatoesHarvested,
+        upgrades_purchased: Object.values(upgrades).filter(u => u.purchased).length,
+        automation_devices: getAutomationDevicesCount(),
+        final_tier: currentTier
+    });
+    
     const singularityScreen = document.getElementById('singularity-screen');
     const statsContent = document.getElementById('final-stats-content');
     
@@ -468,6 +481,13 @@ function showFinalStats() {
         ];
         window.location.href = urls[Math.floor(Math.random() * urls.length)];
     };
+
+    // Track secret ending if found
+    if (finalPotatoClicks === 10) {
+        trackEvent('secret_ending_found', {
+            total_playtime_seconds: Math.floor((Date.now() - gameStartTime) / 1000)
+        });
+    }
 }
 
 // ==========================================

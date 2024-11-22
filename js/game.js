@@ -175,6 +175,13 @@ function initializeGame() {
     // Start game loop
     requestAnimationFrame(gameLoop);
     gameInitialized = true;
+    
+    // Track game start
+    trackEvent('game_start', {
+        is_new_game: !loadSavedGame(),
+        browser: navigator.userAgent,
+        screen_resolution: `${window.screen.width}x${window.screen.height}`
+    });
 }
 
 // New function to handle all UI initialization
@@ -620,6 +627,14 @@ function saveGame() {
     console.log('Saving game with neural network:', gameState.neuralNetworkState);
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
+    
+    trackEvent('game_saved', {
+        playtime_seconds: Math.floor((Date.now() - gameStartTime) / 1000),
+        total_potatoes: Math.floor(potatoCount),
+        total_harvested: totalPotatoesHarvested,
+        current_tier: currentTier,
+        automation_devices: getAutomationDevicesCount()
+    });
 }
 
 // Function to load the game state
@@ -836,6 +851,13 @@ function loadGame() {
         console.log('No saved game state found');
         showToast('No saved game found', 'Starting a new game.', 'info');
     }
+    
+    trackEvent('game_loaded', {
+        playtime_seconds: Math.floor((Date.now() - gameStartTime) / 1000),
+        save_age_hours: Math.floor((Date.now() - savedGameTime) / (1000 * 60 * 60)),
+        total_potatoes: Math.floor(potatoCount),
+        current_tier: currentTier
+    });
 }
 
 function restoreUpgrades(savedUpgrades) {
@@ -2237,4 +2259,29 @@ function initializeHeaderScroll() {
             lastScrollTop = scrollTop;
         }
     });
+}
+
+
+// Google Analytics Event Tracking
+function trackEvent(eventName, eventParams = {}) {
+    if (typeof gtag !== 'undefined') {
+        // Add common parameters
+        const commonParams = {
+            total_potatoes: Math.floor(potatoCount),
+            total_harvested: totalPotatoesHarvested,
+            current_tier: currentTier,
+            playtime_seconds: Math.floor((Date.now() - gameStartTime) / 1000)
+        };
+        
+        gtag('event', eventName, { ...commonParams, ...eventParams });
+    }
+}
+
+// Utility function to count automation devices
+function getAutomationDevicesCount() {
+    return {
+        autoplanters: autoplanters.length,
+        autoharvesters: autoHarvesters.length,
+        quantum_spawner: isQuantumSpudSpawnerActive ? 1 : 0
+    };
 }

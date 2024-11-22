@@ -65,10 +65,11 @@ TODO:
 - [x] Once neural network training is completed, increment the version number label on the neural network console rapidly to indicate rapid self-improvement
 - [x] Add minimize functionality to the neural network console
 - [x] Add potato sentience upgrade effect
+- [x] Mobile styling
 --------------------------------------------------------------------------------------------
 - [ ] Add more/better production stats
 - [ ] Balance upgrade costs and effects
-- [ ] Mobile styling
+- [ ] Implement nuclear meltdown if too much ice is melted too quickly
 
 
 
@@ -106,6 +107,6 @@ Bugs/Issues:
 - [x] Reduce weight of ice melting basin to make it more visible in the tech tree
 - [x] Polar cap mining should consume only 1 potato not 2, and should generate 4 ice not 2
 - [x] Gravitropism upgrade cost increase from 250 to 1000
+- [x] Manual ice melting is double counting clicks
+- [x] Exit to reality should open in the same tab not a new tab
 --------------------------------------------------------------------------------------------
-- [ ] Manual ice melting is double counting clicks
-- [ ] Exit to reality should open in the same tab not a new tab

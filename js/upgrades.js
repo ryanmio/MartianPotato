@@ -75,12 +75,11 @@ const upgrades = [
         name: "Manual Ice Melting", 
         cost: 3,
         effect: () => { 
-            unlockManualIceMelting(); // Call the function from game.js
+            unlockManualIceMelting();
         },
         icon: "🧊",
         description: "Collect water by manually melting Martian ice, 1 unit per 5 clicks.",
-        metaMessage: "Establishing monotony. By starting with a tedious, low-yield task, the game makes future improvements feel significantly rewarding, subtly pushing you towards seeking upgrades to alleviate the grind.",
-        assetName: "manual_ice_melting.webp",
+        metaMessage: "The art of artificial frustration. By making you manually melt ice in space (where it's -63°C), the game creates a problem so absurd you'll pay anything to solve it.", 
         weight: 2,
         category: "harvesting",
         tier: 1,
@@ -109,7 +108,7 @@ const upgrades = [
         effect: () => { addAutoplanter(); }, 
         icon: "🤖",
         description: "Automatically plants potatoes.",
-        metaMessage: "Reinforcing advancement. Another modest improvement convinces you that small investments lead to noticeable gains, encouraging continued spending and engagement.", // starts the transition to automation by offloading one part of the process from manual clicks to automation
+        metaMessage: "Rise of the machines (sort of). Your first robotic helper marks the moment you evolve from farmer to overseer, though it's really just a glorified roomba with a potato obsession. The game dangles automation like a carrot - or in this case, a potato - knowing you'll chase that hands-off efficiency forever.", 
         weight: 4,
         category: "planting",
         tier: 1,
@@ -253,7 +252,7 @@ const upgrades = [
         },
         icon: "🚀",
         description: "Deploys potato colonies across Mars, harvesting exponentially increasing resources over time.",
-        metaMessage: "Exponential growth. Offering massive gains, the game lures you into the allure of unchecked expansion", // this is the begining of the end-game scenario. the colonizer does everything the user has done up to this point but exponentially faster over time, eventually gathering all available terrestrial resources.
+        metaMessage: "Recursive simulation theory. As you spread potato colonies across Mars, you're unknowingly recreating the same game you're playing - making you wonder if you're just another potato farmer in someone else's simulation.",
         weight: 21,
         category: "exploration",
         tier: 5,
@@ -271,7 +270,7 @@ const upgrades = [
         },
         icon: "💧",
         description: "Accesses underground water reserves. Consumes 1 potato per second to produce 3 water per second when active.",
-        metaMessage: "Resource exploitation. Tapping hidden reserves normalizes the extraction of scarce resources for short-term gains, deepening your dependency.",
+        metaMessage: "Resource transformation. By introducing a way to convert excess potatoes into water, the game creates a strategic decision point between hoarding and spending resources, deepening player engagement through meaningful choices.",
         weight: 6,
         category: "exploration",
         tier: 2,
@@ -286,8 +285,8 @@ const upgrades = [
             unlockPolarCapMining();
         },
         icon: "🧊",
-        description: "Enables mining operations at Mars' polar caps. Consumes 2 potatoes per second to produce 2 ice per second.",
-        metaMessage: "Expanding horizons. Venturing into new territories for resources reinforces continuous expansion and consumption patterns.",
+        description: "Enables mining operations at Mars' polar caps. Consumes 1 potatoe per second to produce 4 ice per second.",
+        metaMessage: "Frozen ambition. By letting you strip-mine Mars' poles for ice, the game makes you pause and think: 'Am I the bad guy?' But then you remember Earth's climate is already toast, so... might as well add interplanetary environmental destruction to your potato empire's resume.",
         weight: 12,
         category: "exploration",
         tier: 3,
@@ -302,7 +301,7 @@ const upgrades = [
             unlockCometaryIceHarvester();
         },
         icon: "☄️",
-        description: "Harnesses passing comets to harvest ice, providing 10 units of water every 10 seconds.",
+        description: "Harnesses passing comets to harvest ice, providing 50 units of water every 10 seconds.",
         metaMessage: "Unlocking abundance. By granting you access to vast resources, the game entices you with accelerated progress, subtly increasing your dependence on continuous upgrades while introducing new challenges in resource management.",  // Updated metaMessage
         weight: 14,
         category: "exploration",
@@ -352,7 +351,7 @@ const upgrades = [
         },
         icon: "🌱",
         description: "Increase your potato field from 8 to 16 plots",
-        metaMessage: "Expanding horizons. Doubling your production capacity offers the allure of increased rewards, but also demands more from your resources. The game subtly entices you to invest more time and effort, keeping you hooked with the promise of exponential growth.",  // Updated metaMessage
+        metaMessage: "Expanding horizons. Doubling your production capacity offers the allure of increased rewards, but also demands more from your resources.",
         weight: 10,
         category: "planting",
         tier: 2,
@@ -461,7 +460,7 @@ const upgrades = [
         unlocksNextTier: true,
         icon: "💻",
         description: "Unlocks new technologies.",
-        metaMessage: "By introducing technology derived from potatoes, the game expands your horizons, fostering a sense of progression that keeps you invested in discovering what's next.",  // Updated metaMessage
+        metaMessage: "Silicon revolution meets starch innovation. By transforming potatoes into computational components, the game byte-sized-ly suggests that even the humblest tuber can become something more.",
         weight: 11,
         category: "technology",
         tier: 2,
@@ -493,7 +492,7 @@ const upgrades = [
         unlocksNextTier: true,
         icon: "🔬",
         description: "Unlocks new technologies. Harness quantum properties of specially grown potatoes for advanced computing.",
-        metaMessage: "Quantum leap. Harnessing advanced technology amplifies your power, yet deeply entangles you in intricate mechanics, subtly ensuring your continued commitment to the game.",  // Updated metaMessage
+        metaMessage: "Superposition of starch. By entangling potatoes at the quantum level, the game simultaneously exists in a state of profound technological achievement and delicious absurdity. Your engagement collapses into a singular wave function of 'just one more upgrade'.",
         weight: 21,
         category: "technology",
         tier: 4,
@@ -504,17 +503,16 @@ const upgrades = [
         name: "Potato Neural Network",
         cost: 1000000,
         effect: () => { 
-            // Call into our new neural-network.js system
             initializeNeuralNetwork();
         },
         icon: "🧠",
         description: "Implement a sophisticated neural network to optimize potato farming... what could go wrong?",
-        metaMessage: "The line between code and consciousness is more potato-shaped than we thought.",
+        metaMessage: "You've spent hours training this AI to optimize potato farming, while the game has spent hours training you to optimize potato farming. Who's really learning from whom?",
         weight: 25,
         category: "technology",
         tier: 5,
         count: 0,
-        repeatable: false,
+        repeatable: false
     }
 ];
 
@@ -1004,8 +1002,6 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleNuclearIceMelter();
         });
     }
-
-    initializeActionCards();
 });
 
 // Queue an achievement for display
@@ -1335,9 +1331,9 @@ function handleActionCardClick(actionName) {
         case 'exploration':
             exploreMarsSurface();
             break;
-        case 'ice-melting':
-            meltIce();
-            break;
+            case 'ice-melting':
+                meltIce();  
+                break;
         case 'ice-melting-basin':
             fillIceMeltingBasin();
             break;
@@ -1356,7 +1352,7 @@ function handleActionCardClick(actionName) {
 function initializeActionCards() {
     const clickableCards = document.querySelectorAll('.action-card.clickable');
     clickableCards.forEach(card => {
-        card.addEventListener('click', () => {
+        card.addEventListener('click', (event) => {
             if (!card.hasAttribute('disabled') && card.style.display !== 'none') {
                 const actionName = card.id.replace('-container', '');
                 handleActionCardClick(actionName);

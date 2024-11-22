@@ -457,13 +457,16 @@ function showFinalStats() {
     // Set up final buttons
     document.getElementById('new-timeline-btn').onclick = resetGame;
     document.getElementById('exit-reality-btn').onclick = () => {
+        // Save game state before exiting
+        saveGame();
+        
         // Pick a random philosophical URL
         const urls = [
             'https://en.wikipedia.org/wiki/Simulation_hypothesis',
             'https://en.wikipedia.org/wiki/Brain_in_a_vat',
             'https://en.wikipedia.org/wiki/Philosophical_zombie'
         ];
-        window.open(urls[Math.floor(Math.random() * urls.length)], '_blank');
+        window.location.href = urls[Math.floor(Math.random() * urls.length)];
     };
 }
 

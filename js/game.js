@@ -178,7 +178,7 @@ function initializeGame() {
     
     // Track game start
     trackEvent('game_start', {
-        is_new_game: !loadSavedGame(),
+        is_new_game: !loadGame(),
         browser: navigator.userAgent,
         screen_resolution: `${window.screen.width}x${window.screen.height}`
     });
@@ -854,7 +854,7 @@ function loadGame() {
     
     trackEvent('game_loaded', {
         playtime_seconds: Math.floor((Date.now() - gameStartTime) / 1000),
-        save_age_hours: Math.floor((Date.now() - savedGameTime) / (1000 * 60 * 60)),
+        save_age_hours: Math.floor((Date.now() - gameStartTime) / (1000 * 60 * 60)),
         total_potatoes: Math.floor(potatoCount),
         current_tier: currentTier
     });

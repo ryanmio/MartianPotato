@@ -230,5 +230,19 @@
             </div>
         </div>
     </div>
+
+    <!-- Add Vercel Analytics with fallback -->
+    <script>
+        // Load analytics only if we're online
+        if (navigator.onLine) {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/@vercel/analytics@1.1.1/dist/index.browser.js';
+            script.defer = true;
+            script.onload = () => {
+                window.va?.inject();
+            };
+            document.body.appendChild(script);
+        }
+    </script>
 </body>
 </html>

@@ -9,6 +9,10 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
 </head>
 <body>
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
     <div id="toast-container"></div>
     <div id="game-container">
         <div id="game-header">
@@ -230,19 +234,5 @@
             </div>
         </div>
     </div>
-
-    <!-- Add Vercel Analytics with fallback -->
-    <script>
-        // Load analytics only if we're online
-        if (navigator.onLine) {
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/@vercel/analytics@1.1.1/dist/index.browser.js';
-            script.defer = true;
-            script.onload = () => {
-                window.va?.inject();
-            };
-            document.body.appendChild(script);
-        }
-    </script>
 </body>
 </html>

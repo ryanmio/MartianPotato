@@ -624,7 +624,6 @@ function saveGame() {
         neuralNetworkActive: window.neuralNetworkActive,
         neuralNetworkState: getNeuralNetworkState()
     };
-    console.log('Saving game with neural network:', gameState.neuralNetworkState);
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
     
@@ -2230,7 +2229,6 @@ function getNeuralNetworkState() {
         minimized: terminalMinimized,
         // Add any other state we need to persist
     };
-    console.log('Getting neural network state:', state);
     return state;
 }
 

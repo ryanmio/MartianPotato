@@ -158,9 +158,6 @@ let gameInitialized = false;
 function initializeGame() {
     if (gameInitialized) return;
     
-    // Load saved game state first
-    loadGame();
-    
     // Initialize core game systems
     initializePotatoField();
     createTechTree();
@@ -176,9 +173,10 @@ function initializeGame() {
     requestAnimationFrame(gameLoop);
     gameInitialized = true;
     
-    // Track game start
+    // Track game start with the result of loadGame()
+    const loadedGame = loadGame();
     trackEvent('game_start', {
-        is_new_game: !loadGame(),
+        is_new_game: !loadedGame,
         browser: navigator.userAgent,
         screen_resolution: `${window.screen.width}x${window.screen.height}`
     });
@@ -845,10 +843,12 @@ function loadGame() {
         } catch (error) {
             console.error('Error parsing saved game state:', error);
             showToast('Error loading game', 'There was an error loading your saved game. Starting a new game.', 'error');
+            return false;
         }
     } else {
         console.log('No saved game state found');
         showToast('No saved game found', 'Starting a new game.', 'info');
+        return false;
     }
     
     trackEvent('game_loaded', {
@@ -857,6 +857,8 @@ function loadGame() {
         total_potatoes: Math.floor(potatoCount),
         current_tier: currentTier
     });
+    
+    return true; // Successfully loaded a game
 }
 
 function restoreUpgrades(savedUpgrades) {

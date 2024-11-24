@@ -2,7 +2,7 @@
    1. Reset and Base Styles 
    ========================================== */
 body {
-    font-family: "Times New Roman", serif;
+    font-family: 'Courier New', monospace;
     background-color: #fff;
     color: #000;
     text-align: left;

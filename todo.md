@@ -67,9 +67,33 @@ TODO:
 - [x] Add potato sentience upgrade effect
 - [x] Mobile styling
 --------------------------------------------------------------------------------------------
+- [x] Fix UI scaling and accessibility
+- [ ] Implement production statistics panel
+    - [ ] Resource consumption per machine
+    - [ ] Net production rates
+    - [ ] Machine states overview
+- [ ] Create upgrades history panel
+    - [ ] List of purchased upgrades
+    - [ ] Specifications viewer
+    - [ ] Tooltips system
+- [ ] Fix Nuclear Ice Melter upgrade control switch bug
+    - [ ] Maintain visibility of existing control switches
+    - [ ] Ensure proper state management
+- [ ] Optimize late-game performance
+    - [ ] Profile Quantum Spud Spawner impact
+    - [ ] Implement performance monitoring
+    - [ ] Optimize game loop
+- [ ] Enhance upgrade UI/UX
+    - [ ] Implement upgrade categories
+    - [ ] Add cost history view
+    - [ ] Update typography
+    - [ ] Improve upgrade descriptions
 - [ ] Add more/better production stats
 - [ ] Balance upgrade costs and effects
 - [ ] Implement nuclear meltdown if too much ice is melted too quickly
+- [ ] Create instructions for how to play
+- [ ] Write a README.md for the project
+
 
 
 
@@ -110,3 +134,4 @@ Bugs/Issues:
 - [x] Manual ice melting is double counting clicks
 - [x] Exit to reality should open in the same tab not a new tab
 --------------------------------------------------------------------------------------------
+- quantum spud spawner poof appearing not on the potato but above

@@ -149,6 +149,18 @@ potatoTemplate.innerHTML = `
 // Add to the game state variables section at top
 let neuralNetworkActive = false;
 
+let isTabActive = true;
+let quantumSpawnerStats = {
+    updates: 0,
+    skippedUpdates: 0,
+    lastUpdateTime: Date.now()
+};
+
+// Add visibility change listener
+document.addEventListener('visibilitychange', () => {
+    isTabActive = !document.hidden;
+});
+
 // ==========================================
 //            CORE GAME FUNCTIONS
 // ==========================================
@@ -1662,21 +1674,62 @@ function martianPotatoColonizerEffect() {
 //       QUANTUM SPUD SPAWNER FUNCTIONS
 // ==========================================
 
+
+// Enhanced visibility change listener
+document.addEventListener('visibilitychange', () => {
+    const wasActive = isTabActive;
+    isTabActive = !document.hidden;
+    console.log(`Tab visibility changed: ${wasActive ? 'active → inactive' : 'inactive → active'}`);
+    
+    if (isTabActive && isQuantumSpudSpawnerActive) {
+        console.log(`Quantum spawner stats:
+            Updates: ${quantumSpawnerStats.updates}
+            Skipped: ${quantumSpawnerStats.skippedUpdates}
+            Time since last update: ${Date.now() - quantumSpawnerStats.lastUpdateTime}ms`);
+    }
+});
+
+// Modified startQuantumSpudSpawner with logging
 function startQuantumSpudSpawner() {
     if (!isQuantumSpudSpawnerActive) {
+        console.log('Starting Quantum Spud Spawner');
         isQuantumSpudSpawnerActive = true;
+        quantumSpawnerStats.lastUpdateTime = Date.now();
+        
         quantumSpudSpawnerInterval = setInterval(() => {
+            if (!isTabActive) {
+                quantumSpawnerStats.skippedUpdates++;
+                return;
+            }
+            
+            let changes = false;
+            const startTime = Date.now();
+            
+            // Single pass through field
             for (let i = 0; i < potatoField.length; i++) {
-                if (potatoField[i] === null && consumeResources()) {
-                    // Plant a new potato with isQuantumSpawned set to true
+                if (!potatoField[i] && consumeResources()) {
                     potatoField[i] = createPotato(true, true);
-                    updatePotatoFieldDisplay();
-                } else if (potatoField[i] && potatoField[i].growthStage >= 100) {
-                    // Harvest the potato
+                    changes = true;
+                } else if (potatoField[i]?.growthStage >= 100) {
                     harvestPotatoAtIndex(i, true);
+                    changes = true;
                 }
             }
-            updateDisplay();
+            
+            // Only update if needed
+            if (changes) {
+                updatePotatoFieldDisplay();
+                updateDisplay();
+            }
+            
+            quantumSpawnerStats.updates++;
+            quantumSpawnerStats.lastUpdateTime = Date.now();
+            
+            // Log if update took longer than expected
+            const updateTime = Date.now() - startTime;
+            if (updateTime > 100) { // Log slow updates
+                console.log(`Quantum update took ${updateTime}ms`);
+            }
         }, 600);
     }
 }

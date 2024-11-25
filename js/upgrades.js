@@ -938,6 +938,7 @@ function addAutoHarvester() {
         interval: null,
         cost: Math.floor(100 * Math.pow(1.15, upgrades.find(u => u.name === "Autonomous Harvesting Rover").count))
     };
+    
     autoHarvesters.push(autoHarvester);
     startAutoHarvester(autoHarvester);
     updateDisplay();
@@ -961,11 +962,9 @@ function checkAndRestartAutoHarvesters() {
 
 // Harvest a single ready potato from the field
 function harvestOneReadyPotato() {
-    for (let i = 0; i < potatoField.length; i++) {
-        if (potatoField[i] && potatoField[i].growthStage >= 100) {
-            harvestPotatoAtIndex(i);
-            break; // Only harvest one potato
-        }
+    const readyIndex = potatoField.findIndex(potato => potato?.growthStage >= 100);
+    if (readyIndex !== -1) {
+        harvestPotatoAtIndex(readyIndex);
     }
 }
 

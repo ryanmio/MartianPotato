@@ -215,7 +215,7 @@ const upgrades = [
             addNutrientProspectingRover();
         },
         icon: "🚜",
-        description: "Deploys a rover to prospect for nutrients in Martian regolith. Generates 1 nutrient every 10 seconds.",
+        description: "Deploys a rover to prospect for nutrients in Martian regolith. Generates 6 nutrients every 20 seconds.",
         metaMessage: "Robotic prospector. This tireless rover scours the Martian surface for precious nutrients, providing a steady stream of resources to fuel your growth.",
         weight: 4,
         category: "nutrients",

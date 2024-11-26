@@ -632,7 +632,11 @@ function saveGame() {
         isBucketWheelExcavatorActive: window.isBucketWheelExcavatorActive,
         isSubterraneanTuberTunnelerActive: window.isSubterraneanTuberTunnelerActive,
         neuralNetworkActive: window.neuralNetworkActive,
-        neuralNetworkState: getNeuralNetworkState()
+        neuralNetworkState: getNeuralNetworkState(),
+        nutrientProspectingRovers: nutrientProspectingRovers.map(rover => ({
+            id: rover.id,
+            nutrients: rover.nutrients
+        }))
     };
     localStorage.setItem('martianPotatoSave', JSON.stringify(gameState));
     showToast('Game saved successfully!', 'Your progress has been saved.', 'success');
@@ -851,6 +855,26 @@ function loadGame() {
             // If it was active, we MUST reinitialize it
             if (neuralNetworkActive) {
                 initializeNeuralNetwork(gameState.neuralNetworkState);
+            }
+
+            if (gameState.nutrientProspectingRovers) {
+                nutrientProspectingRovers = gameState.nutrientProspectingRovers.map(savedRover => {
+                    const rover = {
+                        id: savedRover.id,
+                        intervalId: null,
+                        nutrients: savedRover.nutrients
+                    };
+
+                    rover.intervalId = setInterval(() => {
+                        const nutrientsCollected = 6;
+                        rover.nutrients += nutrientsCollected;
+                        nutrients += nutrientsCollected;
+                        updateDisplay();
+                        showToast('Nutrients Collected', `Your Prospecting Rover collected ${nutrientsCollected} nutrients!`, 'success', 2000);
+                    }, 20000);
+
+                    return rover;
+                });
             }
         } catch (error) {
             console.error('Error parsing saved game state:', error);
@@ -1273,6 +1297,8 @@ function updateDisplay() {
     if (neuralNetworkActive) {
         updateTerminalDisplay(); // Update neural network terminal
     }
+    document.getElementById('nutrient-prospecting-rovers').textContent = `Prospecting Rovers: ${nutrientProspectingRovers.length}`;
+    document.getElementById('nutrients').textContent = `Nutrients: ${nutrients}`;
 }
 
 function updateAutoHarvestersInfo() {
@@ -2337,4 +2363,24 @@ function getAutomationDevicesCount() {
         autoharvesters: autoHarvesters.length,
         quantum_spawner: isQuantumSpudSpawnerActive ? 1 : 0
     };
+}
+
+let nutrientProspectingRovers = [];
+
+function addNutrientProspectingRover() {
+    const rover = {
+        id: Date.now(),
+        intervalId: null,
+        nutrients: 0
+    };
+
+    rover.intervalId = setInterval(() => {
+        const nutrientsCollected = 6;
+        rover.nutrients += nutrientsCollected;
+        nutrients += nutrientsCollected;
+        updateDisplay();
+        showToast('Nutrients Collected', `Your Prospecting Rover collected ${nutrientsCollected} nutrients!`, 'success', 2000);
+    }, 20000);
+
+    nutrientProspectingRovers.push(rover);
 }

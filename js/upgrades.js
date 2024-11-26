@@ -208,6 +208,21 @@ const upgrades = [
         count: 0,
         repeatable: false
     },
+    {
+        name: "Nutrient Prospecting Rover",
+        cost: 50,
+        effect: () => {
+            addNutrientProspectingRover();
+        },
+        icon: "🚜",
+        description: "Deploys a rover to prospect for nutrients in Martian regolith. Generates 1 nutrient every 10 seconds.",
+        metaMessage: "Robotic prospector. This tireless rover scours the Martian surface for precious nutrients, providing a steady stream of resources to fuel your growth.",
+        weight: 4,
+        category: "nutrients",
+        tier: 1,
+        count: 0,
+        repeatable: true
+    },
     { 
         name: "Martian Bucket-Wheel Excavator", 
         cost: 750,

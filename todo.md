@@ -89,6 +89,12 @@ TODO:
 - [ ] Implement nuclear meltdown if too much ice is melted too quickly
 - [ ] Create instructions for how to play
 - [ ] Write a README.md for the project
+- [ ] Implement toast notification settings
+    - [ ] Add toggle for all toast notifications
+    - [ ] Add option for "Important notifications only"
+    - [ ] Create UI for notification preferences
+    - [ ] Define which notifications are "important"
+    - [ ] Persist notification settings in save game
 
 
 

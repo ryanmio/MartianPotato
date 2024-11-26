@@ -129,6 +129,7 @@ const defaultAchievements = {
 };
 let achievements = { ...defaultAchievements };
 let harvestHistory = [];
+const activeToasts = new Map();
 
 // Debug Variables
 let fpsValues = [];
@@ -1166,28 +1167,69 @@ document.addEventListener('DOMContentLoaded', function() {
 // ==========================================
 
 // Display a toast notification to the user
-window.showToast = function(title, message, type = 'achievement') {
+window.showToast = function(title, message, type = 'achievement', duration = 3000) {
     console.log("Showing toast:", title, message, type);
     const toastContainer = document.getElementById('toast-container');
+    
+    // Create a unique key for this type of toast
+    const toastKey = `${title}-${message}-${type}`;
+    
+    // Check if this toast is already showing
+    if (activeToasts.has(toastKey)) {
+        // Update existing toast
+        const existingToast = activeToasts.get(toastKey);
+        existingToast.count++;
+        
+        // Update the message to show count
+        const messageEl = existingToast.element.querySelector('.toast-message');
+        messageEl.textContent = `${message} (×${existingToast.count})`;
+        
+        // Reset the removal timeout
+        clearTimeout(existingToast.timeout);
+        existingToast.timeout = setTimeout(() => {
+            removeToast(toastKey);
+        }, duration);
+        
+        return;
+    }
+    
+    // Create new toast
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
     toast.innerHTML = `
         <div class="toast-title">${title}</div>
         <div class="toast-message">${message}</div>
     `;
+    
     toastContainer.appendChild(toast);
-
-    // Trigger reflow to enable transition
-    toast.offsetHeight;
-
+    toast.offsetHeight; // Trigger reflow
     toast.classList.add('show');
+    
+    // Store the toast info
+    const timeoutId = setTimeout(() => {
+        removeToast(toastKey);
+    }, duration);
+    
+    activeToasts.set(toastKey, {
+        count: 1,
+        element: toast,
+        timeout: timeoutId
+    });
+}
 
+function removeToast(toastKey) {
+    const toastInfo = activeToasts.get(toastKey);
+    if (!toastInfo) return;
+    
+    const toast = toastInfo.element;
+    toast.classList.remove('show');
+    
     setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => {
-            toastContainer.removeChild(toast);
-        }, 300);
-    }, 3000);
+        if (toast.parentElement) {
+            toast.parentElement.removeChild(toast);
+        }
+        activeToasts.delete(toastKey);
+    }, 300);
 }
 
 // Check and update game achievements

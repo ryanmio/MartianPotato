@@ -942,11 +942,31 @@ function updateActionCards() {
             card.style.display = shouldBeVisible ? 'block' : 'none';
         }
 
-        // Only check depletion status for visible, depletable cards
-        if (shouldBeVisible && depletableCards.includes(cardId)) {
-            updateDepletedActionCard(cardId, areResourcesDepleted, "Resources Depleted");
+        // Preserve toggle states for automation devices
+        if (shouldBeVisible) {
+            const toggle = card.querySelector('input[type="checkbox"]');
+            if (toggle && window[getActivityStateVariable(cardId)] !== undefined) {
+                toggle.checked = window[getActivityStateVariable(cardId)];
+            }
+            
+            // Check depletion status for depletable cards
+            if (depletableCards.includes(cardId)) {
+                updateDepletedActionCard(cardId, areResourcesDepleted, "Resources Depleted");
+            }
         }
     });
+}
+
+// Helper function to get activity state variable name
+function getActivityStateVariable(cardId) {
+    const stateMap = {
+        'nuclear-ice-melter-container': 'isNuclearIceMelterActive',
+        'subsurface-aquifer-tapper-container': 'isSubsurfaceAquiferTapperActive',
+        'bucket-wheel-excavator-container': 'isBucketWheelExcavatorActive',
+        'subterranean-tuber-tunneler-container': 'isSubterraneanTuberTunnelerActive',
+        'polar-cap-mining-container': 'isPolarCapMiningActive'
+    };
+    return stateMap[cardId];
 }
 
 function onResourcesDepleted() {
@@ -1852,10 +1872,14 @@ function updateQuantumSpudSpawnerToggle() {
 // Unlock the Nuclear Ice Melter
 function unlockNuclearIceMelter() {
     isNuclearIceMelterUnlocked = true;
+    
+    // Add to unlockedActionCards if not already present
     if (!unlockedActionCards.includes('nuclear-ice-melter-container')) {
         unlockedActionCards.push('nuclear-ice-melter-container');
     }
+    
     updateActionCards();
+    initializeNuclearIceMelterControls();
 }
 
 // Start the Nuclear Ice Melter

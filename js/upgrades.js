@@ -130,7 +130,7 @@ const upgrades = [
     },
     { 
         name: "Quantum Spud Spawner", 
-        cost: 10000,
+        cost: 1000,
         effect: function() { 
             unlockQuantumSpudSpawner(); 
         },
@@ -225,7 +225,7 @@ const upgrades = [
     },
     { 
         name: "Martian Bucket-Wheel Excavator", 
-        cost: 750,
+        cost: 500,
         effect: () => {
             unlockBucketWheelExcavator();
             isBucketWheelExcavatorUnlocked = true;
@@ -243,7 +243,7 @@ const upgrades = [
     },
     { 
         name: "Subterranean Tuber Tunneler",
-        cost: 2500,
+        cost: 1000,
         effect: () => {
             unlockSubterraneanTuberTunneler();
             isSubterraneanTuberTunnelerUnlocked = true;
@@ -260,7 +260,7 @@ const upgrades = [
     },
     { 
         name: "Martian Potato Colonizer", 
-        cost: 50000,
+        cost: 5000,
         effect: () => {
             console.log('Executing Martian Potato Colonizer upgrade effect');
             unlockMartianPotatoColonizer();
@@ -295,7 +295,7 @@ const upgrades = [
     },
     {
         name: "Polar Cap Mining",
-        cost: 1500,
+        cost: 1000,
         effect: () => { 
             unlockPolarCapMining();
         },
@@ -311,7 +311,7 @@ const upgrades = [
     },
     {
         name: "Cometary Ice Harvester",
-        cost: 5000,
+        cost: 2000,
         effect: () => { 
             unlockCometaryIceHarvester();
         },
@@ -342,7 +342,7 @@ const upgrades = [
     },
     {
         name: "Nuclear Ice Melter",
-        cost: 1000,
+        cost: 500,
         effect: () => { 
             unlockNuclearIceMelter();
         },
@@ -468,7 +468,7 @@ const upgrades = [
     },
     {
         name: "Potato Chip",
-        cost: 500,
+        cost: 200,
         effect: () => {
             unlockNextTier(); // Unlock tier 3
         },
@@ -484,7 +484,7 @@ const upgrades = [
     },
     {
         name: "Potato Computer",
-        cost: 2000,
+        cost: 1000,
         effect: () => {
             unlockNextTier(); // Unlock tier 4
         },
@@ -500,7 +500,7 @@ const upgrades = [
     },
     {
         name: "Potato Quantum Computer",
-        cost: 10000,
+        cost: 2000,
         effect: () => {
             unlockNextTier(); // Unlock tier 5
         },

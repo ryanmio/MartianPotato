@@ -144,7 +144,7 @@ class GameSettings {
         this.closeModal();
         
         // Show success message
-        showToast('Settings saved successfully!', 'success', 'achievement');
+        showToast('Settings Updated', 'Your preferences have been saved.', 'success');
     }
 }
 

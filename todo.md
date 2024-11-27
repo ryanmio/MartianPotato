@@ -88,20 +88,23 @@ TODO:
         - [x] Design responsive layout
         - [x] Implement open/close functionality
         - [x] Add save/cancel buttons
-    - [ ] Fix settings modal styling and layout
-        - [ ] Center modal on desktop
-        - [ ] Reduce modal size and add proper spacing
-        - [ ] Fix mobile scrolling issues
-        - [ ] Ensure save/cancel buttons are always visible
-        - [ ] Add proper padding and margins
+    - [x] Fix settings modal styling and layout
+        - [x] Center modal on desktop
+        - [x] Reduce modal size and add proper spacing
+        - [x] Fix mobile scrolling issues
+        - [x] Ensure save/cancel buttons are always visible
+        - [x] Add proper padding and margins
+        - [x] Improve toggle layout and sizing
     - [ ] Implement settings functionality
-        - [ ] Sound toggle
-            - [ ] Add game sound system
-            - [ ] Implement mute/unmute functionality
+        - [ ] Sound toggle (placeholder)
+            - [ ] Create game sound system structure
+            - [ ] Add mute state to localStorage
+            - [ ] Prepare sound toggle logic for future sound effects
         - [ ] Animation toggle
-            - [ ] Create animation control system
-            - [ ] Add disable-animations CSS class
-            - [ ] Handle all animated elements
+            - [ ] Add CSS class for disabling potato growth animation
+            - [ ] Store animation preference in localStorage
+            - [ ] Apply animation settings on game load
+            - [ ] Update growth indicator visibility
         - [ ] Auto-save system
             - [ ] Implement interval-based saving
             - [ ] Handle interval changes

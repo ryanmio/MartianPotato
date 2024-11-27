@@ -19,11 +19,24 @@ class Settings {
 
     saveSettings() {
         localStorage.setItem('gameSettings', JSON.stringify(this.settings));
+        
+        // Apply sound settings
+        if (window.soundSystem) {
+            window.soundSystem.setMute(!this.settings.sound);
+        }
+
+        // Apply other settings...
     }
 
     initializeUI() {
-        // Initialize UI elements with current settings
-        document.getElementById('mute-toggle').checked = this.settings.sound;
+        // Initialize sound toggle from sound system if available
+        if (window.soundSystem) {
+            document.getElementById('mute-toggle').checked = !window.soundSystem.isMuted;
+        } else {
+            document.getElementById('mute-toggle').checked = this.settings.sound;
+        }
+        
+        // Initialize other settings...
         document.getElementById('animations-toggle').checked = this.settings.animations;
         document.getElementById('toast-level').value = this.settings.toastLevel;
         document.getElementById('auto-save').value = this.settings.autoSave.toString();

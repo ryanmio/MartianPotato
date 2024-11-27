@@ -680,12 +680,12 @@ button:hover, button:disabled {
     border: 2px solid #102838;
     border-radius: 7px;
     display: inline-block;
-    width: 100px;
-    height: 50px;
+    width: 80px;
+    height: 40px;
     padding-top: 1px;
     position: relative;
     vertical-align: middle;
-    margin: 14px auto; 
+    margin: 8px auto; 
     color: #297597;
     box-shadow: 0 0 5px rgba(255,255,255,.4), 
                 0 2px 1px -1px rgba(255,255,255,.7) inset, 
@@ -708,7 +708,7 @@ button:hover, button:disabled {
     background: linear-gradient(to right, #8FD9E4 0%,#A0F2FE 53%,#69DCF1 56%,#33AFCE 99%,#CEF5FF 100%);
     box-shadow: -2px 0 1px 0 #A6F2FE inset;
     border-radius: 5px;
-    line-height: 50px;
+    line-height: 40px;
     font-weight: bold;
     cursor: pointer;
     position: relative;
@@ -721,7 +721,7 @@ button:hover, button:disabled {
 }
 
 .toggle-switch div:first-letter {
-    letter-spacing: 40px; 
+    letter-spacing: 32px; 
 }
 
 .toggle-switch :checked ~ div {
@@ -749,10 +749,10 @@ button:hover, button:disabled {
 
 .toggle-switch .indicator {
     position: absolute;
-    top: 14px;
+    top: 10px;
     right: -25px; 
     width: 8px;
-    height: 25px;
+    height: 20px;
     box-shadow: 0 0 8px #000 inset;
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 15px;
@@ -828,8 +828,8 @@ button:hover, button:disabled {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
     margin-bottom: 16px;
-    padding: 8px 0;
 }
 
 .setting-item:last-child {
@@ -2073,8 +2073,8 @@ button:hover, button:disabled {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
     margin-bottom: 16px;
-    padding: 8px 0;
 }
 
 .setting-item:last-child {
@@ -2168,4 +2168,23 @@ button:hover, button:disabled {
 .disable-animations * {
     animation: none !important;
     transition: none !important;
+}
+
+.settings-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 16px;
+}
+
+.settings-row .setting-item {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
 }

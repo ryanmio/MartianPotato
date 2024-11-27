@@ -2085,15 +2085,17 @@ button:hover, button:disabled {
     font-family: 'Courier New', monospace;
     font-size: 16px;
     color: #333;
-    min-width: 200px;
+    flex: 1;
 }
 
 .toggle-switch-container {
     margin-left: 8px;
+    padding-right: 25px; /* Make room for indicator light */
 }
 
-.settings-select {
-    width: 180px;
+/* Settings select */
+.settings-modal-content .settings-select {
+    width: 200px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -2323,7 +2325,7 @@ body:not(.animations-disabled) .potato .growth-indicator {
 }
 
 /* Settings select */
-.settings-select {
+.settings-modal-content .settings-select {
     width: 200px;
     padding: 8px;
     border: 1px solid #ccc;
@@ -2331,4 +2333,28 @@ body:not(.animations-disabled) .potato .growth-indicator {
     font-family: 'Courier New', monospace;
     font-size: 16px;
     background-color: white;
+}
+
+/* Settings Modal Toggle Switch Overrides */
+.settings-modal-content .toggle-switch {
+    width: 80px !important;  /* Smaller width for settings modal */
+    height: 40px !important; /* Smaller height for settings modal */
+}
+
+.settings-modal-content .toggle-switch div {
+    line-height: 40px !important; /* Match the new height */
+}
+
+.settings-modal-content .toggle-switch div:first-letter {
+    letter-spacing: 32px !important; /* Adjust letter spacing for smaller width */
+}
+
+.settings-modal-content .toggle-switch .indicator {
+    top: 8px !important;    /* Adjust for smaller height */
+    height: 20px !important; /* Smaller indicator */
+}
+
+.settings-modal-content .toggle-switch-container {
+    margin-left: 8px;
+    padding-right: 25px; /* Room for indicator */
 }

@@ -285,7 +285,6 @@ button:hover, button:disabled {
     left: 0;
     right: 0;
     background-color: rgba(76, 175, 80, 0.4);
-    transition: height 0.5s ease-out, opacity 0.3s ease;
     z-index: 5;
     opacity: 0;
 }
@@ -2165,26 +2164,119 @@ button:hover, button:disabled {
 }
 
 /* Animation Control */
-.disable-animations * {
-    animation: none !important;
+.animations-disabled {
+    /* Disable all transitions */
     transition: none !important;
 }
 
-.settings-row {
-    display: flex;
-    gap: 24px;
-    margin-bottom: 16px;
+.animations-disabled * {
+    transition: none !important;
+    animation: none !important;
 }
 
-.settings-row .setting-item {
-    flex: 1;
-    margin-bottom: 0;
+/* Specific animation overrides */
+.animations-disabled .potato .growth-indicator {
+    transition: none !important;
 }
 
-.setting-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
+.animations-disabled .potato.harvestable {
+    animation: none !important;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.8) !important;
+}
+
+.animations-disabled .quantum-potato {
+    animation: none !important;
+    box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3) !important;
+}
+
+.animations-disabled .poof-animation-red {
+    display: none !important;
+}
+
+.animations-disabled #plant-button:active {
+    transform: translateY(4px);
+    transition: none !important;
+}
+
+/* Animation Control */
+.animations-disabled {
+    /* Disable all transitions */
+    transition: none !important;
+}
+
+.animations-disabled * {
+    transition: none !important;
+    animation: none !important;
+}
+
+/* Specific animation overrides */
+.animations-disabled .potato .growth-indicator {
+    transition: none !important;
+}
+
+.animations-disabled .potato.harvestable {
+    animation: none !important;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.8) !important;
+}
+
+.animations-disabled .quantum-potato {
+    animation: none !important;
+    box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3) !important;
+}
+
+.animations-disabled .poof-animation-red {
+    display: none !important;
+}
+
+.animations-disabled #plant-button:active {
+    transform: translateY(4px);
+    transition: none !important;
+}
+
+/* Ensure no transitions on any sub-elements */
+.animations-disabled .potato *,
+.animations-disabled .growth-indicator * {
+    transition: none !important;
+    animation: none !important;
+}
+
+/* Growth Indicator - Base styles without any transitions */
+.potato .growth-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(76, 175, 80, 0.4);
+    z-index: 5;
+    opacity: 0;
+}
+
+/* Only add transitions when animations are explicitly enabled */
+body:not(.animations-disabled) .potato .growth-indicator {
+    transition: height 0.5s ease-out;
+}
+
+.potato:hover .growth-indicator {
+    opacity: 1;
+}
+
+/* Animation Control */
+.animations-disabled .potato .growth-indicator {
+    /* Ensure no transitions are possible */
+    transition-property: none !important;
+    -webkit-transition-property: none !important;
+    -moz-transition-property: none !important;
+    -o-transition-property: none !important;
+    transition: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+    -moz-transform: none !important;
+    -o-transform: none !important;
+    animation: none !important;
+    -webkit-animation: none !important;
+    -moz-animation: none !important;
+    -o-animation: none !important;
 }

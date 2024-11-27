@@ -96,15 +96,17 @@ TODO:
         - [x] Add proper padding and margins
         - [x] Improve toggle layout and sizing
     - [ ] Implement settings functionality
-        - [ ] Sound toggle (placeholder)
-            - [ ] Create game sound system structure
-            - [ ] Add mute state to localStorage
-            - [ ] Prepare sound toggle logic for future sound effects
-        - [ ] Animation toggle
-            - [ ] Add CSS class for disabling potato growth animation
-            - [ ] Store animation preference in localStorage
-            - [ ] Apply animation settings on game load
-            - [ ] Update growth indicator visibility
+        - [x] Sound toggle (placeholder)
+            - [x] Create game sound system structure
+            - [x] Add mute state to localStorage
+            - [x] Prepare sound toggle logic for future sound effects
+            - [x] Fix sound system state synchronization
+        - [x] Animation toggle
+            - [x] Add CSS class for disabling potato growth animation
+            - [x] Store animation preference in localStorage
+            - [x] Apply animation settings on game load
+            - [x] Update growth indicator visibility
+            - [x] Fix growth indicator animation behavior
         - [ ] Auto-save system
             - [ ] Implement interval-based saving
             - [ ] Handle interval changes

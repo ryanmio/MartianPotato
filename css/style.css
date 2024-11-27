@@ -679,12 +679,12 @@ button:hover, button:disabled {
     border: 2px solid #102838;
     border-radius: 7px;
     display: inline-block;
-    width: 80px;
-    height: 40px;
+    width: 100px;
+    height: 50px;
     padding-top: 1px;
     position: relative;
     vertical-align: middle;
-    margin: 8px auto; 
+    margin: 14px auto;
     color: #297597;
     box-shadow: 0 0 5px rgba(255,255,255,.4), 
                 0 2px 1px -1px rgba(255,255,255,.7) inset, 
@@ -707,7 +707,7 @@ button:hover, button:disabled {
     background: linear-gradient(to right, #8FD9E4 0%,#A0F2FE 53%,#69DCF1 56%,#33AFCE 99%,#CEF5FF 100%);
     box-shadow: -2px 0 1px 0 #A6F2FE inset;
     border-radius: 5px;
-    line-height: 40px;
+    line-height: 50px;
     font-weight: bold;
     cursor: pointer;
     position: relative;
@@ -720,7 +720,7 @@ button:hover, button:disabled {
 }
 
 .toggle-switch div:first-letter {
-    letter-spacing: 32px; 
+    letter-spacing: 40px;
 }
 
 .toggle-switch :checked ~ div {
@@ -748,10 +748,10 @@ button:hover, button:disabled {
 
 .toggle-switch .indicator {
     position: absolute;
-    top: 10px;
-    right: -25px; 
+    top: 14px;
+    right: -25px;
     width: 8px;
-    height: 20px;
+    height: 25px;
     box-shadow: 0 0 8px #000 inset;
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 15px;
@@ -2051,14 +2051,15 @@ button:hover, button:disabled {
 /* Settings Modal Styles */
 .settings-modal-content {
     max-width: 500px;
-    width: 90%;
+    width: 100%;
+    padding: 20px;
 }
 
 .settings-section {
-    margin-bottom: 24px;
-    padding: 16px;
     background: #f5f5f5;
     border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
 }
 
 .settings-section h3 {
@@ -2070,10 +2071,10 @@ button:hover, button:disabled {
 
 .setting-item {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
-    gap: 12px;
     margin-bottom: 16px;
+    max-width: 100%;
 }
 
 .setting-item:last-child {
@@ -2081,17 +2082,24 @@ button:hover, button:disabled {
 }
 
 .setting-item label {
+    font-family: 'Courier New', monospace;
     font-size: 16px;
-    color: #444;
+    color: #333;
+    min-width: 200px;
+}
+
+.toggle-switch-container {
+    margin-left: 8px;
 }
 
 .settings-select {
+    width: 180px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
     background-color: white;
-    font-size: 14px;
-    min-width: 150px;
 }
 
 .placeholder-text {
@@ -2279,4 +2287,48 @@ body:not(.animations-disabled) .potato .growth-indicator {
     -webkit-animation: none !important;
     -moz-animation: none !important;
     -o-animation: none !important;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.settings-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 16px;
+}
+
+.settings-row .setting-item {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+/* Settings labels */
+.setting-item label {
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    color: #333;
+    flex: 1;
+}
+
+/* Settings toggle container */
+.toggle-switch-container {
+    flex: 0 0 auto;
+    margin-left: 12px;
+}
+
+/* Settings select */
+.settings-select {
+    width: 200px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    background-color: white;
 }

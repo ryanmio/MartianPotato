@@ -161,6 +161,5 @@ function showToast(message, type = 'info', important = false) {
             return;
         }
     }
-    // Assuming there's an existing showToast function
     window.showToast(message, type);
 } 

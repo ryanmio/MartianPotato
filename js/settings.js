@@ -1,48 +1,67 @@
 // Settings management
 class Settings {
     constructor() {
+        console.log('⚙️ Initializing Settings...');
         this.defaultSettings = {
             sound: true,
             animations: true,
             toastLevel: 'all',
             autoSave: 0 // 0 means off
         };
+        console.log('⚙️ Default settings:', this.defaultSettings);
         this.settings = this.loadSettings();
+        
+        // Export settings instance before initialization
+        window.gameSettings = this;
+        console.log('⚙️ Settings exported to window.gameSettings');
+        
         this.initializeUI();
         this.bindEvents();
     }
 
     loadSettings() {
         const savedSettings = localStorage.getItem('gameSettings');
-        return savedSettings ? { ...this.defaultSettings, ...JSON.parse(savedSettings) } : { ...this.defaultSettings };
+        console.log('⚙️ Loading settings from localStorage:', savedSettings);
+        const settings = savedSettings ? { ...this.defaultSettings, ...JSON.parse(savedSettings) } : { ...this.defaultSettings };
+        console.log('⚙️ Loaded settings:', settings);
+        return settings;
     }
 
     saveSettings() {
+        console.log('⚙️ Saving settings:', this.settings);
         localStorage.setItem('gameSettings', JSON.stringify(this.settings));
+        console.log('⚙️ Settings saved to localStorage:', localStorage.getItem('gameSettings'));
         
         // Apply sound settings
         if (window.soundSystem) {
+            console.log('⚙️ Applying sound setting to sound system. Muting:', !this.settings.sound);
             window.soundSystem.setMute(!this.settings.sound);
+        } else {
+            console.warn('⚙️ Sound system not available - sound settings will apply on next load');
         }
 
         // Apply other settings...
     }
 
     initializeUI() {
-        // Initialize sound toggle from sound system if available
-        if (window.soundSystem) {
-            document.getElementById('mute-toggle').checked = !window.soundSystem.isMuted;
-        } else {
-            document.getElementById('mute-toggle').checked = this.settings.sound;
+        console.log('⚙️ Initializing UI with settings:', this.settings);
+        
+        // Set sound toggle based on settings, not sound system
+        const soundToggle = document.getElementById('mute-toggle');
+        if (soundToggle) {
+            console.log('⚙️ Setting sound toggle from settings:', this.settings.sound);
+            soundToggle.checked = this.settings.sound;
         }
         
         // Initialize other settings...
         document.getElementById('animations-toggle').checked = this.settings.animations;
         document.getElementById('toast-level').value = this.settings.toastLevel;
         document.getElementById('auto-save').value = this.settings.autoSave.toString();
+        console.log('⚙️ UI initialization complete');
     }
 
     bindEvents() {
+        console.log('⚙️ Binding settings events...');
         // Settings button
         const settingsBtn = document.getElementById('settings-button');
         const settingsModal = document.getElementById('settings-modal');
@@ -52,33 +71,44 @@ class Settings {
 
         // Open settings modal
         settingsBtn.addEventListener('click', () => {
+            console.log('⚙️ Opening settings modal');
             settingsModal.style.display = 'block';
             this.initializeUI(); // Reset to current settings
         });
 
         // Close modal handlers
-        closeBtn.addEventListener('click', () => settingsModal.style.display = 'none');
-        cancelBtn.addEventListener('click', () => settingsModal.style.display = 'none');
-        window.addEventListener('click', (e) => {
-            if (e.target === settingsModal) {
-                settingsModal.style.display = 'none';
-            }
+        closeBtn.addEventListener('click', () => {
+            console.log('⚙️ Closing settings modal (X button)');
+            settingsModal.style.display = 'none';
+        });
+        
+        cancelBtn.addEventListener('click', () => {
+            console.log('⚙️ Canceling settings changes');
+            settingsModal.style.display = 'none';
         });
 
         // Save settings
         saveBtn.addEventListener('click', () => {
+            console.log('⚙️ Saving settings changes...');
+            const oldSettings = { ...this.settings };
+            
             this.settings.sound = document.getElementById('mute-toggle').checked;
             this.settings.animations = document.getElementById('animations-toggle').checked;
             this.settings.toastLevel = document.getElementById('toast-level').value;
             this.settings.autoSave = parseInt(document.getElementById('auto-save').value);
 
+            console.log('⚙️ Settings changes:', {
+                old: oldSettings,
+                new: this.settings
+            });
+
             this.saveSettings();
-            this.applySettings();
             settingsModal.style.display = 'none';
 
             // Show confirmation toast
             showToast('Settings saved successfully!', 'success');
         });
+        console.log('⚙️ Events bound successfully');
     }
 
     applySettings() {
@@ -136,9 +166,9 @@ class Settings {
 }
 
 // Initialize settings when the game loads
-let gameSettings;
 document.addEventListener('DOMContentLoaded', () => {
-    gameSettings = new Settings();
+    console.log('⚙️ DOM loaded, creating settings...');
+    new Settings();
 });
 
 // Helper function to show toasts based on importance level

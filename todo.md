@@ -83,12 +83,40 @@ TODO:
 - [ ] Implement nuclear meltdown if too much ice is melted too quickly
 - [ ] Create instructions for how to play
 - [ ] Write a README.md for the project
+- [ ] Implement game settings
+    - [x] Create mobile-friendly settings modal
+        - [x] Design responsive layout
+        - [x] Implement open/close functionality
+        - [x] Add save/cancel buttons
+    - [ ] Fix settings modal styling and layout
+        - [ ] Center modal on desktop
+        - [ ] Reduce modal size and add proper spacing
+        - [ ] Fix mobile scrolling issues
+        - [ ] Ensure save/cancel buttons are always visible
+        - [ ] Add proper padding and margins
+    - [ ] Implement settings functionality
+        - [ ] Sound toggle
+            - [ ] Add game sound system
+            - [ ] Implement mute/unmute functionality
+        - [ ] Animation toggle
+            - [ ] Create animation control system
+            - [ ] Add disable-animations CSS class
+            - [ ] Handle all animated elements
+        - [ ] Auto-save system
+            - [ ] Implement interval-based saving
+            - [ ] Handle interval changes
+            - [ ] Add save confirmation toasts
+        - [ ] Toast notification system
+            - [ ] Implement notification filtering
+            - [ ] Handle importance levels
+            - [ ] Test all notification scenarios
+    - [x] Implement settings groups
 - [ ] Implement toast notification settings
-    - [ ] Add toggle for all toast notifications
-    - [ ] Add option for "Important notifications only"
-    - [ ] Create UI for notification preferences
-    - [ ] Define which notifications are "important"
-    - [ ] Persist notification settings in save game
+    - [x] Add toggle for all toast notifications
+    - [x] Add option for "Important notifications only"
+    - [x] Create UI for notification preferences
+    - [x] Define which notifications are "important"
+    - [x] Persist notification settings in save game
 
 
 

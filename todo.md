@@ -122,6 +122,12 @@ TODO:
     - [x] Create UI for notification preferences
     - [x] Define which notifications are "important"
     - [x] Persist notification settings in save game
+- [ ] Settings UI fixes
+    - [ ] Move animations toggle to graphics section
+    - [ ] Reduce spacing between label and toggle
+    - [ ] Update settings saved success message
+    - [ ] Center settings modal on desktop
+    - [ ] Fix modal background color (broken in 4bfc788)
 
 
 

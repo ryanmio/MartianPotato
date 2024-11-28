@@ -95,7 +95,7 @@ TODO:
         - [x] Ensure save/cancel buttons are always visible
         - [x] Add proper padding and margins
         - [x] Improve toggle layout and sizing
-    - [ ] Implement settings functionality
+    - [x] Implement settings functionality
         - [x] Sound toggle (placeholder)
             - [x] Create game sound system structure
             - [x] Add mute state to localStorage
@@ -111,10 +111,10 @@ TODO:
             - [x] Implement interval-based saving
             - [x] Handle interval changes
             - [x] Add save confirmation toasts
-        - [ ] Toast notification system
+        - [x] Toast notification system
             - [x] Implement notification filtering
             - [x] Handle importance levels (using existing notification types)
-            - [ ] Test all notification scenarios
+            - [x] Test all notification scenarios
     - [x] Implement settings groups
 - [ ] Implement toast notification settings
     - [x] Add toggle for all toast notifications

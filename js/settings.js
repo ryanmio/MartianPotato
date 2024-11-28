@@ -187,14 +187,4 @@ class GameSettings {
 document.addEventListener('DOMContentLoaded', () => {
     new GameSettings();
 });
-
-// Helper function to show toasts based on importance level
-function showToast(message, type = 'info', important = false) {
-    if (gameSettings) {
-        const toastLevel = gameSettings.toastLevel;
-        if (toastLevel === 'none' || (toastLevel === 'important' && !important)) {
-            return;
-        }
-    }
-    window.showToast(message, type);
-} 
+ 

@@ -797,7 +797,7 @@ button:hover, button:disabled {
     position: relative;
     background-color: white;
     max-width: 500px;
-    width: 100%;
+    width: 90%;
     margin: 40px auto;
     padding: 20px;
     border-radius: 8px;
@@ -906,7 +906,7 @@ button:hover, button:disabled {
 /* Mobile adjustments */
 @media (max-width: 600px) {
     .settings-modal-content {
-        width: 95%;
+        width: 90%;
         margin: 10px;
         max-height: 85vh;
         padding: 15px;
@@ -1185,7 +1185,7 @@ button:hover, button:disabled {
 
     /* Modal adjustments */
     .modal-content {
-        width: 95%;
+        width: 90%;
         padding: 15px;
     }
 
@@ -2062,7 +2062,7 @@ button:hover, button:disabled {
 /* Settings Modal Styles */
 .settings-modal-content {
     max-width: 500px;
-    width: 100%;
+    width: 90%;
     padding: 20px;
 }
 
@@ -2161,7 +2161,7 @@ button:hover, button:disabled {
 /* Mobile Responsiveness */
 @media (max-width: 600px) {
     .settings-modal-content {
-        width: 95%;
+        width: 90%;
         margin: 20px auto;
     }
 

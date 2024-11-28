@@ -107,10 +107,10 @@ TODO:
             - [x] Apply animation settings on game load
             - [x] Update growth indicator visibility
             - [x] Fix growth indicator animation behavior
-        - [ ] Auto-save system
-            - [ ] Implement interval-based saving
-            - [ ] Handle interval changes
-            - [ ] Add save confirmation toasts
+        - [x] Auto-save system
+            - [x] Implement interval-based saving
+            - [x] Handle interval changes
+            - [x] Add save confirmation toasts
         - [ ] Toast notification system
             - [ ] Implement notification filtering
             - [ ] Handle importance levels
@@ -122,12 +122,12 @@ TODO:
     - [x] Create UI for notification preferences
     - [x] Define which notifications are "important"
     - [x] Persist notification settings in save game
-- [ ] Settings UI fixes
-    - [ ] Move animations toggle to graphics section
-    - [ ] Reduce spacing between label and toggle
-    - [ ] Update settings saved success message
-    - [ ] Center settings modal on desktop
-    - [ ] Fix modal background color (broken in 4bfc788)
+- [x] Settings UI fixes
+    - [x] Move animations toggle to graphics section
+    - [x] Reduce spacing between label and toggle
+    - [x] Update settings saved success message
+    - [x] Center settings modal on desktop
+    - [x] Fix modal background color (broken in 4bfc788)
 
 
 

@@ -34,6 +34,9 @@ let lastSaveTime = 0;
 let MAX_TIER = 5;
 let hasSeenInitialGlow = false;
 let gameStartTime = Date.now();
+// Expose these immediately after initialization
+window.gameStartTime = gameStartTime;
+window.getElapsedMartianTime = getElapsedMartianTime;
 let lastHarvestUpdateTime = 0; 
 
 // Harvest Chart Update Intervals
@@ -620,11 +623,11 @@ function saveGame() {
         autoHarvesters,
         MAX_FIELD_SIZE,
         unlockedActionCards: window.unlockedActionCards,
-        currentTier, // Save the currentTier
+        currentTier,
         upgrades: upgrades.map(upgrade => ({
             name: upgrade.name,
             purchased: upgrade.purchased || false,
-            count: upgrade.count || 0 // Ensure count is saved even if zero
+            count: upgrade.count || 0
         })),
         isFirstPlant,
         hasSeenInitialGlow,
@@ -632,12 +635,12 @@ function saveGame() {
         isPolarCapMiningActive,
         growthTimeMultiplier,
         totalPotatoesHarvested,
-        harvestHistory,         
-        gameStartTime,
+        harvestHistory,
+        gameStartTime: gameStartTime || Date.now(), // Ensure we save the original start time
         isSubsurfaceAquiferTapperUnlocked,
         isSubsurfaceAquiferTapperActive,
         isBucketWheelExcavatorUnlocked,
-        isSubterraneanTuberTunnelerUnlocked,          
+        isSubterraneanTuberTunnelerUnlocked,
         explorationResourceMultiplier: window.explorationResourceMultiplier,
         lastExploreTime: window.lastExploreTime,
         exploreDelay: window.exploreDelay,
@@ -673,14 +676,11 @@ function loadGame() {
     if (savedState) {
         try {
             const gameState = JSON.parse(savedState);
-            // IMPORTANT: Load neural network first, before other state
-            if (gameState.neuralNetworkActive || (gameState.neuralNetworkState && gameState.neuralNetworkState.isActive)) {
-                window.neuralNetworkActive = true; // Make sure it's global
-                initializeNeuralNetwork(gameState.neuralNetworkState);
-            }
-
+            
             // Restore game variables, respecting saved values even if they're zero
             gameStartTime = gameState.gameStartTime || Date.now();
+            window.gameStartTime = gameStartTime; // Re-expose after loading
+            
             potatoCount = gameState.potatoCount !== undefined ? gameState.potatoCount : 0;
             water = gameState.water !== undefined ? gameState.water : 100;
             nutrients = gameState.nutrients !== undefined ? gameState.nutrients : 100;
@@ -2508,3 +2508,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, true);
 });
+
+// Make getElapsedMartianTime available globally
+window.getElapsedMartianTime = getElapsedMartianTime;
+
+// Expose existing gameStartTime to window
+window.gameStartTime = gameStartTime;

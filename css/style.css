@@ -132,16 +132,17 @@ button:hover, button:disabled {
 
 .poof-animation-red {
     position: absolute;
-    width: 50px; /* These will be overridden inline */
-    height: 50px; /* These will be overridden inline */
-    left: 0;
-    top: 0;
+    width: 60px;  /* Match potato size */
+    height: 60px; /* Match potato size */
     background: radial-gradient(circle, rgba(255,0,0,0.9) 0%, rgba(255,69,0,0) 70%);
     border-radius: 50%;
     animation: poofEffectRed 0.5s ease-out forwards;
     pointer-events: none;
     z-index: 9999;
-    transform: translate(-50%, -50%) scale(0.5); /* Start centered and scaled down */
+    /* Center the poof */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 @keyframes poofEffectRed {
@@ -320,9 +321,24 @@ button:hover, button:disabled {
     animation: pulse 2s infinite ease-in-out;
 }
 
-.quantum-potato {
-    background-color: #9e483b; /* Same as normal potato */
-    box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3); /* Red tint */
+@keyframes quantum-pulse {
+    0% { 
+        background-color: #9e483b;
+        box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3);
+    }
+    50% {
+        background-color: #b23c2d;
+        box-shadow: inset 0 0 20px rgba(255, 0, 0, 0.5);
+    }
+    100% {
+        background-color: #9e483b;
+        box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3);
+    }
+}
+
+.potato.quantum-potato {
+    background-color: #9e483b !important;
+    box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3) !important;
     animation: quantum-pulse 2s infinite alternate;
 }
 
@@ -1039,7 +1055,7 @@ button:hover, button:disabled {
     font-size: 24px;
 }
 
-#save-button, #reset-button, #chart-button, #settings-button {
+#save-button, #reset-button, #chart-button, #settings-button, #help-button {
     display: inline-block;
     width: auto;
     margin: 5px 0 5px 10px;
@@ -1061,7 +1077,7 @@ button:hover, button:disabled {
     background-color: #d0d0d0;
 }
 
-#chart-button, #settings-button {
+#chart-button, #settings-button, #help-button {
     padding: 5px 8px;
     font-size: 18px;
     line-height: 1;
@@ -2508,7 +2524,7 @@ body:not(.animations-disabled) .potato .growth-indicator {
     padding: 20px;
     border-radius: 8px;
     width: 90%;
-    max-width: 500px;
+    max-width: 400px;
     position: relative;
     z-index: 1001;
 }
@@ -2520,4 +2536,286 @@ body:not(.animations-disabled) .potato .growth-indicator {
 
 .upgrade-modal-content {
     z-index: 1101;
+}
+
+/* Help Modal Styles */
+.help-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.help-modal.open {
+    opacity: 1;
+}
+
+.help-modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    height: 90%;
+    margin: 2% auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.help-modal-content-wrapper {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.help-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+}
+
+.help-modal-header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.help-modal-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #666;
+    cursor: pointer;
+    padding: 0 8px;
+    transition: color 0.2s;
+}
+
+.help-modal-close:hover {
+    color: #333;
+}
+
+.help-modal-nav {
+    width: 250px;
+    border-right: 1px solid #ddd;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.help-modal-main {
+    flex: 1;
+    padding: 20px 30px;
+    overflow-y: auto;
+}
+
+/* Navigation styles */
+.help-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item {
+    margin: 8px 0;
+}
+
+.nav-item a {
+    color: #333;
+    text-decoration: none;
+    display: block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.nav-item a:hover {
+    background-color: #f0f0f0;
+}
+
+.nav-indent {
+    padding-left: 20px;
+}
+
+/* Content styles */
+.help-title {
+    font-size: 32px;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.help-section {
+    font-size: 24px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    color: #444;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.help-subsection {
+    font-size: 20px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.help-list {
+    padding-left: 25px;
+    margin: 15px 0;
+}
+
+.help-list li {
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+.help-code {
+    background-color: #f5f5f5;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-family: monospace;
+}
+
+/* Error state */
+.help-error {
+    text-align: center;
+    padding: 40px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.help-error h3 {
+    color: #d32f2f;
+    margin-bottom: 20px;
+}
+
+.help-error button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.help-error button:hover {
+    background-color: #45a049;
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+    .help-modal-content {
+        background-color: #1a1a1a;
+        color: #fff;
+    }
+
+    .help-modal-header {
+        background-color: #2a2a2a;
+        border-bottom-color: #333;
+    }
+
+    .help-modal-header h2 {
+        color: #fff;
+    }
+
+    .help-modal-close {
+        color: #999;
+    }
+
+    .help-modal-close:hover {
+        color: #fff;
+    }
+
+    .help-modal-nav {
+        border-right-color: #333;
+    }
+
+    .nav-item a {
+        color: #ddd;
+    }
+
+    .nav-item a:hover {
+        background-color: #2a2a2a;
+    }
+
+    .help-title {
+        color: #fff;
+    }
+
+    .help-section {
+        color: #eee;
+        border-bottom-color: #333;
+    }
+
+    .help-subsection {
+        color: #ddd;
+    }
+
+    .help-code {
+        background-color: #2a2a2a;
+    }
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+    .help-modal-content {
+        width: 95%;
+        height: 95%;
+        margin: 2.5% auto;
+    }
+
+    .help-modal-nav {
+        width: 200px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .help-modal-content {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .help-modal-nav {
+        display: none; /* Hide nav on mobile, will add hamburger menu later */
+    }
+}
+
+/* Section highlight effect */
+@keyframes highlight-section {
+    0% { background-color: transparent; }
+    30% { background-color: rgba(76, 175, 80, 0.2); }
+    100% { background-color: transparent; }
+}
+
+.help-section.highlight,
+.help-subsection.highlight {
+    animation: highlight-section 2s ease-out;
+}
+
+/* Dark theme support for highlight */
+@media (prefers-color-scheme: dark) {
+    @keyframes highlight-section-dark {
+        0% { background-color: transparent; }
+        30% { background-color: rgba(76, 175, 80, 0.15); }
+        100% { background-color: transparent; }
+    }
+
+    .help-section.highlight,
+    .help-subsection.highlight {
+        animation: highlight-section-dark 2s ease-out;
+    }
 }

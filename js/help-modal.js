@@ -136,9 +136,11 @@ class HelpModal {
         // Instructions content embedded directly
         const markdown = `# Martian Potato - Game Guide
 
-## Getting Started
+## Game Objective
 
-Welcome to Martian Potato! In this game, you'll be pioneering potato farming on Mars, using advanced technology and strategy to build a thriving potato empire.
+Welcome to your new role as Mars' premier potato farmer! Your mission is to establish and grow a self-sustaining potato-based colony on the Red Planet. Starting with just a handful of resources and your first precious potato, you'll develop technologies, automate processes, and expand your operation from a simple farming outpost to a thriving Martian civilization.
+
+As you progress, you'll unlock increasingly advanced technologies that transform your humble farming operation into an automated potato empire. Each breakthrough brings new possibilities, from simple automated planters to quantum technologies that push the boundaries of potato science.
 
 ### Basic Controls
 - Click the "Plant Potato" button to plant your first potato

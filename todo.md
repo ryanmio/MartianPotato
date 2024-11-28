@@ -233,3 +233,30 @@ Bugs/Issues:
 - [ ] Move help button to header menu alongside settings button
 
 --------------------------------------------------------------------------------------------
+
+# Help Guide Update Plan - 2023
+
+## Step 1: Add Game Objective Section
+- [ ] Write compelling game objective section
+- [ ] Focus on potato-based Martian colony theme
+- [ ] Explain incremental game mechanics
+- [ ] Keep tone informative but engaging
+
+## Step 2: Rewrite Gameplay Basics
+- [ ] Update resource system explanation
+- [ ] Detail water/ice mechanics
+- [ ] Explain nutrient requirements
+- [ ] Document upgrade paths for resource generation
+
+## Step 3: Add Game Progression Notes
+- [ ] Explain initial manual gameplay
+- [ ] Document transition to idle mechanics
+- [ ] Highlight automation features
+
+## Step 4: Upgrade System Documentation
+- [ ] Document milestone upgrades
+- [ ] Explain tech tree progression
+- [ ] Detail rover mechanics
+- [ ] Include upgrade purchasing information
+
+--------------------------------------------------------------------------------------------

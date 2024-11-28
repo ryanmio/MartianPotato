@@ -1077,7 +1077,7 @@ button:hover, button:disabled {
     background-color: #d0d0d0;
 }
 
-#chart-button, #settings-button {
+#chart-button, #settings-button, #help-button {
     padding: 5px 8px;
     font-size: 18px;
     line-height: 1;

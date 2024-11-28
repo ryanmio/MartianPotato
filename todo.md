@@ -68,22 +68,7 @@ TODO:
 - [x] Mobile styling
 - [x] Fix UI scaling and accessibility
 - [x] Fix Nuclear Ice Melter upgrade control switch bug
---------------------------------------------------------------------------------------------
-- [ ] Implement automation panel
-    - [ ] Resource consumption + production rates per machine
-    - [ ] Net production rates
-    - [ ] Machine states
-    - [ ] Tooltips system
-- [ ] Enhance upgrade UI/UX
-    - [ ] Implement upgrade categories
-    - [ ] Add cost history view
-    - [ ] Update typography
-    - [ ] Improve upgrade descriptions
-- [ ] Balance upgrade costs and effects
-- [ ] Implement nuclear meltdown if too much ice is melted too quickly
-- [ ] Create instructions for how to play
-- [ ] Write a README.md for the project
-- [ ] Implement game settings
+- [x] Implement game settings
     - [x] Create mobile-friendly settings modal
         - [x] Design responsive layout
         - [x] Implement open/close functionality
@@ -116,7 +101,7 @@ TODO:
             - [x] Handle importance levels (using existing notification types)
             - [x] Test all notification scenarios
     - [x] Implement settings groups
-- [ ] Implement toast notification settings
+- [x] Implement toast notification settings
     - [x] Add toggle for all toast notifications
     - [x] Add option for "Important notifications only"
     - [x] Create UI for notification preferences
@@ -128,6 +113,21 @@ TODO:
     - [x] Update settings saved success message
     - [x] Center settings modal on desktop
     - [x] Fix modal background color (broken in 4bfc788)
+--------------------------------------------------------------------------------------------
+- [ ] Implement automation panel
+    - [ ] Resource consumption + production rates per machine
+    - [ ] Net production rates
+    - [ ] Machine states
+    - [ ] Tooltips system
+- [ ] Enhance upgrade UI/UX
+    - [ ] Implement upgrade categories
+    - [ ] Add cost history view
+    - [ ] Update typography
+    - [ ] Improve upgrade descriptions
+- [ ] Balance upgrade costs and effects
+- [ ] Implement nuclear meltdown if too much ice is melted too quickly
+- [ ] Create instructions for how to play
+- [ ] Write a README.md for the project
 
 
 
@@ -169,4 +169,5 @@ Bugs/Issues:
 - [x] Manual ice melting is double counting clicks
 - [x] Exit to reality should open in the same tab not a new tab
 --------------------------------------------------------------------------------------------
-- quantum spud spawner poof appearing not on the potato but above
+- [ ] critical bug: upgrade modals are not working!
+- [ ] quantum spud spawner poof appearing not on the potato but above

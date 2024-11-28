@@ -452,6 +452,14 @@ function updatePotatoGrowth() {
                 // When animations are enabled, update every frame
                 potato.growthStage = newGrowthStage;
             }
+            
+            // Update the potato element's classes while preserving quantum status
+            const potatoElement = document.querySelector(`.potato-slot:nth-child(${potatoField.indexOf(potato) + 1}) .potato`);
+            if (potatoElement) {
+                const harvestableClass = newGrowthStage >= 100 ? 'harvestable' : '';
+                const quantumClass = potato.isQuantumSpawned ? 'quantum-potato' : '';
+                potatoElement.className = `potato ${harvestableClass} ${quantumClass} ${potato.textureClass}`;
+            }
         }
         return potato;
     });
@@ -557,7 +565,13 @@ function updatePotatoFieldDisplay() {
                 transform: scale(${potato.scaleX}, ${potato.scaleY});
                 border-radius: ${potato.borderRadius};
             `;
-            potatoElement.className = `potato ${potato.textureClass}${potato.growthStage >= 100 ? ' harvestable' : ''}`;
+            
+            // Build the class list with all necessary classes
+            const classes = ['potato'];
+            if (potato.textureClass) classes.push(potato.textureClass);
+            if (potato.growthStage >= 100) classes.push('harvestable');
+            if (potato.isQuantumSpawned) classes.push('quantum-potato');
+            potatoElement.className = classes.join(' ');
 
             // Update growth indicator and text using cached references
             const growthIndicator = potatoElement.firstElementChild;

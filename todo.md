@@ -113,6 +113,7 @@ TODO:
     - [x] Update settings saved success message
     - [x] Center settings modal on desktop
     - [x] Fix modal background color (broken in 4bfc788)
+- [x] Create instructions for how to play
 --------------------------------------------------------------------------------------------
 - [ ] Implement automation panel
     - [ ] Resource consumption + production rates per machine
@@ -126,7 +127,6 @@ TODO:
     - [ ] Improve upgrade descriptions
 - [ ] Balance upgrade costs and effects
 - [ ] Implement nuclear meltdown if too much ice is melted too quickly
-- [ ] Create instructions for how to play
 - [ ] Write a README.md for the project
 
 

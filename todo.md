@@ -168,6 +168,6 @@ Bugs/Issues:
 - [x] Gravitropism upgrade cost increase from 250 to 1000
 - [x] Manual ice melting is double counting clicks
 - [x] Exit to reality should open in the same tab not a new tab
+- [x] critical bug: upgrade modals are not working!
 --------------------------------------------------------------------------------------------
-- [ ] critical bug: upgrade modals are not working!
 - [ ] quantum spud spawner poof appearing not on the potato but above

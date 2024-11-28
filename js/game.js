@@ -470,21 +470,12 @@ function harvestPotatoAtIndex(index, isAutomated = false) {
         const potatoElement = slotElement.querySelector('.potato');
 
         if (potatoElement && harvestedPotato.isQuantumSpawned) {
-
             // Create the poof element
             const poofElement = document.createElement('div');
             poofElement.className = 'poof-animation-red';
 
             // Append the poof to the slotElement
             slotElement.appendChild(poofElement);
-
-            // Ensure the poof covers the entire slot
-            poofElement.style.position = 'absolute';
-            poofElement.style.left = '0';
-            poofElement.style.top = '0';
-            poofElement.style.width = '100%';
-            poofElement.style.height = '100%';
-            poofElement.style.zIndex = '10';
 
             // Hide the potatoElement during the animation
             potatoElement.style.visibility = 'hidden';

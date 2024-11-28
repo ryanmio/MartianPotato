@@ -132,16 +132,17 @@ button:hover, button:disabled {
 
 .poof-animation-red {
     position: absolute;
-    width: 50px; /* These will be overridden inline */
-    height: 50px; /* These will be overridden inline */
-    left: 0;
-    top: 0;
+    width: 60px;  /* Match potato size */
+    height: 60px; /* Match potato size */
     background: radial-gradient(circle, rgba(255,0,0,0.9) 0%, rgba(255,69,0,0) 70%);
     border-radius: 50%;
     animation: poofEffectRed 0.5s ease-out forwards;
     pointer-events: none;
     z-index: 9999;
-    transform: translate(-50%, -50%) scale(0.5); /* Start centered and scaled down */
+    /* Center the poof */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 @keyframes poofEffectRed {

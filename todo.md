@@ -170,4 +170,4 @@ Bugs/Issues:
 - [x] Exit to reality should open in the same tab not a new tab
 - [x] critical bug: upgrade modals are not working!
 --------------------------------------------------------------------------------------------
-- [ ] quantum spud spawner poof appearing not on the potato but above
+- [x] quantum spud spawner poof appearing not on the potato but above

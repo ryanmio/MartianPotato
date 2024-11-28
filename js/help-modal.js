@@ -138,11 +138,16 @@ class HelpModal {
 
 ## Game Objective
 
-Welcome to your new role as Mars' premier potato farmer! Your mission is to establish and grow a self-sustaining potato-based colony on the Red Planet. Starting with just a handful of resources and your first precious potato, you'll develop technologies, automate processes, and expand your operation from a simple farming outpost to a thriving Martian civilization.
+Welcome to your new role as Mars' premier potato farmer! Your mission is to establish and grow a self-sustaining potato-based colony on the Red Planet.
 
-As you progress, you'll unlock increasingly advanced technologies that transform your humble farming operation into an automated potato empire. Each breakthrough brings new possibilities, from simple automated planters to quantum technologies that push the boundaries of potato science.
+As you progress, you'll unlock increasingly advanced technologies that transform your humble farming operation into an automated potato empire.
 
-## Gameplay Basics
+## Gameplay
+
+### The Basics
+- Click on the "Plant Potato" button to plant your first potato
+- Click on fully grown potatoes (100%) to harvest them
+- Watch your resources (Water, Ice, Nutrients) - you'll need them to plant potatoes
 
 ### Resource Management
 Your potato farm requires careful management of three essential resources:
@@ -157,65 +162,12 @@ Your potato farm requires careful management of three essential resources:
 3. Harvest potatoes when they reach 100% growth
 4. Harvested potatoes can be used to purchase upgrades
 
-### Resource Generation
-- **Early Game**: Manually explore Mars and melt ice
-- **Mid Game**: Use automated systems like the Ice Melting Basin
-- **Late Game**: Access advanced technologies for direct resource generation
+## Upgrade System
 
-## Game Progression
-
-### Early Game - Manual Operations
-The initial phase requires hands-on management:
-- Manually explore the Martian surface for resources
-- Plant and harvest potatoes one at a time
-- Melt ice manually to generate water
-- Save potatoes to purchase your first automation upgrades
-
-### Mid Game - Basic Automation
-As you acquire upgrades, operations become more automated:
-- Autonomous rovers handle planting and harvesting
-- Ice Melting Basin provides steady water supply
-- Resource gathering becomes more efficient
-- Focus shifts to managing your automated systems
-
-### Late Game - Full Automation
-Eventually, your colony becomes largely self-sustaining:
-- Advanced technologies generate resources automatically
-- Quantum systems dramatically increase efficiency
-- Multiple automation systems work together
-- Focus on optimization and expansion
-
-The game transitions naturally from active management to strategic oversight as you unlock more advanced technologies. While the early game may feel hands-on, patience and smart upgrade choices will lead to a thriving automated colony.
-
-## Core Mechanics
-
-### Growth System
-- Potatoes take time to grow from 0% to 100%
-- Growth speed can be improved through upgrades
-- Fully grown potatoes pulse with a golden glow
-- Harvest potatoes at 100% to collect them
-
-### Basic Tools
-- **Manual Ice Melting**: Click to convert ice into water
-- **Ice Melting Basin**: Automated ice-to-water conversion
-- **Potato Field**: Your main farming area
-- **Resource Gathering**: Explore Mars for resources
-
-## Advanced Features
-
-### Quantum Technologies
-- **Quantum Spud Spawner**: Automatically plants and harvests special quantum potatoes
-- **Quantum Potatoes**: Special reddish potatoes with unique properties
-
-### Automation Systems
-- **Auto-Planters**: Automatically plant new potatoes
-- **Auto-Harvesters**: Automatically collect fully grown potatoes
-- **Nuclear Ice Melter**: Advanced ice-to-water conversion
-
-### Special Equipment
-- **Martian Potato Colonizer**: Special tool for potato multiplication
-- **Polar Cap Mining**: Extract ice from Mars' polar caps
-- **Subterranean Tuber Tunneler**: Advanced underground farming
+### Technology Tree
+Your colony's advancement is driven by milestone-based upgrades:
+- Each upgrade unlocks new technologies or capabilities
+- Higher-tier upgrades become visible as you progress
 
 ## Tips & Strategies
 
@@ -236,45 +188,7 @@ The game transitions naturally from active management to strategic oversight as 
 - Utilize all automated systems
 - Optimize your resource conversion rates
 - Experiment with different upgrade combinations
-
-## Upgrade System
-
-### Technology Tree
-Your colony's advancement is driven by milestone-based upgrades:
-- Each upgrade unlocks new technologies or capabilities
-- Higher-tier upgrades become visible as you progress
-- Some upgrades require previous technologies to be unlocked
-- Costs are displayed in potatoes - plan your harvests accordingly
-
-### Types of Upgrades
-
-#### Automation Upgrades
-- **Autonomous Planting Rovers**: Automatically plant new potatoes
-  - Can be purchased multiple times to increase efficiency
-  - Each rover increases automatic planting rate
-- **Autonomous Harvesting Rovers**: Automatically collect mature potatoes
-  - Multiple purchases increase collection speed
-  - Works alongside manual harvesting
-
-#### Resource Generation
-- **Ice Melting Basin**: Basic automated water production
-- **Nuclear Ice Melter**: Advanced ice-to-water conversion
-- **Subsurface Aquifer Tapper**: Direct water extraction
-- **Martian Polar Cap Extractor**: Large-scale ice collection
-
-#### Advanced Technologies
-- **Quantum Technologies**: Late-game upgrades for massive efficiency
-- **Specialized Equipment**: Unique tools for specific tasks
-- **Colony Expansion**: Increase your operation's scale
-- **Research Upgrades**: Improve overall efficiency
-
-### Purchasing Strategy
-1. Focus on automation upgrades early to reduce manual work
-2. Balance resource generation with consumption
-3. Save potatoes for important milestone upgrades
-4. Consider multiple rover purchases to increase automation speed
-
-Remember that some upgrades are one-time purchases that unlock new capabilities, while others (like rovers) can be bought multiple times for increased efficiency.`;
+`;
 
         console.log('Loading content...');
         

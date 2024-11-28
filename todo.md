@@ -176,58 +176,60 @@ Bugs/Issues:
 # Help System Implementation Plan
 
 ## Core Features
-- [ ] Create instructions.md with well-organized game documentation
-  - Getting Started guide
-  - Core mechanics explanation
-  - Advanced features and strategies
-  - Tips and tricks section
-  - Individual mechanic deep-dives
-- [ ] Create help-modal.js for handling the help system UI
-  - Modal framework
-  - Markdown parsing and rendering
-  - Navigation system for different sections
-  - Search functionality
+- [x] Create instructions.md with well-organized game documentation
+  - [x] Getting Started guide
+  - [x] Core mechanics explanation
+  - [x] Advanced features and strategies
+  - [x] Tips and tricks section
+  - [x] Individual mechanic deep-dives
+- [x] Create help-modal.js for handling the help system UI
+  - [x] Modal framework
+  - [x] Markdown parsing and rendering
+  - [x] Navigation system for different sections
+  - [ ] Search functionality
 - [ ] Add help button/icon to main UI
-  - Accessible location in header
-  - Consistent styling with game
-  - Keyboard shortcut (h key)
-- [ ] Style the help modal
-  - Responsive design
-  - Dark/light theme support
-  - Good readability
-  - Smooth transitions
-- [ ] Implement help content features
-  - Table of contents
-  - Section navigation
-  - Collapsible sections
-  - Image support for tutorials
-  - Code/example formatting
+  - [ ] Move to header alongside settings
+  - [x] Consistent styling with game
+  - [x] Keyboard shortcut (h key)
+- [x] Style the help modal
+  - [x] Responsive design
+  - [x] Dark/light theme support
+  - [x] Good readability
+  - [x] Smooth transitions
+- [x] Implement help content features
+  - [x] Table of contents
+  - [x] Section navigation
+  - [x] Collapsible sections
+  - [x] Code/example formatting
 
 ## Nice-to-Have Features
 - [ ] Context-sensitive help
-  - Highlight relevant help sections based on game state
-  - "What's this?" tooltips for new features
+  - [ ] Highlight relevant help sections based on game state
+  - [ ] "What's this?" tooltips for new features
 - [ ] Help content versioning
-  - Track help content versions with game updates
-  - Show "What's New" section
+  - [ ] Track help content versions with game updates
+  - [ ] Show "What's New" section
 - [ ] Interactive tutorials
-  - Step-by-step guides
-  - Interactive examples
+  - [ ] Step-by-step guides
+  - [ ] Interactive examples
 - [ ] Search functionality
-  - Full-text search
-  - Quick jump to sections
-  - Search result highlighting
+  - [ ] Full-text search
+  - [ ] Quick jump to sections
+  - [ ] Search result highlighting
 
 ## Implementation Steps
-1. [ ] Create initial instructions.md with basic structure and content
-2. [ ] Set up help modal framework and basic styling
-3. [ ] Implement markdown parsing and rendering
-4. [ ] Add help button and keyboard shortcut
-5. [ ] Style modal for responsiveness and theme support
-6. [ ] Add navigation and table of contents
-7. [ ] Implement collapsible sections
+1. [x] Create initial instructions.md with basic structure and content
+2. [x] Set up help modal framework and basic styling
+3. [x] Implement markdown parsing and rendering
+4. [x] Add help button and keyboard shortcut
+5. [x] Style modal for responsiveness and theme support
+6. [x] Add navigation and table of contents
+7. [x] Implement collapsible sections
 8. [ ] Add search functionality
-9. [ ] Polish UI and transitions
+9. [x] Polish UI and transitions
 10. [ ] Add context-sensitive help features
+
+## Current Task
+- [ ] Move help button to header menu alongside settings button
 
 --------------------------------------------------------------------------------------------

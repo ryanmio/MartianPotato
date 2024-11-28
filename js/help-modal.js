@@ -69,15 +69,19 @@ class HelpModal {
     generateNavigation(content) {
         // Extract headers from content using regex
         const headers = [];
-        const headerRegex = /^(#{1,3})\s+(.+)$/gm;
+        const headerRegex = /^(#{1,3})\s+(.+?)(?:\s*{#[\w-]+})?\s*$/gm;
         let match;
         
+        console.log('Generating navigation from content...');
+        
         while ((match = headerRegex.exec(content)) !== null) {
-            headers.push({
-                level: match[1].length,
-                text: match[2],
-                id: match[2].toLowerCase().replace(/[^\w]+/g, '-')
-            });
+            const level = match[1].length;
+            const text = match[2];
+            const id = text.toLowerCase().replace(/[^\w]+/g, '-');
+            
+            console.log(`Found header: Level ${level}, Text: "${text}", ID: "${id}"`);
+            
+            headers.push({ level, text, id });
         }
 
         // Generate navigation HTML
@@ -95,15 +99,35 @@ class HelpModal {
         
         navHtml += '</ul>';
         this.nav.innerHTML = navHtml;
+        
+        console.log('Navigation HTML generated:', navHtml);
     }
 
     scrollToSection(id) {
+        console.log(`Attempting to scroll to section: ${id}`);
         const element = document.getElementById(id);
+        
         if (element) {
-            this.content.scrollTo({
-                top: element.offsetTop - 20,
+            console.log(`Found element with id: ${id}, offsetTop: ${element.offsetTop}`);
+            
+            // Get the modal content element for scrolling
+            const modalContent = this.content;
+            const headerHeight = 60; // Approximate height of the modal header
+            
+            // Calculate scroll position accounting for header
+            const scrollTop = element.offsetTop - headerHeight;
+            
+            console.log(`Scrolling to position: ${scrollTop}`);
+            modalContent.scrollTo({
+                top: scrollTop,
                 behavior: 'smooth'
             });
+            
+            // Add a highlight effect
+            element.classList.add('highlight');
+            setTimeout(() => element.classList.remove('highlight'), 2000);
+        } else {
+            console.warn(`No element found with id: ${id}`);
         }
     }
 
@@ -182,27 +206,49 @@ Welcome to Martian Potato! In this game, you'll be pioneering potato farming on 
 - Optimize your resource conversion rates
 - Experiment with different upgrade combinations`;
 
+        console.log('Loading content...');
+        
         // Generate navigation first
         this.generateNavigation(markdown);
         
+        // Configure marked options for header IDs
+        marked.setOptions({
+            headerIds: true,
+            gfm: true
+        });
+        
         // Convert markdown to HTML using marked.parse()
+        console.log('Converting markdown to HTML...');
         const htmlContent = marked.parse(markdown);
         
-        // Add custom classes to elements
+        // Add custom classes to elements and ensure IDs are preserved
         const styledHtml = htmlContent
-            .replace(/<h1>/g, '<h1 class="help-title">')
-            .replace(/<h2>/g, '<h2 class="help-section">')
-            .replace(/<h3>/g, '<h3 class="help-subsection">')
+            .replace(/<h1/g, '<h1 class="help-title"')
+            .replace(/<h2/g, '<h2 class="help-section"')
+            .replace(/<h3/g, '<h3 class="help-subsection"')
             .replace(/<ul>/g, '<ul class="help-list">')
             .replace(/<code>/g, '<code class="help-code">');
         
+        console.log('Setting innerHTML...');
         this.content.innerHTML = styledHtml;
+        
+        // Add IDs to headers if they don't have them
+        this.content.querySelectorAll('h1, h2, h3').forEach(header => {
+            if (!header.id) {
+                header.id = header.textContent.toLowerCase().replace(/[^\w]+/g, '-');
+            }
+            console.log(`Header: ${header.tagName}, id="${header.id}", text="${header.textContent}"`);
+        });
         
         // Add click handlers to all navigation links
         this.nav.querySelectorAll('a').forEach(link => {
+            const href = link.getAttribute('href');
+            console.log(`Adding click handler for link: ${href}`);
+            
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const id = link.getAttribute('href').substring(1);
+                const id = href.substring(1);
+                console.log(`Link clicked: ${href}, scrolling to: ${id}`);
                 this.scrollToSection(id);
             });
         });

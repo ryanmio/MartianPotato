@@ -1055,7 +1055,7 @@ button:hover, button:disabled {
     font-size: 24px;
 }
 
-#save-button, #reset-button, #chart-button, #settings-button {
+#save-button, #reset-button, #chart-button, #settings-button, #help-button {
     display: inline-block;
     width: auto;
     margin: 5px 0 5px 10px;

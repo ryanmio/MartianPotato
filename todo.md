@@ -113,7 +113,7 @@ TODO:
             - [x] Add save confirmation toasts
         - [ ] Toast notification system
             - [x] Implement notification filtering
-            - [ ] Handle importance levels
+            - [x] Handle importance levels (using existing notification types)
             - [ ] Test all notification scenarios
     - [x] Implement settings groups
 - [ ] Implement toast notification settings

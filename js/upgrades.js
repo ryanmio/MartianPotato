@@ -772,15 +772,17 @@ function showUpgradeModal(upgrade) {
     console.log("Showing upgrade modal for:", upgrade.name);
     const existingModal = document.querySelector('.upgrade-modal');
     if (existingModal) {
+        console.log("Removing existing modal");
         existingModal.remove();
     }
 
     const modal = document.createElement('div');
-    modal.className = 'modal upgrade-modal'; // Assign both classes
+    modal.className = 'modal upgrade-modal';
+    console.log("Created new modal element:", modal);
     
     const upgradeCost = getUpgradeCost(upgrade);
     const content = `
-        <div class="modal-content">
+        <div class="modal-content upgrade-modal-content">
             <span class="close-modal">&times;</span>
             <h2>${upgrade.name}</h2>
             <p>${upgrade.description}</p>
@@ -789,25 +791,38 @@ function showUpgradeModal(upgrade) {
         </div>
     `;
     modal.innerHTML = content;
+    console.log("Modal content set:", content);
 
+    // Add modal to body
+    document.body.appendChild(modal);
+    console.log("Modal added to document body");
+
+    // Force a reflow and show the modal
+    modal.offsetHeight;
+    modal.style.display = 'flex';
+    console.log("Modal display set to flex");
+
+    // Add event listeners
     const buyButton = modal.querySelector('.buy-upgrade-button');
+    const closeButton = modal.querySelector('.close-modal');
+
     buyButton.addEventListener('click', () => {
+        console.log("Buy button clicked");
         buyUpgrade(upgrade);
         modal.remove();
     });
 
-    const closeButton = modal.querySelector('.close-modal');
     closeButton.addEventListener('click', () => {
+        console.log("Close button clicked");
         modal.remove();
     });
 
     modal.addEventListener('click', (event) => {
         if (event.target === modal) {
+            console.log("Modal backdrop clicked");
             modal.remove();
         }
     });
-
-    document.body.appendChild(modal);
 }
 
 // Handle the purchase of an upgrade

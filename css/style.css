@@ -321,9 +321,24 @@ button:hover, button:disabled {
     animation: pulse 2s infinite ease-in-out;
 }
 
-.quantum-potato {
-    background-color: #9e483b; /* Same as normal potato */
-    box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3); /* Red tint */
+@keyframes quantum-pulse {
+    0% { 
+        background-color: #9e483b;
+        box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3);
+    }
+    50% {
+        background-color: #b23c2d;
+        box-shadow: inset 0 0 20px rgba(255, 0, 0, 0.5);
+    }
+    100% {
+        background-color: #9e483b;
+        box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3);
+    }
+}
+
+.potato.quantum-potato {
+    background-color: #9e483b !important;
+    box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3) !important;
     animation: quantum-pulse 2s infinite alternate;
 }
 

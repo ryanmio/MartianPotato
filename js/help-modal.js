@@ -162,6 +162,31 @@ Your potato farm requires careful management of three essential resources:
 - **Mid Game**: Use automated systems like the Ice Melting Basin
 - **Late Game**: Access advanced technologies for direct resource generation
 
+## Game Progression
+
+### Early Game - Manual Operations
+The initial phase requires hands-on management:
+- Manually explore the Martian surface for resources
+- Plant and harvest potatoes one at a time
+- Melt ice manually to generate water
+- Save potatoes to purchase your first automation upgrades
+
+### Mid Game - Basic Automation
+As you acquire upgrades, operations become more automated:
+- Autonomous rovers handle planting and harvesting
+- Ice Melting Basin provides steady water supply
+- Resource gathering becomes more efficient
+- Focus shifts to managing your automated systems
+
+### Late Game - Full Automation
+Eventually, your colony becomes largely self-sustaining:
+- Advanced technologies generate resources automatically
+- Quantum systems dramatically increase efficiency
+- Multiple automation systems work together
+- Focus on optimization and expansion
+
+The game transitions naturally from active management to strategic oversight as you unlock more advanced technologies. While the early game may feel hands-on, patience and smart upgrade choices will lead to a thriving automated colony.
+
 ## Core Mechanics
 
 ### Growth System
@@ -210,7 +235,46 @@ Your potato farm requires careful management of three essential resources:
 - Maximize quantum potato production
 - Utilize all automated systems
 - Optimize your resource conversion rates
-- Experiment with different upgrade combinations`;
+- Experiment with different upgrade combinations
+
+## Upgrade System
+
+### Technology Tree
+Your colony's advancement is driven by milestone-based upgrades:
+- Each upgrade unlocks new technologies or capabilities
+- Higher-tier upgrades become visible as you progress
+- Some upgrades require previous technologies to be unlocked
+- Costs are displayed in potatoes - plan your harvests accordingly
+
+### Types of Upgrades
+
+#### Automation Upgrades
+- **Autonomous Planting Rovers**: Automatically plant new potatoes
+  - Can be purchased multiple times to increase efficiency
+  - Each rover increases automatic planting rate
+- **Autonomous Harvesting Rovers**: Automatically collect mature potatoes
+  - Multiple purchases increase collection speed
+  - Works alongside manual harvesting
+
+#### Resource Generation
+- **Ice Melting Basin**: Basic automated water production
+- **Nuclear Ice Melter**: Advanced ice-to-water conversion
+- **Subsurface Aquifer Tapper**: Direct water extraction
+- **Martian Polar Cap Extractor**: Large-scale ice collection
+
+#### Advanced Technologies
+- **Quantum Technologies**: Late-game upgrades for massive efficiency
+- **Specialized Equipment**: Unique tools for specific tasks
+- **Colony Expansion**: Increase your operation's scale
+- **Research Upgrades**: Improve overall efficiency
+
+### Purchasing Strategy
+1. Focus on automation upgrades early to reduce manual work
+2. Balance resource generation with consumption
+3. Save potatoes for important milestone upgrades
+4. Consider multiple rover purchases to increase automation speed
+
+Remember that some upgrades are one-time purchases that unlock new capabilities, while others (like rovers) can be bought multiple times for increased efficiency.`;
 
         console.log('Loading content...');
         

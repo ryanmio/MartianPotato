@@ -17,6 +17,10 @@ class GameSettings {
         this.loadSettings();
         this.initializeUI();
         this.bindEvents();
+        
+        // Initialize auto-save system
+        this.lastAutoSave = Date.now();
+        this.initializeAutoSave();
     }
 
     loadSettings() {
@@ -118,6 +122,24 @@ class GameSettings {
         }
     }
 
+    initializeAutoSave() {
+        // Clear any existing interval
+        if (this.autoSaveInterval) {
+            clearInterval(this.autoSaveInterval);
+            this.autoSaveInterval = null;
+        }
+
+        // Set up new interval if auto-save is enabled
+        if (this.settings.autoSave > 0) {
+            this.autoSaveInterval = setInterval(() => {
+                if (window.saveGame) {
+                    window.saveGame();
+                    // Don't show toast here - saveGame() handles its own toast
+                }
+            }, this.settings.autoSave * 1000);
+        }
+    }
+
     saveChanges() {
         const oldSettings = { ...this.settings };
         
@@ -132,6 +154,9 @@ class GameSettings {
             return;
         }
 
+        // Store old auto-save value for comparison
+        const oldAutoSave = this.settings.autoSave;
+
         this.settings.sound = soundToggle.checked;
         this.settings.animations = animationsToggle.checked;
         this.settings.toastLevel = toastLevelSelect.value;
@@ -140,11 +165,21 @@ class GameSettings {
         // Save to storage
         this.saveSettings();
         
+        // Reinitialize auto-save if the interval changed
+        if (oldAutoSave !== this.settings.autoSave) {
+            this.initializeAutoSave();
+        }
+        
         // Close modal
         this.closeModal();
         
-        // Show success message
-        showToast('Settings Updated', 'Your preferences have been saved.', 'success');
+        // Show success message with appropriate details
+        let message = 'Your preferences have been saved';
+        if (this.settings.autoSave > 0) {
+            const minutes = this.settings.autoSave / 60;
+            message += ` - Auto-save every ${minutes} minute${minutes > 1 ? 's' : ''}`;
+        }
+        window.showToast('Settings Updated', message, 'success');
     }
 }
 

@@ -112,12 +112,13 @@ class HelpModal {
             
             // Get the modal content element for scrolling
             const modalContent = this.content;
-            const headerHeight = 60; // Approximate height of the modal header
+            const headerHeight = 60; // Height of the modal header
+            const scrollPadding = 20; // Additional padding for visual comfort
             
-            // Calculate scroll position accounting for header
-            const scrollTop = element.offsetTop - headerHeight;
+            // Calculate scroll position with refined offset
+            const scrollTop = Math.max(0, element.offsetTop - headerHeight - scrollPadding);
             
-            console.log(`Scrolling to position: ${scrollTop}`);
+            console.log(`Scrolling to position: ${scrollTop} (offsetTop: ${element.offsetTop}, headerHeight: ${headerHeight}, padding: ${scrollPadding})`);
             modalContent.scrollTo({
                 top: scrollTop,
                 behavior: 'smooth'

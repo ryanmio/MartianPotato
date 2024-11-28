@@ -2508,7 +2508,7 @@ body:not(.animations-disabled) .potato .growth-indicator {
     padding: 20px;
     border-radius: 8px;
     width: 90%;
-    max-width: 500px;
+    max-width: 400px;
     position: relative;
     z-index: 1001;
 }

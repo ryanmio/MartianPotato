@@ -142,24 +142,27 @@ Welcome to your new role as Mars' premier potato farmer! Your mission is to esta
 
 As you progress, you'll unlock increasingly advanced technologies that transform your humble farming operation into an automated potato empire. Each breakthrough brings new possibilities, from simple automated planters to quantum technologies that push the boundaries of potato science.
 
-### Basic Controls
-- Click the "Plant Potato" button to plant your first potato
-- Click on fully grown potatoes (100%) to harvest them
-- Watch your resources (Water, Ice, Nutrients) - you'll need them to plant potatoes
-
-### Your First Steps
-1. Start by planting your first potato using the "Plant Potato" button
-2. While it grows, explore Mars to gather more resources
-3. Harvest your potato when it reaches 100% growth
-4. Use your harvested potatoes to unlock new features and upgrades
-
-## Core Mechanics
+## Gameplay Basics
 
 ### Resource Management
-- **Water**: Essential for potato growth
-- **Ice**: Can be melted into water
-- **Nutrients**: Required for healthy potato growth
-- **Potatoes**: Your main currency for upgrades
+Your potato farm requires careful management of three essential resources:
+
+- **Water**: Essential for potato growth. Initially obtained by melting ice, but later upgrades will allow direct water generation and more efficient ice melting.
+- **Ice**: Your primary source of water in the early game. Explore the Martian surface to find ice deposits and use various technologies to melt it efficiently.
+- **Nutrients**: Required for planting potatoes. Gather these through surface exploration and later through automated systems.
+
+### Planting and Growing
+1. Each potato requires both water and nutrients to plant
+2. Growth takes time - watch the percentage indicator
+3. Harvest potatoes when they reach 100% growth
+4. Harvested potatoes can be used to purchase upgrades
+
+### Resource Generation
+- **Early Game**: Manually explore Mars and melt ice
+- **Mid Game**: Use automated systems like the Ice Melting Basin
+- **Late Game**: Access advanced technologies for direct resource generation
+
+## Core Mechanics
 
 ### Growth System
 - Potatoes take time to grow from 0% to 100%

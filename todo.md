@@ -112,7 +112,7 @@ TODO:
             - [x] Handle interval changes
             - [x] Add save confirmation toasts
         - [ ] Toast notification system
-            - [ ] Implement notification filtering
+            - [x] Implement notification filtering
             - [ ] Handle importance levels
             - [ ] Test all notification scenarios
     - [x] Implement settings groups

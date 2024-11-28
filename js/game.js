@@ -1198,6 +1198,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Display a toast notification to the user
 window.showToast = function(title, message, type = 'achievement', duration = 3000) {
+    // Check toast level settings
+    if (window.gameSettings) {
+        const toastLevel = window.gameSettings.settings.toastLevel;
+        if (toastLevel === 'none') return;
+        if (toastLevel === 'important') {
+            // Only show important notifications
+            if (!['achievement', 'warning', 'setback'].includes(type)) {
+                return;
+            }
+        }
+    }
+
     console.log("Showing toast:", title, message, type);
     const toastContainer = document.getElementById('toast-container');
     

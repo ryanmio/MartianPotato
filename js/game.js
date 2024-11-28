@@ -435,18 +435,28 @@ function plantPotato() {
 // Update the growth stage of all planted potatoes
 function updatePotatoGrowth() {
     const currentTime = Date.now();
+    const animationsDisabled = document.body.classList.contains('animations-disabled');
+    
     potatoField = potatoField.map(potato => {
-        if (potato !== null) {
-            // Only update potatoes that are not fully grown
-            if (potato.growthStage < 100) {
-                const growthTime = currentTime - potato.plantedAt;
-                const actualGrowthTime = GROWTH_TIME * growthTimeMultiplier;
-                potato.growthStage = Math.min(100, Math.floor((growthTime / actualGrowthTime) * 100));
+        if (potato !== null && potato.growthStage < 100) {
+            const growthTime = currentTime - potato.plantedAt;
+            const actualGrowthTime = GROWTH_TIME * growthTimeMultiplier;
+            const newGrowthStage = Math.min(100, Math.floor((growthTime / actualGrowthTime) * 100));
+            
+            if (animationsDisabled) {
+                // When animations are disabled, only update on 5% increments
+                if (Math.floor(potato.growthStage / 5) !== Math.floor(newGrowthStage / 5)) {
+                    potato.growthStage = newGrowthStage;
+                }
+            } else {
+                // When animations are enabled, update every frame
+                potato.growthStage = newGrowthStage;
             }
         }
         return potato;
     });
-    updateDisplay();
+
+    updatePotatoFieldDisplay();
 }
 
 // Harvest a fully grown potato at the specified index
@@ -1188,6 +1198,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Display a toast notification to the user
 window.showToast = function(title, message, type = 'achievement', duration = 3000) {
+    // Check toast level settings
+    if (window.gameSettings) {
+        const toastLevel = window.gameSettings.settings.toastLevel;
+        if (toastLevel === 'none') return;
+        if (toastLevel === 'important') {
+            // Only show important notifications
+            if (!['achievement', 'warning', 'setback'].includes(type)) {
+                return;
+            }
+        }
+    }
+
     console.log("Showing toast:", title, message, type);
     const toastContainer = document.getElementById('toast-container');
     
@@ -1452,8 +1474,10 @@ function updatePotatoField() {
     }
 }
 
-// Update the visual representation of a single potato
+// Update the visual representation of a potato
 function updatePotatoElement(slotElement, potato) {
+    const animationsDisabled = document.body.classList.contains('animations-disabled');
+
     let potatoElement = slotElement.querySelector('.potato');
     if (!potatoElement) {
         potatoElement = document.createElement('div');
@@ -1464,26 +1488,42 @@ function updatePotatoElement(slotElement, potato) {
                 <span class="growth-text"></span>
             </div>
         `;
-                slotElement.appendChild(potatoElement);
-            }
+        slotElement.appendChild(potatoElement);
+    }
 
     const growthStage = potato.growthStage;
     const harvestableClass = growthStage >= 100 ? 'harvestable' : '';
     const quantumClass = potato.isQuantumSpawned ? 'quantum-potato' : '';
     const growthColor = growthStage < 33 ? 'rgba(139, 195, 74, 0.4)' : 
-                        growthStage < 66 ? 'rgba(76, 175, 80, 0.4)' : 
-                        'rgba(56, 142, 60, 0.4)';
+                       growthStage < 66 ? 'rgba(76, 175, 80, 0.4)' : 
+                       'rgba(56, 142, 60, 0.4)';
 
     potatoElement.className = `potato ${harvestableClass} ${quantumClass} ${potato.textureClass}`;
-            potatoElement.style.transform = `scale(${potato.scaleX}, ${potato.scaleY})`;
-            potatoElement.style.borderRadius = potato.borderRadius;
+    potatoElement.style.transform = `scale(${potato.scaleX}, ${potato.scaleY})`;
+    potatoElement.style.borderRadius = potato.borderRadius;
 
-            const growthIndicator = potatoElement.querySelector('.growth-indicator');
-    growthIndicator.style.height = `${growthStage}%`;
-    growthIndicator.style.backgroundColor = growthColor;
+    const growthIndicator = potatoElement.querySelector('.growth-indicator');
+    if (growthIndicator) {
+        if (animationsDisabled) {
+            // When animations are disabled, update in a single frame
+            requestAnimationFrame(() => {
+                growthIndicator.style.setProperty('transition', 'none', 'important');
+                growthIndicator.style.setProperty('height', `${growthStage}%`, 'important');
+                growthIndicator.style.backgroundColor = growthColor;
+                // Force reflow
+                growthIndicator.offsetHeight;
+            });
+        } else {
+            growthIndicator.style.removeProperty('transition');
+            growthIndicator.style.height = `${growthStage}%`;
+            growthIndicator.style.backgroundColor = growthColor;
+        }
+    }
     
     const growthText = potatoElement.querySelector('.growth-text');
-    growthText.textContent = `${growthStage}%`;
+    if (growthText) {
+        growthText.textContent = `${Math.floor(growthStage)}%`;
+    }
 }
 
 
@@ -2450,3 +2490,16 @@ function addNutrientProspectingRover() {
 
     nutrientProspectingRovers.push(rover);
 }
+
+// Add transition event listener to debug any transitions that occur
+document.addEventListener('DOMContentLoaded', () => {
+    document.body.addEventListener('transitionstart', (e) => {
+        if (document.body.classList.contains('animations-disabled')) {
+            console.log('🚨 Transition detected while animations disabled:', {
+                property: e.propertyName,
+                element: e.target,
+                elapsedTime: e.elapsedTime
+            });
+        }
+    }, true);
+});

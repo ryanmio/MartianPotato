@@ -68,6 +68,51 @@ TODO:
 - [x] Mobile styling
 - [x] Fix UI scaling and accessibility
 - [x] Fix Nuclear Ice Melter upgrade control switch bug
+- [x] Implement game settings
+    - [x] Create mobile-friendly settings modal
+        - [x] Design responsive layout
+        - [x] Implement open/close functionality
+        - [x] Add save/cancel buttons
+    - [x] Fix settings modal styling and layout
+        - [x] Center modal on desktop
+        - [x] Reduce modal size and add proper spacing
+        - [x] Fix mobile scrolling issues
+        - [x] Ensure save/cancel buttons are always visible
+        - [x] Add proper padding and margins
+        - [x] Improve toggle layout and sizing
+    - [x] Implement settings functionality
+        - [x] Sound toggle (placeholder)
+            - [x] Create game sound system structure
+            - [x] Add mute state to localStorage
+            - [x] Prepare sound toggle logic for future sound effects
+            - [x] Fix sound system state synchronization
+        - [x] Animation toggle
+            - [x] Add CSS class for disabling potato growth animation
+            - [x] Store animation preference in localStorage
+            - [x] Apply animation settings on game load
+            - [x] Update growth indicator visibility
+            - [x] Fix growth indicator animation behavior
+        - [x] Auto-save system
+            - [x] Implement interval-based saving
+            - [x] Handle interval changes
+            - [x] Add save confirmation toasts
+        - [x] Toast notification system
+            - [x] Implement notification filtering
+            - [x] Handle importance levels (using existing notification types)
+            - [x] Test all notification scenarios
+    - [x] Implement settings groups
+- [x] Implement toast notification settings
+    - [x] Add toggle for all toast notifications
+    - [x] Add option for "Important notifications only"
+    - [x] Create UI for notification preferences
+    - [x] Define which notifications are "important"
+    - [x] Persist notification settings in save game
+- [x] Settings UI fixes
+    - [x] Move animations toggle to graphics section
+    - [x] Reduce spacing between label and toggle
+    - [x] Update settings saved success message
+    - [x] Center settings modal on desktop
+    - [x] Fix modal background color (broken in 4bfc788)
 --------------------------------------------------------------------------------------------
 - [ ] Implement automation panel
     - [ ] Resource consumption + production rates per machine
@@ -83,43 +128,6 @@ TODO:
 - [ ] Implement nuclear meltdown if too much ice is melted too quickly
 - [ ] Create instructions for how to play
 - [ ] Write a README.md for the project
-- [ ] Implement game settings
-    - [x] Create mobile-friendly settings modal
-        - [x] Design responsive layout
-        - [x] Implement open/close functionality
-        - [x] Add save/cancel buttons
-    - [x] Fix settings modal styling and layout
-        - [x] Center modal on desktop
-        - [x] Reduce modal size and add proper spacing
-        - [x] Fix mobile scrolling issues
-        - [x] Ensure save/cancel buttons are always visible
-        - [x] Add proper padding and margins
-        - [x] Improve toggle layout and sizing
-    - [ ] Implement settings functionality
-        - [ ] Sound toggle (placeholder)
-            - [ ] Create game sound system structure
-            - [ ] Add mute state to localStorage
-            - [ ] Prepare sound toggle logic for future sound effects
-        - [ ] Animation toggle
-            - [ ] Add CSS class for disabling potato growth animation
-            - [ ] Store animation preference in localStorage
-            - [ ] Apply animation settings on game load
-            - [ ] Update growth indicator visibility
-        - [ ] Auto-save system
-            - [ ] Implement interval-based saving
-            - [ ] Handle interval changes
-            - [ ] Add save confirmation toasts
-        - [ ] Toast notification system
-            - [ ] Implement notification filtering
-            - [ ] Handle importance levels
-            - [ ] Test all notification scenarios
-    - [x] Implement settings groups
-- [ ] Implement toast notification settings
-    - [x] Add toggle for all toast notifications
-    - [x] Add option for "Important notifications only"
-    - [x] Create UI for notification preferences
-    - [x] Define which notifications are "important"
-    - [x] Persist notification settings in save game
 
 
 
@@ -161,4 +169,5 @@ Bugs/Issues:
 - [x] Manual ice melting is double counting clicks
 - [x] Exit to reality should open in the same tab not a new tab
 --------------------------------------------------------------------------------------------
-- quantum spud spawner poof appearing not on the potato but above
+- [ ] critical bug: upgrade modals are not working!
+- [ ] quantum spud spawner poof appearing not on the potato but above

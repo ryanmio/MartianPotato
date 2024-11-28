@@ -285,7 +285,6 @@ button:hover, button:disabled {
     left: 0;
     right: 0;
     background-color: rgba(76, 175, 80, 0.4);
-    transition: height 0.5s ease-out, opacity 0.3s ease;
     z-index: 5;
     opacity: 0;
 }
@@ -680,12 +679,12 @@ button:hover, button:disabled {
     border: 2px solid #102838;
     border-radius: 7px;
     display: inline-block;
-    width: 80px;
-    height: 40px;
+    width: 100px;
+    height: 50px;
     padding-top: 1px;
     position: relative;
     vertical-align: middle;
-    margin: 8px auto; 
+    margin: 14px auto;
     color: #297597;
     box-shadow: 0 0 5px rgba(255,255,255,.4), 
                 0 2px 1px -1px rgba(255,255,255,.7) inset, 
@@ -708,7 +707,7 @@ button:hover, button:disabled {
     background: linear-gradient(to right, #8FD9E4 0%,#A0F2FE 53%,#69DCF1 56%,#33AFCE 99%,#CEF5FF 100%);
     box-shadow: -2px 0 1px 0 #A6F2FE inset;
     border-radius: 5px;
-    line-height: 40px;
+    line-height: 50px;
     font-weight: bold;
     cursor: pointer;
     position: relative;
@@ -721,7 +720,7 @@ button:hover, button:disabled {
 }
 
 .toggle-switch div:first-letter {
-    letter-spacing: 32px; 
+    letter-spacing: 40px;
 }
 
 .toggle-switch :checked ~ div {
@@ -749,10 +748,10 @@ button:hover, button:disabled {
 
 .toggle-switch .indicator {
     position: absolute;
-    top: 10px;
-    right: -25px; 
+    top: 14px;
+    right: -25px;
     width: 8px;
-    height: 20px;
+    height: 25px;
     box-shadow: 0 0 8px #000 inset;
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 15px;
@@ -782,30 +781,41 @@ button:hover, button:disabled {
 
 /* Modals */
 .modal {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
     z-index: 1000;
+    overflow-y: auto;
 }
 
+/* Settings Modal Specific Styles */
 .settings-modal-content {
-    max-width: 400px;
+    position: relative;
+    background-color: white;
+    max-width: 500px;
     width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    background: white;
+    margin: 40px auto;
     padding: 20px;
     border-radius: 8px;
-    position: relative;
-    margin: 20px;
-    display: flex;
-    flex-direction: column;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal Close Button */
+.close-settings-modal {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.close-settings-modal:hover {
+    color: #333;
 }
 
 .settings-section {
@@ -896,7 +906,7 @@ button:hover, button:disabled {
 /* Mobile adjustments */
 @media (max-width: 600px) {
     .settings-modal-content {
-        width: 95%;
+        width: 90%;
         margin: 10px;
         max-height: 85vh;
         padding: 15px;
@@ -1175,7 +1185,7 @@ button:hover, button:disabled {
 
     /* Modal adjustments */
     .modal-content {
-        width: 95%;
+        width: 90%;
         padding: 15px;
     }
 
@@ -2053,13 +2063,14 @@ button:hover, button:disabled {
 .settings-modal-content {
     max-width: 500px;
     width: 90%;
+    padding: 20px;
 }
 
 .settings-section {
-    margin-bottom: 24px;
-    padding: 16px;
     background: #f5f5f5;
     border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
 }
 
 .settings-section h3 {
@@ -2071,10 +2082,10 @@ button:hover, button:disabled {
 
 .setting-item {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
-    gap: 12px;
     margin-bottom: 16px;
+    max-width: 100%;
 }
 
 .setting-item:last-child {
@@ -2082,17 +2093,26 @@ button:hover, button:disabled {
 }
 
 .setting-item label {
+    font-family: 'Courier New', monospace;
     font-size: 16px;
-    color: #444;
+    color: #333;
+    flex: 1;
 }
 
-.settings-select {
+.toggle-switch-container {
+    margin-left: 8px;
+    padding-right: 25px; /* Make room for indicator light */
+}
+
+/* Settings select */
+.settings-modal-content .settings-select {
+    width: 200px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
     background-color: white;
-    font-size: 14px;
-    min-width: 150px;
 }
 
 .placeholder-text {
@@ -2141,7 +2161,7 @@ button:hover, button:disabled {
 /* Mobile Responsiveness */
 @media (max-width: 600px) {
     .settings-modal-content {
-        width: 95%;
+        width: 90%;
         margin: 20px auto;
     }
 
@@ -2165,9 +2185,118 @@ button:hover, button:disabled {
 }
 
 /* Animation Control */
-.disable-animations * {
-    animation: none !important;
+.animations-disabled {
+    /* Disable all transitions */
     transition: none !important;
+}
+
+.animations-disabled * {
+    transition: none !important;
+    animation: none !important;
+}
+
+/* Specific animation overrides */
+.animations-disabled .potato .growth-indicator {
+    transition: none !important;
+}
+
+.animations-disabled .potato.harvestable {
+    animation: none !important;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.8) !important;
+}
+
+.animations-disabled .quantum-potato {
+    animation: none !important;
+    box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3) !important;
+}
+
+.animations-disabled .poof-animation-red {
+    display: none !important;
+}
+
+.animations-disabled #plant-button:active {
+    transform: translateY(4px);
+    transition: none !important;
+}
+
+/* Animation Control */
+.animations-disabled {
+    /* Disable all transitions */
+    transition: none !important;
+}
+
+.animations-disabled * {
+    transition: none !important;
+    animation: none !important;
+}
+
+/* Specific animation overrides */
+.animations-disabled .potato .growth-indicator {
+    /* Ensure no transitions are possible */
+    transition-property: none !important;
+    -webkit-transition-property: none !important;
+    -moz-transition-property: none !important;
+    -o-transition-property: none !important;
+    transition: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+    -moz-transform: none !important;
+    -o-transform: none !important;
+    animation: none !important;
+    -webkit-animation: none !important;
+    -moz-animation: none !important;
+    -o-animation: none !important;
+}
+
+.potato .growth-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(76, 175, 80, 0.4);
+    z-index: 5;
+    opacity: 0;
+}
+
+/* Only add transitions when animations are explicitly enabled */
+body:not(.animations-disabled) .potato .growth-indicator {
+    transition: height 0.5s ease-out;
+}
+
+.potato:hover .growth-indicator {
+    opacity: 1;
+}
+
+/* Animation Control */
+.animations-disabled .potato .growth-indicator {
+    /* Ensure no transitions are possible */
+    transition-property: none !important;
+    -webkit-transition-property: none !important;
+    -moz-transition-property: none !important;
+    -o-transition-property: none !important;
+    transition: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+    -moz-transform: none !important;
+    -o-transform: none !important;
+    animation: none !important;
+    -webkit-animation: none !important;
+    -moz-animation: none !important;
+    -o-animation: none !important;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
 .settings-row {
@@ -2181,10 +2310,214 @@ button:hover, button:disabled {
     margin-bottom: 0;
 }
 
-.setting-item {
+/* Settings labels */
+.setting-item label {
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    color: #333;
+    flex: 1;
+}
+
+/* Settings toggle container */
+.toggle-switch-container {
+    flex: 0 0 auto;
+    margin-left: 12px;
+}
+
+/* Settings select */
+.settings-modal-content .settings-select {
+    width: 200px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    background-color: white;
+}
+
+/* Settings Modal Toggle Switch Overrides */
+.settings-modal-content .toggle-switch {
+    width: 80px !important;  /* Smaller width for settings modal */
+    height: 40px !important; /* Smaller height for settings modal */
+}
+
+.settings-modal-content .toggle-switch div {
+    line-height: 40px !important; /* Match the new height */
+}
+
+.settings-modal-content .toggle-switch div:first-letter {
+    letter-spacing: 32px !important; /* Adjust letter spacing for smaller width */
+}
+
+.settings-modal-content .toggle-switch .indicator {
+    top: 8px !important;    /* Adjust for smaller height */
+    height: 20px !important; /* Smaller indicator */
+}
+
+.settings-modal-content .toggle-switch-container {
+    margin-left: 8px;
+    padding-right: 25px; /* Room for indicator */
+}
+
+/* Settings Modal Footer */
+.settings-footer {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
     display: flex;
-    justify-content: space-between;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.settings-button {
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+.settings-button:first-child {
+    background-color: #4CAF50;
+    color: white;
+    width: 100%;
+}
+
+.settings-button:last-child {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .settings-modal-content {
+        margin: 0;
+        min-height: 100vh;
+        border-radius: 0;
+    }
+
+    .settings-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 15px;
+        margin: 0;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        flex-direction: column;
+    }
+
+    .settings-button {
+        width: 100%;
+        margin: 0;
+        padding: 15px;
+        font-size: 18px;
+    }
+
+    .settings-button:first-child {
+        order: -1;
+    }
+}
+
+/* First, let's fix the base modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+/* Add specific styles for upgrade modal */
+.upgrade-modal-content {
+    position: relative;
+    background-color: white;
+    max-width: 500px;
+    width: 90%;
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure modals are centered */
+.modal {
+    display: none;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
+    justify-content: center;
+}
+
+.modal.show {
+    display: flex;
+}
+
+/* Fix z-index stacking */
+.modal-content {
+    position: relative;
+    z-index: 1001;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    margin: 20px auto;
+}
+
+/* Ensure close buttons are visible */
+.close-modal {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    z-index: 1002;
+}
+
+.close-modal:hover {
+    color: #333;
+}
+
+/* Upgrade Modal Specific Styles */
+.upgrade-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.upgrade-modal.show {
+    display: flex;
+}
+
+.upgrade-modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    z-index: 1001;
+}
+
+/* Ensure upgrade modals appear above other content */
+.upgrade-modal {
+    z-index: 1100;
+}
+
+.upgrade-modal-content {
+    z-index: 1101;
 }

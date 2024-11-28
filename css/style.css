@@ -1871,12 +1871,13 @@ button:hover, button:disabled {
     margin: auto;
     text-align: center;
     color: #00ff00;
-    padding: 40px;
+    padding: 20px 20px; /* Adjusted padding for mobile */
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 30px;
     font-family: monospace;
+    min-height: 100%; /* Ensure content fills the screen */
 }
 
 .glowing-potato {
@@ -2817,5 +2818,40 @@ body:not(.animations-disabled) .potato .growth-indicator {
     .help-section.highlight,
     .help-subsection.highlight {
         animation: highlight-section-dark 2s ease-out;
+    }
+}
+
+/* Mobile adjustments for final stats */
+@media screen and (max-width: 768px) {
+    .singularity-screen {
+        position: fixed;
+        height: 100%;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .singularity-content {
+        padding: 20px;
+        margin: 0 auto;
+        width: 90%;
+        gap: 0px;
+    }
+
+    .final-stats {
+        margin: 10px 0;
+        padding: 15px;
+    }
+
+    .final-buttons {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+        padding-bottom: 30px; /* Add padding at bottom for better scrolling */
+    }
+
+    .final-button {
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0;
     }
 }

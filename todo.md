@@ -121,10 +121,10 @@ TODO:
     - [ ] Machine states
     - [ ] Tooltips system
 - [ ] Enhance upgrade UI/UX
+    - [ ] Implement full screen upgrades modal
     - [ ] Implement upgrade categories
-    - [ ] Add cost history view
     - [ ] Update typography
-    - [ ] Improve upgrade descriptions
+    - [ ] Create menu instead of header buttons
 - [ ] Balance upgrade costs and effects
 - [ ] Implement nuclear meltdown if too much ice is melted too quickly
 - [ ] Write a README.md for the project

@@ -3139,3 +3139,8 @@ body:not(.animations-disabled) .potato .growth-indicator {
     align-items: center;
     gap: 5px;
 }
+
+.status-depleted {
+    background: #fff3e0;
+    color: #e65100;
+}

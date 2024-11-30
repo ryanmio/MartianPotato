@@ -2690,10 +2690,23 @@ function createAccordionDevice(device, container) {
         content.classList.add('expanded');
     }
 
+    // Check for resource depletion
+    let status = 'inactive';
+    let statusText = 'Inactive';
+    if (device.isActive) {
+        if (areResourcesDepleted) {
+            status = 'depleted';
+            statusText = 'Resources Depleted';
+        } else {
+            status = 'active';
+            statusText = 'Active';
+        }
+    }
+
     content.innerHTML = `
         <div class="device-details">
-            <div class="device-status ${device.isActive ? 'status-active' : 'status-inactive'}">
-                ${device.isActive ? 'Active' : 'Inactive'}
+            <div class="device-status status-${status}">
+                ${statusText}
             </div>
             <p>${device.description}</p>
             <div class="device-rates">

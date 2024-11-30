@@ -2637,10 +2637,19 @@ function updateAutomationDevices() {
             if (cardId === 'ice-melting-container') return;
 
             const id = cardId.replace('-container', '');
-            const statusVarName = `is${id.split('-').map(word => 
-                word.charAt(0).toUpperCase() + word.slice(1)
-            ).join('')}Active`;
-            const isActive = window[statusVarName] || false;
+            
+            // Special case for nuclear ice melter
+            let isActive;
+            if (id === 'nuclear-ice-melter') {
+                // Access the global variable directly
+                isActive = isNuclearIceMelterActive;
+                console.log('Nuclear ice melter status:', isActive, 'Direct variable:', isNuclearIceMelterActive); // Debug log
+            } else {
+                const statusVarName = `is${id.split('-').map(word => 
+                    word.charAt(0).toUpperCase() + word.slice(1)
+                ).join('')}Active`;
+                isActive = window[statusVarName] || false;
+            }
             
             createAccordionDevice({
                 id,

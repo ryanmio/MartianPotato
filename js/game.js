@@ -2616,7 +2616,7 @@ function updateAutomationDevices() {
             description: 'Automatically harvests mature potatoes.',
             isActive: true,
             rates: {
-                production: ['🥔', 'Harvests when ready']
+                production: [['🥔', 'Harvests when ready']]
             }
         }, container);
     }
@@ -2631,7 +2631,7 @@ function updateAutomationDevices() {
             description: 'Deploys rovers to prospect for nutrients in Martian regolith.',
             isActive: true,
             rates: {
-                production: ['🧪', '6 nutrients every 20 seconds']
+                production: [['🧪', '6 nutrients every 20 seconds']]
             }
         }, container);
     }
@@ -2692,7 +2692,9 @@ function createAccordionDevice(device, container) {
                     `<span class="rate-item">${device.rates.consumption[0]} ${device.rates.consumption[1]}</span>` : 
                     ''}
                 ${device.rates.production ? 
-                    `<span class="rate-item">${device.rates.production[0]} ${device.rates.production[1]}</span>` : 
+                    device.rates.production.map(rate => 
+                        `<span class="rate-item">${rate[0]} ${rate[1]}</span>`
+                    ).join('') : 
                     ''}
             </div>
         </div>
@@ -2731,27 +2733,33 @@ function getDeviceRates(id) {
     const rates = {
         'subsurface-aquifer-tapper': {
             consumption: ['🥔', '1 potato per second'],
-            production: ['💧', '3 water per second']
+            production: [['💧', '3 water per second']]
         },
         'bucket-wheel-excavator': {
             consumption: ['🥔', '1 potato per second'],
-            production: ['🧪', '4 nutrients and 2 ice per second']
+            production: [
+                ['🧪', '4 nutrients per second'],
+                ['🧊', '2 ice per second']
+            ]
         },
         'polar-cap-mining': {
             consumption: ['🥔', '1 potato per second'],
-            production: ['🧊', '4 ice per second']
+            production: [['🧊', '4 ice per second']]
         },
         'cometary-ice-harvester': {
             consumption: ['🥔', '5 potatoes per cycle'],
-            production: ['🧊', '50 ice per cycle']
+            production: [['🧊', '50 ice per cycle']]
         },
         'subterranean-tuber-tunneler': {
             consumption: ['🥔', '1 potato per 2 seconds'],
-            production: ['🧪', '2 nutrients and 2 ice per 2 seconds']
+            production: [
+                ['🧪', '2 nutrients per 2 seconds'],
+                ['🧊', '2 ice per 2 seconds']
+            ]
         },
         'quantum-spud-spawner': {
             consumption: ['🥔', '1 potato to activate'],
-            production: ['🥔', 'Instant planting and harvesting']
+            production: [['🥔', 'Instant planting and harvesting']]
         }
     };
     return rates[id] || {};

@@ -2647,14 +2647,15 @@ function updateAutomationDevices() {
                 case 'polar-cap-mining':
                     isActive = isPolarCapMiningActive;
                     break;
+                case 'quantum-spud-spawner':
+                    isActive = isQuantumSpudSpawnerActive;
+                    break;
                 default:
                     const statusVarName = `is${id.split('-').map(word => 
                         word.charAt(0).toUpperCase() + word.slice(1)
                     ).join('')}Active`;
                     isActive = window[statusVarName] || false;
             }
-            
-            console.log(`Device ${id} status:`, isActive); // Debug log
             
             createAccordionDevice({
                 id,
@@ -2777,7 +2778,11 @@ function getDeviceRates(id) {
         },
         'quantum-spud-spawner': {
             consumption: ['🥔', '1 potato to activate'],
-            production: ['Instant planting and harvesting']
+            production: 'Instantly plants and harvests potatoes in all field slots'
+        },
+        'martian-potato-colonizer': {
+            consumption: ['🥔', '1 potato per cycle'],
+            production: 'Exponentially increasing resource production over time'
         }
     };
     return rates[id] || {};

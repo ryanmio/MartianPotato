@@ -138,8 +138,7 @@ button:hover, button:disabled {
     border-radius: 50%;
     animation: poofEffectRed 0.5s ease-out forwards;
     pointer-events: none;
-    z-index: 9999;
-    /* Center the poof */
+    z-index: 100; /* Lower than the panel */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

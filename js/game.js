@@ -2638,18 +2638,23 @@ function updateAutomationDevices() {
 
             const id = cardId.replace('-container', '');
             
-            // Special case for nuclear ice melter
+            // Get device status
             let isActive;
-            if (id === 'nuclear-ice-melter') {
-                // Access the global variable directly
-                isActive = isNuclearIceMelterActive;
-                console.log('Nuclear ice melter status:', isActive, 'Direct variable:', isNuclearIceMelterActive); // Debug log
-            } else {
-                const statusVarName = `is${id.split('-').map(word => 
-                    word.charAt(0).toUpperCase() + word.slice(1)
-                ).join('')}Active`;
-                isActive = window[statusVarName] || false;
+            switch (id) {
+                case 'nuclear-ice-melter':
+                    isActive = isNuclearIceMelterActive;
+                    break;
+                case 'polar-cap-mining':
+                    isActive = isPolarCapMiningActive;
+                    break;
+                default:
+                    const statusVarName = `is${id.split('-').map(word => 
+                        word.charAt(0).toUpperCase() + word.slice(1)
+                    ).join('')}Active`;
+                    isActive = window[statusVarName] || false;
             }
+            
+            console.log(`Device ${id} status:`, isActive); // Debug log
             
             createAccordionDevice({
                 id,

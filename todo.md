@@ -175,53 +175,60 @@ Bugs/Issues:
 # Automation Panel Implementation Plan
 
 ## UI Components
-- [ ] Create sidebar/modal container for automation panel
-  - Desktop: Right-side sliding panel
-  - Mobile: Full-screen modal (reuse existing modal styles)
-- [ ] Add toggle button in game header
-- [ ] Create automation device card component
-  - Device icon/image
-  - Name and description
-  - Status indicator (active/inactive)
-  - Resource consumption/production rates
+- [x] Create sidebar/modal container for automation panel
+  - [x] Desktop: Right-side sliding panel
+  - [x] Mobile: Full-screen modal (reuse existing modal styles)
+- [x] Add toggle button in game header
+- [x] Create basic automation device list
+  - [x] Show rover counts
+  - [x] Show unlocked automation devices
+
+## Next Steps
+- [ ] Convert to accordion layout
+  - [ ] Add expand/collapse functionality
+  - [ ] Style accordion headers
+  - [ ] Animate expand/collapse transitions
+  - [ ] Add device details in expanded view:
+    - [ ] Device icon/image
+    - [ ] Status indicator (active/inactive)
+    - [ ] Resource consumption/production rates
+    - [ ] Description
 
 ## JavaScript Implementation
-- [ ] Add automation panel state management
-  - Track panel open/close state
-  - Handle responsive layout changes
-- [ ] Create automation device list from existing upgrades
-  - Filter upgrades for automation devices
-  - Format device data for display
-- [ ] Implement panel toggle functionality
-  - Desktop slide animation
-  - Mobile modal behavior
-- [ ] Add device status tracking
-  - Monitor active/inactive states
-  - Update resource rates display
+- [x] Add automation panel state management
+  - [x] Track panel open/close state
+  - [x] Handle responsive layout changes
+- [x] Create automation device list from existing upgrades
+  - [x] Show rovers with counts
+  - [x] Show unlocked action cards
+- [ ] Implement accordion functionality
+  - [ ] Track expanded/collapsed state per device
+  - [ ] Handle expand/collapse transitions
+  - [ ] Update device states in real-time
 
 ## CSS Styling
-- [ ] Create sidebar panel styles
-  - Slide-out animation
-  - Responsive breakpoints
-  - Consistent theme with existing UI
-- [ ] Style automation device cards
-  - Grid/flex layout
-  - Status indicators
-  - Resource rate displays
-- [ ] Add mobile-specific styles
-  - Modal overlay
-  - Full-screen layout
-  - Touch-friendly spacing
+- [x] Create sidebar panel styles
+  - [x] Slide-out animation
+  - [x] Responsive breakpoints
+  - [x] Consistent theme with existing UI
+- [x] Style basic device list
+  - [x] Clean, readable layout
+  - [x] Consistent spacing
+- [ ] Style accordion components
+  - [ ] Expandable headers
+  - [ ] Content areas
+  - [ ] Expansion indicators
+  - [ ] Hover and active states
 
 ## Integration
-- [ ] Connect with existing upgrade system
-- [ ] Integrate with resource tracking
-- [ ] Add responsive layout handlers
-- [ ] Test cross-browser compatibility
+- [x] Connect with existing upgrade system
+- [x] Integrate with resource tracking
+- [x] Add responsive layout handlers
+- [ ] Enhance device status tracking
 
 ## Testing
-- [ ] Verify desktop sidebar behavior
-- [ ] Test mobile modal functionality
-- [ ] Check responsive layout transitions
+- [x] Verify desktop sidebar behavior
+- [x] Test mobile modal functionality
+- [ ] Test accordion interactions
 - [ ] Validate device status updates
-- [ ] Test resource rate displays
+- [ ] Test responsive layout transitions

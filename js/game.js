@@ -168,6 +168,9 @@ document.addEventListener('visibilitychange', () => {
 // Add to the game state variables section
 let isAutomationPanelOpen = false;
 
+// Add to game state variables
+let expandedDevices = new Set();
+
 // ==========================================
 //            CORE GAME FUNCTIONS
 // ==========================================
@@ -2585,9 +2588,6 @@ function toggleAutomationPanel() {
 function updateAutomationDevices() {
     console.log('Updating automation devices...');
     const container = document.getElementById('automation-devices');
-    console.log('Container exists:', !!container);
-    console.log('Panel is open:', isAutomationPanelOpen);
-    
     if (!container || !isAutomationPanelOpen) {
         console.warn('Cannot update: container missing or panel closed');
         return;
@@ -2595,46 +2595,147 @@ function updateAutomationDevices() {
 
     // Clear existing content
     container.innerHTML = '';
-    console.log('Cleared container');
 
     // Add rovers if any exist
     if (autoplanters.length > 0) {
-        const div = document.createElement('div');
-        div.className = 'automation-device';
-        div.textContent = `Autonomous Planting Rovers: ${autoplanters.length}`;
-        container.appendChild(div);
-        console.log('Added planting rovers:', autoplanters.length);
+        createAccordionDevice({
+            id: 'planting-rovers',
+            title: `Autonomous Planting Rovers: ${autoplanters.length}`,
+            description: 'Automatically plants potatoes in empty field slots.',
+            isActive: true,
+            rates: {
+                production: 'Plants 1 potato every 2 seconds'
+            }
+        }, container);
     }
 
     if (autoHarvesters.length > 0) {
-        const div = document.createElement('div');
-        div.className = 'automation-device';
-        div.textContent = `Autonomous Harvesting Rovers: ${autoHarvesters.length}`;
-        container.appendChild(div);
-        console.log('Added harvesting rovers:', autoHarvesters.length);
+        createAccordionDevice({
+            id: 'harvesting-rovers',
+            title: `Autonomous Harvesting Rovers: ${autoHarvesters.length}`,
+            description: 'Automatically harvests mature potatoes.',
+            isActive: true,
+            rates: {
+                production: 'Harvests mature potatoes automatically'
+            }
+        }, container);
     }
 
     if (window.nutrientProspectingRovers > 0) {
-        const div = document.createElement('div');
-        div.className = 'automation-device';
-        div.textContent = `Nutrient Prospecting Rovers: ${window.nutrientProspectingRovers}`;
-        container.appendChild(div);
-        console.log('Added prospecting rovers:', window.nutrientProspectingRovers);
+        createAccordionDevice({
+            id: 'prospecting-rovers',
+            title: `Nutrient Prospecting Rovers: ${window.nutrientProspectingRovers}`,
+            description: 'Deploys rovers to prospect for nutrients in Martian regolith.',
+            isActive: true,
+            rates: {
+                production: 'Generates 6 nutrients every 20 seconds'
+            }
+        }, container);
     }
 
     // Add unlocked action cards
-    console.log('Window unlockedActionCards:', window.unlockedActionCards);
     if (Array.isArray(window.unlockedActionCards)) {
-        window.unlockedActionCards.forEach((cardId, index) => {
-            console.log(`Processing card ${index}:`, cardId);
-            const div = document.createElement('div');
-            div.className = 'automation-device';
-            const displayName = cardId.replace('-container', '').replace(/-/g, ' ');
-            div.textContent = displayName;
-            container.appendChild(div);
-            console.log('Added device:', displayName);
+        window.unlockedActionCards.forEach(cardId => {
+            // Skip manual operations
+            if (cardId === 'ice-melting-container') return;
+
+            const id = cardId.replace('-container', '');
+            // Fix status detection by using the correct variable name format
+            const statusVarName = `is${id.split('-').map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1)
+            ).join('')}Active`;
+            const isActive = window[statusVarName] || false;
+            
+            createAccordionDevice({
+                id,
+                title: id.replace(/-/g, ' '),
+                description: getDeviceDescription(id),
+                isActive,
+                rates: getDeviceRates(id)
+            }, container);
         });
     }
+}
 
-    console.log('Finished updating automation devices');
+function createAccordionDevice(device, container) {
+    const deviceEl = document.createElement('div');
+    deviceEl.className = 'automation-device';
+    deviceEl.id = `device-${device.id}`;
+
+    const header = document.createElement('div');
+    header.className = 'device-header';
+    if (expandedDevices.has(device.id)) {
+        header.classList.add('expanded');
+    }
+
+    header.innerHTML = `
+        <span>${device.title}</span>
+        <span class="expand-icon">▼</span>
+    `;
+
+    const content = document.createElement('div');
+    content.className = 'device-content';
+    if (expandedDevices.has(device.id)) {
+        content.classList.add('expanded');
+    }
+
+    content.innerHTML = `
+        <div class="device-details">
+            <div class="device-status ${device.isActive ? 'status-active' : 'status-inactive'}">
+                ${device.isActive ? 'Active' : 'Inactive'}
+            </div>
+            <p>${device.description}</p>
+            <div class="device-rates">
+                ${device.rates.consumption ? 
+                    `<span class="rate-item">📉 ${device.rates.consumption}</span>` : 
+                    ''}
+                ${device.rates.production ? 
+                    `<span class="rate-item">📈 ${device.rates.production}</span>` : 
+                    ''}
+            </div>
+        </div>
+    `;
+
+    header.addEventListener('click', () => {
+        const isExpanded = expandedDevices.has(device.id);
+        if (isExpanded) {
+            expandedDevices.delete(device.id);
+        } else {
+            expandedDevices.add(device.id);
+        }
+        header.classList.toggle('expanded');
+        content.classList.toggle('expanded');
+    });
+
+    deviceEl.appendChild(header);
+    deviceEl.appendChild(content);
+    container.appendChild(deviceEl);
+}
+
+function getDeviceDescription(id) {
+    const descriptions = {
+        'subsurface-aquifer-tapper': 'Accesses underground water reserves to produce water.',
+        'bucket-wheel-excavator': 'A massive mobile strip-mining machine that generates nutrients and ice.',
+        'quantum-spud-spawner': 'Harnesses quantum mechanics for potato farming.',
+        'polar-cap-mining': 'Enables mining operations at Mars\' polar caps.',
+        'cometary-ice-harvester': 'Harnesses passing comets to harvest ice.',
+        'subterranean-tuber-tunneler': 'Burrows beneath the Martian surface.',
+        // Add more descriptions as needed
+    };
+    return descriptions[id] || 'No description available';
+}
+
+function getDeviceRates(id) {
+    const rates = {
+        'subsurface-aquifer-tapper': {
+            consumption: '1 potato per second',
+            production: '3 water per second'
+        },
+        'bucket-wheel-excavator': {
+            consumption: '1 potato per second',
+            production: '4 nutrients and 2 ice per second'
+        },
+        // Add more rates as needed
+    };
+    return rates[id] || {};
 }

@@ -2588,10 +2588,7 @@ function toggleAutomationPanel() {
 function updateAutomationDevices() {
     console.log('Updating automation devices...');
     const container = document.getElementById('automation-devices');
-    if (!container || !isAutomationPanelOpen) {
-        console.warn('Cannot update: container missing or panel closed');
-        return;
-    }
+    if (!container || !isAutomationPanelOpen) return;
 
     // Clear existing content
     container.innerHTML = '';
@@ -2604,7 +2601,7 @@ function updateAutomationDevices() {
             description: 'Automatically plants potatoes in empty field slots.',
             isActive: true,
             rates: {
-                consumption: ['🥔', '1 potato per plant']
+                production: 'Plants 1 potato every 2 seconds'
             }
         }, container);
     }
@@ -2616,22 +2613,20 @@ function updateAutomationDevices() {
             description: 'Automatically harvests mature potatoes.',
             isActive: true,
             rates: {
-                production: [['🥔', 'Harvests when ready']]
+                production: 'Harvests potatoes when ready'
             }
         }, container);
     }
 
-    // Fix: Check the correct variable for nutrient prospecting rovers
-    const nutrientRovers = window.nutrientProspectingRovers || 0;
-    console.log('Nutrient rovers:', nutrientRovers);
-    if (nutrientRovers > 0) {
+    // Fix: Check array length for nutrient rovers
+    if (Array.isArray(nutrientProspectingRovers) && nutrientProspectingRovers.length > 0) {
         createAccordionDevice({
             id: 'prospecting-rovers',
-            title: `Nutrient Prospecting Rovers: ${nutrientRovers}`,
+            title: `Nutrient Prospecting Rovers: ${nutrientProspectingRovers.length}`,
             description: 'Deploys rovers to prospect for nutrients in Martian regolith.',
             isActive: true,
             rates: {
-                production: [['🧪', '6 nutrients every 20 seconds']]
+                production: 'Generates 6 nutrients every 20 seconds'
             }
         }, container);
     }
@@ -2639,7 +2634,6 @@ function updateAutomationDevices() {
     // Add unlocked action cards
     if (Array.isArray(window.unlockedActionCards)) {
         window.unlockedActionCards.forEach(cardId => {
-            // Skip manual operations
             if (cardId === 'ice-melting-container') return;
 
             const id = cardId.replace('-container', '');
@@ -2692,9 +2686,12 @@ function createAccordionDevice(device, container) {
                     `<span class="rate-item rate-cost">${device.rates.consumption[0]} ${device.rates.consumption[1]}</span>` : 
                     ''}
                 ${device.rates.production ? 
-                    device.rates.production.map(rate => 
-                        `<span class="rate-item rate-reward">${rate[0]} ${rate[1]}</span>`
-                    ).join('') : 
+                    (Array.isArray(device.rates.production) ? 
+                        device.rates.production.map(rate => 
+                            `<span class="rate-item rate-reward">${rate[0]} ${rate[1]}</span>`
+                        ).join('') :
+                        `<span class="rate-item rate-reward">${device.rates.production}</span>`
+                    ) : 
                     ''}
             </div>
         </div>
@@ -2720,6 +2717,7 @@ function getDeviceDescription(id) {
     const descriptions = {
         'subsurface-aquifer-tapper': 'Accesses underground water reserves to produce water.',
         'bucket-wheel-excavator': 'A massive mobile strip-mining machine that generates nutrients and ice.',
+        'nuclear-ice-melter': 'A nuclear-powered ice melter that rapidly converts ice to water.',
         'quantum-spud-spawner': 'Harnesses quantum mechanics for potato farming.',
         'polar-cap-mining': 'Enables mining operations at Mars\' polar caps.',
         'cometary-ice-harvester': 'Harnesses passing comets to harvest ice.',
@@ -2742,6 +2740,10 @@ function getDeviceRates(id) {
                 ['🧊', '2 ice per second']
             ]
         },
+        'nuclear-ice-melter': {
+            consumption: ['🥔', '100 potatoes to activate'],
+            production: [['🧊', 'Melts chosen percentage of ice per second']]
+        },
         'polar-cap-mining': {
             consumption: ['🥔', '1 potato per second'],
             production: [['🧊', '4 ice per second']]
@@ -2759,7 +2761,7 @@ function getDeviceRates(id) {
         },
         'quantum-spud-spawner': {
             consumption: ['🥔', '1 potato to activate'],
-            production: [['🥔', 'Instant planting and harvesting']]
+            production: ['Instant planting and harvesting']
         }
     };
     return rates[id] || {};

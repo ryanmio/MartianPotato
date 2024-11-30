@@ -2802,9 +2802,10 @@ body:not(.animations-disabled) .potato .growth-indicator {
     100% { background-color: transparent; }
 }
 
-.help-section.highlight,
-.help-subsection.highlight {
-    animation: highlight-section 2s ease-out;
+    .help-section.highlight,
+    .help-subsection.highlight {
+        animation: highlight-section 2s ease-out;
+    }
 }
 
 /* Dark theme support for highlight */
@@ -2979,15 +2980,28 @@ body:not(.animations-disabled) .potato .growth-indicator {
 
 .device-rates {
     display: flex;
+    flex-direction: column;
     gap: 10px;
-    font-size: 12px;
-    color: #333;
+    font-size: 14px;
+    color: #666;
 }
 
 .rate-item {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.rate-cost {
+    background: rgba(255, 200, 200, 0.2);
+    border-left: 3px solid #ffcccc;
+}
+
+.rate-reward {
+    background: rgba(200, 255, 200, 0.2);
+    border-left: 3px solid #ccffcc;
 }
 
 /* Mobile Styles */

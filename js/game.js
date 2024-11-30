@@ -2689,11 +2689,11 @@ function createAccordionDevice(device, container) {
             <p>${device.description}</p>
             <div class="device-rates">
                 ${device.rates.consumption ? 
-                    `<span class="rate-item">${device.rates.consumption[0]} ${device.rates.consumption[1]}</span>` : 
+                    `<span class="rate-item rate-cost">${device.rates.consumption[0]} ${device.rates.consumption[1]}</span>` : 
                     ''}
                 ${device.rates.production ? 
                     device.rates.production.map(rate => 
-                        `<span class="rate-item">${rate[0]} ${rate[1]}</span>`
+                        `<span class="rate-item rate-reward">${rate[0]} ${rate[1]}</span>`
                     ).join('') : 
                     ''}
             </div>

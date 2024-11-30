@@ -2731,6 +2731,8 @@ function getDeviceDescription(id) {
         'polar-cap-mining': 'Enables mining operations at Mars\' polar caps.',
         'cometary-ice-harvester': 'Harnesses passing comets to harvest ice.',
         'subterranean-tuber-tunneler': 'Burrows beneath the Martian surface.',
+        'martian-potato-colonizer': 'Deploys autonomous potato colonies across Mars, exponentially increasing resource production over time.',
+        'ice-melting-basin': 'A large basin that efficiently melts ice into water in batches.',
         // Add more descriptions as needed
     };
     return descriptions[id] || 'No description available';

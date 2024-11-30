@@ -2604,7 +2604,7 @@ function updateAutomationDevices() {
             description: 'Automatically plants potatoes in empty field slots.',
             isActive: true,
             rates: {
-                production: 'Plants 1 potato every 2 seconds'
+                consumption: ['🥔', '1 potato per plant']
             }
         }, container);
     }
@@ -2616,19 +2616,22 @@ function updateAutomationDevices() {
             description: 'Automatically harvests mature potatoes.',
             isActive: true,
             rates: {
-                production: 'Harvests mature potatoes automatically'
+                production: ['🥔', 'Harvests when ready']
             }
         }, container);
     }
 
-    if (window.nutrientProspectingRovers > 0) {
+    // Fix: Check the correct variable for nutrient prospecting rovers
+    const nutrientRovers = window.nutrientProspectingRovers || 0;
+    console.log('Nutrient rovers:', nutrientRovers);
+    if (nutrientRovers > 0) {
         createAccordionDevice({
             id: 'prospecting-rovers',
-            title: `Nutrient Prospecting Rovers: ${window.nutrientProspectingRovers}`,
+            title: `Nutrient Prospecting Rovers: ${nutrientRovers}`,
             description: 'Deploys rovers to prospect for nutrients in Martian regolith.',
             isActive: true,
             rates: {
-                production: 'Generates 6 nutrients every 20 seconds'
+                production: ['🧪', '6 nutrients every 20 seconds']
             }
         }, container);
     }
@@ -2640,7 +2643,6 @@ function updateAutomationDevices() {
             if (cardId === 'ice-melting-container') return;
 
             const id = cardId.replace('-container', '');
-            // Fix status detection by using the correct variable name format
             const statusVarName = `is${id.split('-').map(word => 
                 word.charAt(0).toUpperCase() + word.slice(1)
             ).join('')}Active`;
@@ -2687,10 +2689,10 @@ function createAccordionDevice(device, container) {
             <p>${device.description}</p>
             <div class="device-rates">
                 ${device.rates.consumption ? 
-                    `<span class="rate-item">📉 ${device.rates.consumption}</span>` : 
+                    `<span class="rate-item">${device.rates.consumption[0]} ${device.rates.consumption[1]}</span>` : 
                     ''}
                 ${device.rates.production ? 
-                    `<span class="rate-item">📈 ${device.rates.production}</span>` : 
+                    `<span class="rate-item">${device.rates.production[0]} ${device.rates.production[1]}</span>` : 
                     ''}
             </div>
         </div>
@@ -2728,14 +2730,29 @@ function getDeviceDescription(id) {
 function getDeviceRates(id) {
     const rates = {
         'subsurface-aquifer-tapper': {
-            consumption: '1 potato per second',
-            production: '3 water per second'
+            consumption: ['🥔', '1 potato per second'],
+            production: ['💧', '3 water per second']
         },
         'bucket-wheel-excavator': {
-            consumption: '1 potato per second',
-            production: '4 nutrients and 2 ice per second'
+            consumption: ['🥔', '1 potato per second'],
+            production: ['🧪', '4 nutrients and 2 ice per second']
         },
-        // Add more rates as needed
+        'polar-cap-mining': {
+            consumption: ['🥔', '1 potato per second'],
+            production: ['🧊', '4 ice per second']
+        },
+        'cometary-ice-harvester': {
+            consumption: ['🥔', '5 potatoes per cycle'],
+            production: ['🧊', '50 ice per cycle']
+        },
+        'subterranean-tuber-tunneler': {
+            consumption: ['🥔', '1 potato per 2 seconds'],
+            production: ['🧪', '2 nutrients and 2 ice per 2 seconds']
+        },
+        'quantum-spud-spawner': {
+            consumption: ['🥔', '1 potato to activate'],
+            production: ['🥔', 'Instant planting and harvesting']
+        }
     };
     return rates[id] || {};
 }

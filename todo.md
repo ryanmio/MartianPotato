@@ -184,15 +184,15 @@ Bugs/Issues:
   - [x] Show unlocked automation devices
 
 ## Next Steps
-- [ ] Convert to accordion layout
-  - [ ] Add expand/collapse functionality
-  - [ ] Style accordion headers
-  - [ ] Animate expand/collapse transitions
-  - [ ] Add device details in expanded view:
-    - [ ] Device icon/image
-    - [ ] Status indicator (active/inactive)
-    - [ ] Resource consumption/production rates
-    - [ ] Description
+- [x] Convert to accordion layout
+  - [x] Add expand/collapse functionality
+  - [x] Style accordion headers
+  - [x] Animate expand/collapse transitions
+  - [x] Add device details in expanded view:
+    - [x] Device icon/image
+    - [x] Status indicator (active/inactive)
+    - [x] Resource consumption/production rates
+    - [x] Description
 
 ## JavaScript Implementation
 - [x] Add automation panel state management
@@ -201,10 +201,10 @@ Bugs/Issues:
 - [x] Create automation device list from existing upgrades
   - [x] Show rovers with counts
   - [x] Show unlocked action cards
-- [ ] Implement accordion functionality
-  - [ ] Track expanded/collapsed state per device
-  - [ ] Handle expand/collapse transitions
-  - [ ] Update device states in real-time
+- [x] Implement accordion functionality
+  - [x] Track expanded/collapsed state per device
+  - [x] Handle expand/collapse transitions
+  - [x] Update device states in real-time
 
 ## CSS Styling
 - [x] Create sidebar panel styles
@@ -214,11 +214,11 @@ Bugs/Issues:
 - [x] Style basic device list
   - [x] Clean, readable layout
   - [x] Consistent spacing
-- [ ] Style accordion components
-  - [ ] Expandable headers
-  - [ ] Content areas
-  - [ ] Expansion indicators
-  - [ ] Hover and active states
+- [x] Style accordion components
+  - [x] Expandable headers
+  - [x] Content areas
+  - [x] Expansion indicators
+  - [x] Hover and active states
 
 ## Integration
 - [x] Connect with existing upgrade system
@@ -232,3 +232,8 @@ Bugs/Issues:
 - [ ] Test accordion interactions
 - [ ] Validate device status updates
 - [ ] Test responsive layout transitions
+
+## Current Issues to Fix
+- [ ] Update resource emojis to be more specific (🥔 for costs, 💧 for water, etc.)
+- [ ] Fix nutrient prospecting rover not showing in panel
+- [ ] Ensure all device states are correctly tracked

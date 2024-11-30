@@ -120,6 +120,9 @@
                 <button id="chart-button">📊</button>
                 <button id="help-button" onclick="helpModal.open()">📚</button>
             </div>
+            <button id="automation-panel-toggle" class="header-button" title="Automation Panel">
+                🤖
+            </button>
         </div>
         <button id="plant-button">Plant Potato</button>
         <div id="stats-container">
@@ -401,6 +404,17 @@
             <div class="settings-footer">
                 <button id="save-settings" class="settings-button">Save Changes</button>
                 <button id="cancel-settings" class="settings-button">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <div id="automation-panel" class="panel">
+        <div class="panel-header">
+            <h2>Automation</h2>
+            <button class="close-panel">×</button>
+        </div>
+        <div class="panel-content">
+            <div id="automation-devices" class="automation-grid">
+                <!-- Automation devices will be dynamically added here -->
             </div>
         </div>
     </div>

@@ -171,3 +171,57 @@ Bugs/Issues:
 - [x] critical bug: upgrade modals are not working!
 - [x] quantum spud spawner poof appearing not on the potato but above
 --------------------------------------------------------------------------------------------
+
+# Automation Panel Implementation Plan
+
+## UI Components
+- [ ] Create sidebar/modal container for automation panel
+  - Desktop: Right-side sliding panel
+  - Mobile: Full-screen modal (reuse existing modal styles)
+- [ ] Add toggle button in game header
+- [ ] Create automation device card component
+  - Device icon/image
+  - Name and description
+  - Status indicator (active/inactive)
+  - Resource consumption/production rates
+
+## JavaScript Implementation
+- [ ] Add automation panel state management
+  - Track panel open/close state
+  - Handle responsive layout changes
+- [ ] Create automation device list from existing upgrades
+  - Filter upgrades for automation devices
+  - Format device data for display
+- [ ] Implement panel toggle functionality
+  - Desktop slide animation
+  - Mobile modal behavior
+- [ ] Add device status tracking
+  - Monitor active/inactive states
+  - Update resource rates display
+
+## CSS Styling
+- [ ] Create sidebar panel styles
+  - Slide-out animation
+  - Responsive breakpoints
+  - Consistent theme with existing UI
+- [ ] Style automation device cards
+  - Grid/flex layout
+  - Status indicators
+  - Resource rate displays
+- [ ] Add mobile-specific styles
+  - Modal overlay
+  - Full-screen layout
+  - Touch-friendly spacing
+
+## Integration
+- [ ] Connect with existing upgrade system
+- [ ] Integrate with resource tracking
+- [ ] Add responsive layout handlers
+- [ ] Test cross-browser compatibility
+
+## Testing
+- [ ] Verify desktop sidebar behavior
+- [ ] Test mobile modal functionality
+- [ ] Check responsive layout transitions
+- [ ] Validate device status updates
+- [ ] Test resource rate displays

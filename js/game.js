@@ -165,6 +165,9 @@ document.addEventListener('visibilitychange', () => {
     isTabActive = !document.hidden;
 });
 
+// Add to the game state variables section
+let isAutomationPanelOpen = false;
+
 // ==========================================
 //            CORE GAME FUNCTIONS
 // ==========================================
@@ -213,6 +216,13 @@ function initializeUI() {
     initializeNuclearIceMelter();
     initializeChartModalListeners();
     initializeHeaderScroll();
+    
+    // Initialize automation panel
+    if (document.readyState === 'complete') {
+        initializeAutomationPanel();
+    } else {
+        window.addEventListener('load', initializeAutomationPanel);
+    }
 }
 
 // Function to reset the game state
@@ -263,6 +273,10 @@ function gameLoop(currentTime) {
     }
     
     requestAnimationFrame(gameLoop);
+    
+    if (isAutomationPanelOpen) {
+        updateAutomationDevices();
+    }
 }
 
 // Function to update the field size
@@ -2514,3 +2528,113 @@ window.getElapsedMartianTime = getElapsedMartianTime;
 
 // Expose existing gameStartTime to window
 window.gameStartTime = gameStartTime;
+
+// Add these new functions
+function initializeAutomationPanel() {
+    console.log('Initializing automation panel...');
+    const toggleButton = document.getElementById('automation-panel-toggle');
+    const panel = document.getElementById('automation-panel');
+    
+    console.log('Toggle button exists:', !!toggleButton);
+    console.log('Panel exists:', !!panel);
+    
+    if (!toggleButton || !panel) {
+        console.warn('Required elements not found');
+        return;
+    }
+    
+    const closeButton = panel.querySelector('.close-panel');
+    console.log('Close button exists:', !!closeButton);
+
+    toggleButton.addEventListener('click', () => {
+        console.log('Toggle button clicked');
+        toggleAutomationPanel();
+    });
+    
+    closeButton.addEventListener('click', () => {
+        console.log('Close button clicked');
+        toggleAutomationPanel();
+    });
+
+    // Close panel when clicking outside
+    document.addEventListener('click', (event) => {
+        if (isAutomationPanelOpen && 
+            !panel.contains(event.target) && 
+            !toggleButton.contains(event.target)) {
+            console.log('Clicked outside panel');
+            toggleAutomationPanel();
+        }
+    });
+
+    console.log('Automation panel initialized');
+}
+
+function toggleAutomationPanel() {
+    console.log('Toggling automation panel');
+    const panel = document.getElementById('automation-panel');
+    isAutomationPanelOpen = !isAutomationPanelOpen;
+    console.log('Panel open state:', isAutomationPanelOpen);
+    panel.classList.toggle('open', isAutomationPanelOpen);
+    
+    if (isAutomationPanelOpen) {
+        console.log('Panel opened, updating devices');
+        updateAutomationDevices();
+    }
+}
+
+function updateAutomationDevices() {
+    console.log('Updating automation devices...');
+    const container = document.getElementById('automation-devices');
+    console.log('Container exists:', !!container);
+    console.log('Panel is open:', isAutomationPanelOpen);
+    
+    if (!container || !isAutomationPanelOpen) {
+        console.warn('Cannot update: container missing or panel closed');
+        return;
+    }
+
+    // Clear existing content
+    container.innerHTML = '';
+    console.log('Cleared container');
+
+    // Add rovers if any exist
+    if (autoplanters.length > 0) {
+        const div = document.createElement('div');
+        div.className = 'automation-device';
+        div.textContent = `Autonomous Planting Rovers: ${autoplanters.length}`;
+        container.appendChild(div);
+        console.log('Added planting rovers:', autoplanters.length);
+    }
+
+    if (autoHarvesters.length > 0) {
+        const div = document.createElement('div');
+        div.className = 'automation-device';
+        div.textContent = `Autonomous Harvesting Rovers: ${autoHarvesters.length}`;
+        container.appendChild(div);
+        console.log('Added harvesting rovers:', autoHarvesters.length);
+    }
+
+    if (window.nutrientProspectingRovers > 0) {
+        const div = document.createElement('div');
+        div.className = 'automation-device';
+        div.textContent = `Nutrient Prospecting Rovers: ${window.nutrientProspectingRovers}`;
+        container.appendChild(div);
+        console.log('Added prospecting rovers:', window.nutrientProspectingRovers);
+    }
+
+    // Add unlocked action cards
+    console.log('Window unlockedActionCards:', window.unlockedActionCards);
+    if (Array.isArray(window.unlockedActionCards)) {
+        window.unlockedActionCards.forEach((cardId, index) => {
+            console.log(`Processing card ${index}:`, cardId);
+            const div = document.createElement('div');
+            div.className = 'automation-device';
+            const displayName = cardId.replace('-container', '').replace(/-/g, ' ');
+            div.textContent = displayName;
+            container.appendChild(div);
+            console.log('Added device:', displayName);
+        });
+    }
+
+    console.log('Finished updating automation devices');
+}

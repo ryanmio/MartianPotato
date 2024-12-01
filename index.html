@@ -410,12 +410,12 @@
     <div id="automation-panel" class="panel">
         <div class="panel-header">
             <h2>Automation</h2>
-            <div class="panel-header-buttons">
-                <button id="expand-all-button" class="header-button" onclick="toggleAllDevices()">Expand All</button>
-                <button class="close-panel">×</button>
-            </div>
+            <button class="close-panel">×</button>
         </div>
         <div class="panel-content">
+            <div class="panel-controls">
+                <button id="expand-all-button" onclick="toggleAllDevices()">Expand All</button>
+            </div>
             <div id="automation-devices" class="automation-grid">
                 <!-- Automation devices will be dynamically added here -->
             </div>

@@ -2888,6 +2888,26 @@ body:not(.animations-disabled) .potato .growth-indicator {
     border: none;
 }
 
+.panel-header-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#expand-all-button {
+    font-size: 14px;
+    padding: 6px 12px;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#expand-all-button:hover {
+    background: #f5f5f5;
+}
+
 .close-panel {
     background: none;
     border: none;
@@ -3143,30 +3163,4 @@ body:not(.animations-disabled) .potato .growth-indicator {
 .status-depleted {
     background: #fff3e0;
     color: #e65100;
-}
-
-.automation-controls {
-    display: flex;
-    gap: 10px;
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    margin-bottom: 10px;
-}
-
-.automation-controls button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    background: #f0f0f0;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
-}
-
-.automation-controls button:hover {
-    background: #e0e0e0;
-}
-
-.automation-controls button:active {
-    background: #d0d0d0;
 }

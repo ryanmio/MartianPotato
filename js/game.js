@@ -2582,7 +2582,45 @@ function toggleAutomationPanel() {
     if (isAutomationPanelOpen) {
         console.log('Panel opened, updating devices');
         updateAutomationDevices();
+        updateExpandAllButton();
     }
+}
+
+function toggleAllDevices() {
+    const devices = document.querySelectorAll('.automation-device');
+    const areAllExpanded = Array.from(devices).every(device => 
+        device.querySelector('.device-header').classList.contains('expanded')
+    );
+    
+    devices.forEach(device => {
+        const header = device.querySelector('.device-header');
+        const content = device.querySelector('.device-content');
+        const deviceId = device.id.replace('device-', '');
+        
+        if (areAllExpanded) {
+            expandedDevices.delete(deviceId);
+            header.classList.remove('expanded');
+            content.classList.remove('expanded');
+        } else {
+            expandedDevices.add(deviceId);
+            header.classList.add('expanded');
+            content.classList.add('expanded');
+        }
+    });
+    
+    updateExpandAllButton();
+}
+
+function updateExpandAllButton() {
+    const devices = document.querySelectorAll('.automation-device');
+    const expandAllButton = document.getElementById('expand-all-button');
+    if (!expandAllButton) return;
+    
+    const areAllExpanded = Array.from(devices).every(device => 
+        device.querySelector('.device-header').classList.contains('expanded')
+    );
+    
+    expandAllButton.textContent = areAllExpanded ? 'Collapse All' : 'Expand All';
 }
 
 function updateAutomationDevices() {
@@ -2600,19 +2638,6 @@ function updateAutomationDevices() {
 
     // Clear existing content
     container.innerHTML = '';
-
-    // Add expand/collapse controls
-    const controls = document.createElement('div');
-    controls.className = 'automation-controls';
-    controls.innerHTML = `
-        <button class="expand-all-btn">Expand All</button>
-        <button class="collapse-all-btn">Collapse All</button>
-    `;
-    container.appendChild(controls);
-
-    // Add event listeners to the buttons
-    controls.querySelector('.expand-all-btn').addEventListener('click', expandAllDevices);
-    controls.querySelector('.collapse-all-btn').addEventListener('click', collapseAllDevices);
 
     // Add rovers if any exist
     if (autoplanters.length > 0) {
@@ -2851,32 +2876,4 @@ function getDeviceRates(id) {
         }
     };
     return rates[id] || {};
-}
-
-function expandAllDevices() {
-    expandedDevices.clear(); // Reset the set
-    const devices = document.querySelectorAll('.automation-device');
-    devices.forEach(device => {
-        const id = device.id.replace('device-', '');
-        expandedDevices.add(id);
-        const header = device.querySelector('.device-header');
-        const content = device.querySelector('.device-content');
-        if (header && content) {
-            header.classList.add('expanded');
-            content.classList.add('expanded');
-        }
-    });
-}
-
-function collapseAllDevices() {
-    expandedDevices.clear();
-    const devices = document.querySelectorAll('.automation-device');
-    devices.forEach(device => {
-        const header = device.querySelector('.device-header');
-        const content = device.querySelector('.device-content');
-        if (header && content) {
-            header.classList.remove('expanded');
-            content.classList.remove('expanded');
-        }
-    });
 }

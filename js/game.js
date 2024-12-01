@@ -2659,17 +2659,25 @@ function updateAutomationDevices() {
             }
             // Regular automation devices
             else {
-                const activeStateKey = `is${id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('')}Active`;
-                isActive = window[activeStateKey] || false;
+                switch (id) {
+                    case 'cometary-ice-harvester':
+                        // Get active state from the global variable
+                        isActive = isCometaryIceHarvesterActive;
+                        break;
+                    default:
+                        // For other automation devices, use the dynamic key
+                        const activeStateKey = `is${id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('')}Active`;
+                        isActive = window[activeStateKey] || false;
+                }
             }
             
             console.log(`Device ${id} status check:`, { id, isActive, areResourcesDepleted });
             
             createAccordionDevice({
-                id,
-                title: id.replace(/-/g, ' '),
+                id: id,
+                title: id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
                 description: getDeviceDescription(id),
-                isActive,
+                isActive: isActive,
                 rates: getDeviceRates(id)
             }, container);
         });

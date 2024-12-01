@@ -2639,23 +2639,25 @@ function updateAutomationDevices() {
             const id = cardId.replace('-container', '');
             
             // Get device status
-            let isActive;
-            switch (id) {
-                case 'nuclear-ice-melter':
-                    isActive = isNuclearIceMelterActive;
-                    break;
-                case 'polar-cap-mining':
-                    isActive = isPolarCapMiningActive;
-                    break;
-                case 'quantum-spud-spawner':
-                    isActive = isQuantumSpudSpawnerActive;
-                    break;
-                default:
-                    const statusVarName = `is${id.split('-').map(word => 
-                        word.charAt(0).toUpperCase() + word.slice(1)
-                    ).join('')}Active`;
-                    isActive = window[statusVarName] || false;
+            let isActive = false;
+
+            // Special cases for rovers
+            if (id === 'planting-rovers') {
+                isActive = autoplanters.length > 0;
+            } else if (id === 'harvesting-rovers') {
+                isActive = autoHarvesters.length > 0;
+            } else if (id === 'prospecting-rovers') {
+                isActive = nutrientProspectingRovers && nutrientProspectingRovers.length > 0;
             }
+            // Regular automation devices
+            else {
+                const statusVarName = `is${id.split('-').map(word => 
+                    word.charAt(0).toUpperCase() + word.slice(1)
+                ).join('')}Active`;
+                isActive = typeof window[statusVarName] !== 'undefined' ? window[statusVarName] : false;
+            }
+            
+            console.log(`Device ${id} status check:`, { id, isActive });
             
             createAccordionDevice({
                 id,
@@ -2690,11 +2692,15 @@ function createAccordionDevice(device, container) {
         content.classList.add('expanded');
     }
 
-    // Check for resource depletion
+    // Check device status with resource depletion
     let status = 'inactive';
     let statusText = 'Inactive';
+
     if (device.isActive) {
-        if (areResourcesDepleted) {
+        // Check if this is a device that can be depleted (not a rover)
+        const isAutomationDevice = !['planting-rovers', 'harvesting-rovers', 'prospecting-rovers'].includes(device.id);
+        
+        if (isAutomationDevice && areResourcesDepleted) {
             status = 'depleted';
             statusText = 'Resources Depleted';
         } else {

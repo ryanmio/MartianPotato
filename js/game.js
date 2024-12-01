@@ -2586,6 +2586,14 @@ function toggleAutomationPanel() {
 }
 
 function updateAutomationDevices() {
+    console.log('Updating automation devices, resource state:', {
+        areResourcesDepleted,
+        potatoCount,
+        ice,
+        water,
+        nutrients
+    });
+
     console.log('Updating automation devices...');
     const container = document.getElementById('automation-devices');
     if (!container || !isAutomationPanelOpen) return;
@@ -2651,13 +2659,11 @@ function updateAutomationDevices() {
             }
             // Regular automation devices
             else {
-                const statusVarName = `is${id.split('-').map(word => 
-                    word.charAt(0).toUpperCase() + word.slice(1)
-                ).join('')}Active`;
-                isActive = typeof window[statusVarName] !== 'undefined' ? window[statusVarName] : false;
+                const activeStateKey = `is${id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('')}Active`;
+                isActive = window[activeStateKey] || false;
             }
             
-            console.log(`Device ${id} status check:`, { id, isActive });
+            console.log(`Device ${id} status check:`, { id, isActive, areResourcesDepleted });
             
             createAccordionDevice({
                 id,
@@ -2696,18 +2702,31 @@ function createAccordionDevice(device, container) {
     let status = 'inactive';
     let statusText = 'Inactive';
 
-    if (device.isActive) {
-        // Check if this is a device that can be depleted (not a rover)
-        const isAutomationDevice = !['planting-rovers', 'harvesting-rovers', 'prospecting-rovers'].includes(device.id);
-        
-        if (isAutomationDevice && areResourcesDepleted) {
-            status = 'depleted';
-            statusText = 'Resources Depleted';
-        } else {
-            status = 'active';
-            statusText = 'Active';
-        }
+    // Check if this is a device that can be depleted (not a rover)
+    const isAutomationDevice = !['planting-rovers', 'harvesting-rovers', 'prospecting-rovers'].includes(device.id);
+    
+    // First check if resources are depleted for automation devices
+    if (isAutomationDevice && areResourcesDepleted) {
+        status = 'depleted';
+        statusText = 'Resources Depleted';
     }
+    // Then check if the device is active
+    else if (device.isActive) {
+        status = 'active';
+        statusText = 'Active';
+    }
+
+    console.log(`Device ${device.id} final status:`, { 
+        isActive: device.isActive, 
+        isAutomationDevice, 
+        areResourcesDepleted, 
+        status, 
+        statusText,
+        potatoCount,
+        ice,
+        water,
+        nutrients
+    });
 
     content.innerHTML = `
         <div class="device-details">

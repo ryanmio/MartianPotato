@@ -3144,3 +3144,29 @@ body:not(.animations-disabled) .potato .growth-indicator {
     background: #fff3e0;
     color: #e65100;
 }
+
+.automation-controls {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+}
+
+.automation-controls button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background: #f0f0f0;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.automation-controls button:hover {
+    background: #e0e0e0;
+}
+
+.automation-controls button:active {
+    background: #d0d0d0;
+}

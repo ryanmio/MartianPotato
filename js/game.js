@@ -2601,6 +2601,19 @@ function updateAutomationDevices() {
     // Clear existing content
     container.innerHTML = '';
 
+    // Add expand/collapse controls
+    const controls = document.createElement('div');
+    controls.className = 'automation-controls';
+    controls.innerHTML = `
+        <button class="expand-all-btn">Expand All</button>
+        <button class="collapse-all-btn">Collapse All</button>
+    `;
+    container.appendChild(controls);
+
+    // Add event listeners to the buttons
+    controls.querySelector('.expand-all-btn').addEventListener('click', expandAllDevices);
+    controls.querySelector('.collapse-all-btn').addEventListener('click', collapseAllDevices);
+
     // Add rovers if any exist
     if (autoplanters.length > 0) {
         createAccordionDevice({
@@ -2838,4 +2851,32 @@ function getDeviceRates(id) {
         }
     };
     return rates[id] || {};
+}
+
+function expandAllDevices() {
+    expandedDevices.clear(); // Reset the set
+    const devices = document.querySelectorAll('.automation-device');
+    devices.forEach(device => {
+        const id = device.id.replace('device-', '');
+        expandedDevices.add(id);
+        const header = device.querySelector('.device-header');
+        const content = device.querySelector('.device-content');
+        if (header && content) {
+            header.classList.add('expanded');
+            content.classList.add('expanded');
+        }
+    });
+}
+
+function collapseAllDevices() {
+    expandedDevices.clear();
+    const devices = document.querySelectorAll('.automation-device');
+    devices.forEach(device => {
+        const header = device.querySelector('.device-header');
+        const content = device.querySelector('.device-content');
+        if (header && content) {
+            header.classList.remove('expanded');
+            content.classList.remove('expanded');
+        }
+    });
 }

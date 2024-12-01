@@ -2805,7 +2805,6 @@ body:not(.animations-disabled) .potato .growth-indicator {
     .help-subsection.highlight {
         animation: highlight-section 2s ease-out;
     }
-}
 
 /* Dark theme support for highlight */
 @media (prefers-color-scheme: dark) {

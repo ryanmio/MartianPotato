@@ -3173,3 +3173,19 @@ body:not(.animations-disabled) .potato .growth-indicator {
     background: #fff3e0;
     color: #e65100;
 }
+
+.close-panel {
+    background: none;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    font-size: 20px;
+    color: #666;
+    cursor: pointer;
+    padding: 4px 8px;
+    margin: 0;
+    transition: background-color 0.2s ease;
+}
+
+.close-panel:hover {
+    background: #f5f5f5;
+}

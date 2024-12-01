@@ -2661,8 +2661,13 @@ function updateAutomationDevices() {
             else {
                 switch (id) {
                     case 'cometary-ice-harvester':
-                        // Get active state from the global variable
                         isActive = isCometaryIceHarvesterActive;
+                        break;
+                    case 'nuclear-ice-melter':
+                        isActive = isNuclearIceMelterActive;
+                        break;
+                    case 'quantum-spud-spawner':
+                        isActive = isQuantumSpudSpawnerActive;
                         break;
                     default:
                         // For other automation devices, use the dynamic key

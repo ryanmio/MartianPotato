@@ -2702,8 +2702,8 @@ function createAccordionDevice(device, container) {
     let status = 'inactive';
     let statusText = 'Inactive';
 
-    // Check if this is a device that can be depleted (not a rover)
-    const isAutomationDevice = !['planting-rovers', 'harvesting-rovers', 'prospecting-rovers'].includes(device.id);
+    // Check if this is a device that can be depleted (not a rover or cometary harvester)
+    const isAutomationDevice = !['planting-rovers', 'harvesting-rovers', 'prospecting-rovers', 'cometary-ice-harvester'].includes(device.id);
     
     // First check if resources are depleted for automation devices
     if (isAutomationDevice && areResourcesDepleted) {

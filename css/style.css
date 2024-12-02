@@ -1054,7 +1054,7 @@ button:hover, button:disabled {
     font-size: 24px;
 }
 
-#save-button, #reset-button, #chart-button, #settings-button, #help-button {
+#save-button, #reset-button, #chart-button, #settings-button, #help-button, #automation-panel-toggle {
     display: inline-block;
     width: auto;
     margin: 5px 0 5px 10px;
@@ -3037,16 +3037,6 @@ body:not(.animations-disabled) .potato .growth-indicator {
         height: 50px;
         font-size: 24px;
     }
-}
-
-/* Header Button */
-.header-button {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 8px;
-    margin: 0 4px;
 }
 
 /* Override the general header button styles for expand-all button */

@@ -276,10 +276,6 @@ function gameLoop(currentTime) {
     }
     
     requestAnimationFrame(gameLoop);
-    
-    if (isAutomationPanelOpen) {
-        updateAutomationDevices();
-    }
 }
 
 // Function to update the field size
@@ -2583,6 +2579,20 @@ function toggleAutomationPanel() {
         console.log('Panel opened, updating devices');
         updateAutomationDevices();
         updateExpandAllButton();
+        // Start the interval update when panel is opened
+        if (!window.automationUpdateInterval) {
+            window.automationUpdateInterval = setInterval(() => {
+                if (isAutomationPanelOpen) {
+                    updateAutomationDevices();
+                }
+            }, AUTOMATION_PANEL_UPDATE_INTERVAL);
+        }
+    } else {
+        // Clear the interval when panel is closed
+        if (window.automationUpdateInterval) {
+            clearInterval(window.automationUpdateInterval);
+            window.automationUpdateInterval = null;
+        }
     }
 }
 

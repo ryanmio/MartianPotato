@@ -22,6 +22,7 @@ const FRAME_RATE = 30; // 30 fps
 const FRAME_DELAY = 1000 / FRAME_RATE;
 const CLICKS_PER_WATER = 5;
 const MARTIAN_SOL_LENGTH = 88620 * 1000; // 24h 37m in milliseconds
+const AUTOMATION_PANEL_UPDATE_INTERVAL = 1000; // Update automation panel every second
 
 // Global State
 window.unlockedActionCards = [];
@@ -2579,20 +2580,6 @@ function toggleAutomationPanel() {
         console.log('Panel opened, updating devices');
         updateAutomationDevices();
         updateExpandAllButton();
-        // Start the interval update when panel is opened
-        if (!window.automationUpdateInterval) {
-            window.automationUpdateInterval = setInterval(() => {
-                if (isAutomationPanelOpen) {
-                    updateAutomationDevices();
-                }
-            }, AUTOMATION_PANEL_UPDATE_INTERVAL);
-        }
-    } else {
-        // Clear the interval when panel is closed
-        if (window.automationUpdateInterval) {
-            clearInterval(window.automationUpdateInterval);
-            window.automationUpdateInterval = null;
-        }
     }
 }
 

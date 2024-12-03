@@ -2533,28 +2533,20 @@ window.gameStartTime = gameStartTime;
 
 // Add these new functions
 function initializeAutomationPanel() {
-    console.log('Initializing automation panel...');
     const toggleButton = document.getElementById('automation-panel-toggle');
     const panel = document.getElementById('automation-panel');
     
-    console.log('Toggle button exists:', !!toggleButton);
-    console.log('Panel exists:', !!panel);
-    
     if (!toggleButton || !panel) {
-        console.warn('Required elements not found');
         return;
     }
     
     const closeButton = panel.querySelector('.close-panel');
-    console.log('Close button exists:', !!closeButton);
 
     toggleButton.addEventListener('click', () => {
-        console.log('Toggle button clicked');
         toggleAutomationPanel();
     });
     
     closeButton.addEventListener('click', () => {
-        console.log('Close button clicked');
         toggleAutomationPanel();
     });
 
@@ -2563,23 +2555,17 @@ function initializeAutomationPanel() {
         if (isAutomationPanelOpen && 
             !panel.contains(event.target) && 
             !toggleButton.contains(event.target)) {
-            console.log('Clicked outside panel');
             toggleAutomationPanel();
         }
     });
-
-    console.log('Automation panel initialized');
 }
 
 function toggleAutomationPanel() {
-    console.log('Toggling automation panel');
     const panel = document.getElementById('automation-panel');
     isAutomationPanelOpen = !isAutomationPanelOpen;
-    console.log('Panel open state:', isAutomationPanelOpen);
     panel.classList.toggle('open', isAutomationPanelOpen);
     
     if (isAutomationPanelOpen) {
-        console.log('Panel opened, updating devices');
         updateAutomationDevices();
         updateExpandAllButton();
     }

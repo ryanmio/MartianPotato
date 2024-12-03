@@ -2777,18 +2777,6 @@ function createAccordionDevice(device, container) {
         statusText = 'Active';
     }
 
-    console.log(`Device ${device.id} final status:`, { 
-        isActive: device.isActive, 
-        isAutomationDevice, 
-        areResourcesDepleted, 
-        status, 
-        statusText,
-        potatoCount,
-        ice,
-        water,
-        nutrients
-    });
-
     content.innerHTML = `
         <div class="device-details">
             <div class="device-status status-${status}">

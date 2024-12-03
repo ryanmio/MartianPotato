@@ -2688,7 +2688,8 @@ function updateAutomationDevices() {
     // Add unlocked action cards
     if (Array.isArray(window.unlockedActionCards)) {
         window.unlockedActionCards.forEach(cardId => {
-            if (cardId === 'ice-melting-container') return;
+            // Skip manual/non-automated devices
+            if (cardId === 'ice-melting-container' || cardId === 'ice-melting-basin-container') return;
 
             const id = cardId.replace('-container', '');
             

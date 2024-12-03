@@ -115,10 +115,11 @@
             <h1>Martian Potato</h1>
             <div class="game-buttons">
                 <button id="save-button">Save Game</button>
-                <button id="reset-button">Reset Game</button>
-                <button id="settings-button">⚙️</button>
-                <button id="chart-button">📊</button>
+                <button id="reset-button">Restart</button>
                 <button id="help-button" onclick="helpModal.open()">📚</button>
+                <button id="chart-button">📊</button>
+                <button id="settings-button">⚙️</button>
+                <button id="automation-panel-toggle" title="Automation Panel">🤖</button>
             </div>
         </div>
         <button id="plant-button">Plant Potato</button>
@@ -401,6 +402,20 @@
             <div class="settings-footer">
                 <button id="save-settings" class="settings-button">Save Changes</button>
                 <button id="cancel-settings" class="settings-button">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <div id="automation-panel" class="panel">
+        <div class="panel-header">
+            <h2>Automation</h2>
+            <button class="close-panel">×</button>
+        </div>
+        <div class="panel-content">
+            <div class="panel-controls">
+                <button id="expand-all-button" onclick="toggleAllDevices()">Expand All</button>
+            </div>
+            <div id="automation-devices" class="automation-grid">
+                <!-- Automation devices will be dynamically added here -->
             </div>
         </div>
     </div>

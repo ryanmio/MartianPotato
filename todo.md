@@ -114,12 +114,11 @@ TODO:
     - [x] Center settings modal on desktop
     - [x] Fix modal background color (broken in 4bfc788)
 - [x] Create instructions for how to play
+- [x] Implement basic automation panel
+    - [x] Resource consumption + production rates per machine
+    - [x] Machine states
 --------------------------------------------------------------------------------------------
-- [ ] Implement automation panel
-    - [ ] Resource consumption + production rates per machine
-    - [ ] Net production rates
-    - [ ] Machine states
-    - [ ] Tooltips system
+    - [ ] Automation panel net production rates
 - [ ] Enhance upgrade UI/UX
     - [ ] Implement full screen upgrades modal
     - [ ] Implement upgrade categories

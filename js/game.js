@@ -165,6 +165,12 @@ document.addEventListener('visibilitychange', () => {
     isTabActive = !document.hidden;
 });
 
+// Add to the game state variables section
+let isAutomationPanelOpen = false;
+
+// Add to game state variables
+let expandedDevices = new Set();
+
 // ==========================================
 //            CORE GAME FUNCTIONS
 // ==========================================
@@ -213,6 +219,13 @@ function initializeUI() {
     initializeNuclearIceMelter();
     initializeChartModalListeners();
     initializeHeaderScroll();
+    
+    // Initialize automation panel
+    if (document.readyState === 'complete') {
+        initializeAutomationPanel();
+    } else {
+        window.addEventListener('load', initializeAutomationPanel);
+    }
 }
 
 // Function to reset the game state
@@ -223,6 +236,9 @@ function resetGame() {
         hasSeenInitialGlow = false;
         location.reload();
     }
+    
+    // Clear all expanded devices
+    expandedDevices.clear();
 }
 
 // Helper function to add event listeners if the element exists
@@ -2514,3 +2530,346 @@ window.getElapsedMartianTime = getElapsedMartianTime;
 
 // Expose existing gameStartTime to window
 window.gameStartTime = gameStartTime;
+
+// Add these new functions
+function initializeAutomationPanel() {
+    const toggleButton = document.getElementById('automation-panel-toggle');
+    const panel = document.getElementById('automation-panel');
+    
+    if (!toggleButton || !panel) {
+        return;
+    }
+    
+    const closeButton = panel.querySelector('.close-panel');
+
+    toggleButton.addEventListener('click', () => {
+        toggleAutomationPanel();
+    });
+    
+    closeButton.addEventListener('click', () => {
+        toggleAutomationPanel();
+    });
+
+    // Close panel when clicking outside
+    document.addEventListener('click', (event) => {
+        if (isAutomationPanelOpen && 
+            !panel.contains(event.target) && 
+            !toggleButton.contains(event.target)) {
+            toggleAutomationPanel();
+        }
+    });
+}
+
+function toggleAutomationPanel() {
+    const panel = document.getElementById('automation-panel');
+    isAutomationPanelOpen = !isAutomationPanelOpen;
+    panel.classList.toggle('open', isAutomationPanelOpen);
+    
+    if (isAutomationPanelOpen) {
+        updateAutomationDevices();
+        updateExpandAllButton();
+    }
+}
+
+function toggleAllDevices() {
+    const devices = document.querySelectorAll('.automation-device');
+    const areAllExpanded = Array.from(devices).every(device => 
+        device.querySelector('.device-header').classList.contains('expanded')
+    );
+    
+    devices.forEach(device => {
+        const header = device.querySelector('.device-header');
+        const content = device.querySelector('.device-content');
+        const deviceId = device.id.replace('device-', '');
+        
+        if (areAllExpanded) {
+            expandedDevices.delete(deviceId);
+            header.classList.remove('expanded');
+            content.classList.remove('expanded');
+        } else {
+            expandedDevices.add(deviceId);
+            header.classList.add('expanded');
+            content.classList.add('expanded');
+        }
+    });
+    
+    updateExpandAllButton();
+}
+
+function updateExpandAllButton() {
+    const devices = document.querySelectorAll('.automation-device');
+    const expandAllButton = document.getElementById('expand-all-button');
+    if (!expandAllButton) return;
+    
+    const areAllExpanded = Array.from(devices).every(device => 
+        device.querySelector('.device-header').classList.contains('expanded')
+    );
+    
+    expandAllButton.textContent = areAllExpanded ? 'Collapse All' : 'Expand All';
+}
+
+// Add this function to handle cleanup
+function cleanupExpandedDevices() {
+    // Get all current device IDs
+    const currentDeviceIds = new Set([
+        ...autoplanters.map(() => 'planting-rovers'),
+        ...autoHarvesters.map(() => 'harvesting-rovers'),
+        ...nutrientProspectingRovers.map(() => 'prospecting-rovers'),
+        ...window.unlockedActionCards.map(cardId => cardId.replace('-container', ''))
+    ]);
+
+    // Remove any expanded device IDs that no longer exist
+    for (const deviceId of expandedDevices) {
+        if (!currentDeviceIds.has(deviceId)) {
+            expandedDevices.delete(deviceId);
+        }
+    }
+}
+
+// Add cleanup call in updateAutomationDevices
+function updateAutomationDevices() {
+    const container = document.getElementById('automation-devices');
+    if (!container || !isAutomationPanelOpen) return;
+
+    // Clear existing content
+    container.innerHTML = '';
+
+    // Check if there are any automations
+    const hasAutomations = autoplanters.length > 0 || autoHarvesters.length > 0 || nutrientProspectingRovers.length > 0;
+
+    if (!hasAutomations) {
+        const emptyMessage = document.createElement('div');
+        emptyMessage.className = 'empty-automation-message';
+        emptyMessage.textContent = "You haven't unlocked any automations yet!";
+        container.appendChild(emptyMessage);
+        return;
+    }
+
+    // Add rovers if any exist
+    if (autoplanters.length > 0) {
+        createAccordionDevice({
+            id: 'planting-rovers',
+            title: `Autonomous Planting Rovers: ${autoplanters.length}`,
+            description: 'Automatically plants potatoes in empty field slots.',
+            isActive: true,
+            rates: {
+                production: 'Plants 1 potato every 2 seconds'
+            }
+        }, container);
+    }
+
+    if (autoHarvesters.length > 0) {
+        createAccordionDevice({
+            id: 'harvesting-rovers',
+            title: `Autonomous Harvesting Rovers: ${autoHarvesters.length}`,
+            description: 'Automatically harvests mature potatoes.',
+            isActive: true,
+            rates: {
+                production: 'Harvests potatoes when ready'
+            }
+        }, container);
+    }
+
+    // Fix: Check array length for nutrient rovers
+    if (Array.isArray(nutrientProspectingRovers) && nutrientProspectingRovers.length > 0) {
+        createAccordionDevice({
+            id: 'prospecting-rovers',
+            title: `Nutrient Prospecting Rovers: ${nutrientProspectingRovers.length}`,
+            description: 'Deploys rovers to prospect for nutrients in Martian regolith.',
+            isActive: true,
+            rates: {
+                production: 'Generates 6 nutrients every 20 seconds'
+            }
+        }, container);
+    }
+
+    // Add unlocked action cards
+    if (Array.isArray(window.unlockedActionCards)) {
+        window.unlockedActionCards.forEach(cardId => {
+            // Skip manual/non-automated devices
+            if (cardId === 'ice-melting-container' || cardId === 'ice-melting-basin-container') return;
+
+            const id = cardId.replace('-container', '');
+            
+            // Get device status
+            let isActive = false;
+
+            // Special cases for rovers
+            if (id === 'planting-rovers') {
+                isActive = autoplanters.length > 0;
+            } else if (id === 'harvesting-rovers') {
+                isActive = autoHarvesters.length > 0;
+            } else if (id === 'prospecting-rovers') {
+                isActive = nutrientProspectingRovers && nutrientProspectingRovers.length > 0;
+            }
+            // Regular automation devices
+            else {
+                switch (id) {
+                    case 'cometary-ice-harvester':
+                        isActive = isCometaryIceHarvesterActive;
+                        break;
+                    case 'nuclear-ice-melter':
+                        isActive = isNuclearIceMelterActive;
+                        break;
+                    case 'quantum-spud-spawner':
+                        isActive = isQuantumSpudSpawnerActive;
+                        break;
+                    default:
+                        // For other automation devices, use the dynamic key
+                        const activeStateKey = `is${id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('')}Active`;
+                        isActive = window[activeStateKey] || false;
+                }
+            }
+            
+            createAccordionDevice({
+                id: id,
+                title: id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+                description: getDeviceDescription(id),
+                isActive: isActive,
+                rates: getDeviceRates(id)
+            }, container);
+        });
+    }
+
+    // Add cleanup before updating devices
+    cleanupExpandedDevices();
+}
+
+function createAccordionDevice(device, container) {
+    const deviceEl = document.createElement('div');
+    deviceEl.className = 'automation-device';
+    deviceEl.id = `device-${device.id}`;
+
+    const header = document.createElement('div');
+    header.className = 'device-header';
+    if (expandedDevices.has(device.id)) {
+        header.classList.add('expanded');
+    }
+
+    header.innerHTML = `
+        <span>${device.title}</span>
+        <span class="expand-icon">▼</span>
+    `;
+
+    const content = document.createElement('div');
+    content.className = 'device-content';
+    if (expandedDevices.has(device.id)) {
+        content.classList.add('expanded');
+    }
+
+    // Check device status with resource depletion
+    let status = 'inactive';
+    let statusText = 'Inactive';
+
+    // Check if this is a device that can be depleted (not a rover, cometary harvester, or energy-based device)
+    const isAutomationDevice = !['planting-rovers', 'harvesting-rovers', 'prospecting-rovers', 
+        'cometary-ice-harvester', 'nuclear-ice-melter', 'ice-melting-basin', 'quantum-spud-spawner'].includes(device.id);
+    
+    // First check if resources are depleted for automation devices
+    if (isAutomationDevice && areResourcesDepleted) {
+        status = 'depleted';
+        statusText = 'Resources Depleted';
+    }
+    // Then check if the device is active
+    else if (device.isActive) {
+        status = 'active';
+        statusText = 'Active';
+    }
+
+    content.innerHTML = `
+        <div class="device-details">
+            <div class="device-status status-${status}">
+                ${statusText}
+            </div>
+            <p>${device.description}</p>
+            <div class="device-rates">
+                ${device.rates.consumption ? 
+                    `<span class="rate-item rate-cost">${device.rates.consumption[0]} ${device.rates.consumption[1]}</span>` : 
+                    ''}
+                ${device.rates.production ? 
+                    (Array.isArray(device.rates.production) ? 
+                        device.rates.production.map(rate => 
+                            `<span class="rate-item rate-reward">${rate[0]} ${rate[1]}</span>`
+                        ).join('') :
+                        `<span class="rate-item rate-reward">${device.rates.production}</span>`
+                    ) : 
+                    ''}
+            </div>
+        </div>
+    `;
+
+    header.addEventListener('click', () => {
+        const isExpanded = expandedDevices.has(device.id);
+        if (isExpanded) {
+            expandedDevices.delete(device.id);
+        } else {
+            expandedDevices.add(device.id);
+        }
+        header.classList.toggle('expanded');
+        content.classList.toggle('expanded');
+    });
+
+    deviceEl.appendChild(header);
+    deviceEl.appendChild(content);
+    container.appendChild(deviceEl);
+}
+
+function getDeviceDescription(id) {
+    const descriptions = {
+        'subsurface-aquifer-tapper': 'Accesses underground water reserves to produce water.',
+        'bucket-wheel-excavator': 'A massive mobile strip-mining machine that generates nutrients and ice.',
+        'nuclear-ice-melter': 'A nuclear-powered ice melter that rapidly converts ice to water.',
+        'quantum-spud-spawner': 'Harnesses quantum mechanics for potato farming.',
+        'polar-cap-mining': 'Enables mining operations at Mars\' polar caps.',
+        'cometary-ice-harvester': 'Harnesses passing comets to harvest ice.',
+        'subterranean-tuber-tunneler': 'Burrows beneath the Martian surface.',
+        'martian-potato-colonizer': 'Deploys autonomous potato colonies across Mars, exponentially increasing resource production over time.',
+        'ice-melting-basin': 'A large basin that efficiently melts ice into water in batches.',
+        // Add more descriptions as needed
+    };
+    return descriptions[id] || 'No description available';
+}
+
+function getDeviceRates(id) {
+    const rates = {
+        'subsurface-aquifer-tapper': {
+            consumption: ['🥔', '1 potato per second'],
+            production: [['💧', '3 water per second']]
+        },
+        'bucket-wheel-excavator': {
+            consumption: ['🥔', '1 potato per second'],
+            production: [
+                ['🧪', '4 nutrients per second'],
+                ['🧊', '2 ice per second']
+            ]
+        },
+        'nuclear-ice-melter': {
+            consumption: ['🥔', '100 potatoes to activate'],
+            production: [['🧊', 'Melts chosen percentage of ice per second']]
+        },
+        'polar-cap-mining': {
+            consumption: ['🥔', '1 potato per second'],
+            production: [['🧊', '4 ice per second']]
+        },
+        'cometary-ice-harvester': {
+            consumption: ['🥔', '5 potatoes per cycle'],
+            production: [['🧊', '50 ice per cycle']]
+        },
+        'subterranean-tuber-tunneler': {
+            consumption: ['🥔', '1 potato per 2 seconds'],
+            production: [
+                ['🧪', '2 nutrients per 2 seconds'],
+                ['🧊', '2 ice per 2 seconds']
+            ]
+        },
+        'quantum-spud-spawner': {
+            consumption: ['🥔', '1 potato to activate'],
+            production: 'Instantly plants and harvests potatoes in all field slots'
+        },
+        'martian-potato-colonizer': {
+            consumption: ['🥔', '1 potato per cycle'],
+            production: 'Exponentially increasing resource production over time'
+        }
+    };
+    return rates[id] || {};
+}

@@ -237,6 +237,9 @@ function resetGame() {
         hasSeenInitialGlow = false;
         location.reload();
     }
+    
+    // Clear all expanded devices
+    expandedDevices.clear();
 }
 
 // Helper function to add event listeners if the element exists
@@ -2620,16 +2623,26 @@ function updateExpandAllButton() {
     expandAllButton.textContent = areAllExpanded ? 'Collapse All' : 'Expand All';
 }
 
-function updateAutomationDevices() {
-    console.log('Updating automation devices, resource state:', {
-        areResourcesDepleted,
-        potatoCount,
-        ice,
-        water,
-        nutrients
-    });
+// Add this function to handle cleanup
+function cleanupExpandedDevices() {
+    // Get all current device IDs
+    const currentDeviceIds = new Set([
+        ...autoplanters.map(() => 'planting-rovers'),
+        ...autoHarvesters.map(() => 'harvesting-rovers'),
+        ...nutrientProspectingRovers.map(() => 'prospecting-rovers'),
+        ...window.unlockedActionCards.map(cardId => cardId.replace('-container', ''))
+    ]);
 
-    console.log('Updating automation devices...');
+    // Remove any expanded device IDs that no longer exist
+    for (const deviceId of expandedDevices) {
+        if (!currentDeviceIds.has(deviceId)) {
+            expandedDevices.delete(deviceId);
+        }
+    }
+}
+
+// Add cleanup call in updateAutomationDevices
+function updateAutomationDevices() {
     const container = document.getElementById('automation-devices');
     if (!container || !isAutomationPanelOpen) return;
 
@@ -2723,8 +2736,6 @@ function updateAutomationDevices() {
                 }
             }
             
-            console.log(`Device ${id} status check:`, { id, isActive, areResourcesDepleted });
-            
             createAccordionDevice({
                 id: id,
                 title: id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
@@ -2734,6 +2745,9 @@ function updateAutomationDevices() {
             }, container);
         });
     }
+
+    // Add cleanup before updating devices
+    cleanupExpandedDevices();
 }
 
 function createAccordionDevice(device, container) {

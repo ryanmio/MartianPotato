@@ -3178,3 +3178,11 @@ body:not(.animations-disabled) .potato .growth-indicator {
 .close-panel:hover {
     background: #f5f5f5;
 }
+
+.empty-automation-message {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    font-style: italic;
+    font-size: 1.1em;
+}

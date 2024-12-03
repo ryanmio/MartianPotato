@@ -2636,6 +2636,17 @@ function updateAutomationDevices() {
     // Clear existing content
     container.innerHTML = '';
 
+    // Check if there are any automations
+    const hasAutomations = autoplanters.length > 0 || autoHarvesters.length > 0 || nutrientProspectingRovers.length > 0;
+
+    if (!hasAutomations) {
+        const emptyMessage = document.createElement('div');
+        emptyMessage.className = 'empty-automation-message';
+        emptyMessage.textContent = "You haven't unlocked any automations yet!";
+        container.appendChild(emptyMessage);
+        return;
+    }
+
     // Add rovers if any exist
     if (autoplanters.length > 0) {
         createAccordionDevice({

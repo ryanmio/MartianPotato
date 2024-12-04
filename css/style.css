@@ -3204,20 +3204,21 @@ body:not(.animations-disabled) .potato .growth-indicator {
     }
 
     /* Focus styles - only show outline on keyboard focus, not on mouse clicks */
-    [role="button"],
-    button,
-    input,
-    select,
-    a {
-        /* Remove default focus ring */
-        &:focus {
-            outline: none;
-        }
-        
-        /* Show custom focus ring only when using keyboard */
-        &:focus-visible {
-            outline: 2px solid #4A90E2;
-            outline-offset: 2px;
-        }
+    [role="button"]:focus,
+    button:focus,
+    input:focus,
+    select:focus,
+    a:focus {
+        outline: none;
     }
-}
+    
+    /* Show custom focus ring only when using keyboard */
+    [role="button"]:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    a:focus-visible {
+        outline: 2px solid #4A90E2;
+        outline-offset: 2px;
+    }
+

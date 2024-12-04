@@ -3039,150 +3039,185 @@ body:not(.animations-disabled) .potato .growth-indicator {
     }
 }
 
-/* Override the general header button styles for expand-all button */
-#expand-all-button {
-    font-size: 14px;
-    padding: 8px 16px;
-    border: 1px solid #e5e5e5;
-    border-radius: 4px;
-    background: white;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    width: 100%;
-}
+    /* Override the general header button styles for expand-all button */
+    #expand-all-button {
+        font-size: 14px;
+        padding: 8px 16px;
+        border: 1px solid #e5e5e5;
+        border-radius: 4px;
+        background: white;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        width: 100%;
+    }
 
-#expand-all-button:hover {
-    background: #f5f5f5;
-}
+    #expand-all-button:hover {
+        background: #f5f5f5;
+    }
 
-.automation-section {
-    border: 1px solid #e5e5e5;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
-    background: white;
-}
+    .automation-section {
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+        background: white;
+    }
 
-.section-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 0 0 10px 0;
-    color: #333;
-}
+    .section-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 0 0 10px 0;
+        color: #333;
+    }
 
-.automation-section p {
-    margin: 5px 0;
-    font-size: 14px;
-    color: #666;
-}
+    .automation-section p {
+        margin: 5px 0;
+        font-size: 14px;
+        color: #666;
+    }
 
-.automation-device {
-    border-bottom: 1px solid #e5e5e5;
-    overflow: hidden;
-}
+    .automation-device {
+        border-bottom: 1px solid #e5e5e5;
+        overflow: hidden;
+    }
 
-.automation-device:last-child {
-    border-bottom: none;
-}
+    .automation-device:last-child {
+        border-bottom: none;
+    }
 
-.device-header {
-    padding: 15px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: white;
-    transition: background-color 0.2s ease;
-}
+    .device-header {
+        padding: 15px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
+        transition: background-color 0.2s ease;
+    }
 
-.device-header:hover {
-    background: #f5f5f5;
-}
+    .device-header:hover {
+        background: #f5f5f5;
+    }
 
-.device-header .expand-icon {
-    font-size: 20px;
-    transition: transform 0.3s ease;
-}
+    .device-header .expand-icon {
+        font-size: 20px;
+        transition: transform 0.3s ease;
+    }
 
-.device-header.expanded .expand-icon {
-    transform: rotate(180deg);
-}
+    .device-header.expanded .expand-icon {
+        transform: rotate(180deg);
+    }
 
-.device-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out;
-    background: #f9f9f9;
-    padding: 0 15px;
-}
+    .device-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+        background: #f9f9f9;
+        padding: 0 15px;
+    }
 
-.device-content.expanded {
-    max-height: 500px; /* Adjust based on content */
-    padding: 15px;
-}
+    .device-content.expanded {
+        max-height: 500px; /* Adjust based on content */
+        padding: 15px;
+    }
 
-.device-details {
-    display: grid;
-    gap: 10px;
-}
+    .device-details {
+        display: grid;
+        gap: 10px;
+    }
 
-.device-status {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: bold;
-}
+    .device-status {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+    }
 
-.status-active {
-    background: #e6ffe6;
-    color: #006600;
-}
+    .status-active {
+        background: #e6ffe6;
+        color: #006600;
+    }
 
-.status-inactive {
-    background: #ffe6e6;
-    color: #660000;
-}
+    .status-inactive {
+        background: #ffe6e6;
+        color: #660000;
+    }
 
-.device-rates {
-    display: flex;
-    gap: 15px;
-    font-size: 14px;
-    color: #666;
-}
+    .device-rates {
+        display: flex;
+        gap: 15px;
+        font-size: 14px;
+        color: #666;
+    }
 
-.rate-item {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
+    .rate-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
 
-.status-depleted {
-    background: #fff3e0;
-    color: #e65100;
-}
+    .status-depleted {
+        background: #fff3e0;
+        color: #e65100;
+    }
 
-.close-panel {
-    background: none;
-    border: 1px solid #e5e5e5;
-    border-radius: 4px;
-    font-size: 20px;
-    color: #666;
-    cursor: pointer;
-    padding: 4px 8px;
-    margin: 0;
-    transition: background-color 0.2s ease;
-}
+    .close-panel {
+        background: none;
+        border: 1px solid #e5e5e5;
+        border-radius: 4px;
+        font-size: 20px;
+        color: #666;
+        cursor: pointer;
+        padding: 4px 8px;
+        margin: 0;
+        transition: background-color 0.2s ease;
+    }
 
-.close-panel:hover {
-    background: #f5f5f5;
-}
+    .close-panel:hover {
+        background: #f5f5f5;
+    }
 
-.empty-automation-message {
-    text-align: center;
-    padding: 2rem;
-    color: #666;
-    font-style: italic;
-    font-size: 1.1em;
+    .empty-automation-message {
+        text-align: center;
+        padding: 2rem;
+        color: #666;
+        font-style: italic;
+        font-size: 1.1em;
+    }
+
+    /* Skip link - for keyboard users to skip navigation */
+    .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: #000;
+        color: white;
+        padding: 8px;
+        z-index: 100;
+        transition: top 0.3s ease;
+    }
+
+    .skip-link:focus {
+        top: 0;
+    }
+
+    /* Focus styles - only show outline on keyboard focus, not on mouse clicks */
+    [role="button"],
+    button,
+    input,
+    select,
+    a {
+        /* Remove default focus ring */
+        &:focus {
+            outline: none;
+        }
+        
+        /* Show custom focus ring only when using keyboard */
+        &:focus-visible {
+            outline: 2px solid #4A90E2;
+            outline-offset: 2px;
+        }
+    }
 }

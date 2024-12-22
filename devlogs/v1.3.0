@@ -1,0 +1,9 @@
+<h1>🥔 v1.3.0 Update Notes</h1>
+
+<h2>Bug Fixes</h2>
+<ul>
+    <li>Fixed Subterranean Tunneler disappearing after unlocking Nuclear Ice Melter (@NabsterHax)(@Xofran)</li>
+    <li>Optimized background processing and memory usage (@finndo)</li>
+</ul>
+
+<p>Special thanks to @NabsterHax, @Xofran, and @finndo for reporting these issues and helping with testing! 🥔</p> 

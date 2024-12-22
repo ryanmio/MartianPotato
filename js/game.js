@@ -964,23 +964,18 @@ function updateActionCards() {
     
     allActionCards.forEach(card => {
         const cardId = card.id;
-        const isUnlocked = unlockedActionCards.includes(cardId);
-        const currentDisplay = card.style.display;
-        const shouldBeVisible = isUnlocked || cardId === 'exploration-container';
-        
-        // Only update display if it needs to change
-        if ((shouldBeVisible && currentDisplay === 'none') || (!shouldBeVisible && currentDisplay === 'block')) {
-            card.style.display = shouldBeVisible ? 'block' : 'none';
-        }
+        const isVisible = unlockedActionCards.includes(cardId) || cardId === 'exploration-container';
+        card.style.display = isVisible ? 'block' : 'none';
 
-        // Preserve toggle states for automation devices
-        if (shouldBeVisible) {
+        // Only handle additional states if the card is visible
+        if (isVisible) {
+            // Update toggle states for automation devices
             const toggle = card.querySelector('input[type="checkbox"]');
             if (toggle && window[getActivityStateVariable(cardId)] !== undefined) {
                 toggle.checked = window[getActivityStateVariable(cardId)];
             }
             
-            // Check depletion status for depletable cards
+            // Handle resource depletion
             if (depletableCards.includes(cardId)) {
                 updateDepletedActionCard(cardId, areResourcesDepleted, "Resources Depleted");
             }
@@ -1830,11 +1825,17 @@ document.addEventListener('visibilitychange', () => {
     isTabActive = !document.hidden;
     console.log(`Tab visibility changed: ${wasActive ? 'active → inactive' : 'inactive → active'}`);
     
+    if (!isTabActive && isQuantumSpudSpawnerActive) {
+        // When going inactive, record the state
+        quantumSpawnerStats.lastUpdateTime = Date.now();
+    }
+    
     if (isTabActive && isQuantumSpudSpawnerActive) {
+        // When becoming active again, log stats but don't try to catch up missed updates
         console.log(`Quantum spawner stats:
             Updates: ${quantumSpawnerStats.updates}
-            Skipped: ${quantumSpawnerStats.skippedUpdates}
             Time since last update: ${Date.now() - quantumSpawnerStats.lastUpdateTime}ms`);
+        quantumSpawnerStats.lastUpdateTime = Date.now();
     }
 });
 
@@ -1847,7 +1848,13 @@ function startQuantumSpudSpawner() {
         
         quantumSpudSpawnerInterval = setInterval(() => {
             if (!isTabActive) {
-                quantumSpawnerStats.skippedUpdates++;
+                return; // Skip completely when tab is inactive
+            }
+            
+            const timeSinceLastUpdate = Date.now() - quantumSpawnerStats.lastUpdateTime;
+            // If we've been inactive, don't try to catch up
+            if (timeSinceLastUpdate > 5000) {
+                quantumSpawnerStats.lastUpdateTime = Date.now();
                 return;
             }
             
@@ -1876,10 +1883,10 @@ function startQuantumSpudSpawner() {
             
             // Log if update took longer than expected
             const updateTime = Date.now() - startTime;
-            if (updateTime > 100) { // Log slow updates
+            if (updateTime > 100) {
                 console.log(`Quantum update took ${updateTime}ms`);
             }
-        }, 600);
+        }, 600); // Restored to original 600ms interval for faster quantum spawning
     }
 }
 

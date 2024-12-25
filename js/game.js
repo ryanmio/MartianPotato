@@ -1957,7 +1957,7 @@ function startNuclearIceMelter() {
         updateDisplay();
 
         nuclearIceMelterInterval = setInterval(() => {
-            // Calculate ice to melt based on the knob's percentage
+            // Calculate ice to melt based on the knob's percentage (now using just nuclearIceMelterPercentage directly)
             const iceToMelt = Math.max(1, Math.floor((ice * nuclearIceMelterPercentage) / 100));
 
             if (ice >= iceToMelt) {
@@ -1965,7 +1965,6 @@ function startNuclearIceMelter() {
                 water += iceToMelt;
                 updateDisplay();
             } else if (ice >= 1) {
-                // Melt remaining ice if less than iceToMelt but at least 1
                 water += ice;
                 ice = 0;
                 updateDisplay();
@@ -2027,9 +2026,19 @@ function initializeNuclearIceMelter() {
 // Knob Change Handler
 window.knobChanged = function(id, val) {
     if (id === 'nuclear-ice-melter-knob') {
-        nuclearIceMelterPercentage = parseInt(val);
-        console.log(`Nuclear Ice Melter percentage set to ${nuclearIceMelterPercentage * 10}%`);
-        updateNuclearIceMelterDisplay();
+        const newVal = parseInt(val);
+        
+        // Only update and restart if the value actually changed
+        if (nuclearIceMelterPercentage !== newVal) {
+            nuclearIceMelterPercentage = newVal;
+            updateNuclearIceMelterDisplay();
+            
+            // If the melter is active, restart it to use the new percentage
+            if (isNuclearIceMelterActive) {
+                stopNuclearIceMelter();
+                startNuclearIceMelter();
+            }
+        }
     }
 };
 
@@ -2299,14 +2308,9 @@ function initializeNuclearIceMelterControls() {
         nuclearIceMelterToggle.removeEventListener('click', handleNuclearIceMelterClick);
         nuclearIceMelterToggle.addEventListener('click', handleNuclearIceMelterClick);
     }
-
-    // Nuclear Ice Melter Knob Handler
-    window.knobChanged = function(id, val) {
-        if (id === 'nuclear-ice-melter-knob') {
-            nuclearIceMelterPercentage = parseInt(val);
-            updateNuclearIceMelterDisplay();
-        }
-    };
+    
+    // Initialize the knob
+    initializeNuclearIceMelter();
 }
 
 // ---------------

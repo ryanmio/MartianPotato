@@ -1,0 +1,7 @@
+# 🥔 v1.4.0 Update Notes
+
+## Bug Fixes
+- Fixed Nuclear Ice Melter knob getting stuck and not responding to adjustments (@johnmyster)
+- Rebalanced Nuclear Ice Melter to use 1-10% melting rate for better gameplay progression
+
+Special thanks to @johnmyster for reporting the Nuclear Ice Melter issue! 🥔

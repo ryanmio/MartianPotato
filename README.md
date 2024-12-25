@@ -6,15 +6,15 @@ A meta-aware idle game about colonizing Mars with potatoes. From manual farming 
 
 ## 🎮 Play Now
 
-[![Play Game](https://img.shields.io/badge/Play-Martian%20Potato-C2A378?style=for-the-badge)](https://martianpotato.com)
-[![View Gallery](https://img.shields.io/badge/View-Image%20Gallery-4CAF50?style=for-the-badge)](https://martianpotato.com/gallery.html)
+[![Play Game](https://img.shields.io/badge/Play-Martian%20Potato-C2A378?style=for-the-badge)](https://martianpotato.com/?utm_source=github&utm_medium=readme&utm_campaign=play_button)
+[![View Gallery](https://img.shields.io/badge/View-Image%20Gallery-4CAF50?style=for-the-badge)](https://martianpotato.com/gallery.html?utm_source=github&utm_medium=readme&utm_campaign=gallery_button)
 
 ## ⭐ Support the Game
 
 If you enjoy Martian Potato, consider:
 - ⭐ Starring this repository
-- 📝 [Rating on itch.io](https://martianpotato.com/?utm_source=github&utm_medium=readme&utm_campaign=rating)
-- 🎯 [Reviewing on incremental.db](https://martianpotato.com/?utm_source=github&utm_medium=readme&utm_campaign=review)
+- 📝 [Rating on itch.io](https://martianpotato.com/?utm_source=github&utm_medium=readme&utm_campaign=itch_rating)
+- 🎯 [Reviewing on incremental.db](https://martianpotato.com/?utm_source=github&utm_medium=readme&utm_campaign=incremental_review)
 
 ## 🌟 Features
 

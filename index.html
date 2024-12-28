@@ -162,6 +162,11 @@
                     <div id="explore-button" class="action-icon" aria-hidden="true">👩‍🚀</div>
                     <span id="exploration-cooldown" class="action-cooldown" aria-live="polite">Ready</span>
                 </div>
+                <div id="watch-ad-container" class="action-card clickable" role="button" tabindex="0" aria-label="Watch Ad for Resources" style="display: none;">
+                    <h3>Watch Ad for Resources</h3>
+                    <div class="action-icon">📺</div>
+                    <span id="ad-cooldown" class="action-cooldown">Ready</span>
+                </div>
                 <div id="ice-melting-container" class="action-card clickable" role="button" tabindex="0" aria-label="Manual Ice Melting" style="display: none;">
                     <h3>Manual Ice Melting</h3>
                     <div id="ice-cube" class="action-icon" aria-hidden="true">🧊</div>
@@ -366,16 +371,24 @@
             <!-- Game Settings Section -->
             <div class="settings-section">
                 <h3>Game Settings</h3>
-                <div class="settings-row">
-                    <div class="setting-item">
-                        <label for="mute-toggle" id="mute-label">Sound</label>
-                        <div class="toggle-switch-container">
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="mute-toggle" aria-labelledby="mute-label" role="switch">
-                                <div aria-hidden="true">ΟΙ</div><b></b>
-                                <span class="indicator" aria-hidden="true"></span>
-                            </label>
-                        </div>
+                <div class="setting-item">
+                    <label for="mute-toggle" id="mute-label">Sound (coming soon)</label>
+                    <div class="toggle-switch-container">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="mute-toggle" aria-labelledby="mute-label" role="switch">
+                            <div aria-hidden="true">ΟΙ</div><b></b>
+                            <span class="indicator" aria-hidden="true"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label for="ads-toggle" id="ads-label">Optional Video Ads</label>
+                    <div class="toggle-switch-container">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="ads-toggle" aria-labelledby="ads-label" role="switch">
+                            <div aria-hidden="true">ΟΙ</div><b></b>
+                            <span class="indicator" aria-hidden="true"></span>
+                        </label>
                     </div>
                 </div>
                 <div class="setting-item">

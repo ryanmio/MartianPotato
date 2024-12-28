@@ -32,6 +32,7 @@ class AdsManager {
         const savedOptIn = localStorage.getItem('adOptIn');
         if (savedOptIn === 'true') {
             this.isOptedIn = true;
+            this.hasShownOptIn = true; // Prevent showing opt-in modal if already opted in
         }
     }
 
@@ -44,22 +45,52 @@ class AdsManager {
         // Add watch ad button to the game UI
         this.createWatchAdButton();
         
-        // Start checking for the one-hour mark
-        this.startAdFreeTimer();
+        // Add toggle to settings modal
+        this.addSettingsToggle();
+        
+        // Start checking for the one-hour mark (only if not opted in)
+        if (!this.isOptedIn) {
+            this.startAdFreeTimer();
+        }
         
         // Initialize AdSense API when it's ready
         window.adsbygoogle = window.adsbygoogle || [];
         
         // Show watch ad button if previously opted in
         if (this.isOptedIn) {
-            const watchAdButton = document.getElementById('watch-ad-button');
-            if (watchAdButton) {
-                watchAdButton.style.display = 'block';
+            const watchAdCard = document.getElementById('watch-ad-container');
+            if (watchAdCard) {
+                watchAdCard.style.display = 'block';
             }
         }
         
         this.isInitialized = true;
         console.log('Ads Manager initialized');
+    }
+
+    addSettingsToggle() {
+        const settingsContent = document.querySelector('.settings-content');
+        if (!settingsContent) return;
+
+        const toggleContainer = document.createElement('div');
+        toggleContainer.className = 'settings-row';
+        toggleContainer.innerHTML = `
+            <label for="ads-toggle">Optional Video Ads</label>
+            <label class="switch">
+                <input type="checkbox" id="ads-toggle" ${this.isOptedIn ? 'checked' : ''}>
+                <span class="slider round"></span>
+            </label>
+        `;
+
+        settingsContent.appendChild(toggleContainer);
+
+        // Add event listener to toggle
+        const toggle = document.getElementById('ads-toggle');
+        if (toggle) {
+            toggle.addEventListener('change', (e) => {
+                this.handleOptIn(e.target.checked);
+            });
+        }
     }
 
     async loadRewardedAd() {
@@ -105,17 +136,26 @@ class AdsManager {
     }
 
     createWatchAdButton() {
-        const button = document.createElement('button');
-        button.id = 'watch-ad-button';
-        button.className = 'watch-ad-button';
-        button.innerHTML = '📺 Watch Ad for Resources';
-        button.style.display = 'none';
-        button.addEventListener('click', this.showRewardedAd);
+        const actionCard = document.createElement('div');
+        actionCard.id = 'watch-ad-container';
+        actionCard.className = 'action-card clickable';
+        actionCard.setAttribute('role', 'button');
+        actionCard.setAttribute('tabindex', '0');
+        actionCard.setAttribute('aria-label', 'Watch Ad for Resources');
+        actionCard.style.display = 'none';
         
-        // Add to game header buttons
-        const gameButtons = document.querySelector('.game-buttons');
-        if (gameButtons) {
-            gameButtons.appendChild(button);
+        actionCard.innerHTML = `
+            <h3>Watch Ad for Resources</h3>
+            <div class="action-icon">📺</div>
+            <span class="action-cooldown" id="ad-cooldown">Ready</span>
+        `;
+        
+        actionCard.addEventListener('click', this.showRewardedAd);
+        
+        // Add to action cards container
+        const actionCardsContainer = document.getElementById('action-cards-container');
+        if (actionCardsContainer) {
+            actionCardsContainer.appendChild(actionCard);
         }
     }
 
@@ -137,6 +177,9 @@ class AdsManager {
     }
 
     showOptInPrompt() {
+        // Don't show if already opted in
+        if (this.isOptedIn || this.hasShownOptIn) return;
+        
         const modal = document.getElementById('ad-optin-modal');
         if (modal) {
             modal.style.display = 'block';
@@ -146,14 +189,14 @@ class AdsManager {
     handleOptIn(accepted) {
         this.isOptedIn = accepted;
         const modal = document.getElementById('ad-optin-modal');
-        const watchAdButton = document.getElementById('watch-ad-button');
+        const watchAdCard = document.getElementById('watch-ad-container');
         
         if (modal) {
             modal.style.display = 'none';
         }
         
-        if (watchAdButton) {
-            watchAdButton.style.display = accepted ? 'block' : 'none';
+        if (watchAdCard) {
+            watchAdCard.style.display = accepted ? 'block' : 'none';
         }
 
         // Save preference
@@ -174,7 +217,19 @@ class AdsManager {
         if (now - this.lastAdTime < cooldown) {
             const remainingTime = Math.ceil((cooldown - (now - this.lastAdTime)) / 1000);
             window.showToast('Ad Cooldown', `Please wait ${remainingTime} seconds before watching another ad.`, 'warning');
+            
+            // Update cooldown display
+            const cooldownElement = document.getElementById('ad-cooldown');
+            if (cooldownElement) {
+                cooldownElement.textContent = `${Math.ceil(remainingTime / 60)}m ${remainingTime % 60}s`;
+            }
             return;
+        }
+
+        // Update cooldown display
+        const cooldownElement = document.getElementById('ad-cooldown');
+        if (cooldownElement) {
+            cooldownElement.textContent = 'Loading...';
         }
 
         // Show loading message
@@ -186,6 +241,9 @@ class AdsManager {
                 const adLoaded = await this.loadRewardedAd();
                 if (!adLoaded) {
                     window.showToast('Ad Error', 'No ads available right now. Please try again later.', 'error');
+                    if (cooldownElement) {
+                        cooldownElement.textContent = 'Ready';
+                    }
                     return;
                 }
                 
@@ -194,12 +252,18 @@ class AdsManager {
             } catch (error) {
                 console.error('Error showing rewarded ad:', error);
                 window.showToast('Ad Error', 'There was a problem loading the ad. Please try again later.', 'error');
+                if (cooldownElement) {
+                    cooldownElement.textContent = 'Ready';
+                }
             }
         } else {
             // Simulation mode for testing
             setTimeout(() => {
                 this.distributeReward();
                 this.lastAdTime = now;
+                if (cooldownElement) {
+                    cooldownElement.textContent = 'Ready';
+                }
             }, 1000);
         }
     }

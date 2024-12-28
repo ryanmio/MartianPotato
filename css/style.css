@@ -3255,6 +3255,14 @@ body:not(.animations-disabled) .potato .growth-indicator {
     padding: 2rem;
 }
 
+#ad-optin-modal .modal-note {
+    font-size: 0.9em;
+    color: #666;
+    margin: 1.5rem 0;
+    line-height: 1.4;
+    font-style: italic;
+}
+
 #ad-optin-modal .modal-buttons {
     display: flex;
     justify-content: center;

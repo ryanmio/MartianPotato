@@ -88,12 +88,12 @@ class AdsManager {
         modal.className = 'modal';
         modal.innerHTML = `
             <div class="modal-content">
-                <h2>Support Martian Potato</h2>
-                <p>Would you like to enable optional video ads? Watch them to earn bonus resources!</p>
-                <p>You'll only see ads when you choose to watch them.</p>
+                <h2>Hi there, Martian farmer!</h2>
+                <p>I'm Ryan, the developer of Martian Potato. To keep the game free and running smoothly, would you consider enabling optional video ads?</p>
+                <p>You'll get bonus resources for each ad you watch, and they'll only play when you choose. Every view helps keep our servers running and potatoes growing! 🥔</p>
                 <div class="modal-buttons">
-                    <button id="ad-optin-accept" class="settings-button">Enable Ads</button>
-                    <button id="ad-optin-decline" class="settings-button">No Thanks</button>
+                    <button id="ad-optin-accept" class="settings-button">Enable Ads & Support</button>
+                    <button id="ad-optin-decline" class="settings-button">Not Now</button>
                 </div>
             </div>
         `;

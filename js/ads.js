@@ -10,6 +10,8 @@ class AdsManager {
         this.adFreeHours = 1; // One hour ad-free period
         this.isInitialized = false;
         this.publisherId = 'ca-pub-2199417995068387';
+        this.rewardedAdUnit = null; // Will be set once we get the ad unit ID
+        this.isAdLoading = false;
         
         // Bind methods
         this.initialize = this.initialize.bind(this);
@@ -17,12 +19,19 @@ class AdsManager {
         this.handleOptIn = this.handleOptIn.bind(this);
         this.showRewardedAd = this.showRewardedAd.bind(this);
         this.distributeReward = this.distributeReward.bind(this);
+        this.loadRewardedAd = this.loadRewardedAd.bind(this);
         
         // Initialize when DOM is ready
         if (document.readyState === 'complete') {
             this.initialize();
         } else {
             window.addEventListener('load', this.initialize);
+        }
+
+        // Restore opt-in preference
+        const savedOptIn = localStorage.getItem('adOptIn');
+        if (savedOptIn === 'true') {
+            this.isOptedIn = true;
         }
     }
 
@@ -38,8 +47,39 @@ class AdsManager {
         // Start checking for the one-hour mark
         this.startAdFreeTimer();
         
+        // Initialize AdSense API when it's ready
+        window.adsbygoogle = window.adsbygoogle || [];
+        
+        // Show watch ad button if previously opted in
+        if (this.isOptedIn) {
+            const watchAdButton = document.getElementById('watch-ad-button');
+            if (watchAdButton) {
+                watchAdButton.style.display = 'block';
+            }
+        }
+        
         this.isInitialized = true;
         console.log('Ads Manager initialized');
+    }
+
+    async loadRewardedAd() {
+        if (!this.rewardedAdUnit || this.isAdLoading) return false;
+        
+        this.isAdLoading = true;
+        try {
+            // TODO: Replace with actual rewarded ad unit ID once received
+            await window.adsbygoogle.push({
+                type: 'rewarded',
+                client: this.publisherId,
+                slot: 'YOUR_REWARDED_AD_SLOT_ID', // We'll replace this with actual slot ID
+            });
+            this.isAdLoading = false;
+            return true;
+        } catch (error) {
+            console.error('Error loading rewarded ad:', error);
+            this.isAdLoading = false;
+            return false;
+        }
     }
 
     createOptInModal() {
@@ -127,7 +167,7 @@ class AdsManager {
         }
     }
 
-    showRewardedAd() {
+    async showRewardedAd() {
         // Check cooldown
         const now = Date.now();
         const cooldown = 5 * 60 * 1000; // 5 minutes
@@ -137,15 +177,31 @@ class AdsManager {
             return;
         }
 
-        // TODO: Replace with actual AdSense rewarded ad implementation
-        // For now, simulate ad viewing
+        // Show loading message
         window.showToast('Loading Ad', 'Preparing your reward video...', 'info');
-        
-        setTimeout(() => {
-            // Simulate successful ad completion
-            this.distributeReward();
-            this.lastAdTime = now;
-        }, 1000);
+
+        // TODO: Replace this with actual AdSense rewarded ad implementation
+        if (window.adsbygoogle && this.rewardedAdUnit) {
+            try {
+                const adLoaded = await this.loadRewardedAd();
+                if (!adLoaded) {
+                    window.showToast('Ad Error', 'No ads available right now. Please try again later.', 'error');
+                    return;
+                }
+                
+                // The ad will handle its own display and callbacks
+                this.lastAdTime = now;
+            } catch (error) {
+                console.error('Error showing rewarded ad:', error);
+                window.showToast('Ad Error', 'There was a problem loading the ad. Please try again later.', 'error');
+            }
+        } else {
+            // Simulation mode for testing
+            setTimeout(() => {
+                this.distributeReward();
+                this.lastAdTime = now;
+            }, 1000);
+        }
     }
 
     distributeReward() {
@@ -171,6 +227,21 @@ class AdsManager {
             `You received: ${rewards.potatoes} potatoes, ${rewards.water} water, ${rewards.nutrients} nutrients, and ${rewards.ice} ice!`, 
             'achievement'
         );
+
+        // Track reward distribution
+        if (window.gtag) {
+            window.gtag('event', 'reward_collected', {
+                'event_category': 'Ads',
+                'event_label': 'Rewarded Ad',
+                'value': rewards.potatoes + rewards.water + rewards.nutrients + rewards.ice
+            });
+        }
+    }
+
+    // Method to set the rewarded ad unit ID once we receive it
+    setRewardedAdUnit(unitId) {
+        this.rewardedAdUnit = unitId;
+        console.log('Rewarded ad unit ID set:', unitId);
     }
 }
 
